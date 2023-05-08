@@ -19,6 +19,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
+        binding.bottomNavigation.setSelectedItemId(R.id.home);
 
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
