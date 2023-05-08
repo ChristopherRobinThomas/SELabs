@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +24,9 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,7 +62,20 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Button questionnaireButton;
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
+        questionnaireButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QuestionnaireFragment questionnaireFragment = new QuestionnaireFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,questionnaireFragment).commit();
+
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
+
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
@@ -46,4 +47,5 @@ public class HomeScreenActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
 }
