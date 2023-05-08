@@ -1,5 +1,6 @@
 package com.example.se_lab_23b02;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -69,9 +70,10 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuestionnaireFragment questionnaireFragment = new QuestionnaireFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,questionnaireFragment).commit();
-
+                //QuestionnaireFragment questionnaireFragment = new QuestionnaireFragment();
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,questionnaireFragment).commit();
+                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                startActivity(myIntent);
             }
         });
         // Inflate the layout for this fragment
