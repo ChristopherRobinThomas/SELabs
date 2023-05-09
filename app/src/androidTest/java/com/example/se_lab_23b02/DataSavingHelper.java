@@ -4,9 +4,14 @@ import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.app.Application;
 import android.content.Context;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
 // Woah Singleton
 public class DataSavingHelper extends Activity {
@@ -32,13 +37,32 @@ public class DataSavingHelper extends Activity {
         settingsContents = new HashMap<String, String>(settings.getAll().size());
         return settingsContents;
     }
-
-    public void saveFileInInternalStorage(String filename, String contents) {
-        try (FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE)) {
-            fos.write(contents.toByteArray());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+    public void writeDataToInternalStorage (String filename, String data) {
+        try {
+            FileOutputStream fOut = openFileOutput(filename,1) ;
+            OutputStreamWriter osw = new OutputStreamWriter(fOut) ;
+            osw.write(data);
+            osw.flush();
+            osw.close();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-
+    }
+    public String readSavedDataFromInternalStorage(String filename) {
+        StringBuilder datax = new StringBuilder("");
+        try {
+            FileInputStream fIn = openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fIn);
+            BufferedReader buffreader = new BufferedReader(isr);
+            String readString = buffreader.readLine();
+            while (readString != null) {
+                datax.append(readString);
+                readString = buffreader.readLine();
+            }
+            isr.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return datax.toString();
     }
 }
