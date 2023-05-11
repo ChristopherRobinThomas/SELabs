@@ -1,0 +1,20 @@
+## Casing
+- Class Names in CamelCase
+- Methods in dromedaryCase (Scherz, pascalCase)
+- Variables in ???
+- Methods have curly braces on the same line
+- Variables are private unless they need 
+  to be public
+- Method names should be verbs
+- Classes should be nouns
+- Descriptice Naming
+- Javadoc when there is time, but defintiely 
+  an explanatory comment
+
+```java
+class ExampleClass {
+	public void beExampleMethod {
+
+	}
+}
+```
