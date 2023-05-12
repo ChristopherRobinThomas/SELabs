@@ -7,7 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,20 +64,29 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button notificationButton;
-        Button sensorButton;
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        notificationButton = view.findViewById(R.id.NotificationButton);
-        sensorButton = view.findViewById(R.id.SensorButton);
-        notificationButton.setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
+
+        Spinner mSpinner = (Spinner) view.findViewById(R.id.spLanguageSelector);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(arrayAdapter);
+
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                NotificationSettingsFragment notificationSettingsFragment = new NotificationSettingsFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,notificationSettingsFragment).commit();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String val = parent.getItemAtPosition(position).toString();
+                System.out.println(val);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+
+        /*
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +95,8 @@ public class SettingsFragment extends Fragment {
 
             }
         });
+        */
+
         // Inflate the layout for this fragment
         return view;
     }

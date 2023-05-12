@@ -26,15 +26,19 @@ public class HomeScreenActivity extends AppCompatActivity {
             {
                 case R.id.home:
                     replaceFragment(new HomeFragment());
+                    setTitle("Home");
                     break;
                 case R.id.settings:
                     replaceFragment(new SettingsFragment());
+                    setTitle("Settings");
                     break;
                 case R.id.data:
                     replaceFragment(new OverviewFragment());
+                    setTitle("Data");
                     break;
                 case R.id.interventions:
                     replaceFragment(new InterventionsFragment());
+                    setTitle("Interventions");
                     break;
             }
 
