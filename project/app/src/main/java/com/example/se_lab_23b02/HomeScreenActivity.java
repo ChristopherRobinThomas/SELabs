@@ -33,6 +33,9 @@ public class HomeScreenActivity extends AppCompatActivity {
                 case R.id.data:
                     replaceFragment(new OverviewFragment());
                     break;
+                case R.id.interventions:
+                    replaceFragment(new InterventionsFragment());
+                    break;
             }
 
             return true;
