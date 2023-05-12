@@ -12,7 +12,7 @@ import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
-    ActivityHomeScreenBinding binding;
+    private ActivityHomeScreenBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
