@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.widget.Button;
 
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
@@ -31,7 +30,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 case R.id.settings:
                     replaceFragment(new SettingsFragment());
                     break;
-                case R.id.graph_overview:
+                case R.id.data:
                     replaceFragment(new OverviewFragment());
                     break;
             }

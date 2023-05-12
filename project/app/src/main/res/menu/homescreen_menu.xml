@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Overview"
-        android:icon="@drawable/baseline_auto_graph_24"
-        android:id="@+id/graph_overview"/>
-    <item android:title="Home"
+    <item
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:icon="@drawable/baseline_home_24"
-        android:id="@+id/home"/>
+        android:title="Home" />
+    <item
+        android:id="@+id/data"
+        android:icon="@drawable/baseline_auto_graph_24"
+        android:title="data" />
+    <item
+        android:id="@+id/interventions"
+        android:icon="@drawable/little_being"
+        android:title="tasks" />
     <item android:title="Settings"
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/settings"/>
