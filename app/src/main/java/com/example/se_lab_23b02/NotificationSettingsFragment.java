@@ -2,14 +2,19 @@ package com.example.se_lab_23b02;
 
 import static androidx.databinding.DataBindingUtil.setContentView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.se_lab_23b02.databinding.FragmentHomeBinding;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -17,6 +22,7 @@ import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Logger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +42,7 @@ public class NotificationSettingsFragment extends Fragment {
     FragmentHomeBinding  binding;
     private MaterialTimePicker picker;
     private ArrayList<Alarm> alarms = new ArrayList<>();
-    private int current = 0;
+    private Alarm current;
 
     public NotificationSettingsFragment() {
         // Required empty public constructor
@@ -68,7 +74,6 @@ public class NotificationSettingsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        binding = FragmentHomeBinding.inflate(getLayoutInflater());
 
     }
 
@@ -78,9 +83,12 @@ public class NotificationSettingsFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_notification_settings, container, false);
+        createNotificationChannel();
         view.findViewById(R.id.AlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                current = new Alarm();
+                alarms.add(current);
                 showTimePicker();
             }
         });
@@ -96,27 +104,32 @@ public class NotificationSettingsFragment extends Fragment {
                 .setTitleText("Select Alarm Time")
                 .build();
         picker.show(getParentFragmentManager(),"AlarmClock");
-
         picker.addOnPositiveButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(picker.getHour() > 12){
-                    /*
-                    HomeScreenActivity.binding..setText(
-                            picker.getHour() + ":" + picker.getMinute()
-                            //String.format("%02d",(picker.getHour()-12) + " : " + String.format("%02d",picker.getMinute()) + "PM")
-                    );
-                    */
-                }else
+                if(alarms.contains(current))
                 {
-                    /*
-                    HomeScreenActivity.binding.selectedTime.setText(
-                            picker.getHour() + ":" + picker.getMinute()
-                            //String.format("%02d",picker.getHour() + " : " + String.format("%02d",picker.getMinute()) + "PM")
-                    );
-                     */
+                    Log.d("TimePicked","time picked");
+                    int pos = alarms.indexOf(current);
+                    alarms.get(pos).addTime(picker);
+                    alarms.get(pos).setAlarm(getActivity());
+                    Toast.makeText(getActivity(), "Alarm set successfully", Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
+    }
+
+    private void createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
+            CharSequence name = "AlarmClockChannel";
+            String description = "Channel for the ALarm Clock";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("AlarmClock",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

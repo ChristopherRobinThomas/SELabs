@@ -2,8 +2,13 @@ package com.example.se_lab_23b02;
 
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -18,12 +23,13 @@ public class Alarm
 
     private Calendar calendar;
     private int id;
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
 
-    private Context context;
 
-    Alarm(Context _context)
+    Alarm()
     {
-        context = _context;
+        id = 0;
     }
 
     public  void addTime(MaterialTimePicker picker)
@@ -36,30 +42,17 @@ public class Alarm
     }
 
 
-    public void addAlarm(android.widget.Button btn) {
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void setAlarm(Context context) {
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context,AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),10,pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        Log.d("setAlarm","ALarm set");
 
-            }
-        });
     }
 
-    public void cancelAlarm(android.widget.Button btn) {
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+    public void cancelAlarm() {
     }
 
-    /*
-    public void setAlarmTime(android.widget.Button btn) {
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-                public void onClick(View v) { showTimePicker(); }
-        });
-    }
-    */
 }
