@@ -4,15 +4,20 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,16 +72,36 @@ public class SettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
 
-        Spinner mSpinner = (Spinner) view.findViewById(R.id.spLanguageSelector);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(arrayAdapter);
+        Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
+        Spinner spinnerColortheme = (Spinner) view.findViewById(R.id.spinner_color);
+        Spinner spinnerDarkMode = (Spinner) view.findViewById(R.id.spDarkMode);
+        Switch switchStepCount = (Switch) view.findViewById(R.id.swStepCounter);
+        Switch switchAccel = (Switch) view.findViewById(R.id.swAccelSensor);
+        Switch switchGPS = (Switch) view.findViewById(R.id.swGPS);
+        Button btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
+        Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
+        Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
+        Button delAllData = (Button) view.findViewById(R.id.btDeleteData);
 
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode);
+
+
+
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        dsHelper.saveSettingAsSharedPref("language", "english", getActivity().getBaseContext());
+        //trying to access data
+        HashMap<String, String> settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(getActivity().getBaseContext());
+        System.out.println(settings.toString());
+
+
+        //language Spinner selection Listener
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String val = parent.getItemAtPosition(position).toString();
+
+                dsHelper.saveSettingAsSharedPref("language", val, view.getContext());
                 System.out.println(val);
             }
 
@@ -86,6 +111,26 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                System.out.println(b);
+            }
+        });
+
+        switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                System.out.println(b);
+            }
+        });
+
+        switchStepCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                System.out.println(b);
+            }
+        });
         /*
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +142,22 @@ public class SettingsFragment extends Fragment {
         });
         */
 
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLang.setAdapter(arrayAdapter);
+
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colortheme));
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColor.setAdapter(colorAdapter);
+
+        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.darkmode));
+        darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDMode.setAdapter(darkModeAdapter);
     }
 }

@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
@@ -19,6 +21,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
+
 
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
