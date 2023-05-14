@@ -164,6 +164,8 @@ public class SettingsFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putInt("lowerBound", 7);
                 b.putInt("upperBound", 11);
+                b.putInt("currentHour", 8);
+                b.putInt("currentMin", 15);//get real value here
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -177,6 +179,8 @@ public class SettingsFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putInt("lowerBound", 12);
                 b.putInt("upperBound", 14);
+                b.putInt("currentHour", 13); //get real value here
+                b.putInt("currentMin", 0);
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -190,6 +194,8 @@ public class SettingsFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putInt("lowerBound", 17);
                 b.putInt("upperBound", 19);
+                b.putInt("currentHour", 17);
+                b.putInt("currentMin", 0);
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
