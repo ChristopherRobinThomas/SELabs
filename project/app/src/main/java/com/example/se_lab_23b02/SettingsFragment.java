@@ -1,8 +1,11 @@
 package com.example.se_lab_23b02;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
@@ -28,6 +31,7 @@ import java.util.Timer;
  */
 public class SettingsFragment extends Fragment {
 
+    private Switch switchGPS;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -79,7 +83,7 @@ public class SettingsFragment extends Fragment {
         Spinner spinnerDarkMode = (Spinner) view.findViewById(R.id.spDarkMode);
         Switch switchStepCount = (Switch) view.findViewById(R.id.swStepCounter);
         Switch switchAccel = (Switch) view.findViewById(R.id.swAccelSensor);
-        Switch switchGPS = (Switch) view.findViewById(R.id.swGPS);
+        switchGPS = (Switch) view.findViewById(R.id.swGPS);
         Button btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
         Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
@@ -139,6 +143,7 @@ public class SettingsFragment extends Fragment {
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                 System.out.println(b);
             }
         });
@@ -146,6 +151,12 @@ public class SettingsFragment extends Fragment {
         switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+                    }
+
+                }
                 System.out.println(b);
             }
         });
@@ -237,4 +248,18 @@ public class SettingsFragment extends Fragment {
         darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDMode.setAdapter(darkModeAdapter);
     }
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
+
+        switch(permsRequestCode){
+
+            case 200:
+
+                switchGPS.setChecked(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                break;
+
+        }
+
+    }
 }
+
