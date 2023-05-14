@@ -1,5 +1,6 @@
 package com.example.se_lab_23b02;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Switch;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,7 +83,7 @@ public class SettingsFragment extends Fragment {
         Button btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
         Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
-        Button delAllData = (Button) view.findViewById(R.id.btDeleteData);
+        Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode);
 
@@ -110,6 +112,29 @@ public class SettingsFragment extends Fragment {
 
             }
         });
+        spinnerColortheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerDarkMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -129,6 +154,52 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 System.out.println(b);
+            }
+        });
+
+        btnNotifMorning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("btnMorningClick");
+                Bundle b = new Bundle();
+                b.putInt("lowerBound", 7);
+                b.putInt("upperBound", 11);
+                Intent intent = new Intent(getActivity(), TimePickerActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        btnNotifNoon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("btnNoonClick");
+                Bundle b = new Bundle();
+                b.putInt("lowerBound", 12);
+                b.putInt("upperBound", 14);
+                Intent intent = new Intent(getActivity(), TimePickerActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        btnNotifEvening.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("btnEveningClick");
+                Bundle b = new Bundle();
+                b.putInt("lowerBound", 17);
+                b.putInt("upperBound", 19);
+                Intent intent = new Intent(getActivity(), TimePickerActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        btnDelAllData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("btnDelClick");
             }
         });
         /*
