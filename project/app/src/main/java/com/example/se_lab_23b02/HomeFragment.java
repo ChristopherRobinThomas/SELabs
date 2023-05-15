@@ -66,12 +66,11 @@ public class HomeFragment extends Fragment {
         Button questionnaireButton;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //QuestionnaireFragment questionnaireFragment = new QuestionnaireFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,questionnaireFragment).commit();
                 Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
                 startActivity(myIntent);
             }

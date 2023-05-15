@@ -23,6 +23,7 @@
         android:textSize="60sp"/>
 
     <Button
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
@@ -30,6 +31,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/button_row1"
         app:layout_constraintTop_toBottomOf="@+id/numberView"
+        android:onClick="startButtonClicked"
         />
 
     <LinearLayout
