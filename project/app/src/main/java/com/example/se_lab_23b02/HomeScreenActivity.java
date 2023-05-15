@@ -16,9 +16,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
+
 
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
@@ -37,21 +40,26 @@ public class HomeScreenActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
 
+
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
             switch(item.getItemId())
             {
                 case R.id.home:
                     replaceFragment(new HomeFragment());
+                    setTitle("Home");
                     break;
                 case R.id.settings:
                     replaceFragment(new SettingsFragment());
+                    setTitle("Settings");
                     break;
                 case R.id.data:
                     replaceFragment(new OverviewFragment());
+                    setTitle("Data");
                     break;
                 case R.id.interventions:
                     replaceFragment(new InterventionsFragment());
+                    setTitle("Interventions");
                     break;
             }
 
