@@ -27,9 +27,9 @@ public class Alarm
     private PendingIntent pendingIntent;
 
 
-    Alarm()
+    public Alarm(int _id)
     {
-        id = 0;
+        id = _id;
     }
 
     public  void addTime(MaterialTimePicker picker)
@@ -37,6 +37,15 @@ public class Alarm
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY,picker.getHour());
         calendar.set(Calendar.MINUTE,picker.getMinute());
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+    }
+
+    public  void addTime(int hour, int minute)
+    {
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,hour);
+        calendar.set(Calendar.MINUTE,minute);
         calendar.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
     }
@@ -49,7 +58,6 @@ public class Alarm
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),10,pendingIntent);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         Log.d("setAlarm","ALarm set");
-
     }
 
     public void cancelAlarm() {
