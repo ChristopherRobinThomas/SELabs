@@ -87,7 +87,7 @@ public class NotificationSettingsFragment extends Fragment {
         view.findViewById(R.id.AlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                current = new Alarm();
+                current = new Alarm(0);
                 alarms.add(current);
                 showTimePicker();
             }

@@ -20,8 +20,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "AlarmClock")
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Alarm Clock Test")
-                .setContentText("This is a test Notification for alarm Clocks")
+                .setContentTitle("Questionnaire is open")
+                .setContentText("This is your daily reminder for the questionnaire!")
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
