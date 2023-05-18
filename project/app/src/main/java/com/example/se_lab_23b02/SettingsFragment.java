@@ -36,6 +36,10 @@ public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
     private Context context;
+    private DataSavingHelper dsHelper;
+
+    private HashMap<String, String> settings;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -81,9 +85,9 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        context = getContext();
+        context = getActivity().getApplicationContext();
 
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        dsHelper = DataSavingHelper.getInstance();
 
 
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
@@ -99,9 +103,9 @@ public class SettingsFragment extends Fragment {
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
+        saveDefaultValuesInSettings();
 
-
-        HashMap<String, String> settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
 
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
@@ -185,23 +189,15 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
 
                 Bundle b = new Bundle();
+                refreshSettings();
+                System.out.println(settings);
 
-
-                if(settings.containsKey("mornLB") && settings.containsKey("mornUB") && settings.containsKey("mornCurH") && settings.containsKey("mornCurM")) {
-                    //do nothing
-                } else {
-                    settings.put("mornLB", "7");
-                    settings.put("mornUB", "11");
-                    settings.put("mornCurH", "8");
-                    settings.put("mornCurM", "15");
-
-
-                }
                 b.putInt("lowerBound", Integer.parseInt(settings.get("mornLB")));
                 b.putInt("upperBound", Integer.parseInt(settings.get("mornUB")));
                 b.putInt("currentHour", Integer.parseInt(settings.get("mornCurH")));
                 b.putInt("currentMin", Integer.parseInt(settings.get("mornCurM")));
                 b.putInt("id", 0);
+                //System.out.println(b);
 
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
@@ -214,16 +210,8 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 Bundle b = new Bundle();
 
-                if(settings.containsKey("noonLB") && settings.containsKey("noonUB") && settings.containsKey("noonCurH") && settings.containsKey("noonCurM")) {
-                    //do nothing
-                } else {
-                    settings.put("noonLB", "12");
-                    settings.put("noonUB", "14");
-                    settings.put("noonCurH", "13");
-                    settings.put("noonCurM", "0");
+                refreshSettings();
 
-
-                }
                 b.putInt("lowerBound", Integer.parseInt(settings.get("noonLB")));
                 b.putInt("upperBound", Integer.parseInt(settings.get("noonUB")));
                 b.putInt("currentHour", Integer.parseInt(settings.get("noonCurH")));
@@ -241,14 +229,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 Bundle b = new Bundle();
 
-                if(settings.containsKey("evnLB") && settings.containsKey("evnUB") && settings.containsKey("evnCurH") && settings.containsKey("evnCurM")) {
-                    //do nothing
-                } else {
-                    settings.put("evnLB", "12");
-                    settings.put("evnUB", "14");
-                    settings.put("evnCurH", "13");
-                    settings.put("evnCurM", "0");
-                }
+                refreshSettings();
 
                 b.putInt("lowerBound", Integer.parseInt(settings.get("evnLB")));
                 b.putInt("upperBound", Integer.parseInt(settings.get("evnUB")));
@@ -270,22 +251,12 @@ public class SettingsFragment extends Fragment {
 
             }
         });
-        /*
-        sensorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SensorSettingsFragment sensorSettingsFragment = new SensorSettingsFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,sensorSettingsFragment).commit();
 
-            }
-        });
-        */
-
-
-        // Inflate the layout for this fragment
         return view;
     }
 
+
+    //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
     private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -315,6 +286,8 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
+
+    //this method takes all switches and the settings map to set the switches to checked if their corresponding value is true/false
     private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS, HashMap<String, String> settings) {
         if(settings.containsKey("StepCounterAllowed")) {
             swStep.setChecked(Boolean.parseBoolean(settings.get("StepCounterAllowed")));
@@ -338,6 +311,38 @@ public class SettingsFragment extends Fragment {
                 break;
 
         }
+    }
+
+    private void saveDefaultValuesInSettings() {
+        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(context);
+        if(!tempSettings.containsKey("mornCurH"))
+            dsHelper.saveSettingAsSharedPref("mornCurH", "8", context);
+        if(!tempSettings.containsKey("mornCurM"))
+            dsHelper.saveSettingAsSharedPref("mornCurM", "15", context);
+        if(!tempSettings.containsKey("mornLB"))
+            dsHelper.saveSettingAsSharedPref("mornLB", "7", context);
+        if(!tempSettings.containsKey("mornUB"))
+            dsHelper.saveSettingAsSharedPref("mornUB", "11", context);
+        if(!tempSettings.containsKey("noonCurH"))
+            dsHelper.saveSettingAsSharedPref("noonCurH", "13", context);
+        if(!tempSettings.containsKey("noonCurM"))
+            dsHelper.saveSettingAsSharedPref("noonCurM", "0", context);
+        if(!tempSettings.containsKey("noonLB"))
+            dsHelper.saveSettingAsSharedPref("noonLB", "12", context);
+        if(!tempSettings.containsKey("noonUB"))
+            dsHelper.saveSettingAsSharedPref("noonUB", "14", context);
+        if(!tempSettings.containsKey("evnCurH"))
+            dsHelper.saveSettingAsSharedPref("evnCurH", "18", context);
+        if(!tempSettings.containsKey("evnCurM"))
+            dsHelper.saveSettingAsSharedPref("evnCurM", "0", context);
+        if(!tempSettings.containsKey("evnLB"))
+            dsHelper.saveSettingAsSharedPref("evnLB", "17", context);
+        if(!tempSettings.containsKey("evnUB"))
+            dsHelper.saveSettingAsSharedPref("evnUB", "19", context);
+    }
+
+    private void refreshSettings() {
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
     }
 
 }
