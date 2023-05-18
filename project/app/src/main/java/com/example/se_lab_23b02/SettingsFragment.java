@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -104,6 +105,7 @@ public class SettingsFragment extends Fragment {
 
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
+        setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
 
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -154,8 +156,7 @@ public class SettingsFragment extends Fragment {
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), context);
             }
         });
 
@@ -168,14 +169,14 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), context);
             }
         });
 
         switchStepCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), context);
             }
         });
 
@@ -265,6 +266,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("btnDelClick");
+                System.out.println(dsHelper.getAllSettingsFromSharedPref(context));
+
             }
         });
         /*
@@ -312,6 +315,18 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
+    private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS, HashMap<String, String> settings) {
+        if(settings.containsKey("StepCounterAllowed")) {
+            swStep.setChecked(Boolean.parseBoolean(settings.get("StepCounterAllowed")));
+        }
+        if(settings.containsKey("AccelAllowed")) {
+            swAcc.setChecked(Boolean.parseBoolean(settings.get("AccelAllowed")));
+        }
+        if(settings.containsKey("GPSAllowed")) {
+            swGPS.setChecked(Boolean.parseBoolean(settings.get("GPSAllowed")));
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
 
@@ -323,7 +338,7 @@ public class SettingsFragment extends Fragment {
                 break;
 
         }
-
     }
+
 }
 
