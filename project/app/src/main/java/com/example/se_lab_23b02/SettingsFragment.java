@@ -32,6 +32,14 @@ import java.util.Timer;
 public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
+    private final int mLB = 7;
+    private final int mUB = 11;
+    private final int nLB = 12;
+    private final int nUB = 14;
+    private final int eLB = 17;
+    private final int eUB = 19;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -173,10 +181,11 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 System.out.println("btnMorningClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", 7);
-                b.putInt("upperBound", 11);
+                b.putInt("lowerBound", mLB);
+                b.putInt("upperBound", mUB);
                 b.putInt("currentHour", 8);
                 b.putInt("currentMin", 15);//get real value here
+                b.putInt("id", 0);
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -188,10 +197,11 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 System.out.println("btnNoonClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", 12);
-                b.putInt("upperBound", 14);
+                b.putInt("lowerBound", nLB);
+                b.putInt("upperBound", nUB);
                 b.putInt("currentHour", 13); //get real value here
                 b.putInt("currentMin", 0);
+                b.putInt("id", 1);
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -203,10 +213,11 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 System.out.println("btnEveningClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", 17);
-                b.putInt("upperBound", 19);
+                b.putInt("lowerBound", eLB);
+                b.putInt("upperBound", eUB);
                 b.putInt("currentHour", 17);
                 b.putInt("currentMin", 0);
+                b.putInt("id", 2);
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
