@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -32,13 +34,7 @@ import java.util.Timer;
 public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
-    private final int mLB = 7;
-    private final int mUB = 11;
-    private final int nLB = 12;
-    private final int nUB = 14;
-    private final int eLB = 17;
-    private final int eUB = 19;
-
+    private Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +80,11 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        context = getContext();
+
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+
+
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -97,16 +98,12 @@ public class SettingsFragment extends Fragment {
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
-        setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode);
 
 
+        HashMap<String, String> settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
 
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        dsHelper.saveSettingAsSharedPref("language", "english", getActivity().getBaseContext());
-        //trying to access data
-        HashMap<String, String> settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(getActivity().getBaseContext());
-        System.out.println(settings.toString());
 
+        setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
 
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -115,8 +112,8 @@ public class SettingsFragment extends Fragment {
 
                 String val = parent.getItemAtPosition(position).toString();
 
-                dsHelper.saveSettingAsSharedPref("language", val, view.getContext());
-                System.out.println(val);
+                dsHelper.saveSettingAsSharedPref("language", val, context);
+
             }
 
             @Override
@@ -127,7 +124,10 @@ public class SettingsFragment extends Fragment {
         spinnerColortheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemAtPosition(position).toString());
+
+                String val = parent.getItemAtPosition(position).toString();
+                dsHelper.saveSettingAsSharedPref("color", val, context);
+                System.out.println(val);
             }
 
             @Override
@@ -139,7 +139,10 @@ public class SettingsFragment extends Fragment {
         spinnerDarkMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemAtPosition(position).toString());
+
+                String val = parent.getItemAtPosition(position).toString();
+                dsHelper.saveSettingAsSharedPref("dmValue", val, context);
+                System.out.println(val);
             }
 
             @Override
@@ -179,13 +182,26 @@ public class SettingsFragment extends Fragment {
         btnNotifMorning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnMorningClick");
+
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", mLB);
-                b.putInt("upperBound", mUB);
-                b.putInt("currentHour", 8);
-                b.putInt("currentMin", 15);//get real value here
+
+
+                if(settings.containsKey("mornLB") && settings.containsKey("mornUB") && settings.containsKey("mornCurH") && settings.containsKey("mornCurM")) {
+                    //do nothing
+                } else {
+                    settings.put("mornLB", "7");
+                    settings.put("mornUB", "11");
+                    settings.put("mornCurH", "8");
+                    settings.put("mornCurM", "15");
+
+
+                }
+                b.putInt("lowerBound", Integer.parseInt(settings.get("mornLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("mornUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("mornCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("mornCurM")));
                 b.putInt("id", 0);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -195,13 +211,24 @@ public class SettingsFragment extends Fragment {
         btnNotifNoon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnNoonClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", nLB);
-                b.putInt("upperBound", nUB);
-                b.putInt("currentHour", 13); //get real value here
-                b.putInt("currentMin", 0);
+
+                if(settings.containsKey("noonLB") && settings.containsKey("noonUB") && settings.containsKey("noonCurH") && settings.containsKey("noonCurM")) {
+                    //do nothing
+                } else {
+                    settings.put("noonLB", "12");
+                    settings.put("noonUB", "14");
+                    settings.put("noonCurH", "13");
+                    settings.put("noonCurM", "0");
+
+
+                }
+                b.putInt("lowerBound", Integer.parseInt(settings.get("noonLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("noonUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("noonCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("noonCurM")));
                 b.putInt("id", 1);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -211,13 +238,23 @@ public class SettingsFragment extends Fragment {
         btnNotifEvening.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnEveningClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", eLB);
-                b.putInt("upperBound", eUB);
-                b.putInt("currentHour", 17);
-                b.putInt("currentMin", 0);
+
+                if(settings.containsKey("evnLB") && settings.containsKey("evnUB") && settings.containsKey("evnCurH") && settings.containsKey("evnCurM")) {
+                    //do nothing
+                } else {
+                    settings.put("evnLB", "12");
+                    settings.put("evnUB", "14");
+                    settings.put("evnCurH", "13");
+                    settings.put("evnCurM", "0");
+                }
+
+                b.putInt("lowerBound", Integer.parseInt(settings.get("evnLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("evnUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("evnCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("evnCurM")));
                 b.putInt("id", 2);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -246,18 +283,34 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode) {
+    private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLang.setAdapter(arrayAdapter);
+
+        if(settings.containsKey("language")) {
+            int spinnerPosition = arrayAdapter.getPosition(settings.get("language"));
+            spLang.setSelection(spinnerPosition);
+        }
+
 
         ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colortheme));
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColor.setAdapter(colorAdapter);
 
+        if(settings.containsKey("color")) {
+            int spinnerPosition = colorAdapter.getPosition(settings.get("color"));
+            spColor.setSelection(spinnerPosition);
+        }
+
         ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.darkmode));
         darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDMode.setAdapter(darkModeAdapter);
+
+        if(settings.containsKey("dmValue")) {
+            int spinnerPosition = darkModeAdapter.getPosition(settings.get("dmValue"));
+            spDMode.setSelection(spinnerPosition);
+        }
     }
     @Override
     public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
