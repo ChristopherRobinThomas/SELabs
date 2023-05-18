@@ -20,6 +20,8 @@ import com.example.se_lab_23b02.databinding.FragmentHomeBinding;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Logger;
@@ -87,7 +89,8 @@ public class NotificationSettingsFragment extends Fragment {
         view.findViewById(R.id.AlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                current = new Alarm(0);
+
+                current = new Alarm((int) System.currentTimeMillis());
                 alarms.add(current);
                 showTimePicker();
             }
