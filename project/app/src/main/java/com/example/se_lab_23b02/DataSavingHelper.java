@@ -37,6 +37,11 @@ public class DataSavingHelper extends Activity {
         settingsContents = (Map<String, String>) settings.getAll();
         return settingsContents;
     }
+
+    public void deleteAllSettingsFromSharedPref(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("Settings", 0);
+        preferences.edit().clear().apply();
+    }
     public void writeDataToInternalStorage (String filename, String data) {
         try {
             FileOutputStream fOut = openFileOutput(filename,1) ;

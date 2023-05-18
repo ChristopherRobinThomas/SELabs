@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -245,9 +246,15 @@ public class SettingsFragment extends Fragment {
 
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                System.out.println("btnDelClick");
-                System.out.println(dsHelper.getAllSettingsFromSharedPref(context));
+            public void onClick(View v)  {
+
+                //delete data here
+                dsHelper.deleteAllSettingsFromSharedPref(context);
+                saveDefaultValuesInSettings();
+                refreshSettings();
+                setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
+                setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
+                Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -291,13 +298,16 @@ public class SettingsFragment extends Fragment {
     private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS, HashMap<String, String> settings) {
         if(settings.containsKey("StepCounterAllowed")) {
             swStep.setChecked(Boolean.parseBoolean(settings.get("StepCounterAllowed")));
-        }
+        } else
+            swStep.setChecked(false);
         if(settings.containsKey("AccelAllowed")) {
             swAcc.setChecked(Boolean.parseBoolean(settings.get("AccelAllowed")));
-        }
+        } else
+            swAcc.setChecked(false);
         if(settings.containsKey("GPSAllowed")) {
             swGPS.setChecked(Boolean.parseBoolean(settings.get("GPSAllowed")));
         }
+        swGPS.setChecked(false);
     }
 
     @Override
@@ -313,6 +323,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
     private void saveDefaultValuesInSettings() {
         Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(context);
         if(!tempSettings.containsKey("mornCurH"))
