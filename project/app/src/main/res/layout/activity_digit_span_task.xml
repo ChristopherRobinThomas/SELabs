@@ -10,6 +10,16 @@
 
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/numberView"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/inputView"/>
+    <TextView
         android:id="@+id/numberView"
         android:layout_width="312dp"
         android:layout_height="247dp"
@@ -172,7 +182,19 @@
         />
     </LinearLayout>
 
-
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round_button"
+        android:text="x"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintVertical_bias="0.01"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/exitButton"
+        android:onClick="exitButtonClicked"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
