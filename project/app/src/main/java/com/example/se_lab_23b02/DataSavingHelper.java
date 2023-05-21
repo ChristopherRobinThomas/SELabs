@@ -39,7 +39,7 @@ public class DataSavingHelper extends Activity {
     }
     public void writeDataToInternalStorage (String filename, String data) {
         try {
-            FileOutputStream fOut = openFileOutput(filename,1) ;
+            FileOutputStream fOut = openFileOutput(filename,Context.MODE_PRIVATE) ;
             OutputStreamWriter osw = new OutputStreamWriter(fOut) ;
             osw.write(data);
             osw.flush();

@@ -33,6 +33,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     Handler handler = new Handler();
     Random rand = new Random();
     Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+    DataSavingHelper dsHelper;
 
 
     //------GUI Elements----------------------------------------------------
@@ -55,8 +56,10 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dsHelper = DataSavingHelper.getInstance();
         setContentView(R.layout.activity_digit_span_task);
         numberOfRounds = 0;
+        initSpanLength = Integer.parseInt(dsHelper.readSavedDataFromInternalStorage("DigitSpanTask.txt"));
         spanLength = initSpanLength;
         startingButton = findViewById(R.id.startButton);
         exitButton = findViewById(R.id.exitButton);
@@ -175,7 +178,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         else if(numberOfRounds > 1){
             initSpanLength++;
         }
-        //TODO: Save to Storage
+        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength));
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
     }
