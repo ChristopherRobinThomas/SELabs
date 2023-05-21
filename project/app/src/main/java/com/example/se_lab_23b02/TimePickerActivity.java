@@ -28,6 +28,8 @@ public class TimePickerActivity extends Activity {
         TextView tvOut = (TextView) findViewById(R.id.tvTime);
         Button btSubmit = (Button) findViewById(R.id.btSubmitNewTime);
 
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+
         Bundle b = getIntent().getExtras();
 
         int id = (int) b.get("id");
@@ -74,6 +76,7 @@ public class TimePickerActivity extends Activity {
                     tvOut.setText("selected: " + hours + ":05");
                 else
                     tvOut.setText("selected: " + hours + ":" + mins);
+
             }
 
             @Override
@@ -93,6 +96,20 @@ public class TimePickerActivity extends Activity {
                 Alarm cur = new Alarm(id);
                 cur.addTime(cHour[0], cMin[0]);
                 cur.setAlarm(TimePickerActivity.this);
+                switch(id) {
+                    case 0:
+                        dsHelper.saveSettingAsSharedPref("mornCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        dsHelper.saveSettingAsSharedPref("mornCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        break;
+                    case 1:
+                        dsHelper.saveSettingAsSharedPref("noonCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        dsHelper.saveSettingAsSharedPref("noonCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        break;
+                    case 2:
+                        dsHelper.saveSettingAsSharedPref("evnCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        dsHelper.saveSettingAsSharedPref("evnCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        break;
+                }
                 Toast.makeText(TimePickerActivity.this, "Alarm set successfully", Toast.LENGTH_SHORT).show();
                 finish();
             }
