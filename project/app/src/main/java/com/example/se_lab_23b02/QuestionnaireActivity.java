@@ -11,7 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Toast;
+
 
 public class QuestionnaireActivity extends AppCompatActivity {
 
@@ -30,11 +30,14 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     private String questionFiveValue;
 
-    private int[] questionSixValues = new int[1];
+    private SeekBar[] slidersSix = new SeekBar[4];
+    private int[] questionSixValues = new int[4];
 
-    private int[] questionSevenValues = new int[1];
+    private SeekBar[] slidersSeven = new SeekBar[2];
+    private int[] questionSevenValues = new int[2];
 
-    private int[] questionEightValues = new int[1];
+    private SeekBar[] slidersEight = new SeekBar[2];
+    private int[] questionEightValues = new int[2];
 
 
     @Override
@@ -270,11 +273,112 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
     }
 
-    void manageQuestionSix(){}
+    void manageQuestionSix()
+    {
+        slidersSix[0] = findViewById(R.id.Question6_1Slider);
+        slidersSix[1] = findViewById(R.id.Question6_2Slider);
+        slidersSix[2] = findViewById(R.id.Question6_3Slider);
+        slidersSix[3] = findViewById(R.id.Question6_4Slider);
 
-    void manageQuestionSeven(){}
+        for(int i = 0; i < slidersSix.length ;i++){
 
-    void manageQuestionEight(){}
+            slidersSix[i].setMax(100);
+            slidersSix[i].setMin(0);
+
+            slidersSix[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    for(int i = 0; i < slidersSix.length;i++)
+                    {
+                        if(slidersSix[i] == seekBar)
+                        {
+                            questionSixValues[i] = progress;
+                            break;
+                        }
+                    }
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
+    }
+
+    void manageQuestionSeven()
+    {
+        slidersSeven[0] = findViewById(R.id.Question7_1Slider);
+        slidersSeven[1] = findViewById(R.id.Question7_2Slider);
+
+        for(int i = 0; i < slidersSeven.length ;i++){
+
+            slidersSeven[i].setMax(9);
+            slidersSeven[i].setMin(0);
+
+            slidersSeven[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    for(int i = 0; i < slidersSeven.length;i++)
+                    {
+                        if(slidersSeven[i] == seekBar)
+                        {
+                            questionSevenValues[i] = progress;
+                            break;
+                        }
+                    }
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
+    }
+
+    void manageQuestionEight()
+    {
+        slidersEight[0] = findViewById(R.id.Question8_1Slider);
+        slidersEight[1] = findViewById(R.id.Question8_2Slider);
+
+        for(int i = 0; i < slidersEight.length ;i++){
+
+            slidersEight[i].setMax(6);
+            slidersEight[i].setMin(0);
+
+            slidersEight[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    for(int i = 0; i < slidersEight.length;i++)
+                    {
+                        if(slidersEight[i] == seekBar)
+                        {
+                            questionEightValues[i] = progress;
+                            break;
+                        }
+                    }
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
+    }
 
 
 }
