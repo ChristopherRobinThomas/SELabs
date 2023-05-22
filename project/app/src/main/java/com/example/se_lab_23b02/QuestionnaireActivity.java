@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class QuestionnaireActivity extends AppCompatActivity {
@@ -19,6 +23,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private int[] questionTwoValues = new int[2];
 
     private boolean questionThreeBool;
+    private SeekBar[] slidersThree = new SeekBar[1];
     private int[] questionThreeValues = new int[1];
 
     private String questionFourValue;
@@ -153,11 +158,117 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
-    void manageQuestionThree(){}
+    void manageQuestionThree() {
+        slidersThree[0] = findViewById(R.id.Question3_2Slider);
+        RadioGroup radioGroup = findViewById(R.id.Question3YesOrNo);
+        RadioButton radioButtonYes = findViewById(R.id.Question3Yes);
+        RadioButton radioButtonNo = findViewById(R.id.Question3No);
 
-    void manageQuestionFour(){}
+        Spinner spinner = findViewById(R.id.Question4_1DropDown);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == radioButtonYes.getId()) {
+                    questionThreeBool = true;
+                    spinner.setEnabled(true);
+                    for (int i = 0; i < slidersThree.length; i++) {
+                        slidersThree[i].setEnabled(true);
+                    }
+                } else if (checkedId == radioButtonNo.getId()) {
+                    questionThreeBool = false;
+                    spinner.setEnabled(false);
+                    for (int i = 0; i < slidersThree.length; i++) {
+                        slidersThree[i].setEnabled(false);
+                    }
+                }
+            }
+        });
 
-    void manageQuestionFive(){}
+        for (int i = 0; i < slidersThree.length; i++) {
+            slidersThree[i].setMax(100);
+            slidersThree[i].setMin(0);
+            slidersThree[i].setEnabled(false);
+
+            slidersThree[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    for (int i = 0; i < slidersThree.length; i++) {
+                        if (slidersThree[i] == seekBar) {
+                            questionThreeValues[i] = progress;
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
+    }
+    void manageQuestionFour()
+    {
+        Spinner spinner = findViewById(R.id.Question4_1DropDown);
+        spinner.setEnabled(false);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
+        adapter.add("Partner");
+        adapter.add("Family");
+        adapter.add("Friends");
+        adapter.add("Coworkers");
+        adapter.add("Strangers");
+        adapter.add("Other"); // To be implemented
+
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                questionFourValue = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    void manageQuestionFive()
+    {
+        Spinner spinner = findViewById(R.id.Question5_1DropDown);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
+        adapter.add("At home");
+        adapter.add("School/University");
+        adapter.add("Work");
+        adapter.add("Sport");
+        adapter.add("other recreational Activity");
+        adapter.add("Shopping");
+        adapter.add("Visiting");
+        adapter.add("Other"); // To be implemented
+
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                questionFiveValue = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     void manageQuestionSix(){}
 
