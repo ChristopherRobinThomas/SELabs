@@ -24,13 +24,13 @@
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/Question1Text"
-                android:layout_width="wrap_content"
+                android:id="@+id/Question1_1Text"
+                android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Question1"
+                android:text="In the last 24 hours I felt: Satisfied/Unsatisfied "
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,14 +39,140 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
-                android:id="@+id/Question1Slider"
+                android:id="@+id/Question1_1Slider"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Question1Text" />
+                app:layout_constraintTop_toBottomOf="@+id/Question1_1Text" />
+
+            <TextView
+                android:id="@+id/Question1_2Text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="In the last 24 hours I felt: Restless/Calm"
+                android:textAlignment="textStart"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_1Slider" />
+
+            <SeekBar
+                android:id="@+id/Question1_2Slider"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_2Text" />
+
+            <TextView
+                android:id="@+id/Question1_3Text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="In the last 24 hours I felt: Well/Unwell"
+                android:textAlignment="textStart"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_2Slider" />
+
+            <SeekBar
+                android:id="@+id/Question1_3Slider"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_3Text" />
+
+            <TextView
+                android:id="@+id/Question1_4Text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="In the last 24 hours I felt: Relaxed/Tense"
+                android:textAlignment="textStart"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_3Slider" />
+
+            <SeekBar
+                android:id="@+id/Question1_4Slider"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_4Text" />
+
+
+            <TextView
+                android:id="@+id/Question1_5Text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="In the last 24 hours I felt: Full of Energy/Without Energy"
+                android:textAlignment="textStart"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_4Slider" />
+
+            <SeekBar
+                android:id="@+id/Question1_5Slider"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_5Text" />
+
+            <TextView
+                android:id="@+id/Question1_6Text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="In the last 24 hours I felt: Tired/Awake "
+                android:textAlignment="textStart"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_5Slider" />
+
+            <SeekBar
+                android:id="@+id/Question1_6Slider"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question1_6Text" />
 
             <TextView
                 android:id="@+id/Question2Text"
@@ -55,11 +181,13 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:text="Question 2"
+                android:text="Since the last questionnaire, did you have one or more
+negative experiences?
+"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Question1Slider" />
+                app:layout_constraintTop_toBottomOf="@+id/Question1_6Slider" />
 
 
             <RadioGroup
