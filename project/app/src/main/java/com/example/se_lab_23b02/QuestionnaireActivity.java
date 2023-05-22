@@ -171,13 +171,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == radioButtonYes.getId()) {
+                if (checkedId == radioButtonNo.getId()) {
                     questionThreeBool = true;
                     spinner.setEnabled(true);
                     for (int i = 0; i < slidersThree.length; i++) {
                         slidersThree[i].setEnabled(true);
                     }
-                } else if (checkedId == radioButtonNo.getId()) {
+                } else if (checkedId == radioButtonYes.getId()) {
                     questionThreeBool = false;
                     spinner.setEnabled(false);
                     for (int i = 0; i < slidersThree.length; i++) {
