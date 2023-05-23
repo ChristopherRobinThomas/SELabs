@@ -48,8 +48,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         manageQuestions();
     }
 
-    void  manageQuestions()
-    {
+    void  manageQuestions() {
         manageQuestionOne();
         manageQuestionTwo();
         manageQuestionThree();
@@ -60,8 +59,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         manageQuestionEight();
     }
 
-    void manageQuestionOne()
-    {
+    void manageQuestionOne() {
         slidersOne[0] = findViewById(R.id.Question1_1Slider);
         slidersOne[1] = findViewById(R.id.Question1_2Slider);
         slidersOne[2] = findViewById(R.id.Question1_3Slider);
@@ -101,8 +99,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     }
 
-    void manageQuestionTwo()
-    {
+    void manageQuestionTwo() {
         slidersTwo[0] = findViewById(R.id.Question2_2Slider);
         slidersTwo[1] = findViewById(R.id.Question2_3Slider);
         RadioGroup radioGroup = findViewById(R.id.Question2YesOrNo);
@@ -161,7 +158,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
-    void manageQuestionThree() {
+    void manageQuestionThree(){
+
         slidersThree[0] = findViewById(R.id.Question3_2Slider);
         RadioGroup radioGroup = findViewById(R.id.Question3YesOrNo);
         RadioButton radioButtonYes = findViewById(R.id.Question3Yes);
@@ -216,8 +214,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             });
         }
     }
-    void manageQuestionFour()
-    {
+    void manageQuestionFour() {
         Spinner spinner = findViewById(R.id.Question4_1DropDown);
         spinner.setEnabled(false);
 
@@ -244,8 +241,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
     }
 
-    void manageQuestionFive()
-    {
+    void manageQuestionFive() {
         Spinner spinner = findViewById(R.id.Question5_1DropDown);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
@@ -273,8 +269,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
     }
 
-    void manageQuestionSix()
-    {
+    void manageQuestionSix() {
         slidersSix[0] = findViewById(R.id.Question6_1Slider);
         slidersSix[1] = findViewById(R.id.Question6_2Slider);
         slidersSix[2] = findViewById(R.id.Question6_3Slider);
@@ -310,8 +305,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
-    void manageQuestionSeven()
-    {
+    void manageQuestionSeven() {
         slidersSeven[0] = findViewById(R.id.Question7_1Slider);
         slidersSeven[1] = findViewById(R.id.Question7_2Slider);
 
@@ -345,8 +339,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
-    void manageQuestionEight()
-    {
+    void manageQuestionEight() {
         slidersEight[0] = findViewById(R.id.Question8_1Slider);
         slidersEight[1] = findViewById(R.id.Question8_2Slider);
 
