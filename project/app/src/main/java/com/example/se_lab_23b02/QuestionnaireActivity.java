@@ -69,7 +69,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         for (int i = 1; i < valueArrays.length; i++) {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
-        //dsHelper.writeDataToInternalStorage("");
+        dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 
     void  manageQuestions() {
