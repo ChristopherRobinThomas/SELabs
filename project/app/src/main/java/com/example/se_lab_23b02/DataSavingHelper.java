@@ -4,8 +4,13 @@ import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
@@ -14,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 
 // Woah Singleton
-public class DataSavingHelper extends Activity {
+public class DataSavingHelper {
     private static DataSavingHelper INSTANCE;
     private DataSavingHelper() {
 
@@ -42,32 +47,46 @@ public class DataSavingHelper extends Activity {
         SharedPreferences preferences = context.getSharedPreferences("Settings", 0);
         preferences.edit().clear().apply();
     }
-    public void writeDataToInternalStorage (String filename, String data) {
+    public void writeDataToInternalStorage (String filename, String data, Context context) {
         try {
-            FileOutputStream fOut = openFileOutput(filename,1) ;
-            OutputStreamWriter osw = new OutputStreamWriter(fOut) ;
-            osw.write(data);
-            osw.flush();
-            osw.close();
-        } catch(Exception e) {
-            e.printStackTrace();
+            // If file does not yet exist, create it
+            File toWrite = new File(context.getFilesDir(), filename);
+            if(!toWrite.exists()){
+                toWrite.createNewFile();
+            }
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+            Log.e("dsHelper", "To file: "+filename+", wrote: "+data);
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
-    public String readSavedDataFromInternalStorage(String filename) {
-        StringBuilder datax = new StringBuilder("");
+    public String readSavedDataFromInternalStorage(String filename, Context context) {
+        String ret = "";
         try {
-            FileInputStream fIn = openFileInput(filename);
-            InputStreamReader isr = new InputStreamReader(fIn);
-            BufferedReader buffreader = new BufferedReader(isr);
-            String readString = buffreader.readLine();
-            while (readString != null) {
-                datax.append(readString);
-                readString = buffreader.readLine();
+            InputStream inputStream = context.openFileInput(filename);
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
             }
-            isr.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
         }
-        return datax.toString();
+        catch (FileNotFoundException e) {
+            Log.e("dsHelper", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("dsHelper", "Can not read file: " + e.toString());
+        }
+        Log.e("dsHelper", "From file: "+filename+", read: "+ret);
+        return ret;
     }
 }
