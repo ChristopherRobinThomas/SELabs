@@ -12,6 +12,10 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class QuestionnaireActivity extends AppCompatActivity {
 
@@ -39,13 +43,33 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
+    private DataSavingHelper dsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
+        dsHelper = DataSavingHelper.getInstance();
 
         manageQuestions();
+    }
+
+    void saveAnswers() throws JSONException {
+        JSONArray[] valueArrays = {
+                new JSONArray(questionOneValues),
+                new JSONArray(questionTwoValues),
+                new JSONArray(questionThreeValues),
+                new JSONArray(questionFourValue),
+                new JSONArray(questionFiveValue),
+                new JSONArray(questionSixValues),
+                new JSONArray(questionSevenValues),
+                new JSONArray(questionEightValues)
+        };
+        JSONObject toSave = new JSONObject();
+        for (int i = 1; i < valueArrays.length; i++) {
+            toSave.put("Q"+i, valueArrays[i-1]);
+        }
+        //dsHelper.writeDataToInternalStorage("");
     }
 
     void  manageQuestions() {
