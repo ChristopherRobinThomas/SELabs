@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,11 +16,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -32,12 +36,10 @@ import java.util.Timer;
 public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
-    private final int mLB = 7;
-    private final int mUB = 11;
-    private final int nLB = 12;
-    private final int nUB = 14;
-    private final int eLB = 17;
-    private final int eUB = 19;
+    private Context context;
+    private DataSavingHelper dsHelper;
+
+    private HashMap<String, String> settings;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -84,6 +86,11 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        context = getActivity().getApplicationContext();
+
+        dsHelper = DataSavingHelper.getInstance();
+
+
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -97,16 +104,13 @@ public class SettingsFragment extends Fragment {
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
-        setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode);
+        saveDefaultValuesInSettings();
+
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
 
 
-
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        dsHelper.saveSettingAsSharedPref("language", "english", getActivity().getBaseContext());
-        //trying to access data
-        HashMap<String, String> settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(getActivity().getBaseContext());
-        System.out.println(settings.toString());
-
+        setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
+        setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
 
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -115,8 +119,8 @@ public class SettingsFragment extends Fragment {
 
                 String val = parent.getItemAtPosition(position).toString();
 
-                dsHelper.saveSettingAsSharedPref("language", val, view.getContext());
-                System.out.println(val);
+                dsHelper.saveSettingAsSharedPref("language", val, context);
+
             }
 
             @Override
@@ -127,7 +131,10 @@ public class SettingsFragment extends Fragment {
         spinnerColortheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemAtPosition(position).toString());
+
+                String val = parent.getItemAtPosition(position).toString();
+                dsHelper.saveSettingAsSharedPref("color", val, context);
+                System.out.println(val);
             }
 
             @Override
@@ -139,7 +146,10 @@ public class SettingsFragment extends Fragment {
         spinnerDarkMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemAtPosition(position).toString());
+
+                String val = parent.getItemAtPosition(position).toString();
+                dsHelper.saveSettingAsSharedPref("dmValue", val, context);
+                System.out.println(val);
             }
 
             @Override
@@ -151,8 +161,7 @@ public class SettingsFragment extends Fragment {
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), context);
             }
         });
 
@@ -165,27 +174,32 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), context);
             }
         });
 
         switchStepCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                System.out.println(b);
+                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), context);
             }
         });
 
         btnNotifMorning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnMorningClick");
+
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", mLB);
-                b.putInt("upperBound", mUB);
-                b.putInt("currentHour", 8);
-                b.putInt("currentMin", 15);//get real value here
+                refreshSettings();
+                System.out.println(settings);
+
+                b.putInt("lowerBound", Integer.parseInt(settings.get("mornLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("mornUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("mornCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("mornCurM")));
                 b.putInt("id", 0);
+                //System.out.println(b);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -195,13 +209,16 @@ public class SettingsFragment extends Fragment {
         btnNotifNoon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnNoonClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", nLB);
-                b.putInt("upperBound", nUB);
-                b.putInt("currentHour", 13); //get real value here
-                b.putInt("currentMin", 0);
+
+                refreshSettings();
+
+                b.putInt("lowerBound", Integer.parseInt(settings.get("noonLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("noonUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("noonCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("noonCurM")));
                 b.putInt("id", 1);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -211,13 +228,16 @@ public class SettingsFragment extends Fragment {
         btnNotifEvening.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btnEveningClick");
                 Bundle b = new Bundle();
-                b.putInt("lowerBound", eLB);
-                b.putInt("upperBound", eUB);
-                b.putInt("currentHour", 17);
-                b.putInt("currentMin", 0);
+
+                refreshSettings();
+
+                b.putInt("lowerBound", Integer.parseInt(settings.get("evnLB")));
+                b.putInt("upperBound", Integer.parseInt(settings.get("evnUB")));
+                b.putInt("currentHour", Integer.parseInt(settings.get("evnCurH")));
+                b.putInt("currentMin", Integer.parseInt(settings.get("evnCurM")));
                 b.putInt("id", 2);
+
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -226,39 +246,70 @@ public class SettingsFragment extends Fragment {
 
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                System.out.println("btnDelClick");
-            }
-        });
-        /*
-        sensorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SensorSettingsFragment sensorSettingsFragment = new SensorSettingsFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,sensorSettingsFragment).commit();
+            public void onClick(View v)  {
+
+                //delete data here
+                dsHelper.deleteAllSettingsFromSharedPref(context);
+                saveDefaultValuesInSettings();
+                refreshSettings();
+                setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
+                setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
+                Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
 
             }
         });
-        */
 
-
-        // Inflate the layout for this fragment
         return view;
     }
 
-    private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode) {
+
+    //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
+    private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLang.setAdapter(arrayAdapter);
+
+        if(settings.containsKey("language")) {
+            int spinnerPosition = arrayAdapter.getPosition(settings.get("language"));
+            spLang.setSelection(spinnerPosition);
+        }
+
 
         ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colortheme));
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColor.setAdapter(colorAdapter);
 
+        if(settings.containsKey("color")) {
+            int spinnerPosition = colorAdapter.getPosition(settings.get("color"));
+            spColor.setSelection(spinnerPosition);
+        }
+
         ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.darkmode));
         darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDMode.setAdapter(darkModeAdapter);
+
+        if(settings.containsKey("dmValue")) {
+            int spinnerPosition = darkModeAdapter.getPosition(settings.get("dmValue"));
+            spDMode.setSelection(spinnerPosition);
+        }
     }
+
+    //this method takes all switches and the settings map to set the switches to checked if their corresponding value is true/false
+    private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS, HashMap<String, String> settings) {
+        if(settings.containsKey("StepCounterAllowed")) {
+            swStep.setChecked(Boolean.parseBoolean(settings.get("StepCounterAllowed")));
+        } else
+            swStep.setChecked(false);
+        if(settings.containsKey("AccelAllowed")) {
+            swAcc.setChecked(Boolean.parseBoolean(settings.get("AccelAllowed")));
+        } else
+            swAcc.setChecked(false);
+        if(settings.containsKey("GPSAllowed")) {
+            swGPS.setChecked(Boolean.parseBoolean(settings.get("GPSAllowed")));
+        }
+        swGPS.setChecked(false);
+    }
+
     @Override
     public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
 
@@ -270,7 +321,40 @@ public class SettingsFragment extends Fragment {
                 break;
 
         }
-
     }
+
+    //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
+    private void saveDefaultValuesInSettings() {
+        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(context);
+        if(!tempSettings.containsKey("mornCurH"))
+            dsHelper.saveSettingAsSharedPref("mornCurH", "8", context);
+        if(!tempSettings.containsKey("mornCurM"))
+            dsHelper.saveSettingAsSharedPref("mornCurM", "15", context);
+        if(!tempSettings.containsKey("mornLB"))
+            dsHelper.saveSettingAsSharedPref("mornLB", "7", context);
+        if(!tempSettings.containsKey("mornUB"))
+            dsHelper.saveSettingAsSharedPref("mornUB", "11", context);
+        if(!tempSettings.containsKey("noonCurH"))
+            dsHelper.saveSettingAsSharedPref("noonCurH", "13", context);
+        if(!tempSettings.containsKey("noonCurM"))
+            dsHelper.saveSettingAsSharedPref("noonCurM", "0", context);
+        if(!tempSettings.containsKey("noonLB"))
+            dsHelper.saveSettingAsSharedPref("noonLB", "12", context);
+        if(!tempSettings.containsKey("noonUB"))
+            dsHelper.saveSettingAsSharedPref("noonUB", "14", context);
+        if(!tempSettings.containsKey("evnCurH"))
+            dsHelper.saveSettingAsSharedPref("evnCurH", "18", context);
+        if(!tempSettings.containsKey("evnCurM"))
+            dsHelper.saveSettingAsSharedPref("evnCurM", "0", context);
+        if(!tempSettings.containsKey("evnLB"))
+            dsHelper.saveSettingAsSharedPref("evnLB", "17", context);
+        if(!tempSettings.containsKey("evnUB"))
+            dsHelper.saveSettingAsSharedPref("evnUB", "19", context);
+    }
+
+    private void refreshSettings() {
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
+    }
+
 }
 
