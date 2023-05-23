@@ -49,6 +49,7 @@ public class DataSavingHelper {
     }
     public void writeDataToInternalStorage (String filename, String data, Context context) {
         try {
+            // If file does not yet exist, create it
             File toWrite = new File(context.getFilesDir(), filename);
             if(!toWrite.exists()){
                 toWrite.createNewFile();
@@ -56,6 +57,7 @@ public class DataSavingHelper {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
+            Log.e("dsHelper", "To file: "+filename+", wrote: "+data);
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -80,11 +82,11 @@ public class DataSavingHelper {
             }
         }
         catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e("dsHelper", "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
+            Log.e("dsHelper", "Can not read file: " + e.toString());
         }
-
+        Log.e("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
     }
 }
