@@ -47,7 +47,19 @@ public class DataSavingHelper {
         SharedPreferences preferences = context.getSharedPreferences("Settings", 0);
         preferences.edit().clear().apply();
     }
+    // Default usage
     public void writeDataToInternalStorage (String filename, String data, Context context) {
+        accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
+    }
+    // Overload: Access Mode
+    public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
+        if (append) {
+            accessInternalStorage(filename, data, context, Context.MODE_APPEND);
+        } else {
+            accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
+        }
+    }
+    private void accessInternalStorage(String filename, String data, Context context, int accessMode) {
         try {
             // If file does not yet exist, create it
             File toWrite = new File(context.getFilesDir(), filename);
