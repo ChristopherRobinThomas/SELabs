@@ -30,9 +30,9 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersThree = new SeekBar[1];
     private int[] questionThreeValues = new int[1];
 
-    private String questionFourValue;
+    private String[] questionFourValue = new String[1];
 
-    private String questionFiveValue;
+    private String[] questionFiveValue = new String[1];
 
     private SeekBar[] slidersSix = new SeekBar[4];
     private int[] questionSixValues = new int[4];
@@ -44,17 +44,53 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private int[] questionEightValues = new int[2];
 
     private DataSavingHelper dsHelper;
+    private ServerHelper sHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
-
-        manageQuestions();
+        //sHelper = ServerHelper.getInstance();
+        try {
+            saveAnswers();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        //manageQuestions();
     }
 
     void saveAnswers() throws JSONException {
+
+        questionOneValues[0] = 5;
+        questionOneValues[1] = 5;
+        questionOneValues[2] = 5;
+        questionOneValues[3] = 5;
+        questionOneValues[4] = 5;
+        questionOneValues[5] = 5;
+
+
+        questionTwoBool = true;
+        questionTwoValues[0] = 10;
+        questionTwoValues[1] = 10;
+
+        questionThreeBool = true;
+        questionThreeValues[0] = 50;
+
+        questionFourValue[0] = "TestFour";
+        questionFiveValue[0] = "TestFive";
+
+        questionSixValues[0] = 4;
+        questionSixValues[1] = 4;
+        questionSixValues[2] = 4;
+        questionSixValues[3] = 4;
+
+        questionSevenValues[0] = 2;
+        questionSevenValues[1] = 3;
+
+        questionEightValues[0] = 8;
+        questionEightValues[1] = 8;
+
         JSONArray[] valueArrays = {
                 new JSONArray(questionOneValues),
                 new JSONArray(questionTwoValues),
@@ -66,10 +102,16 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 new JSONArray(questionEightValues)
         };
         JSONObject toSave = new JSONObject();
-        for (int i = 1; i < valueArrays.length; i++) {
+        for (int i = 1; i <= valueArrays.length; i++) {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
-        dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        System.out.println(toSave);
+        System.out.println(toSave.toString());
+
+
+
+        //sHelper.addQuestionaire(toSave);
+        //dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 
     void  manageQuestions() {
@@ -255,7 +297,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                questionFourValue = parent.getItemAtPosition(position).toString();
+                questionFourValue[0] = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -283,7 +325,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                questionFiveValue = parent.getItemAtPosition(position).toString();
+                questionFiveValue[0] = parent.getItemAtPosition(position).toString();
             }
 
             @Override
