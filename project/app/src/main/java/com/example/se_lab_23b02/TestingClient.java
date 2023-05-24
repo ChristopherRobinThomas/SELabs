@@ -14,7 +14,7 @@ import retrofit2.http.Url;
 public interface TestingClient {
 
         @POST("development/testing")
-        Call<Void> postQuestionnaire(@Body JSONObject questionnaire);
+        Call<Void> postQuestionnaire(@Url String postURL,@Body JSONObject questionnaire);
 
         @Streaming
         @GET

@@ -25,9 +25,13 @@ public class ServerHelper {
     private static ServerHelper INSTANCE;
     TestingClient testingClient;
     FragmentActivity activity;
+
+    private String addQuestionaireURL = "snq4xkkw69.execute-api.eu-north-1.amazonaws.com/development/databaseentrys/questionaire";
+    private String getInterventionSourceListURL = "snq4xkkw69.execute-api.eu-north-1.amazonaws.com/development/s3/getinterventionsourcelist";
+
     private ServerHelper() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://")
+                .baseUrl("https://")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -43,7 +47,7 @@ public class ServerHelper {
 
     public void addQuestionaire(JSONObject toSave){
 
-        Call<Void> call = testingClient.postQuestionnaire(toSave);
+        Call<Void> call = testingClient.postQuestionnaire(addQuestionaireURL ,toSave);
 
         call.enqueue(new Callback<Void>() {
             @Override
