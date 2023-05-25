@@ -52,44 +52,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
-        try {
-            saveAnswers();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        //manageQuestions();
+        manageQuestions();
     }
 
     void saveAnswers() throws JSONException {
-
-        questionOneValues[0] = 5;
-        questionOneValues[1] = 5;
-        questionOneValues[2] = 5;
-        questionOneValues[3] = 5;
-        questionOneValues[4] = 5;
-        questionOneValues[5] = 5;
-
-
-        questionTwoBool = true;
-        questionTwoValues[0] = 10;
-        questionTwoValues[1] = 10;
-
-        questionThreeBool = true;
-        questionThreeValues[0] = 50;
-
-        questionFourValue[0] = "TestFour";
-        questionFiveValue[0] = "TestFive";
-
-        questionSixValues[0] = 4;
-        questionSixValues[1] = 4;
-        questionSixValues[2] = 4;
-        questionSixValues[3] = 4;
-
-        questionSevenValues[0] = 2;
-        questionSevenValues[1] = 3;
-
-        questionEightValues[0] = 8;
-        questionEightValues[1] = 8;
 
         JSONArray[] valueArrays = {
                 new JSONArray(questionOneValues),
@@ -108,7 +74,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         sHelper.setActivity(this);
         sHelper.addQuestionaire(toSave);
-        //dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 
     void  manageQuestions() {

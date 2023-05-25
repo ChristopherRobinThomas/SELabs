@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServerHelper {
     private static ServerHelper INSTANCE;
-    private TestingClient testingClient;
+    private HTTPClient httpClient;
     private FragmentActivity activity;
     private String addQuestionaireURL = "development/databaseentrys/questionaire";
     private String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
@@ -36,7 +36,7 @@ public class ServerHelper {
                 .build();
 
         //create Interface
-        testingClient = retrofit.create(TestingClient.class);
+        httpClient = retrofit.create(HTTPClient.class);
     }
 
     public static ServerHelper getInstance() {
@@ -55,7 +55,7 @@ public class ServerHelper {
     public void addQuestionaire(JSONObject toSave) throws JSONException {
         JSONObject body = addInformationToJSONObject(toSave);
 
-        Call<ResponseBody> call = testingClient.postQuestionnaire(addQuestionaireURL, body);
+        Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionaireURL, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -91,10 +91,10 @@ public class ServerHelper {
                 .build();
 
 
-        testingClient = retrofit2.create(TestingClient.class);
+        httpClient = retrofit2.create(HTTPClient.class);
 
         String fileUrl = "";
-        Call<ResponseBody> call = testingClient.downloadFile(fileUrl);
+        Call<ResponseBody> call = httpClient.downloadFile(fileUrl);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

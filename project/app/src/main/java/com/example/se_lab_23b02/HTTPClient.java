@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
-public interface TestingClient {
+public interface HTTPClient {
 
     @POST
     Call<ResponseBody> postQuestionnaire(@Url String postURL, @Body JSONObject questionnaire);
