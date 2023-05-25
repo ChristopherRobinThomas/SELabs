@@ -13,11 +13,11 @@ import retrofit2.http.Url;
 
 public interface TestingClient {
 
-        @POST("development/testing")
-        Call<Void> postQuestionnaire(@Url String postURL,@Body JSONObject questionnaire);
+    @POST
+    Call<ResponseBody> postQuestionnaire(@Url String postURL, @Body JSONObject questionnaire);
 
-        @Streaming
-        @GET
-        Call<ResponseBody> downloadFile(@Url String fileUrl);
+    @Streaming
+    @GET
+    Call<ResponseBody> downloadFile(@Url String fileUrl);
 
 }

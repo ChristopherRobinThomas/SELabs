@@ -51,7 +51,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
-        //sHelper = ServerHelper.getInstance();
+        sHelper = ServerHelper.getInstance();
         try {
             saveAnswers();
         } catch (JSONException e) {
@@ -105,11 +105,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
         for (int i = 1; i <= valueArrays.length; i++) {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
-        System.out.println(toSave);
-        System.out.println(toSave.toString());
 
-
-
+        sHelper.setActivity(this);
         sHelper.addQuestionaire(toSave);
         //dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
