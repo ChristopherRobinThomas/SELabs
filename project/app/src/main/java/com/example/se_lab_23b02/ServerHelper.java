@@ -28,6 +28,7 @@ public class ServerHelper {
     private FragmentActivity activity;
     private String addQuestionaireURL = "development/databaseentrys/questionaire";
     private String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
+    private String addDigitSpanTaskURL = "development/databaseentrys/digitspantask";
 
     private ServerHelper() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -76,6 +77,29 @@ public class ServerHelper {
         });
     }
 
+    //creates a new Call (for Async operations) and awaits http response
+    public void addDigitSpanTask(JSONObject toSave) throws JSONException {
+        JSONObject body = addInformationToJSONObject(toSave);
+        Call<ResponseBody> call = httpClient.postDigitSpanTask(addDigitSpanTaskURL, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(activity, "Success", Toast.LENGTH_LONG).show();
+                } else {
+                    System.out.println(response);
+                    Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
     //ads Information such as UserID (to identify the Users Questionaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
     private JSONObject addInformationToJSONObject(JSONObject toSave) throws JSONException {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());

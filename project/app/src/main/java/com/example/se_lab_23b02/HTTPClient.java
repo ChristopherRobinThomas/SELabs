@@ -16,6 +16,9 @@ public interface HTTPClient {
     @POST
     Call<ResponseBody> postQuestionnaire(@Url String postURL, @Body JSONObject questionnaire);
 
+    @POST
+    Call<ResponseBody> postDigitSpanTask(@Url String postURL, @Body JSONObject digitSpanTask);
+
     @Streaming
     @GET
     Call<ResponseBody> downloadFile(@Url String fileUrl);
