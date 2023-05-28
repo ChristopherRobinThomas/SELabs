@@ -2,11 +2,13 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -53,6 +55,20 @@ public class QuestionnaireActivity extends AppCompatActivity {
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
         manageQuestions();
+        findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    saveAnswers();
+                }catch (Exception e)
+                {
+
+                }
+                Intent i = new Intent(QuestionnaireActivity.this,HomeScreenActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     void saveAnswers() throws JSONException {
