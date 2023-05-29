@@ -64,7 +64,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 {
 
                 }
-                Intent i = new Intent(QuestionnaireActivity.this,HomeScreenActivity.class);
+                Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
                 startActivity(i);
             }
         });
