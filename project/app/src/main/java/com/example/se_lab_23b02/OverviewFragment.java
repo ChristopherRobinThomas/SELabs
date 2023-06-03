@@ -5,9 +5,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +16,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.google.gson.internal.bind.util.ISO8601Utils;
+
+import org.json.JSONException;
 
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,7 +46,8 @@ public class OverviewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private  XYPlot plot;
-    private DataSavingHelper ds;
+    private DataSavingHelper dsHelper;
+    private DataAccessHelper daHelper;
 
     private LocalDate dateLB;
     private LocalDate dateUB;
@@ -92,12 +96,15 @@ public class OverviewFragment extends Fragment {
 
         plot = (XYPlot) view.findViewById(R.id.plt_graph);
 
-        ds = DataSavingHelper.getInstance();
+        dsHelper = DataSavingHelper.getInstance();
 
-        Paint color = new Paint();
-        color.setColor(Color.WHITE);
-        plot.getGraph().setBackgroundPaint(color);
-        plot.getGraph().setGridBackgroundPaint(color);
+        Paint whiteColor = new Paint();
+        whiteColor.setColor(Color.WHITE);
+        Paint blackColor = new Paint();
+        blackColor.setColor(Color.BLACK);
+
+        plot.getGraph().setBackgroundPaint(whiteColor);
+        plot.getGraph().setGridBackgroundPaint(whiteColor);
 
 
 
@@ -118,7 +125,11 @@ public class OverviewFragment extends Fragment {
             public void onClick(View v) {
                 Number[] nums = {3, 4, 7, 8, 12, 15};
                 System.out.println("click");
-                updateGraph();
+                try {
+                    updateGraph();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 //draw(nums);
             }
         });
@@ -147,6 +158,11 @@ public class OverviewFragment extends Fragment {
                                 dateLB = dateLB.withMonth(month + 1);
                                 dateLB = dateLB.withDayOfMonth(dayOfMonth);
                                 lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                try {
+                                    updateGraph();
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         },
                         year, month, day);
@@ -176,6 +192,11 @@ public class OverviewFragment extends Fragment {
                                 dateUB = dateUB.withMonth(month + 1);
                                 dateUB = dateUB.withDayOfMonth(dayOfMonth);
                                 upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                try {
+                                    updateGraph();
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         },
                         year, month, day);
@@ -183,17 +204,31 @@ public class OverviewFragment extends Fragment {
             }
 
         });
+
+        try {
+            updateGraph();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         return view;
 
     }
 
 
-    private void updateGraph() {
+    private void updateGraph() throws JSONException {
 
         // get current values
 
-        Number[] nums =  {1, 4, 5, 6, 7, 8, 1, 4, 5, 6, 7, 8, 1, 4, 5, 6, 7, 8};
-        String[] labels = {"May", "June", "July", "August", "September", "October", "May", "June", "July", "August", "September", "October", "May", "June", "July", "August", "September", "October"};
+        daHelper = DataAccessHelper.getInstance();
+        ArrayList<Pair<String, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
+        Number[] nums = new Number[data.size()];
+        String[] labels = new String[data.size()];
+
+        for(int i = 0; i < data.size(); i++) {
+            labels[i] = data.get(i).first;
+            nums[i] = data.get(i).second;
+        }
+
         draw(nums, labels);
 
     }
@@ -202,7 +237,7 @@ public class OverviewFragment extends Fragment {
     private void draw(Number[] dataList, String[] labels) {
 
         plot.clear();
-
+        plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
         final Number[] domainLabels = new Number[dataList.length];
 
         for (int i = 0; i < dataList.length; i++) {
@@ -212,6 +247,9 @@ public class OverviewFragment extends Fragment {
         LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
 
         plot.addSeries(series, seriesFormatter);
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+        plot.getLayoutManager().remove(plot.getLegend());
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
