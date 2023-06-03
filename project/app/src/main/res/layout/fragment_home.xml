@@ -29,5 +29,17 @@
         android:onClick="QuestionnaireClicked"
         />
 
+    <Button
+        android:id="@+id/DailyGoalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Daily Goal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/QuestionnaireButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="PickDailyGoalClicked"
+         />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
