@@ -1,26 +1,33 @@
 package com.example.se_lab_23b02;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -38,8 +45,8 @@ public class OverviewFragment extends Fragment {
     private  XYPlot plot;
     private DataSavingHelper ds;
 
-    private long timeframeLowerBound;
-    private long timeframeUpperBound;
+    private LocalDate dateLB;
+    private LocalDate dateUB;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -87,20 +94,15 @@ public class OverviewFragment extends Fragment {
 
         ds = DataSavingHelper.getInstance();
 
-
-        Date date  = new Date();
-
-        timeframeUpperBound = date.getTime();
-
         Paint color = new Paint();
         color.setColor(Color.WHITE);
         plot.getGraph().setBackgroundPaint(color);
         plot.getGraph().setGridBackgroundPaint(color);
 
 
-        Button btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
-        Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
 
+
+        Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
         btNumOfInterventions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,22 +112,94 @@ public class OverviewFragment extends Fragment {
         });
 
 
+        Button btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
         btShowHealthGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Number[] nums = {3, 4, 7, 8, 12, 15};
                 System.out.println("click");
-                draw(nums);
+                updateGraph();
+                //draw(nums);
             }
         });
 
+        dateUB = LocalDate.now();
+        dateLB = LocalDate.now().minusDays(7);
+
+        EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
+        lowerBoundTimePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int year = dateLB.getYear();
+                int month = dateLB.getMonthValue() - 1;
+                int day = dateLB.getDayOfMonth();
+
+                DatePickerDialog dpDialog = new DatePickerDialog(
+
+                        getContext(),
+                        new DatePickerDialog  .OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int month, int dayOfMonth) {
+                                dateLB = dateLB.withYear(year);
+                                dateLB = dateLB.withMonth(month + 1);
+                                dateLB = dateLB.withDayOfMonth(dayOfMonth);
+                                lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                            }
+                        },
+                        year, month, day);
+                dpDialog.show();
+            }
+
+        });
+
+        EditText upperBoundTimePicker = (EditText) view.findViewById(R.id.etUpperBoundTimePicker);
+        upperBoundTimePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int year = dateUB.getYear();
+                int month = dateUB.getMonthValue() - 1;
+                int day = dateUB.getDayOfMonth();
+
+                DatePickerDialog dpDialog = new DatePickerDialog(
+
+                        getContext(),
+                        new DatePickerDialog  .OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int month, int dayOfMonth) {
+                                dateUB = dateUB.withYear(year);
+                                dateUB = dateUB.withMonth(month + 1);
+                                dateUB = dateUB.withDayOfMonth(dayOfMonth);
+                                upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                            }
+                        },
+                        year, month, day);
+                dpDialog.show();
+            }
+
+        });
         return view;
 
     }
 
 
+    private void updateGraph() {
 
-    public void draw(Number[] dataList) {
+        // get current values
+
+        Number[] nums =  {1, 4, 5, 6, 7, 8, 1, 4, 5, 6, 7, 8, 1, 4, 5, 6, 7, 8};
+        String[] labels = {"May", "June", "July", "August", "September", "October", "May", "June", "July", "August", "September", "October", "May", "June", "July", "August", "September", "October"};
+        draw(nums, labels);
+
+    }
+
+
+    private void draw(Number[] dataList, String[] labels) {
 
         plot.clear();
 
@@ -138,12 +212,11 @@ public class OverviewFragment extends Fragment {
         LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
 
         plot.addSeries(series, seriesFormatter);
-
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
                 int i = Math.round(((Number) obj).floatValue());
-                return toAppendTo.append(domainLabels[i]);
+                return toAppendTo.append(labels[i]);
             }
 
             @Override

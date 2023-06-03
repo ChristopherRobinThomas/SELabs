@@ -6,21 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".OverviewFragment">
 
+    <EditText
+        android:id="@+id/etLowerBoundTimePicker"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="27.05.2023"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.androidplot.xy.XYPlot
         android:id="@+id/plt_graph"
         style="@style/APDefacto.Dark"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="40dp"
         android:background="#00FFFFFF"
         app:backgroundColor="#00FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/_Bindestrich" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -58,4 +74,33 @@
             android:text="Number of Activities"
             android:textSize="10sp" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/etUpperBoundTimePicker"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="03.06.2023"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/_Bindestrich"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="5dp"
+        android:text="-"
+        app:layout_constraintEnd_toStartOf="@+id/editTextText2"
+        app:layout_constraintStart_toEndOf="@+id/editTextText"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
