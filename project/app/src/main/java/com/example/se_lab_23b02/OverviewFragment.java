@@ -123,21 +123,21 @@ public class OverviewFragment extends Fragment {
         btShowHealthGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Number[] nums = {3, 4, 7, 8, 12, 15};
-                System.out.println("click");
                 try {
                     updateGraph();
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                //draw(nums);
             }
         });
 
+        // initializing the upper and lower Date boundary
         dateUB = LocalDate.now();
         dateLB = LocalDate.now().minusDays(7);
 
+
         EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
+        lowerBoundTimePicker.setText(dateLB.getDayOfMonth() + "." + (dateLB.getMonthValue() + 1) + "." + dateLB.getYear());
         lowerBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +171,10 @@ public class OverviewFragment extends Fragment {
 
         });
 
+
+        // added an "editText" with Calender interaction for setting the timeframe
         EditText upperBoundTimePicker = (EditText) view.findViewById(R.id.etUpperBoundTimePicker);
+        upperBoundTimePicker.setText(dateUB.getDayOfMonth() + "." + (dateUB.getMonthValue() + 1) + "." + dateUB.getYear());
         upperBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,7 +217,7 @@ public class OverviewFragment extends Fragment {
 
     }
 
-
+    // updates the graph by reading the data from file (DAHelper) and then drawing it using draw()
     private void updateGraph() throws JSONException {
 
         // get current values
@@ -233,7 +236,7 @@ public class OverviewFragment extends Fragment {
 
     }
 
-
+    //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
     private void draw(Number[] dataList, String[] labels) {
 
         plot.clear();

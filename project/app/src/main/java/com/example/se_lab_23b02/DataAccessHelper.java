@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class DataAccessHelper {
 
+    // to divide different
     public static final int ACCESS_MENTAL_HEALTH_SCORE = 1;
     public static final int ACCESS_COUNT_OF_INTERVENTIONS = 2;
     public static final int ACCESS_COUNT_OF_ACTIVITIES = 3;
@@ -22,6 +23,7 @@ public class DataAccessHelper {
     private DataAccessHelper() {
         dsHelper = DataSavingHelper.getInstance();
     }
+    // Singleton Pattern - yehee
 
     public static DataAccessHelper getInstance() {
         if (INSTANCE == null) {
@@ -30,16 +32,19 @@ public class DataAccessHelper {
         return INSTANCE;
     }
 
+    // returns a list of all the wanted data (accessMode) in the given time span
     public ArrayList<Pair<String, Integer>> collectDataFromTimeframe(LocalDate lowerBorder, LocalDate upperBorder, int accessMode, Context context) throws JSONException {
         ArrayList<Pair<String, Integer>> outputList = new ArrayList<>();
         String fileContent;
 
         switch (accessMode) {
+            // case: list of mental health scores
             case ACCESS_MENTAL_HEALTH_SCORE:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", context);
                 //System.out.println(fileContent);
                 String[] lines = fileContent.split(System.lineSeparator());
 
+                // reads data from file and then checks for each element if it is within the given timeframe
                 for (int i = 1; i < lines.length; i++) {
                     JSONObject jsObject = new JSONObject(lines[i]);
                     String timestamp = (String) jsObject.get("timestamp");
@@ -49,8 +54,6 @@ public class DataAccessHelper {
                         outputList.add(newEntry);
                     }
                 }
-
-                System.out.println(outputList);
                 break;
             default:
                 break;
