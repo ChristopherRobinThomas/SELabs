@@ -54,6 +54,7 @@ public class DataSavingHelper {
     // Overload: Access Mode
     public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
         if (append) {
+            System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
         } else {
             accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
@@ -66,7 +67,7 @@ public class DataSavingHelper {
             if(!toWrite.exists()){
                 toWrite.createNewFile();
             }
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
             Log.e("dsHelper", "To file: "+filename+", wrote: "+data);

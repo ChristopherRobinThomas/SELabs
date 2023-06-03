@@ -21,6 +21,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +36,10 @@ public class OverviewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private  XYPlot plot;
+    private DataSavingHelper ds;
+
+    private long timeframeLowerBound;
+    private long timeframeUpperBound;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,6 +85,12 @@ public class OverviewFragment extends Fragment {
 
         plot = (XYPlot) view.findViewById(R.id.plt_graph);
 
+        ds = DataSavingHelper.getInstance();
+
+
+        Date date  = new Date();
+
+        timeframeUpperBound = date.getTime();
 
         Paint color = new Paint();
         color.setColor(Color.WHITE);
