@@ -64,14 +64,23 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Button questionnaireButton;
+        Button dailyPickGoalButton;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
+        dailyPickGoalButton = view.findViewById(R.id.DailyGoalButton);
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                startActivity(myIntent);
+            }
+        });
+        dailyPickGoalButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
                 startActivity(myIntent);
             }
         });
