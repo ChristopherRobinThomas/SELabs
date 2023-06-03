@@ -6,32 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".OverviewFragment">
 
-    <TextView
-        android:id="@+id/txtOverview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/plt_graph"
+        style="@style/APDefacto.Dark"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="#00FFFFFF"
+        app:backgroundColor="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="361dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="60dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="There's nothing here yet :/ \n
-        When you've filled out you're first questionnaire
-         \n we will display your data here"
-        android:textAlignment="center"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <Button
+            android:id="@+id/btHealthIndex"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="mental health"
+            android:textSize="10sp" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="145dp"
-        android:layout_height="227dp"
-        android:src="@drawable/little_being"
-        app:layout_constraintBottom_toTopOf="@+id/txtOverview"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="70dp"
-        />
+        <Button
+            android:id="@+id/btIntervention"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="number of interventions"
+            android:textSize="10sp" />
 
-
+        <Button
+            android:id="@+id/btNumOfActivities"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Number of Activities"
+            android:textSize="10sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
