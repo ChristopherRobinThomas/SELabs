@@ -55,6 +55,18 @@ public class DataAccessHelper {
                     }
                 }
                 break;
+
+            case ACCESS_COUNT_OF_ACTIVITIES:
+                fileContent = dsHelper.readSavedDataFromInternalStorage("activities.txt", context);
+                // count here
+                // append to outputList
+                break;
+
+            case ACCESS_COUNT_OF_INTERVENTIONS:
+                fileContent = dsHelper.readSavedDataFromInternalStorage("", context);
+                // count
+                //append
+                break;
             default:
                 break;
         }

@@ -271,7 +271,7 @@ public class OverviewFragment extends Fragment {
 
 
         if (typeToPlot == 0) {
-
+            plot.setTitle("Health Index");
             plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
             final Number[] domainLabels = new Number[dataList.length];
             for (int i = 0; i < dataList.length; i++) {
@@ -296,6 +296,7 @@ public class OverviewFragment extends Fragment {
             return;
         }
         if(typeToPlot == 1) {
+            plot.setTitle("Amount of Activities");
             BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
             bf.setMarginLeft(PixelUtils.dpToPix(1));
             bf.setMarginRight(PixelUtils.dpToPix(1));
