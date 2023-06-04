@@ -5,11 +5,16 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +37,10 @@ public class HomeFragment extends Fragment {
 
     //---------Variables--------
     private String dailyGoal;
+    int goalProgress;
 
+    //--------GUI Element-----
+    ProgressBar dailyGoalProgressBar;
 
 
     public HomeFragment() {
@@ -73,20 +81,38 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         Button questionnaireButton;
         Button pickDailyGoalButton;
+        Button markGoalAsCompleteButton;
         TextView dailyGoalTxt;
+
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
         pickDailyGoalButton = view.findViewById(R.id.DailyGoalButton);
+        markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
+        dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
 
         //Retrieve Daily Goal (If already chosen) from Storage
         dsHelper = DataSavingHelper.getInstance();
         try {
-            dailyGoal = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+            String[] dailyGoalArray = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity()).split("_");
+            dailyGoal = dailyGoalArray[0];
+            goalProgress = Integer.valueOf(dailyGoalArray[1]);
+            pickDailyGoalButton.setEnabled(false);
         } catch (Exception e) {
             dailyGoal = "No Goal chosen yet";
+            goalProgress = 0;
+            markGoalAsCompleteButton.setEnabled(false);
         }
-        dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+        if(goalProgress==100)
+        {
+            markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
+            dailyGoalTxt.setText("Congrats: You achieved your daily goal!");
+        }
+        else{
+            dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+        }
+        dailyGoalProgressBar.setProgress(goalProgress);
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +130,31 @@ public class HomeFragment extends Fragment {
                 startActivity(myIntent);
             }
         });
+
+        markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateProgress();
+                //markGoalAsCompleteButton.setEnabled(false);
+                markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
+                dailyGoalTxt.setText("Congrats: You achieved your daily goal!");
+                //Save Progress Update to Storage
+                dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyGoal + "_" + String.valueOf(goalProgress),getActivity());
+            }
+        });
+
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+
+
+    private void updateProgress()
+    {
+        //TODO Get step count and show in progress bar if goal is a certain step count
+        goalProgress = 100;
+        dailyGoalProgressBar.setProgress(goalProgress);
     }
 
 }
