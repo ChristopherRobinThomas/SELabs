@@ -10,7 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -52,6 +56,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonOwnDailyTask = findViewById(R.id.buttonOwnDailyGoal);
         buttonSaveDailyTask = findViewById(R.id.buttonSaveDailyTask);
         txtChosenDailyGoal = findViewById(R.id.txtChosenDailyGoal);
+
 
         buttonX.setOnClickListener(this);
         buttonWalk5000Steps.setOnClickListener(this);
@@ -130,12 +135,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
 
 
-    public void saveGoalButtonClicked(View v)
-    {
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyTask,getApplicationContext());
+    public void saveGoalButtonClicked(View v) throws JSONException {
+        dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyTask + "_0",getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
-
-
     }
+
+
 }
