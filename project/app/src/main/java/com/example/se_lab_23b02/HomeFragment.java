@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +27,11 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    //-------Objects--------------
+    DataSavingHelper dsHelper;
+
+    //---------Variables--------
+    private String dailyGoal;
 
 
 
@@ -58,16 +64,30 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Button questionnaireButton;
-        Button dailyPickGoalButton;
+        Button pickDailyGoalButton;
+        TextView dailyGoalTxt;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
-        dailyPickGoalButton = view.findViewById(R.id.DailyGoalButton);
+        pickDailyGoalButton = view.findViewById(R.id.DailyGoalButton);
+        dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
+
+        //Retrieve Daily Goal (If already chosen) from Storage
+        dsHelper = DataSavingHelper.getInstance();
+        try {
+            dailyGoal = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+        } catch (Exception e) {
+            dailyGoal = "No Goal chosen yet";
+        }
+        dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +95,7 @@ public class HomeFragment extends Fragment {
                 startActivity(myIntent);
             }
         });
-        dailyPickGoalButton.setOnClickListener(new View.OnClickListener()
+        pickDailyGoalButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
