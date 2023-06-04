@@ -34,8 +34,10 @@
         app:backgroundColor="#00FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/_Bindestrich" />
+        app:layout_constraintTop_toBottomOf="@+id/_Bindestrich"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -100,5 +102,17 @@
         app:layout_constraintEnd_toStartOf="@+id/editTextText2"
         app:layout_constraintStart_toEndOf="@+id/editTextText"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNothingToSeeHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="no data avaiable"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/plt_graph"
+        app:layout_constraintEnd_toEndOf="@+id/plt_graph"
+        app:layout_constraintStart_toStartOf="@+id/plt_graph"
+        app:layout_constraintTop_toTopOf="@+id/plt_graph"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

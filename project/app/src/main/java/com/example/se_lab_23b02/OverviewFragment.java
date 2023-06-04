@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BarFormatter;
@@ -49,6 +50,7 @@ public class OverviewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private  XYPlot plot;
+    private TextView tvInfo;
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
     private int currentTypeToPlot = 0;
@@ -110,7 +112,7 @@ public class OverviewFragment extends Fragment {
         plot.getGraph().setBackgroundPaint(whiteColor);
         plot.getGraph().setGridBackgroundPaint(whiteColor);
 
-
+        tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
 
         Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
@@ -140,13 +142,22 @@ public class OverviewFragment extends Fragment {
             }
         });
 
+        Button btNumOfActivities = (Button) view.findViewById(R.id.btNumOfActivities);
+        btNumOfActivities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // show btNumOfActivies here
+            }
+        });
+
+
         // initializing the upper and lower Date boundary
         dateUB = LocalDate.now();
         dateLB = LocalDate.now().minusDays(7);
 
 
         EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
-        lowerBoundTimePicker.setText(dateLB.getDayOfMonth() + "." + (dateLB.getMonthValue() + 1) + "." + dateLB.getYear());
+        lowerBoundTimePicker.setText(dateLB.getDayOfMonth() + "." + (dateLB.getMonthValue()) + "." + dateLB.getYear());
         lowerBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,7 +194,7 @@ public class OverviewFragment extends Fragment {
 
         // added an "editText" with Calender interaction for setting the timeframe
         EditText upperBoundTimePicker = (EditText) view.findViewById(R.id.etUpperBoundTimePicker);
-        upperBoundTimePicker.setText(dateUB.getDayOfMonth() + "." + (dateUB.getMonthValue() + 1) + "." + dateUB.getYear());
+        upperBoundTimePicker.setText(dateUB.getDayOfMonth() + "." + (dateUB.getMonthValue()) + "." + dateUB.getYear());
         upperBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,6 +263,12 @@ public class OverviewFragment extends Fragment {
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
         plot.getLayoutManager().remove(plot.getLegend());
+
+        if(dataList.length == 0) {
+            tvInfo.setVisibility(TextView.VISIBLE);
+        } else
+            tvInfo.setVisibility(TextView.INVISIBLE);
+
 
         if (typeToPlot == 0) {
 
