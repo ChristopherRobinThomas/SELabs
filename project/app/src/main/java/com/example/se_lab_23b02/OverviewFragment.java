@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.BarFormatter;
+import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
@@ -48,6 +51,7 @@ public class OverviewFragment extends Fragment {
     private  XYPlot plot;
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
+    private int currentTypeToPlot = 0;
 
     private LocalDate dateLB;
     private LocalDate dateUB;
@@ -113,8 +117,12 @@ public class OverviewFragment extends Fragment {
         btNumOfInterventions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("test");
-                getActivity().setTitle("test");
+                currentTypeToPlot = 1;
+                try {
+                    updateGraph(1);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -124,7 +132,8 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    updateGraph();
+                    currentTypeToPlot = 0;
+                    updateGraph(currentTypeToPlot);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -159,7 +168,7 @@ public class OverviewFragment extends Fragment {
                                 dateLB = dateLB.withDayOfMonth(dayOfMonth);
                                 lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
                                 try {
-                                    updateGraph();
+                                    updateGraph(currentTypeToPlot);
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -196,7 +205,7 @@ public class OverviewFragment extends Fragment {
                                 dateUB = dateUB.withDayOfMonth(dayOfMonth);
                                 upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
                                 try {
-                                    updateGraph();
+                                    updateGraph(currentTypeToPlot);
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -209,7 +218,7 @@ public class OverviewFragment extends Fragment {
         });
 
         try {
-            updateGraph();
+            updateGraph(currentTypeToPlot);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -218,7 +227,7 @@ public class OverviewFragment extends Fragment {
     }
 
     // updates the graph by reading the data from file (DAHelper) and then drawing it using draw()
-    private void updateGraph() throws JSONException {
+    private void updateGraph(int typeToPlot) throws JSONException {
 
         // get current values
 
@@ -232,40 +241,55 @@ public class OverviewFragment extends Fragment {
             nums[i] = data.get(i).second;
         }
 
-        draw(nums, labels);
+        draw(typeToPlot, nums, labels);
 
     }
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
-    private void draw(Number[] dataList, String[] labels) {
+    private void draw(int typeToPlot, Number[] dataList, String[] labels) {
 
         plot.clear();
-        plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
-        final Number[] domainLabels = new Number[dataList.length];
-
-        for (int i = 0; i < dataList.length; i++) {
-            domainLabels[i] = i;
-        }
-        XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
-        LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
-
-        plot.addSeries(series, seriesFormatter);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
         plot.getLayoutManager().remove(plot.getLegend());
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-            @Override
-            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                int i = Math.round(((Number) obj).floatValue());
-                return toAppendTo.append(labels[i]);
-            }
 
-            @Override
-            public Object parseObject(String source, ParsePosition pos) {
-                return null;
+        if (typeToPlot == 0) {
+
+            plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
+            final Number[] domainLabels = new Number[dataList.length];
+            for (int i = 0; i < dataList.length; i++) {
+                domainLabels[i] = i;
             }
-        });
-        plot.invalidate();
+            XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
+            LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+            plot.addSeries(series, seriesFormatter);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+                @Override
+                public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+                    int i = Math.round(((Number) obj).floatValue());
+                    return toAppendTo.append(labels[i]);
+                }
+
+                @Override
+                public Object parseObject(String source, ParsePosition pos) {
+                    return null;
+                }
+            });
+            plot.invalidate();
+            return;
+        }
+        if(typeToPlot == 1) {
+            BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
+            bf.setMarginLeft(PixelUtils.dpToPix(1));
+            bf.setMarginRight(PixelUtils.dpToPix(1));
+            XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
+            plot.addSeries(series, bf);
+            BarRenderer renderer = plot.getRenderer(BarRenderer.class);
+            plot.invalidate();
+            renderer.setBarOrientation(BarRenderer.BarOrientation.SIDE_BY_SIDE);
+            renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, PixelUtils.dpToPix(5));
+
+        }
     }
 
 }
