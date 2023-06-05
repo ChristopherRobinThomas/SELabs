@@ -71,8 +71,10 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
-                startActivity(myIntent);
+                ServerHelper serverHelper = ServerHelper.getInstance();
+                serverHelper.getUniqueID(getContext());
+                //Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                //startActivity(myIntent);
             }
         });
         // Inflate the layout for this fragment

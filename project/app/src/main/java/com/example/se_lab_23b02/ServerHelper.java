@@ -1,10 +1,12 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.os.Environment;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -102,22 +104,22 @@ public class ServerHelper {
 
     //creates a new Call (for Async operations) and awaits http response
     //on response the UniqueID is getting Stored
-    public void getUniqueID(){
+    public void getUniqueID(Context context){
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         Call<ResponseBody> call = httpClient.getUniqueID(getUniqueID);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    try {
-                        System.out.println(response.body().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    dsHelper.saveSettingAsSharedPref("user_id", readResponceObject(response), context);
+
                 } else {
                     System.out.println(response);
                     Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
                 }
+
+                System.out.println(dsHelper.getAllSettingsFromSharedPref(context));
             }
 
             @Override
@@ -138,6 +140,26 @@ public class ServerHelper {
     //set Activity to display Toast, can be removed in the final delivery
     public void setActivity(FragmentActivity activity) {
         this.activity = activity;
+    }
+
+    //reads UniqueIDfromResponseBodyObject
+    private String readResponceObject (Response<ResponseBody> response){
+
+        JSONArray json = null;
+        try {
+            json = new JSONArray(response.body().string());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            System.out.println(json.get(0).toString());
+            return json.get(0).toString();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
