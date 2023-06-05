@@ -200,7 +200,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
 
         sHelper.setActivity(this);
-        sHelper.addDigitSpanTask(toSave);
+        sHelper.addDigitSpanTask(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength),getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);

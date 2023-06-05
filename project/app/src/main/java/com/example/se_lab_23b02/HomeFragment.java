@@ -58,6 +58,10 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        ServerHelper serverHelper = ServerHelper.getInstance();
+        serverHelper.setActivity(this.getActivity());
+        serverHelper.getUniqueID(getContext());
     }
 
     @Override
@@ -71,10 +75,8 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ServerHelper serverHelper = ServerHelper.getInstance();
-                serverHelper.getUniqueID(getContext());
-                //Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
-                //startActivity(myIntent);
+                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                startActivity(myIntent);
             }
         });
         // Inflate the layout for this fragment

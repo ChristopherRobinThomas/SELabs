@@ -43,6 +43,11 @@ public class DataSavingHelper {
         return settingsContents;
     }
 
+    public String getSpecificSettingsFromSharedPref(String keyValue, Context context){
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        return settings.getString(keyValue, "");
+    }
+
     public void deleteAllSettingsFromSharedPref(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("Settings", 0);
         preferences.edit().clear().apply();

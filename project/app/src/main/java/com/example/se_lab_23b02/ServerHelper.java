@@ -53,8 +53,8 @@ public class ServerHelper {
 
     //creates a new Call (for Async operations) and awaits the http response
     //adds a Questionaire to the RDS Database
-    public void addQuestionaire(JSONObject toSave) throws JSONException {
-        JSONObject body = addInformationToJSONObject(toSave);
+    public void addQuestionaire(JSONObject toSave, Context context) throws JSONException {
+        JSONObject body = addInformationToJSONObject(toSave, context);
 
         Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionaireURL, body);
         call.enqueue(new Callback<ResponseBody>() {
@@ -63,10 +63,10 @@ public class ServerHelper {
                 if (response.isSuccessful()) {
 
                     System.out.println("Success");
-                    Toast.makeText(activity, "Success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Successfully delivered Questionnaire", Toast.LENGTH_LONG).show();
                 } else {
                     System.out.println(response);
-                    Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Failed to deliver Questionnaire", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -79,18 +79,18 @@ public class ServerHelper {
 
     //creates a new Call (for Async operations) and awaits http response
     //adds a DigitSpanTask to the RDS Database
-    public void addDigitSpanTask(JSONObject toSave) throws JSONException {
-        JSONObject body = addInformationToJSONObject(toSave);
+    public void addDigitSpanTask(JSONObject toSave, Context context) throws JSONException {
+        JSONObject body = addInformationToJSONObject(toSave, context);
         Call<ResponseBody> call = httpClient.postDigitSpanTask(addDigitSpanTaskURL, body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(activity, "Success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Successfully delivered DSTask", Toast.LENGTH_LONG).show();
                 } else {
                     System.out.println(response);
-                    Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Failed to deliver DSTask", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -113,13 +113,11 @@ public class ServerHelper {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     dsHelper.saveSettingAsSharedPref("user_id", readResponceObject(response), context);
+                    Toast.makeText(activity, "Successfully got UUID", Toast.LENGTH_LONG).show();
 
                 } else {
-                    System.out.println(response);
-                    Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Failed to get UUID", Toast.LENGTH_LONG).show();
                 }
-
-                System.out.println(dsHelper.getAllSettingsFromSharedPref(context));
             }
 
             @Override
@@ -129,10 +127,11 @@ public class ServerHelper {
         });
     }
 
-    //ads Information such as UserID (to identify the Users Questionaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
-    private JSONObject addInformationToJSONObject(JSONObject toSave) throws JSONException {
+    //ads Information such as UserID (to identify the Users Questionnaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
+    private JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-        toSave.put("user_id", 1);
+        toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
         toSave.put("timestamp", timeStamp);
         return toSave;
     }
