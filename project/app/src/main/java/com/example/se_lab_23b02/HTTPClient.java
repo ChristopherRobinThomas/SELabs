@@ -19,6 +19,9 @@ public interface HTTPClient {
     @POST
     Call<ResponseBody> postDigitSpanTask(@Url String postURL, @Body JSONObject digitSpanTask);
 
+    @POST
+    Call<ResponseBody> getUniqueID(@Url String postURL);
+
     @Streaming
     @GET
     Call<ResponseBody> downloadFile(@Url String fileUrl);

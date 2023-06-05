@@ -27,8 +27,10 @@ public class ServerHelper {
     private HTTPClient httpClient;
     private FragmentActivity activity;
     private String addQuestionaireURL = "development/databaseentrys/questionaire";
-    private String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
     private String addDigitSpanTaskURL = "development/databaseentrys/digitspantask";
+    private String getUniqueID = "development/databaseentrys/getuniqueuserid";
+    private String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
+
 
     private ServerHelper() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,12 +49,8 @@ public class ServerHelper {
         return INSTANCE;
     }
 
-    //set Activity to display Toast, can be removed in the final delivery
-    public void setActivity(FragmentActivity activity) {
-        this.activity = activity;
-    }
-
     //creates a new Call (for Async operations) and awaits the http response
+    //adds a Questionaire to the RDS Database
     public void addQuestionaire(JSONObject toSave) throws JSONException {
         JSONObject body = addInformationToJSONObject(toSave);
 
@@ -78,6 +76,7 @@ public class ServerHelper {
     }
 
     //creates a new Call (for Async operations) and awaits http response
+    //adds a DigitSpanTask to the RDS Database
     public void addDigitSpanTask(JSONObject toSave) throws JSONException {
         JSONObject body = addInformationToJSONObject(toSave);
         Call<ResponseBody> call = httpClient.postDigitSpanTask(addDigitSpanTaskURL, body);
@@ -100,6 +99,34 @@ public class ServerHelper {
         });
 
     }
+
+    //creates a new Call (for Async operations) and awaits http response
+    //on response the UniqueID is getting Stored
+    public void getUniqueID(){
+        Call<ResponseBody> call = httpClient.getUniqueID(getUniqueID);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        System.out.println(response.body().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    System.out.println(response);
+                    Toast.makeText(activity, "Fail", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     //ads Information such as UserID (to identify the Users Questionaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
     private JSONObject addInformationToJSONObject(JSONObject toSave) throws JSONException {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
@@ -107,6 +134,13 @@ public class ServerHelper {
         toSave.put("timestamp", timeStamp);
         return toSave;
     }
+
+    //set Activity to display Toast, can be removed in the final delivery
+    public void setActivity(FragmentActivity activity) {
+        this.activity = activity;
+    }
+
+
 
     //not yet functional:
     public void getDataFromS3() {
