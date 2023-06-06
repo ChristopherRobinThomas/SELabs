@@ -2,6 +2,7 @@ package com.example.se_lab_23b02;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -61,17 +62,17 @@ public class ServerHelper {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-
-                    System.out.println("Success");
+                    Log.i("sHelper", "Questionnaire successfully added");
                     Toast.makeText(activity, "Successfully delivered Questionnaire", Toast.LENGTH_LONG).show();
                 } else {
-                    System.out.println(response);
+                    Log.e("sHelper","Failed to add Questionnaire, Response: " + response);
                     Toast.makeText(activity, "Failed to deliver Questionnaire", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         });
@@ -87,15 +88,17 @@ public class ServerHelper {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+                    Log.i("sHelper", "DigitSpanTask successfully added");
                     Toast.makeText(activity, "Successfully delivered DSTask", Toast.LENGTH_LONG).show();
                 } else {
-                    System.out.println(response);
+                    Log.e("sHelper", "Failed to add DigitSpanTask, Response:" + response);
                     Toast.makeText(activity, "Failed to deliver DSTask", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - DST, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         });
@@ -113,15 +116,18 @@ public class ServerHelper {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     dsHelper.saveSettingAsSharedPref("user_id", readResponceObject(response), context);
+                    Log.i("sHelper", "Successfully got UUID");
                     Toast.makeText(activity, "Successfully got UUID", Toast.LENGTH_LONG).show();
 
                 } else {
+                    Log.i("sHelper", "Failed to get UUID, Response: " + response);
                     Toast.makeText(activity, "Failed to get UUID", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - UUID, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         });
