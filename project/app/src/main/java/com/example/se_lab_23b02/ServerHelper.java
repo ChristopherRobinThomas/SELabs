@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -29,10 +31,10 @@ public class ServerHelper {
     private static ServerHelper INSTANCE;
     private HTTPClient httpClient;
     private FragmentActivity activity;
-    private String addQuestionaireURL = "development/databaseentrys/questionaire";
-    private String addDigitSpanTaskURL = "development/databaseentrys/digitspantask";
-    private String getUniqueID = "development/databaseentrys/getuniqueuserid";
-    private String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
+    private final String addQuestionnaireURL = "development/databaseentrys/questionaire";
+    private final String addDigitSpanTaskURL = "development/databaseentrys/digitspantask";
+    private final String getUniqueID = "development/databaseentrys/getuniqueuserid";
+    private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
     private ServerHelper() {
@@ -53,14 +55,14 @@ public class ServerHelper {
     }
 
     //creates a new Call (for Async operations) and awaits the http response
-    //adds a Questionaire to the RDS Database
-    public void addQuestionaire(JSONObject toSave, Context context) throws JSONException {
+    //adds a Questionnaire to the RDS Database
+    public void addQuestionnaire(JSONObject toSave, Context context) throws JSONException {
         JSONObject body = addInformationToJSONObject(toSave, context);
 
-        Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionaireURL, body);
+        Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionnaireURL, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.i("sHelper", "Questionnaire successfully added");
                     Toast.makeText(activity, "Successfully delivered Questionnaire", Toast.LENGTH_LONG).show();
@@ -71,7 +73,7 @@ public class ServerHelper {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -86,7 +88,7 @@ public class ServerHelper {
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.i("sHelper", "DigitSpanTask successfully added");
                     Toast.makeText(activity, "Successfully delivered DSTask", Toast.LENGTH_LONG).show();
@@ -97,7 +99,7 @@ public class ServerHelper {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - DST, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -113,9 +115,9 @@ public class ServerHelper {
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    dsHelper.saveSettingAsSharedPref("user_id", readResponceObject(response), context);
+                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
                     Log.i("sHelper", "Successfully got UUID");
                     Toast.makeText(activity, "Successfully got UUID", Toast.LENGTH_LONG).show();
 
@@ -126,7 +128,7 @@ public class ServerHelper {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - UUID, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -136,7 +138,7 @@ public class ServerHelper {
     //ads Information such as UserID (to identify the Users Questionnaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
     private JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY).format(new java.util.Date());
         toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
         toSave.put("timestamp", timeStamp);
         return toSave;
@@ -147,15 +149,13 @@ public class ServerHelper {
         this.activity = activity;
     }
 
-    //reads UniqueIDfromResponseBodyObject
-    private String readResponceObject (Response<ResponseBody> response){
+    //reads UniqueID fromResponseBodyObject
+    private String readResponseObject(Response<ResponseBody> response){
 
-        JSONArray json = null;
+        JSONArray json;
         try {
             json = new JSONArray(response.body().string());
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -185,6 +185,7 @@ public class ServerHelper {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 System.out.println(response.body());
+                assert response.body() != null;
                 boolean success = writeResponseBodyToDisk(response.body());
 
                 Toast.makeText(activity, "download was successful:" + success, Toast.LENGTH_LONG).show();
@@ -193,7 +194,7 @@ public class ServerHelper {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(activity, "fail", Toast.LENGTH_LONG).show();
             }
         });

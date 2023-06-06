@@ -89,7 +89,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
 
         sHelper.setActivity(this);
-        sHelper.addQuestionaire(toSave, getApplicationContext());
+        sHelper.addQuestionnaire(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 
