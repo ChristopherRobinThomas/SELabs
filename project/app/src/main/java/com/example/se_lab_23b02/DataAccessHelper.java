@@ -3,6 +3,7 @@ package com.example.se_lab_23b02;
 import android.content.Context;
 import android.util.Pair;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,10 +75,18 @@ public class DataAccessHelper {
     }
 
 
-    private int calculateHealthScoreFromQuestionaire(String questionaireAnswering) {
+    private int calculateHealthScoreFromQuestionaire(String questionaireAnswering) throws JSONException {
         // calculate the questionaire score here, for now using random values
-        Random random = new Random();
-        return random.nextInt(101);
+
+        JSONObject questionaire = new JSONObject(questionaireAnswering);
+        JSONArray jsonArray = (JSONArray) questionaire.get("Q1");
+
+        int calmnessIndex = (int)(100 - jsonArray.getInt(0) + jsonArray.getInt(1))/2;
+        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) + jsonArray.getInt(3))/2;
+        int energyIndex = (int)(100 - jsonArray.getInt(4) + jsonArray.getInt(5))/2;
+
+
+        return (int) (calmnessIndex + satisfactionIndex + energyIndex)/3;
 
     }
 
