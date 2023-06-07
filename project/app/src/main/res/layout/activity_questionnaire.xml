@@ -589,9 +589,10 @@ aggressive to another person, which I regretted later on."
                 android:layout_width="0dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="25dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Question8_2Text" />
 
@@ -604,8 +605,9 @@ aggressive to another person, which I regretted later on."
                 android:layout_marginEnd="25dp"
                 android:text="Send"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Question8_2Text" />
+                app:layout_constraintTop_toBottomOf="@+id/Question8_2Slider" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
