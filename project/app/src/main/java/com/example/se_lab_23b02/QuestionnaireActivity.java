@@ -60,8 +60,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     saveAnswers();
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
 
                 }
                 Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
@@ -72,28 +71,14 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
     void saveAnswers() throws JSONException {
-
-        JSONArray[] valueArrays = {
-                new JSONArray(questionOneValues),
-                new JSONArray(questionTwoValues),
-                new JSONArray(questionThreeValues),
-                new JSONArray(questionFourValue),
-                new JSONArray(questionFiveValue),
-                new JSONArray(questionSixValues),
-                new JSONArray(questionSevenValues),
-                new JSONArray(questionEightValues)
-        };
-        JSONObject toSave = new JSONObject();
-        for (int i = 1; i <= valueArrays.length; i++) {
-            toSave.put("Q"+i, valueArrays[i-1]);
-        }
+        JSONObject toSave = JSONObjectCreator.createQuestionnaireObject(questionOneValues, questionTwoValues, questionThreeValues, questionFourValue, questionFiveValue, questionSixValues, questionSevenValues, questionEightValues);
 
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());
-        dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString() + "\n", getApplicationContext(), true);
     }
 
-    void  manageQuestions() {
+    void manageQuestions() {
         manageQuestionOne();
         manageQuestionTwo();
         manageQuestionThree();
@@ -112,7 +97,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         slidersOne[4] = findViewById(R.id.Question1_5Slider);
         slidersOne[5] = findViewById(R.id.Question1_6Slider);
 
-        for(int i = 0; i < slidersOne.length ;i++){
+        for (int i = 0; i < slidersOne.length; i++) {
 
             slidersOne[i].setMax(100);
             slidersOne[i].setMin(0);
@@ -121,19 +106,19 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                    for(int i = 0; i < slidersOne.length;i++)
-                    {
-                        if(slidersOne[i] == seekBar)
-                        {
+                    for (int i = 0; i < slidersOne.length; i++) {
+                        if (slidersOne[i] == seekBar) {
                             questionOneValues[i] = progress;
                             break;
                         }
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -153,27 +138,21 @@ public class QuestionnaireActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == radioButtonYes.getId())
-                {
+                if (checkedId == radioButtonYes.getId()) {
                     questionTwoBool = true;
-                    for(int i = 0; i < slidersTwo.length; i++)
-                    {
+                    for (int i = 0; i < slidersTwo.length; i++) {
                         slidersTwo[i].setEnabled(true);
                     }
-                }
-                else if (checkedId == radioButtonNo.getId())
-                {
+                } else if (checkedId == radioButtonNo.getId()) {
                     questionTwoBool = false;
-                    for(int i = 0; i < slidersTwo.length; i++)
-                    {
+                    for (int i = 0; i < slidersTwo.length; i++) {
                         slidersTwo[i].setEnabled(false);
                     }
                 }
             }
         });
 
-        for(int i = 0; i < slidersTwo.length; i++)
-        {
+        for (int i = 0; i < slidersTwo.length; i++) {
             slidersTwo[i].setMax(100);
             slidersTwo[i].setMin(0);
             slidersTwo[i].setEnabled(false);
@@ -182,19 +161,19 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                    for(int i = 0; i < slidersTwo.length;i++)
-                    {
-                        if(slidersTwo[i] == seekBar)
-                        {
+                    for (int i = 0; i < slidersTwo.length; i++) {
+                        if (slidersTwo[i] == seekBar) {
                             questionTwoValues[i] = progress;
                             break;
                         }
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -203,7 +182,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
-    void manageQuestionThree(){
+    void manageQuestionThree() {
 
         slidersThree[0] = findViewById(R.id.Question3_2Slider);
         RadioGroup radioGroup = findViewById(R.id.Question3YesOrNo);
@@ -259,11 +238,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
             });
         }
     }
+
     void manageQuestionFour() {
         Spinner spinner = findViewById(R.id.Question4_1DropDown);
         spinner.setEnabled(false);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.add("Partner");
         adapter.add("Family");
         adapter.add("Friends");
@@ -289,7 +269,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     void manageQuestionFive() {
         Spinner spinner = findViewById(R.id.Question5_1DropDown);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.add("At home");
         adapter.add("School/University");
         adapter.add("Work");
@@ -320,7 +300,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         slidersSix[2] = findViewById(R.id.Question6_3Slider);
         slidersSix[3] = findViewById(R.id.Question6_4Slider);
 
-        for(int i = 0; i < slidersSix.length ;i++){
+        for (int i = 0; i < slidersSix.length; i++) {
 
             slidersSix[i].setMax(100);
             slidersSix[i].setMin(0);
@@ -329,19 +309,19 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                    for(int i = 0; i < slidersSix.length;i++)
-                    {
-                        if(slidersSix[i] == seekBar)
-                        {
+                    for (int i = 0; i < slidersSix.length; i++) {
+                        if (slidersSix[i] == seekBar) {
                             questionSixValues[i] = progress;
                             break;
                         }
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -354,7 +334,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         slidersSeven[0] = findViewById(R.id.Question7_1Slider);
         slidersSeven[1] = findViewById(R.id.Question7_2Slider);
 
-        for(int i = 0; i < slidersSeven.length ;i++){
+        for (int i = 0; i < slidersSeven.length; i++) {
 
             slidersSeven[i].setMax(9);
             slidersSeven[i].setMin(0);
@@ -363,19 +343,19 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                    for(int i = 0; i < slidersSeven.length;i++)
-                    {
-                        if(slidersSeven[i] == seekBar)
-                        {
+                    for (int i = 0; i < slidersSeven.length; i++) {
+                        if (slidersSeven[i] == seekBar) {
                             questionSevenValues[i] = progress;
                             break;
                         }
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -388,7 +368,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         slidersEight[0] = findViewById(R.id.Question8_1Slider);
         slidersEight[1] = findViewById(R.id.Question8_2Slider);
 
-        for(int i = 0; i < slidersEight.length ;i++){
+        for (int i = 0; i < slidersEight.length; i++) {
 
             slidersEight[i].setMax(6);
             slidersEight[i].setMin(0);
@@ -397,19 +377,19 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                    for(int i = 0; i < slidersEight.length;i++)
-                    {
-                        if(slidersEight[i] == seekBar)
-                        {
+                    for (int i = 0; i < slidersEight.length; i++) {
+                        if (slidersEight[i] == seekBar) {
                             questionEightValues[i] = progress;
                             break;
                         }
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
 

@@ -58,10 +58,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        ServerHelper serverHelper = ServerHelper.getInstance();
-        serverHelper.setActivity(this.getActivity());
-        serverHelper.getUniqueID(getContext());
     }
 
     @Override

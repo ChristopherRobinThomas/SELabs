@@ -1,0 +1,65 @@
+package com.example.se_lab_23b02;
+
+import android.content.Context;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+
+public class JSONObjectCreator {
+
+    public static JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+        toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
+        toSave.put("timestamp", timeStamp);
+        return toSave;
+    }
+    public static JSONObject createNewUserObject(String userName, String password, String passwordConfirm) throws JSONException {
+        JSONObject toSave = new JSONObject();
+        toSave.put("userName", userName);
+        toSave.put("password", password);
+        toSave.put("passwordConfirm", passwordConfirm);
+
+        return toSave;
+    }
+
+    public static JSONObject createLoginUserObject(String userName, String password) throws JSONException {
+        JSONObject toSave = new JSONObject();
+        toSave.put("userName", userName);
+        toSave.put("password", password);
+
+        return toSave;
+    }
+
+    public static JSONObject createQuestionnaireObject(int[] questionOneValues, int[] questionTwoValues, int[] questionThreeValues, String[] questionFourValue, String[] questionFiveValue, int[] questionSixValues, int[] questionSevenValues, int[] questionEightValues) throws JSONException {
+        JSONArray[] valueArrays = {
+                new JSONArray(questionOneValues),
+                new JSONArray(questionTwoValues),
+                new JSONArray(questionThreeValues),
+                new JSONArray(questionFourValue),
+                new JSONArray(questionFiveValue),
+                new JSONArray(questionSixValues),
+                new JSONArray(questionSevenValues),
+                new JSONArray(questionEightValues)
+        };
+        JSONObject toSave = new JSONObject();
+        for (int i = 1; i <= valueArrays.length; i++) {
+            toSave.put("Q"+i, valueArrays[i-1]);
+        }
+        return toSave;
+    }
+
+    public static JSONObject createDigitSpanTaskObject(int originalInitSpanLength, int initSpanLength, int maxReachedNumbers, int numberOfRounds) throws JSONException {
+        JSONObject toSave = new JSONObject();
+
+        toSave.put("InitSpanLengtToday",originalInitSpanLength);
+        toSave.put("InitSpanLengthTomorrow",initSpanLength);
+        toSave.put("MaxKnownNumbers",maxReachedNumbers);
+        toSave.put("numberOfSuccessfulRounds", numberOfRounds);
+
+        return toSave;
+    }
+}

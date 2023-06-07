@@ -191,13 +191,8 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
             initSpanLength++;
         }
 
-        //create the JSONObject
-        JSONObject toSave = new JSONObject();
-        toSave.put("InitSpanLengtToday",originalInitSpanLength);
-        toSave.put("InitSpanLengthTomorrow",initSpanLength);
-        toSave.put("MaxKnownNumbers",maxReachedNumbers);
-        toSave.put("numberOfSuccessfulRounds", numberOfRounds);
 
+        JSONObject toSave = JSONObjectCreator.createDigitSpanTaskObject(originalInitSpanLength, initSpanLength, maxReachedNumbers, numberOfRounds);
 
         sHelper.setActivity(this);
         sHelper.addDigitSpanTask(toSave, getApplicationContext());

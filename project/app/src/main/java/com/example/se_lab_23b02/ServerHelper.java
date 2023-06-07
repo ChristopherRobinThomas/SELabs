@@ -1,6 +1,10 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,10 +42,7 @@ public class ServerHelper {
 
 
     private ServerHelper() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://snq4xkkw69.execute-api.eu-north-1.amazonaws.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://snq4xkkw69.execute-api.eu-north-1.amazonaws.com/").addConverterFactory(GsonConverterFactory.create()).build();
 
         //create Interface
         httpClient = retrofit.create(HTTPClient.class);
@@ -54,20 +55,67 @@ public class ServerHelper {
         return INSTANCE;
     }
 
-    //creates a new Call (for Async operations) and awaits the http response
-    //adds a Questionnaire to the RDS Database
+    /**
+     * Checks if an Internet Connection is available
+     *
+     * @param context needs Context to get ConnectivityManager
+     * @return 1 if ConnectionType is WIFI, 2 if ConnectionType is Mobile, -1 if no Connection is available
+     */
+    public static int checkInternetAvailability(Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            final Network n = cm.getActiveNetwork();
+            if (n != null) {
+                final NetworkCapabilities nc = cm.getNetworkCapabilities(n);
+
+                if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return 1;
+                if (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return 2;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Adds an Questionnaire to the RDS Database using the retrofit Interface
+     *
+     * @param toSave  JSONObject with all the Data for the Questionnaire
+     * @param context needs Context to get user_id from SharedPreferences
+     */
     public void addQuestionnaire(JSONObject toSave, Context context) throws JSONException {
-        JSONObject body = addInformationToJSONObject(toSave, context);
+        JSONObject body = JSONObjectCreator.addInformationToJSONObject(toSave, context); /* Adds Information only needed online*/
 
         Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionnaireURL, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+
+                    JSONObject responseBody;
+                    try {
+                        assert response.body() != null;
+                        responseBody = new JSONObject(response.body().string());
+                    } catch (JSONException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    System.out.println(responseBody);
+                    System.out.println(responseBody.getClass());
+                    try {
+                        System.out.println(responseBody.getJSONObject("nameValuePairs"));
+                        System.out.println(responseBody.getJSONObject("nameValuePairs").getJSONObject("Q1").getJSONArray("values").get(0));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                    //Wird immer nur ein Questionnaire Objekt gespeichert? Und wie realisieren wir, dass sich gemerkt wird, welches Objekt gespeichert wurde und welches noch hochgeladen werden muss.
+                    //Problem, dass die Antwort nicht einfach zurückgegeben werden kann, da call.enqueue Asynchron ist.
+
+
                     Log.i("sHelper", "Questionnaire successfully added");
                     Toast.makeText(activity, "Successfully delivered Questionnaire", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.e("sHelper","Failed to add Questionnaire, Response: " + response);
+                    Log.e("sHelper", "Failed to add Questionnaire, Response: " + response);
                     Toast.makeText(activity, "Failed to deliver Questionnaire", Toast.LENGTH_LONG).show();
                 }
             }
@@ -80,10 +128,14 @@ public class ServerHelper {
         });
     }
 
-    //creates a new Call (for Async operations) and awaits http response
-    //adds a DigitSpanTask to the RDS Database
+    /**
+     * Adds an DigitSpanTask to the RDS Database using retrofit Interfache
+     *
+     * @param toSave  the JSON Object which will be send to the Server. Is created inside the DigitSpanTaskActivity
+     * @param context needs Context to get UUID from Shared Preferences
+     */
     public void addDigitSpanTask(JSONObject toSave, Context context) throws JSONException {
-        JSONObject body = addInformationToJSONObject(toSave, context);
+        JSONObject body = JSONObjectCreator.addInformationToJSONObject(toSave, context);
         Call<ResponseBody> call = httpClient.postDigitSpanTask(addDigitSpanTaskURL, body);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -107,9 +159,12 @@ public class ServerHelper {
 
     }
 
-    //creates a new Call (for Async operations) and awaits http response
-    //on response the UniqueID is getting Stored
-    public void getUniqueID(Context context){
+    /**
+     * Asks for an UUID provided by RDS Database. UUID is 36 Chars long
+     *
+     * @param context needs Context to write UUID to Shared Preferences
+     */
+    public void getUniqueID(Context context) {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         Call<ResponseBody> call = httpClient.getUniqueID(getUniqueID);
 
@@ -135,14 +190,11 @@ public class ServerHelper {
         });
     }
 
-    //ads Information such as UserID (to identify the Users Questionnaire) and timestamp. Timestamp should normally also be saved in the local JSON - need to talk to Linus about this.
-    private JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY).format(new java.util.Date());
-        toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
-        toSave.put("timestamp", timeStamp);
-        return toSave;
+    public void createNewUser(String userName, String password, String passwordConfirm, Context context) throws JSONException {
+        JSONObjectCreator.createNewUserObject(userName, password, passwordConfirm);
     }
+
+    public void loginUser(String userName, String password, Context context){}
 
     //set Activity to display Toast, can be removed in the final delivery
     public void setActivity(FragmentActivity activity) {
@@ -150,7 +202,7 @@ public class ServerHelper {
     }
 
     //reads UniqueID fromResponseBodyObject
-    private String readResponseObject(Response<ResponseBody> response){
+    private String readResponseObject(Response<ResponseBody> response) {
 
         JSONArray json;
         try {
@@ -167,13 +219,9 @@ public class ServerHelper {
         }
     }
 
-
-
     //not yet functional:
     public void getDataFromS3() {
-        Retrofit retrofit2 = new Retrofit.Builder()
-                .baseUrl("https://selabsapp2023.s3.amazonaws.com/Bulgarian%20Split%20Squads.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIATIJB6MIQNCVTXGNA%2F20230522%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20230522T160343Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJj%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCmV1LW5vcnRoLTEiRjBEAiA06RsYcoh9%2BubLWR6cc6oIA2wxEKQWCsYO7hTBnDQxdAIgc2vMplSXljAUVgCQbPjQyWktoHIdPWZfgxPAp4JxhY4qjAMIwf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyMjM5NDYzNjc1MjAiDMaZvjjixEL0s%2FovPyrgAvn%2FfgPNpHjmpPs1a8gWCptwOcpSZMwqKfocGmhpZBrbdZGj3yVWNbWr5vTZkT8gNb6U0VGRQbSjnFztSnj5ss2wug3OXxwaK%2FgFUdiQhDBJE7nqLFol5xZCfHarOV1dds4%2BDaWwrMlvfZ7vz5gW%2BPXSyXvCiGGUN32Rxw3dLjl3BbmAhziaRMXdFfmX8yhSMADVJuoP9hjNm53BTxqTxqzZQFI6UxpYyz5A20xyVIoNh3HcS1EA8BYajWmH1sQTmRuT3gbyEjnUvyKCDRycyOu0VfqGqNxuB39QooqOg4%2FXUxwUzVMnQd2TVlEuBWsKsO%2B6sI4vVx5KCGO3q85HmqWgPe7Ya3nXgRSCGS%2Fs9SPFEzIAge%2BjA%2BuWW%2BA5lkAIlN2AK5W%2BgN7fdOE0RDaICy4i95DO6Snq92%2FFyvedZ8c2DoIiWhfYQhEiut4wNrc6GbXL90KyVPL5KFxHw%2BF3I4ow3aSuowY6nwFy5zuUa4tNu%2BHuFoTYzhEQVGKp6iuz4ySp4aQNu94DVK9HZlhpUM13r2MwuY1fzVj2E5ET1SvyyQWzibMuSqe9T8erh8KxCFnhOmxkqwlVQd18d7K6DnO9dNWHFsZW3q2zhfhgylFWnbc9NIrcFpovomn1EBoKx9ZWreqEX6GWft9He2x1wddcM5JG83vqgY4cccW099qISM65SY9%2BWGY%3D&X-Amz-Signature=d2478e3200b02dd91c07f1973a643b85f41ead2615fefde34aea2a18ea636406")
-                .build();
+        Retrofit retrofit2 = new Retrofit.Builder().baseUrl("https://selabsapp2023.s3.amazonaws.com/Bulgarian%20Split%20Squads.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIATIJB6MIQNCVTXGNA%2F20230522%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20230522T160343Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJj%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCmV1LW5vcnRoLTEiRjBEAiA06RsYcoh9%2BubLWR6cc6oIA2wxEKQWCsYO7hTBnDQxdAIgc2vMplSXljAUVgCQbPjQyWktoHIdPWZfgxPAp4JxhY4qjAMIwf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyMjM5NDYzNjc1MjAiDMaZvjjixEL0s%2FovPyrgAvn%2FfgPNpHjmpPs1a8gWCptwOcpSZMwqKfocGmhpZBrbdZGj3yVWNbWr5vTZkT8gNb6U0VGRQbSjnFztSnj5ss2wug3OXxwaK%2FgFUdiQhDBJE7nqLFol5xZCfHarOV1dds4%2BDaWwrMlvfZ7vz5gW%2BPXSyXvCiGGUN32Rxw3dLjl3BbmAhziaRMXdFfmX8yhSMADVJuoP9hjNm53BTxqTxqzZQFI6UxpYyz5A20xyVIoNh3HcS1EA8BYajWmH1sQTmRuT3gbyEjnUvyKCDRycyOu0VfqGqNxuB39QooqOg4%2FXUxwUzVMnQd2TVlEuBWsKsO%2B6sI4vVx5KCGO3q85HmqWgPe7Ya3nXgRSCGS%2Fs9SPFEzIAge%2BjA%2BuWW%2BA5lkAIlN2AK5W%2BgN7fdOE0RDaICy4i95DO6Snq92%2FFyvedZ8c2DoIiWhfYQhEiut4wNrc6GbXL90KyVPL5KFxHw%2BF3I4ow3aSuowY6nwFy5zuUa4tNu%2BHuFoTYzhEQVGKp6iuz4ySp4aQNu94DVK9HZlhpUM13r2MwuY1fzVj2E5ET1SvyyQWzibMuSqe9T8erh8KxCFnhOmxkqwlVQd18d7K6DnO9dNWHFsZW3q2zhfhgylFWnbc9NIrcFpovomn1EBoKx9ZWreqEX6GWft9He2x1wddcM5JG83vqgY4cccW099qISM65SY9%2BWGY%3D&X-Amz-Signature=d2478e3200b02dd91c07f1973a643b85f41ead2615fefde34aea2a18ea636406").build();
 
 
         httpClient = retrofit2.create(HTTPClient.class);
@@ -204,10 +252,7 @@ public class ServerHelper {
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
             // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    "Bulgarian Split Squads.jpg"
-            );
+            File futureStudioIconFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Bulgarian Split Squads.jpg");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -253,6 +298,4 @@ public class ServerHelper {
             return false;
         }
     }
-
-
 }
