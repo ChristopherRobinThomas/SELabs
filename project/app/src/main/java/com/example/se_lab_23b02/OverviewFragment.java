@@ -33,9 +33,13 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+
+import kotlin.Triple;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,8 +59,8 @@ public class OverviewFragment extends Fragment {
     private DataAccessHelper daHelper;
     private int currentTypeToPlot = 0;
 
-    private LocalDate dateLB;
-    private LocalDate dateUB;
+    private LocalDateTime dateLB;
+    private LocalDateTime dateUB;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -146,14 +150,18 @@ public class OverviewFragment extends Fragment {
         btNumOfActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // show btNumOfActivies here
+                try {
+                    updateGraph(currentTypeToPlot);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
 
         // initializing the upper and lower Date boundary
-        dateUB = LocalDate.now();
-        dateLB = LocalDate.now().minusDays(7);
+        dateUB = LocalDateTime.now();
+        dateLB = LocalDateTime.now().minusDays(7);
 
 
         EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
@@ -243,21 +251,35 @@ public class OverviewFragment extends Fragment {
         // get current values
 
         daHelper = DataAccessHelper.getInstance();
-        ArrayList<Pair<String, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
-        Number[] nums = new Number[data.size()];
-        String[] labels = new String[data.size()];
+        ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
+        int amountOfHours = (int)dateLB.until(dateUB, ChronoUnit.HOURS);
+        Number[] yVals = new Number[data.size()];
+        String[] labels = new String[amountOfHours];
+        Number[] xVals = new Number[data.size()];
 
-        for(int i = 0; i < data.size(); i++) {
-            labels[i] = data.get(i).first;
-            nums[i] = data.get(i).second;
+
+        // create Labels
+        LocalDateTime tempDate = dateLB;
+        labels[0] = tempDate.toLocalDate().toString();
+        for (int i = 1; i < amountOfHours; i++) {
+            tempDate = tempDate.plusHours(1);
+            labels[i] = tempDate.toLocalDate().toString();
         }
 
-        draw(typeToPlot, nums, labels);
+        for(int i = 0; i < data.size(); i++) {
+            yVals[i] = data.get(i).first;
+            xVals[i] = data.get(i).second;
+        }
+        System.out.println("xVals:" + Arrays.toString(xVals));
+        System.out.println("yVals:" + Arrays.toString(yVals));
+        System.out.println("labels:" + Arrays.toString(labels));
+
+        draw(typeToPlot, yVals, labels, xVals);
 
     }
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
-    private void draw(int typeToPlot, Number[] dataList, String[] labels) {
+    private void draw(int typeToPlot, Number[] dataList, String[] labels, Number[] domains) {
 
         plot.clear();
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
@@ -273,13 +295,13 @@ public class OverviewFragment extends Fragment {
         if (typeToPlot == 0) {
             plot.setTitle("Health Index");
             plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
-            final Number[] domainLabels = new Number[dataList.length];
-            for (int i = 0; i < dataList.length; i++) {
-                domainLabels[i] = i;
-            }
-            XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
+            plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
+            final Number[] domainLabels = domains;
+
+            XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
             LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
             plot.addSeries(series, seriesFormatter);
+
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
                 public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
@@ -292,6 +314,7 @@ public class OverviewFragment extends Fragment {
                     return null;
                 }
             });
+
             plot.invalidate();
             return;
         }

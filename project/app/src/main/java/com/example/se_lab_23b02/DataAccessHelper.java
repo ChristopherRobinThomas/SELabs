@@ -8,8 +8,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
+
+import kotlin.Triple;
 
 public class DataAccessHelper {
 
@@ -34,8 +42,8 @@ public class DataAccessHelper {
     }
 
     // returns a list of all the wanted data (accessMode) in the given time span
-    public ArrayList<Pair<String, Integer>> collectDataFromTimeframe(LocalDate lowerBorder, LocalDate upperBorder, int accessMode, Context context) throws JSONException {
-        ArrayList<Pair<String, Integer>> outputList = new ArrayList<>();
+    public ArrayList<Pair<Integer, Integer>> collectDataFromTimeframe(LocalDateTime lowerBorder, LocalDateTime upperBorder, int accessMode, Context context) throws JSONException {
+        ArrayList<Pair<Integer, Integer>> outputList = new ArrayList<>();
         String fileContent;
 
         switch (accessMode) {
@@ -49,9 +57,15 @@ public class DataAccessHelper {
                 for (int i = 1; i < lines.length; i++) {
                     JSONObject jsObject = new JSONObject(lines[i]);
                     String timestamp = (String) jsObject.get("timestamp");
-                    LocalDate timestampAsDate = LocalDate.parse(timestamp.split(" ")[0]);
-                    if(timestampAsDate.compareTo(lowerBorder) >= 0 && timestampAsDate.compareTo(upperBorder) <= 0) {
-                        Pair<String, Integer> newEntry = new Pair<>(timestampAsDate.toString(), this.calculateHealthScoreFromQuestionaire(lines[i]));
+                    String[] times = timestamp.split(" ");
+                    LocalDate tmpLocalDate = LocalDate.parse(times[0]);
+                    LocalTime tmpLocalTime = LocalTime.parse(times[1]);
+                    LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
+                    if(ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        System.out.println("line read: timestamp: " + ldtTimestampAsDate.toString() + ", lb: " +
+                                lowerBorder.toString() + ", ub: " + upperBorder.toString());
+                        int hours = (int) ChronoUnit.HOURS.between(lowerBorder, ldtTimestampAsDate);
+                        Pair<Integer, Integer> newEntry = new Pair<>(this.calculateHealthScoreFromQuestionaire(lines[i]), hours);
                         outputList.add(newEntry);
                     }
                 }
@@ -75,6 +89,7 @@ public class DataAccessHelper {
     }
 
 
+
     private int calculateHealthScoreFromQuestionaire(String questionaireAnswering) throws JSONException {
         // calculate the questionaire score here, for now using random values
 
@@ -89,6 +104,4 @@ public class DataAccessHelper {
         return (int) (calmnessIndex + satisfactionIndex + energyIndex)/3;
 
     }
-
-
 }
