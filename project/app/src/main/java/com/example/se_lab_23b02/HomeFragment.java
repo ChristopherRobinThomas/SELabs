@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     //-------Objects--------------
     DataSavingHelper dsHelper;
     private SensorManager sensorManager;
+    private Sensor sensor_to_read;
 
     //---------Variables--------
     private String dailyGoal;
@@ -105,8 +106,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
-        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
+        sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         //Retrieve Daily Goal (If already chosen) from Storage
         dsHelper = DataSavingHelper.getInstance();
@@ -207,7 +209,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if(countSensor != null)
         {
-            sensorManager.registerListener(this, countSensor,SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, sensor_to_read,SensorManager.SENSOR_DELAY_UI);
         }
     }
 
@@ -215,6 +217,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public void onPause()
     {
         super.onPause();
+        sensorManager.unregisterListener(this);
         running = false;
     }
     @Override
