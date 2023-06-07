@@ -16,6 +16,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.StringWriter;
+
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener{
 
     //------------GUI Elements-----------------
@@ -136,7 +138,15 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
 
     public void saveGoalButtonClicked(View v) throws JSONException {
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyTask + "_0",getApplicationContext());
+        JSONObject obj = new JSONObject();
+        obj.put("Daily_Task", dailyTask);
+        obj.put("Progress", 0);
+
+        String data = obj.toString();
+
+        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext());
+
+        //dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyTask + "_0",getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
     }
