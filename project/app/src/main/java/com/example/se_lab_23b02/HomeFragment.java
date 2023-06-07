@@ -1,6 +1,13 @@
 package com.example.se_lab_23b02;
 
+import static android.content.Context.SENSOR_SERVICE;
+
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +20,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +32,7 @@ import org.json.JSONObject;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SensorEventListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,10 +45,13 @@ public class HomeFragment extends Fragment {
 
     //-------Objects--------------
     DataSavingHelper dsHelper;
+    private SensorManager sensorManager;
 
     //---------Variables--------
     private String dailyGoal;
-    int goalProgress;
+    private int goalProgress;
+    private boolean running = false;
+    int stepCount;
 
     //--------GUI Element-----
     ProgressBar dailyGoalProgressBar;
@@ -91,10 +105,13 @@ public class HomeFragment extends Fragment {
         markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+
 
         //Retrieve Daily Goal (If already chosen) from Storage
         dsHelper = DataSavingHelper.getInstance();
-        try {
+        /**try {
+
             String[] dailyGoalArray = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity()).split("_");
             dailyGoal = dailyGoalArray[0];
             goalProgress = Integer.valueOf(dailyGoalArray[1]);
@@ -103,11 +120,26 @@ public class HomeFragment extends Fragment {
             dailyGoal = "No Goal chosen yet";
             goalProgress = 0;
             markGoalAsCompleteButton.setEnabled(false);
+        }*/
+
+        try
+        {
+            String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+            JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+            dailyGoal = obj.get("Daily_Task").getAsString();
+            goalProgress = obj.get("Progress").getAsInt();
+            pickDailyGoalButton.setEnabled(false);
+
+        }catch(Exception e){
+            dailyGoal = "No Goal chosen yet";
+            goalProgress = 0;
+            markGoalAsCompleteButton.setEnabled(false);
         }
+
         if(goalProgress==100)
         {
             markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-            dailyGoalTxt.setText("Congrats: You achieved your daily goal!");
+            dailyGoalTxt.setText("You achieved today's goal!");
         }
         else{
             dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
@@ -131,18 +163,30 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener() {
+        markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
+                goalProgress = 100;
                 updateProgress();
                 //markGoalAsCompleteButton.setEnabled(false);
                 markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-                dailyGoalTxt.setText("Congrats: You achieved your daily goal!");
+                dailyGoalTxt.setText("You achieved today's goal!");
+
                 //Save Progress Update to Storage
-                dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyGoal + "_" + String.valueOf(goalProgress),getActivity());
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("Daily_Task", dailyGoal);
+                    obj.put("Progress", 100);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                String data = obj.toString();
+
+                dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity());
+                //dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyGoal + "_" + String.valueOf(goalProgress),getActivity());
+
             }
         });
-
 
         // Inflate the layout for this fragment
         return view;
@@ -152,9 +196,50 @@ public class HomeFragment extends Fragment {
 
     private void updateProgress()
     {
-        //TODO Get step count and show in progress bar if goal is a certain step count
-        goalProgress = 100;
         dailyGoalProgressBar.setProgress(goalProgress);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        running = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor != null)
+        {
+            sensorManager.registerListener(this, countSensor,SensorManager.SENSOR_DELAY_UI);
+        }
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        running = false;
+    }
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent){
+        if(running)
+        {
+            stepCount = (int) sensorEvent.values[0];
+            if(dailyGoal.equals("Walk 5.000 Steps"))
+            {
+                stepCount += (goalProgress/100)*5000;
+                goalProgress = (stepCount/5000)*100;
+                updateProgress();
+            }
+            else if(dailyGoal.equals("Walk 10.000 Steps"))
+            {
+                stepCount += (goalProgress/100)*10000;
+                goalProgress = (stepCount/10000)*100;
+                updateProgress();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
 }

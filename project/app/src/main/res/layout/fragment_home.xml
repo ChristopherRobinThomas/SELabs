@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -69,7 +68,8 @@
             android:layout_height="wrap_content"
             android:indeterminate="false"
             android:max="100"
-            android:progress="50" />
+            android:progress="50"
+            android:progressDrawable="@drawable/progress_bar_background" />
 
         <Button
             android:id="@+id/GoalCompleteButton"
