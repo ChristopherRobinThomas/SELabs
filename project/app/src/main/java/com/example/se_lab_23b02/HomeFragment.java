@@ -70,10 +70,6 @@ public class HomeFragment extends Fragment {
 
 
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
-        String clockTime = new TimeStamp().getCurrentTimeStamp().split(" ")[1];
-        int hour = Integer.parseInt(clockTime.split(":")[0]);
-        String test = String.valueOf( new TimeStamp().getCurrentTimeSlot());
-        questionnaireButton.setText(test);
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
