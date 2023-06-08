@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Time;
 import com.google.gson.Gson;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private DataSavingHelper dsHelper;
     private SensorManager sensorManager;
     private Sensor sensor_to_read;
+    private DataAccessHelper dataAccessHelper;
 
     //---------Variables--------
     private String dailyGoal;
@@ -65,7 +67,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private boolean running = false;
     private int innitStepCount;
     private int newStepCount;
-    private int overallWellBeing = getOverallWellbeing();
+    private int overallWellBeing;
 
     //--------GUI Element-----
     ProgressBar dailyGoalProgressBar;
@@ -130,6 +132,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dsHelper = DataSavingHelper.getInstance();
         getDailyGoalFromStorage();
         setUpProgress();
+        updateLittleBeing();
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +157,23 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 goalProgress = 100;
                 markGoalAsComplete();
 
+            }
+        });
+        littleBeingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(overallWellBeing >=0 && overallWellBeing <= 33) {
+                    Toast.makeText(getActivity(),"[Name] is feeling sag right now. That's okay!", Toast.LENGTH_SHORT).show();
+                }
+                else if(overallWellBeing >=33 && overallWellBeing<66)
+                {
+                    Toast.makeText(getActivity(),"[Name] is feeling okay at the moment", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getActivity(),"[Name] is feeling really happy right now!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -222,22 +242,36 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void updateLittleBeing()
     {
-        //ToDO get overall wellness and set Little Being according to it
 
+        dataAccessHelper = DataAccessHelper.getInstance();
+        try
+        {
+            String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",getActivity()).split("\n");
+            String questionnaire = questionnaires[questionnaires.length-1];
+            try {
+                overallWellBeing = dataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
 
-        /**
-         * if(overallWellBeing <0 && overallWellbeing <?)
-         * littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_happy));
-         * */
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        catch (Exception e)
+        {
+            overallWellBeing = 100;
+        }
+
+        if(overallWellBeing >= 0 && overallWellBeing <= 33) {
+            littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_sad));
+        }
+        else if(overallWellBeing > 33 && overallWellBeing < 66)
+        {
+            littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_okay));
+        }
+        else
+        {
+            littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_happy));
+        }
     }
-
-    private int getOverallWellbeing()
-    {
-        //TODO
-        return 0;
-    }
-
-
 
     private void markGoalAsComplete()
     {
