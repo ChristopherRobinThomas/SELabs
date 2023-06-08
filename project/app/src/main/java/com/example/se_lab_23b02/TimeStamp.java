@@ -11,9 +11,9 @@ public class TimeStamp {
         evening,
         no_TimeSLot
     };
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    static private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public TimeSlot getTimeSlotFromString(String s)
+    static public TimeSlot getTimeSlotFromString(String s)
     {
         String clockTime = s.split(" ")[1];
         int hour = Integer.parseInt(clockTime.split(":")[0]);
@@ -24,10 +24,10 @@ public class TimeStamp {
         if(hour >= 17 && hour < 19)
             return TimeSlot.evening;
 
-        return  TimeSlot.no_TimeSLot;
+        return TimeSlot.no_TimeSLot;
     }
 
-    public TimeSlot getCurrentTimeSlot()
+    static public TimeSlot getCurrentTimeSlot()
     {
         LocalDateTime now = LocalDateTime.now();
         String clockTime = dateTimeFormatter.format(now).split(" ")[1];
@@ -42,7 +42,7 @@ public class TimeStamp {
         return TimeSlot.no_TimeSLot;
     }
 
-    public String getCurrentTimeStamp()
+    static public String getCurrentTimeStamp()
     {
         LocalDateTime now = LocalDateTime.now();
         return dateTimeFormatter.format(now);
