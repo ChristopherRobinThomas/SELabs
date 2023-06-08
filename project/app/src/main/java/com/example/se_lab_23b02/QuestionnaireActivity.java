@@ -63,7 +63,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 try {
                     saveAnswers();
                 }catch (Exception e) { }
-                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.evening)
+                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon)
                 {
                     Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
                     startActivity(i);
