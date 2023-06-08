@@ -14,6 +14,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.androidplot.xy.XYPlot;
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
 import java.util.Calendar;
@@ -35,7 +38,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
