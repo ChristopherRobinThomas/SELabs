@@ -3,8 +3,13 @@ package com.example.se_lab_23b02;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +22,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener{
+public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     //------------GUI Elements-----------------
     Button buttonX;
@@ -34,10 +41,14 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
     TextView txtChosenDailyGoal;
 
     //-------------Variables---------------------
-    String dailyTask;
+    private String dailyTask;
+    private int stepCount;
+    private boolean running = false;
 
     //--------------Objects----------------------
-    DataSavingHelper dsHelper;
+    private DataSavingHelper dsHelper;
+    private SensorManager sensorManager;
+    private Sensor sensor_to_read;
 
     //---------------------------------------------
     @Override
@@ -71,6 +82,8 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonOwnDailyTask.setOnClickListener(this);
 
         buttonSaveDailyTask.setEnabled(false);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
     }
 
     public void onClick(View v)
@@ -138,18 +151,59 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
 
     public void saveGoalButtonClicked(View v) throws JSONException {
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        String date = sdf.format(c.getTime());
+        //Save Date, Task, Progress, and Step Count
         JSONObject obj = new JSONObject();
+        obj.put("Date", date);
         obj.put("Daily_Task", dailyTask);
         obj.put("Progress", 0);
+        obj.put("Step_Count", stepCount);
 
         String data = obj.toString();
 
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext());
 
-        //dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyTask + "_0",getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
     }
 
 
+
+    //---------------Sensor Functions ---------------------
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        running = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor != null)
+        {
+            sensorManager.registerListener(this, sensor_to_read,SensorManager.SENSOR_DELAY_UI);
+        }
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+        running = false;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent){
+        if(running)
+        {
+            stepCount = (int) sensorEvent.values[0];
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
