@@ -41,6 +41,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding.bottomNavigation.setSelectedItemId(R.id.home);
 
 
+
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
             switch(item.getItemId())

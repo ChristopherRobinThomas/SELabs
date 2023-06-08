@@ -45,6 +45,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
+    private String timestamp;
+
     private DataSavingHelper dsHelper;
     private ServerHelper sHelper;
 
@@ -60,12 +62,17 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     saveAnswers();
-                }catch (Exception e)
+                }catch (Exception e) { }
+                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.evening)
                 {
-
+                    Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    startActivity(i);
                 }
-                Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
-                startActivity(i);
+                else
+                {
+                    Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -87,6 +94,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
         for (int i = 1; i <= valueArrays.length; i++) {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
+        timestamp = TimeStamp.getCurrentTimeStamp();
+        toSave.put("timestamp: ", timestamp);
 
         sHelper.setActivity(this);
         sHelper.addQuestionaire(toSave);
