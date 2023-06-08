@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private String todaysDate;
     private String date;
 
-    private int goalProgress;
+    private float goalProgress;
     private boolean running = false;
     private int innitStepCount;
     private int newStepCount;
@@ -227,11 +227,11 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         else{
             dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
         }
-        dailyGoalProgressBar.setProgress(goalProgress);
+        dailyGoalProgressBar.setProgress((int)goalProgress);
     }
     private void updateProgress()
     {
-        dailyGoalProgressBar.setProgress(goalProgress);
+        dailyGoalProgressBar.setProgress((int)goalProgress);
     }
 
     private void updateLittleBeing()
@@ -282,15 +282,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             newStepCount = (int) sensorEvent.values[0];
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
+                float steps = newStepCount - innitStepCount;
 
-                newStepCount = newStepCount - innitStepCount;
-                goalProgress = (newStepCount/5000)*100;
+                goalProgress = (steps/5000)*100;
                 updateProgress();
             }
             else if(dailyGoal.equals("Walk 10.000 Steps"))
             {
-                newStepCount = newStepCount - innitStepCount;
-                goalProgress = (newStepCount/10000)*100;
+                float steps = newStepCount - innitStepCount;
+                goalProgress = (steps/10000)*100;
                 updateProgress();
             }
         }
