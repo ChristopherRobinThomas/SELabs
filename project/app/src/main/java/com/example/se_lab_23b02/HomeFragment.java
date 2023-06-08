@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 /**
@@ -182,16 +183,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private void getDailyGoalFromStorage()
     {
         //Retrieve Daily Goal (If already chosen) from Storage
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar c = Calendar.getInstance();
-        todaysDate = sdf.format(c.getTime());
+        String todaysDate = LocalDate.now().toString();
 
         dsHelper = DataSavingHelper.getInstance();
         try
         {
             String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
             JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
-            date = obj.get("Date").getAsString();
+            date = obj.get("Date").getAsString().split(" ")[0];
 
             if(date.equals(todaysDate))
             {
