@@ -152,23 +152,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 goalProgress = 100;
-                updateProgress();
-                markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-                dailyGoalTxt.setText("You achieved today's goal!");
-
-                //Save Progress Update to Storage
-                JSONObject obj = new JSONObject();
-                try {
-                    obj.put("Date", todaysDate);
-                    obj.put("Daily_Task", dailyGoal);
-                    obj.put("Progress", 100);
-                    obj.put("Step_Count", innitStepCount);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                String data = obj.toString();
-
-                dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity());
+                markGoalAsComplete();
 
             }
         });
@@ -183,12 +167,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private void getDailyGoalFromStorage()
     {
         //Retrieve Daily Goal (If already chosen) from Storage
-        String todaysDate = TimeStamp.getCurrentTimeStamp().split(" ")[0];
+        todaysDate = TimeStamp.getCurrentTimeStamp().split(" ")[0];
 
         dsHelper = DataSavingHelper.getInstance();
         try
         {
             String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+            String[] temp2 = temp.split("\n");
+            temp = temp2[temp2.length-1];
             JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
             date = obj.get("Date").getAsString().split(" ")[0];
 
@@ -253,6 +239,30 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
 
 
+    private void markGoalAsComplete()
+    {
+        updateProgress();
+        markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
+        dailyGoalTxt.setText("You achieved today's goal!");
+        todaysDate = TimeStamp.getCurrentTimeStamp();
+
+        //Save Progress Update to Storage
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("Date", todaysDate);
+            obj.put("Daily_Task", dailyGoal);
+            obj.put("Progress", 100);
+            obj.put("Step_Count", innitStepCount);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        String data = obj.toString() + "\n";
+
+        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
+    }
+
+
+
     //---------------Sensor Functions ---------------------
 
 
@@ -283,15 +293,20 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
                 float steps = newStepCount - innitStepCount;
-
                 goalProgress = (steps/5000)*100;
                 updateProgress();
+
             }
             else if(dailyGoal.equals("Walk 10.000 Steps"))
             {
                 float steps = newStepCount - innitStepCount;
                 goalProgress = (steps/10000)*100;
                 updateProgress();
+
+            }
+            if(goalProgress == 100)
+            {
+                markGoalAsComplete();
             }
         }
     }
