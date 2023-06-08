@@ -66,7 +66,7 @@ public class DataSavingHelper {
             if(!toWrite.exists()){
                 toWrite.createNewFile();
             }
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
             Log.e("dsHelper", "To file: "+filename+", wrote: "+data);

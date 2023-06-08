@@ -183,7 +183,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private void getDailyGoalFromStorage()
     {
         //Retrieve Daily Goal (If already chosen) from Storage
-        String todaysDate = LocalDate.now().toString();
+        String todaysDate = TimeStamp.getCurrentTimeStamp().split(" ")[0];
 
         dsHelper = DataSavingHelper.getInstance();
         try

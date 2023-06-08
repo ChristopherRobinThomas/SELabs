@@ -155,7 +155,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
     public void saveGoalButtonClicked(View v) throws JSONException {
 
-        String now = LocalDate().now().toString();
+        String now = TimeStamp.getCurrentTimeStamp();
 
         //Save Date, Task, Progress, and Step Count
         JSONObject obj = new JSONObject();
@@ -164,7 +164,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         obj.put("Progress", 0);
         obj.put("Step_Count", stepCount);
 
-        String data = obj.toString();
+        String data = obj.toString() + "\n";
 
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext(), true);
 
