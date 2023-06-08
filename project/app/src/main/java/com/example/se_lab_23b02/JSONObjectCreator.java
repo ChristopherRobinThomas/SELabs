@@ -19,7 +19,7 @@ public class JSONObjectCreator {
     }
     public static JSONObject createNewUserObject(String userName, String password, String passwordConfirm) throws JSONException {
         JSONObject toSave = new JSONObject();
-        toSave.put("userName", userName);
+        toSave.put("username", userName);
         toSave.put("password", password);
         toSave.put("passwordConfirm", passwordConfirm);
 

@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -38,6 +39,8 @@ public class ServerHelper {
     private final String addQuestionnaireURL = "development/databaseentrys/questionaire";
     private final String addDigitSpanTaskURL = "development/databaseentrys/digitspantask";
     private final String getUniqueID = "development/databaseentrys/getuniqueuserid";
+    private final String loginUser = "development/useradministration/loginuser";
+    private final String createNewUser = "development/useradministration/createnewuser";
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
@@ -84,7 +87,7 @@ public class ServerHelper {
     public void addQuestionnaire(JSONObject toSave, Context context) throws JSONException {
         JSONObject body = JSONObjectCreator.addInformationToJSONObject(toSave, context); /* Adds Information only needed online*/
 
-        Call<ResponseBody> call = httpClient.postQuestionnaire(addQuestionnaireURL, body);
+        Call<ResponseBody> call = httpClient.postRequest(addQuestionnaireURL, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
@@ -136,7 +139,7 @@ public class ServerHelper {
      */
     public void addDigitSpanTask(JSONObject toSave, Context context) throws JSONException {
         JSONObject body = JSONObjectCreator.addInformationToJSONObject(toSave, context);
-        Call<ResponseBody> call = httpClient.postDigitSpanTask(addDigitSpanTaskURL, body);
+        Call<ResponseBody> call = httpClient.postRequest(addDigitSpanTaskURL, body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -191,10 +194,63 @@ public class ServerHelper {
     }
 
     public void createNewUser(String userName, String password, String passwordConfirm, Context context) throws JSONException {
-        JSONObjectCreator.createNewUserObject(userName, password, passwordConfirm);
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        JSONObject body = JSONObjectCreator.createNewUserObject(userName, password, passwordConfirm);
+        Call<ResponseBody> call = httpClient.postRequest(createNewUser, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                    Log.i("sHelper", "Successfully created new Account");
+                    Toast.makeText(activity, "Successfully created new Account", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Log.i("sHelper", "Failed to create new Account, Response: " + response);
+                    Toast.makeText(activity, "Failed to create new Account", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - createNewUser, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    public void loginUser(String userName, String password, Context context){}
+    public void loginUser(String userName, String password, Context context) throws JSONException, IOException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        JSONObject body = JSONObjectCreator.createLoginUserObject(userName, password);
+        Call<ResponseBody> call = httpClient.postRequest(loginUser, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.i("sHelper", "Successfully logged User");
+                    Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
+                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+
+                    if (response.body())
+
+                    context.startActivity(new Intent(context, HomeScreenActivity.class));
+                } else {
+                    Log.i("sHelper", "Failed to login User, Response: " + response);
+                    Toast.makeText(activity, "Server Authentication Error", Toast.LENGTH_LONG).show();
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - loginUser, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                context.startActivity(new Intent(context, LoginActivity.class));
+            }
+        });
+    }
 
     //set Activity to display Toast, can be removed in the final delivery
     public void setActivity(FragmentActivity activity) {

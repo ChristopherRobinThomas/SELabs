@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                Intent myIntent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(myIntent);
             }
         });
