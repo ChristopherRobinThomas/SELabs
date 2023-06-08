@@ -23,6 +23,9 @@ import org.json.JSONObject;
 
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
 
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
@@ -152,20 +155,18 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
     public void saveGoalButtonClicked(View v) throws JSONException {
 
+        String now = LocalDate().now().toString();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar c = Calendar.getInstance();
-        String date = sdf.format(c.getTime());
         //Save Date, Task, Progress, and Step Count
         JSONObject obj = new JSONObject();
-        obj.put("Date", date);
+        obj.put("Date", now);
         obj.put("Daily_Task", dailyTask);
         obj.put("Progress", 0);
         obj.put("Step_Count", stepCount);
 
         String data = obj.toString();
 
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext());
+        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext(), true);
 
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
