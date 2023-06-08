@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
+    <ImageButton
+        android:id="@+id/buttonLittleBeing"
+        android:layout_width="130dp"
+        android:layout_height="211dp"
+        android:layout_marginTop="-350dp"
+        android:background="@drawable/little_being_happy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -21,13 +32,13 @@
         android:id="@+id/QuestionnaireButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-250dp"
+        android:layout_marginTop="-300dp"
         android:onClick="QuestionnaireClicked"
         android:text="Questionnaire"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/buttonLittleBeing" />
 
     <Button
         android:id="@+id/DailyGoalButton"

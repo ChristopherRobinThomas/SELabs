@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,6 +28,9 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,18 +49,29 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private String mParam2;
 
     //-------Objects--------------
-    DataSavingHelper dsHelper;
+    private DataSavingHelper dsHelper;
     private SensorManager sensorManager;
     private Sensor sensor_to_read;
 
     //---------Variables--------
     private String dailyGoal;
+
+    private String todaysDate;
+    private String date;
+
     private int goalProgress;
     private boolean running = false;
-    int stepCount;
+    private int innitStepCount;
+    private int newStepCount;
+    private int overallWellBeing = getOverallWellbeing();
 
     //--------GUI Element-----
     ProgressBar dailyGoalProgressBar;
+    Button pickDailyGoalButton;
+    Button markGoalAsCompleteButton;
+    TextView dailyGoalTxt;
+    Button questionnaireButton;
+    ImageButton littleBeingButton;
 
 
     public HomeFragment() {
@@ -94,11 +110,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button questionnaireButton;
-        Button pickDailyGoalButton;
-        Button markGoalAsCompleteButton;
-        TextView dailyGoalTxt;
-
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
@@ -107,46 +118,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
 
+
+        littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
+
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         //Retrieve Daily Goal (If already chosen) from Storage
         dsHelper = DataSavingHelper.getInstance();
-        /**try {
-
-            String[] dailyGoalArray = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity()).split("_");
-            dailyGoal = dailyGoalArray[0];
-            goalProgress = Integer.valueOf(dailyGoalArray[1]);
-            pickDailyGoalButton.setEnabled(false);
-        } catch (Exception e) {
-            dailyGoal = "No Goal chosen yet";
-            goalProgress = 0;
-            markGoalAsCompleteButton.setEnabled(false);
-        }*/
-
-        try
-        {
-            String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
-            JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
-            dailyGoal = obj.get("Daily_Task").getAsString();
-            goalProgress = obj.get("Progress").getAsInt();
-            pickDailyGoalButton.setEnabled(false);
-
-        }catch(Exception e){
-            dailyGoal = "No Goal chosen yet";
-            goalProgress = 0;
-            markGoalAsCompleteButton.setEnabled(false);
-        }
-
-        if(goalProgress==100)
-        {
-            markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-            dailyGoalTxt.setText("You achieved today's goal!");
-        }
-        else{
-            dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
-        }
-        dailyGoalProgressBar.setProgress(goalProgress);
+        getDailyGoalFromStorage();
+        setUpProgress();
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,22 +151,22 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
                 goalProgress = 100;
                 updateProgress();
-                //markGoalAsCompleteButton.setEnabled(false);
                 markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
                 dailyGoalTxt.setText("You achieved today's goal!");
 
                 //Save Progress Update to Storage
                 JSONObject obj = new JSONObject();
                 try {
+                    obj.put("Date", todaysDate);
                     obj.put("Daily_Task", dailyGoal);
                     obj.put("Progress", 100);
+                    obj.put("Step_Count", innitStepCount);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
                 String data = obj.toString();
 
                 dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity());
-                //dsHelper.writeDataToInternalStorage("DailyGoal.txt",dailyGoal + "_" + String.valueOf(goalProgress),getActivity());
 
             }
         });
@@ -195,11 +176,85 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     }
 
 
+    //----------------Helper Functions---------------------------
 
+    private void getDailyGoalFromStorage()
+    {
+        //Retrieve Daily Goal (If already chosen) from Storage
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        todaysDate = sdf.format(c.getTime());
+
+        dsHelper = DataSavingHelper.getInstance();
+        try
+        {
+            String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+            JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+            date = obj.get("Date").getAsString();
+
+            if(date.equals(todaysDate))
+            {
+                dailyGoal = obj.get("Daily_Task").getAsString();
+                goalProgress = obj.get("Progress").getAsInt();
+                innitStepCount = obj.get("Step_Count").getAsInt();
+                pickDailyGoalButton.setEnabled(false);
+                if(dailyGoal.equals("Walk 5.000 Steps")||dailyGoal.equals("Walk 10.000 Steps"))
+                {
+                    markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
+                }
+            }
+            else
+            {
+                dailyGoal = "No Goal chosen yet";
+                goalProgress = 0;
+                markGoalAsCompleteButton.setEnabled(false);
+            }
+
+        }catch(Exception e){
+            dailyGoal = "No Goal chosen yet";
+            goalProgress = 0;
+            markGoalAsCompleteButton.setEnabled(false);
+        }
+    }
+
+    private void setUpProgress()
+    {
+        if(goalProgress==100)
+        {
+            markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
+            dailyGoalTxt.setText("You achieved today's goal!");
+        }
+        else{
+            dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+        }
+        dailyGoalProgressBar.setProgress(goalProgress);
+    }
     private void updateProgress()
     {
         dailyGoalProgressBar.setProgress(goalProgress);
     }
+
+    private void updateLittleBeing()
+    {
+        //ToDO get overall wellness and set Little Being according to it
+
+
+        /**
+         * if(overallWellBeing <0 && overallWellbeing <?)
+         * littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_happy));
+         * */
+    }
+
+    private int getOverallWellbeing()
+    {
+        //TODO
+        return 0;
+    }
+
+
+
+    //---------------Sensor Functions ---------------------
+
 
     @Override
     public void onResume()
@@ -224,17 +279,18 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent){
         if(running)
         {
-            stepCount = (int) sensorEvent.values[0];
+            newStepCount = (int) sensorEvent.values[0];
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
-                stepCount += (goalProgress/100)*5000;
-                goalProgress = (stepCount/5000)*100;
+
+                newStepCount = newStepCount - innitStepCount;
+                goalProgress = (newStepCount/5000)*100;
                 updateProgress();
             }
             else if(dailyGoal.equals("Walk 10.000 Steps"))
             {
-                stepCount += (goalProgress/100)*10000;
-                goalProgress = (stepCount/10000)*100;
+                newStepCount = newStepCount - innitStepCount;
+                goalProgress = (newStepCount/10000)*100;
                 updateProgress();
             }
         }
