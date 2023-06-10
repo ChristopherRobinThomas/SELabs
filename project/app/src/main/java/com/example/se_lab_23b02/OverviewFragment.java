@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BarFormatter;
@@ -34,6 +35,7 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,7 +162,8 @@ public class OverviewFragment extends Fragment {
 
 
         // initializing the upper and lower Date boundary
-        dateUB = LocalDateTime.now();
+        dateUB = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+
         dateLB = LocalDateTime.now().minusDays(7);
 
 
@@ -182,10 +185,15 @@ public class OverviewFragment extends Fragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int month, int dayOfMonth) {
-                                dateLB = dateLB.withYear(year);
-                                dateLB = dateLB.withMonth(month + 1);
-                                dateLB = dateLB.withDayOfMonth(dayOfMonth);
-                                lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                LocalDateTime tempLDT = LocalDateTime.now().withYear(year).withMonth(month + 1).withDayOfMonth(dayOfMonth);
+                                if (tempLDT.compareTo(dateUB) <= 0) {
+                                    dateLB = dateLB.withYear(year);
+                                    dateLB = dateLB.withMonth(month + 1);
+                                    dateLB = dateLB.withDayOfMonth(dayOfMonth);
+                                    lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                } else {
+                                    Toast.makeText(getActivity(), "Pick an earlier date", Toast.LENGTH_LONG).show();
+                                }
                                 try {
                                     updateGraph(currentTypeToPlot);
                                 } catch (JSONException e) {

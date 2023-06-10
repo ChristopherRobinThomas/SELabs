@@ -90,7 +90,7 @@ public class DataAccessHelper {
 
 
 
-    private int calculateHealthScoreFromQuestionaire(String questionaireAnswering) throws JSONException {
+    public static int calculateHealthScoreFromQuestionaire(String questionaireAnswering) throws JSONException {
         // calculate the questionaire score here, for now using random values
 
         JSONObject questionaire = new JSONObject(questionaireAnswering);
