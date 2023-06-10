@@ -181,6 +181,12 @@ public class SettingsFragment extends Fragment {
         switchStepCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                    }
+
+                }
                 dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), context);
             }
         });
@@ -308,19 +314,6 @@ public class SettingsFragment extends Fragment {
             swGPS.setChecked(Boolean.parseBoolean(settings.get("GPSAllowed")));
         }
         swGPS.setChecked(false);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
-
-        switch(permsRequestCode){
-
-            case 200:
-
-                switchGPS.setChecked(grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                break;
-
-        }
     }
 
     //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
