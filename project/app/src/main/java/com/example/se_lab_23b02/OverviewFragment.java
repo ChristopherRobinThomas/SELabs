@@ -2,13 +2,11 @@ package com.example.se_lab_23b02;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
-import android.graphics.EmbossMaskFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.provider.ContactsContract;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.pie.PieChart;
-import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
@@ -36,7 +33,6 @@ import com.androidplot.xy.XYSeries;
 
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -157,7 +153,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        Button btNumOfActivities = (Button) view.findViewById(R.id.btNumOfActivities);
+        Button btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
         btNumOfActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
