@@ -1,5 +1,6 @@
 package com.example.se_lab_23b02;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import static android.content.Intent.getIntent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,14 +19,8 @@ import android.view.ViewGroup;
  */
 public class SingleIntervention extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static String pInterventionName;
+    TextView interventionName;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -36,12 +34,10 @@ public class SingleIntervention extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SingleIntervention.
      */
-    // TODO: Rename and change types and number of parameters
     public static SingleIntervention newInstance(String param1, String param2) {
         SingleIntervention fragment = new SingleIntervention();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(pInterventionName, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,15 +46,26 @@ public class SingleIntervention extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            pInterventionName = getArguments().getString("name");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_intervention, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
+
+        interventionName = view.findViewById(R.id.textView3);
+        switch (pInterventionName) {
+            case "sampleIntervention1":  interventionName.setText("Sample Intervention 1");
+                break;
+            default: interventionName.setText("Default Text");
+                break;
+        }
+
+        return view;
+    }
+
+    public void interventionComplete() {
+
     }
 }
