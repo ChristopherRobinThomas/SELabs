@@ -2,6 +2,7 @@ package com.example.se_lab_23b02;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
 
@@ -18,6 +19,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidplot.pie.PieChart;
+import com.androidplot.pie.PieRenderer;
+import com.androidplot.pie.Segment;
+import com.androidplot.pie.SegmentFormatter;
+
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
@@ -30,6 +36,7 @@ import com.androidplot.xy.XYSeries;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -41,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import kotlin.Triple;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +62,7 @@ public class OverviewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private  XYPlot plot;
+    private PieChart pieChart;
     private TextView tvInfo;
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
@@ -107,6 +114,8 @@ public class OverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         plot = (XYPlot) view.findViewById(R.id.plt_graph);
+        pieChart = (PieChart) view.findViewById(R.id.plt_pieChart);
+        pieChart.setVisibility(View.INVISIBLE);
 
         dsHelper = DataSavingHelper.getInstance();
 
@@ -127,7 +136,7 @@ public class OverviewFragment extends Fragment {
             public void onClick(View v) {
                 currentTypeToPlot = 1;
                 try {
-                    updateGraph(1);
+                    updateGraph(currentTypeToPlot);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -153,6 +162,7 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    currentTypeToPlot = 2;
                     updateGraph(currentTypeToPlot);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -256,9 +266,23 @@ public class OverviewFragment extends Fragment {
     // updates the graph by reading the data from file (DAHelper) and then drawing it using draw()
     private void updateGraph(int typeToPlot) throws JSONException {
 
-        // get current values
-
         daHelper = DataAccessHelper.getInstance();
+        if(typeToPlot == 2) {
+            plot.setVisibility(View.INVISIBLE);
+            pieChart.setVisibility(View.VISIBLE);
+            ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_DAILY_TASK_DISTRIBUTION, getContext());
+            ArrayList<Segment> segments = new ArrayList<Segment>();
+            for (int i = 0; i < data.size(); i++) {
+                Segment temp = new Segment(DataAccessHelper.LIST_OF_DAILY_TASKS_TO_INDEX[data.get(i).second], data.get(i).first);
+                segments.add(temp);
+            }
+            drawPieChart(segments);
+            return;
+
+        }
+        // get current values
+        plot.setVisibility(View.VISIBLE);
+        pieChart.setVisibility(View.INVISIBLE);
         ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
         int amountOfHours = (int)dateLB.until(dateUB, ChronoUnit.HOURS);
         Number[] yVals = new Number[data.size()];
@@ -278,12 +302,71 @@ public class OverviewFragment extends Fragment {
             yVals[i] = data.get(i).first;
             xVals[i] = data.get(i).second;
         }
-        System.out.println("xVals:" + Arrays.toString(xVals));
-        System.out.println("yVals:" + Arrays.toString(yVals));
-        System.out.println("labels:" + Arrays.toString(labels));
 
         draw(typeToPlot, yVals, labels, xVals);
 
+    }
+
+    private void drawPieChart(ArrayList<Segment> segments) {
+        pieChart.clear();
+        pieChart.setTitle("Distribution of the Daily Tasks");
+
+        if((int)segments.get(0).getValue() > 0) {
+            SegmentFormatter sf0 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_0);
+            pieChart.addSegment(segments.get(0), sf0);
+        }
+        if((int)segments.get(1).getValue() > 0) {
+            SegmentFormatter sf1 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_1);
+            pieChart.addSegment(segments.get(1), sf1);
+        }
+        if((int)segments.get(2).getValue() > 0) {
+            SegmentFormatter sf2 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_2);
+            pieChart.addSegment(segments.get(2), sf2);
+        }
+        if((int)segments.get(3).getValue() > 0) {
+            SegmentFormatter sf3 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_3);
+            pieChart.addSegment(segments.get(3), sf3);
+        }
+        if((int)segments.get(4).getValue() > 0) {
+            SegmentFormatter sf4 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_4);
+            pieChart.addSegment(segments.get(4), sf4);
+        }
+        if((int)segments.get(5).getValue() > 0) {
+            SegmentFormatter sf5 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_5);
+            pieChart.addSegment(segments.get(5), sf5);
+        }
+        if((int)segments.get(6).getValue() > 0) {
+            SegmentFormatter sf6 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_6);
+            pieChart.addSegment(segments.get(6), sf6);
+        }
+        if((int)segments.get(7).getValue() > 0) {
+            SegmentFormatter sf7 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_7);
+            pieChart.addSegment(segments.get(7), sf7);
+        }
+        pieChart.invalidate();
+    }
+
+    private int getColorFromIndex(int index) {
+        switch(index) {
+            case 0:
+                return R.xml.pie_segment_formatter_0;
+            case 1:
+                return R.xml.pie_segment_formatter_1;
+            case 2:
+                return R.xml.pie_segment_formatter_2;
+            case 3:
+                return R.xml.pie_segment_formatter_3;
+            case 4:
+                return R.xml.pie_segment_formatter_4;
+            case 5:
+                return R.xml.pie_segment_formatter_5;
+            case 6:
+                return R.xml.pie_segment_formatter_6;
+            case 7:
+                return R.xml.pie_segment_formatter_7;
+            default:
+                return -1;
+        }
     }
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
