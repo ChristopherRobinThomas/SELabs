@@ -2,15 +2,20 @@ package com.example.se_lab_23b02;
 
 import static android.content.Context.SENSOR_SERVICE;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -143,13 +148,23 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         });
         pickDailyGoalButton.setOnClickListener(new View.OnClickListener()
         {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v)
             {
-                Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
-                startActivity(myIntent);
+
+                if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                } else {
+                    Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
+                    startActivity(myIntent);
+                }
+
+
             }
         });
+
+
 
         markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
@@ -180,6 +195,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         // Inflate the layout for this fragment
         return view;
     }
+
 
 
     //----------------Helper Functions---------------------------
