@@ -53,21 +53,13 @@ public class DataAccessHelper {
             // case: list of mental health scores
             case ACCESS_MENTAL_HEALTH_SCORE:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", context);
-                //System.out.println(fileContent);
                 String[] linesForMentalHealth = fileContent.split(System.lineSeparator());
-
                 // reads data from file and then checks for each element if it is within the given timeframe
                 for (int i = 1; i < linesForMentalHealth.length; i++) {
                     JSONObject jsObject = new JSONObject(linesForMentalHealth[i]);
-                    String timestamp = (String) jsObject.get("timestamp");
-                    String[] times = timestamp.split(" ");
-                    LocalDate tmpLocalDate = LocalDate.parse(times[0]);
-                    LocalTime tmpLocalTime = LocalTime.parse(times[1]);
-                    LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
-                    if(ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
-                        System.out.println("line read: timestamp: " + ldtTimestampAsDate.toString() + ", lb: " +
-                                lowerBorder.toString() + ", ub: " + upperBorder.toString());
-                        int hours = (int) ChronoUnit.HOURS.between(lowerBorder, ldtTimestampAsDate);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsObject.get("timestamp"));
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        int hours = (int) ChronoUnit.HOURS.between(lowerBorder, timestampAsLocalDateTime);
                         Pair<Integer, Integer> newEntry = new Pair<>(this.calculateHealthScoreFromQuestionaire(linesForMentalHealth[i]), hours);
                         outputList.add(newEntry);
                     }
@@ -76,23 +68,18 @@ public class DataAccessHelper {
 
             case ACCESS_DAILY_TASK_DISTRIBUTION:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt", context);
-                String[] linesForDailyTask = fileContent.split(System.lineSeparator());               ;
-
+                String[] linesForDailyTask = fileContent.split(System.lineSeparator());
                 // initialize every entry with 0
                 for (int i = 0; i < LIST_OF_DAILY_TASKS_TO_INDEX.length; i++) {
                     Pair<Integer, Integer> tmpPair = new Pair<>(0, i);
-                    outputList.add(tmpPair);
-                }
+                    outputList.add(tmpPair);                }
 
                 for (int i = 1; i < linesForDailyTask.length; i++) {
-                    JSONObject jsonObject = new JSONObject(linesForDailyTask[i]);
 
-                    String timestamp = (String) jsonObject.get("Date");
-                    String[] times = timestamp.split(" ");
-                    LocalDate tmpLocalDate = LocalDate.parse(times[0]);
-                    LocalTime tmpLocalTime = LocalTime.parse(times[1]);
-                    LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
-                    if(ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                    JSONObject jsonObject = new JSONObject(linesForDailyTask[i]);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("Date"));
+
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
                         int index = getIndexFromTaskListByString((String) jsonObject.get("Daily_Task"));
                         Pair<Integer, Integer> newPair = new Pair<>(outputList.get(index).first + 1, index);
                         outputList.remove(index);
@@ -104,6 +91,14 @@ public class DataAccessHelper {
 
             case ACCESS_COUNT_OF_INTERVENTIONS:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("", context);
+                String[] linesInterventions = fileContent.split(System.lineSeparator());
+                for (int i = 1; i < linesInterventions.length; i++) {
+                    JSONObject jsonObject = new JSONObject(linesInterventions[i]);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("timestamp"));
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        //append count oder so
+                    }
+                }
                 // count
                 //append
                 break;
@@ -112,6 +107,7 @@ public class DataAccessHelper {
         }
         return outputList;
     }
+
 
 
     private int getIndexFromTaskListByString(String taskString) {

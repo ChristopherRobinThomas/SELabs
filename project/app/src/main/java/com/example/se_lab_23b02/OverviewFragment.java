@@ -109,6 +109,7 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
+        // instantiate the plots/charts, make pieChart invisible while plot is visible
         plot = (XYPlot) view.findViewById(R.id.plt_graph);
         pieChart = (PieChart) view.findViewById(R.id.plt_pieChart);
         pieChart.setVisibility(View.INVISIBLE);
@@ -120,12 +121,14 @@ public class OverviewFragment extends Fragment {
         Paint blackColor = new Paint();
         blackColor.setColor(Color.BLACK);
 
+
         plot.getGraph().setBackgroundPaint(whiteColor);
         plot.getGraph().setGridBackgroundPaint(whiteColor);
 
         tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
 
+        //button changes current Plot type and updates Plot (bar graph)
         Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
         btNumOfInterventions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +142,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-
+        // show xy Plot by changing currentTypeToPlot to 0 and updating the graph
         Button btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
         btShowHealthGraph.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +156,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
+        // show barchart by setting currentTypeToPlot to 2
         Button btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
         btNumOfActivities.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,10 +173,10 @@ public class OverviewFragment extends Fragment {
 
         // initializing the upper and lower Date boundary
         dateUB = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        dateLB = LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(7);
 
-        dateLB = LocalDateTime.now().minusDays(7);
 
-
+        // set Text of edittext to current selected time, when new time > dateUB then nothing is changed
         EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
         lowerBoundTimePicker.setText(dateLB.getDayOfMonth() + "." + (dateLB.getMonthValue()) + "." + dateLB.getYear());
         lowerBoundTimePicker.setOnClickListener(new View.OnClickListener() {
@@ -185,13 +189,13 @@ public class OverviewFragment extends Fragment {
                 int day = dateLB.getDayOfMonth();
 
                 DatePickerDialog dpDialog = new DatePickerDialog(
-
                         getContext(),
                         new DatePickerDialog  .OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int month, int dayOfMonth) {
                                 LocalDateTime tempLDT = LocalDateTime.now().withYear(year).withMonth(month + 1).withDayOfMonth(dayOfMonth);
+                                // check dateLB > dateUB
                                 if (tempLDT.compareTo(dateUB) <= 0) {
                                     dateLB = dateLB.withYear(year);
                                     dateLB = dateLB.withMonth(month + 1);
@@ -201,6 +205,7 @@ public class OverviewFragment extends Fragment {
                                     Toast.makeText(getActivity(), "Pick an earlier date", Toast.LENGTH_LONG).show();
                                 }
                                 try {
+                                    // after the timeslot has changed the graph is updated
                                     updateGraph(currentTypeToPlot);
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
@@ -214,7 +219,7 @@ public class OverviewFragment extends Fragment {
         });
 
 
-        // added an "editText" with Calender interaction for setting the timeframe
+        // added an "editText" with Calender interaction for setting the timeframe, same as lowerBoundTimePicker
         EditText upperBoundTimePicker = (EditText) view.findViewById(R.id.etUpperBoundTimePicker);
         upperBoundTimePicker.setText(dateUB.getDayOfMonth() + "." + (dateUB.getMonthValue()) + "." + dateUB.getYear());
         upperBoundTimePicker.setOnClickListener(new View.OnClickListener() {
@@ -233,10 +238,15 @@ public class OverviewFragment extends Fragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int month, int dayOfMonth) {
-                                dateUB = dateUB.withYear(year);
-                                dateUB = dateUB.withMonth(month + 1);
-                                dateUB = dateUB.withDayOfMonth(dayOfMonth);
-                                upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                LocalDateTime tempLDT = LocalDateTime.now().withYear(year).withMonth(month + 1).withDayOfMonth(dayOfMonth);
+                                if(tempLDT.compareTo(dateLB) >= 0) {
+                                    dateUB = dateUB.withYear(year);
+                                    dateUB = dateUB.withMonth(month + 1);
+                                    dateUB = dateUB.withDayOfMonth(dayOfMonth);
+                                    upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                } else {
+                                    Toast.makeText(getActivity(), "Pick a later date", Toast.LENGTH_LONG).show();
+                                }
                                 try {
                                     updateGraph(currentTypeToPlot);
                                 } catch (JSONException e) {
@@ -259,7 +269,7 @@ public class OverviewFragment extends Fragment {
 
     }
 
-    // updates the graph by reading the data from file (DAHelper) and then drawing it using draw()
+    // updates the graph by reading the data from file (DAHelper) and then drawing it using draw/drawPieChart
     private void updateGraph(int typeToPlot) throws JSONException {
 
         daHelper = DataAccessHelper.getInstance();
@@ -303,6 +313,8 @@ public class OverviewFragment extends Fragment {
 
     }
 
+
+    // adds the segments to the piechart with the according formatter defined in the xml, so the color and font size fits
     private void drawPieChart(ArrayList<Segment> segments) {
         pieChart.clear();
         pieChart.setTitle("Distribution of the Daily Tasks");
@@ -342,28 +354,6 @@ public class OverviewFragment extends Fragment {
         pieChart.invalidate();
     }
 
-    private int getColorFromIndex(int index) {
-        switch(index) {
-            case 0:
-                return R.xml.pie_segment_formatter_0;
-            case 1:
-                return R.xml.pie_segment_formatter_1;
-            case 2:
-                return R.xml.pie_segment_formatter_2;
-            case 3:
-                return R.xml.pie_segment_formatter_3;
-            case 4:
-                return R.xml.pie_segment_formatter_4;
-            case 5:
-                return R.xml.pie_segment_formatter_5;
-            case 6:
-                return R.xml.pie_segment_formatter_6;
-            case 7:
-                return R.xml.pie_segment_formatter_7;
-            default:
-                return -1;
-        }
-    }
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
     private void draw(int typeToPlot, Number[] dataList, String[] labels, Number[] domains) {
