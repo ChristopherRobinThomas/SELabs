@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.List;
+import java.util.Vector;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -27,6 +30,8 @@ public class InterventionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Button buttonIntervention1;
+    Button buttonIntervention2;
 
 
 
@@ -65,10 +70,31 @@ public class InterventionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button questionnaireButton;
+
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        // Inflate the layout for this fragment
+        Vector<Button> buttonList = new Vector<Button>();
+        buttonIntervention1 = view.findViewById(R.id.buttonIntervention1);
+        buttonList.add(buttonIntervention1);
+        buttonIntervention2 = view.findViewById(R.id.buttonIntervention2);
+        buttonList.add(buttonIntervention1);
+
+        for (Button b : buttonList) {
+            b.setOnClickListener(v -> {
+                openSingleInterventionFragment(b.getText().toString());
+            });
+        }
+        
         return view;
+    }
+    private void openSingleInterventionFragment(String buttonText) {
+        SingleIntervention singleIntervention = new SingleIntervention();
+        Bundle args = new Bundle();
+        args.putString("InterventionName", buttonText);
+        singleIntervention.setArguments(args);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(((ViewGroup)getView().getParent()).getId(), singleIntervention, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
     }
 }

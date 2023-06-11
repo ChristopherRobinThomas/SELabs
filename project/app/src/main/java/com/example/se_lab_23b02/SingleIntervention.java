@@ -48,7 +48,7 @@ public class SingleIntervention extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            pInterventionName = getArguments().getString("name");
+            pInterventionName = getArguments().getString("InterventionName");
         }
     }
 
