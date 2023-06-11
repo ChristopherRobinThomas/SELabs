@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MultiUserMainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="ExtraText">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/HeadlineText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Choose your Account"
+            android:textAlignment="center"
+            android:textSize="24dp"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="32dp" />
+        <Button
+            android:id="@+id/ButtonTopLeft"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/HeadlineText"
+            app:layout_constraintLeft_toLeftOf="@id/linearLayout"
+            />
 
-</FrameLayout>
+        <Button
+            android:id="@+id/ButtonTopRight"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/HeadlineText"
+            app:layout_constraintRight_toRightOf="@+id/linearLayout"
+            />
+
+        <Button
+            android:id="@+id/ButtonBottomLeft"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/ButtonTopLeft"
+            app:layout_constraintLeft_toLeftOf="@id/linearLayout"
+            />
+
+        <Button
+            android:id="@+id/ButtonBottomRight"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/ButtonTopRight"
+            app:layout_constraintRight_toRightOf="@+id/linearLayout"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,10 +3,15 @@ package com.example.se_lab_23b02;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +64,60 @@ public class MultiUserMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_multi_user_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_multi_user_main, container, false);
+        Button topLeft = view.findViewById(R.id.ButtonTopLeft);
+        Button topRight = view.findViewById(R.id.ButtonTopRight);
+        Button bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
+        Button bottomRight = view.findViewById(R.id.ButtonBottomRight);
+
+        //Just for testing-----------------------------------------------------
+        ArrayList<User> users = new ArrayList<>();
+        for(int i = 0; i < 4; i++) {
+            User u = new User(i , String.valueOf(i),String.valueOf(i));
+            users.add(u);
+        }
+        //----------------------------------------------------------------------
+
+
+        topLeft.setText(users.get(0).getName());
+        topRight.setText(users.get(0).getName());
+        bottomLeft.setText(users.get(0).getName());
+        bottomRight.setText(users.get(0).getName());
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        topLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(0).getName(),users.get(0).getPassword()));
+                fragmentTransaction.commit();
+            }
+        });
+
+        topRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(1).getName(),users.get(0).getPassword()));
+                fragmentTransaction.commit();
+            }
+        });
+
+        bottomLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(2).getName(),users.get(0).getPassword()));
+                fragmentTransaction.commit();
+            }
+        });
+
+        bottomRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(3).getName(),users.get(0).getPassword()));
+                fragmentTransaction.commit();
+            }
+        });
+
+        return view;
     }
 }
