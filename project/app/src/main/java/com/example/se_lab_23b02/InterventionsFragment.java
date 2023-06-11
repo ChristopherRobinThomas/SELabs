@@ -3,6 +3,8 @@ package com.example.se_lab_23b02;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,7 @@ public class InterventionsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -68,5 +71,4 @@ public class InterventionsFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-
 }
