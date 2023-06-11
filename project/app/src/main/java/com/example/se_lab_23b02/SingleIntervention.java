@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import static android.content.Intent.getIntent;
@@ -21,6 +22,7 @@ public class SingleIntervention extends Fragment {
 
     private static String pInterventionName;
     TextView interventionName;
+    Button completeButton;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -55,6 +57,11 @@ public class SingleIntervention extends Fragment {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
 
         interventionName = view.findViewById(R.id.textView3);
+        completeButton = view.findViewById(R.id.buttonComplete);
+        completeButton.setOnClickListener(v -> {
+            System.out.println("Placeholder");
+            // TODO: Do something
+        });
         switch (pInterventionName) {
             case "sampleIntervention1":  interventionName.setText("Sample Intervention 1");
                 break;
