@@ -73,6 +73,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                     Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
                     startActivity(i);
                 }
+                finish();
             }
         });
 

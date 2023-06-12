@@ -27,7 +27,7 @@ public class DataAccessHelper {
     public static final int ACCESS_COUNT_OF_INTERVENTIONS = 2;
     public static final int ACCESS_DAILY_TASK_DISTRIBUTION = 3;
 
-    public static final String[] LIST_OF_DAILY_TASKS_TO_INDEX = {"5.000 Steps", "10.000 Steps", "Drink 2L", "Clean", "Walk", "Mediate", "Workout", "other"};
+    public static final String[] LIST_OF_DAILY_TASKS_TO_INDEX = {"5.000 Steps", "10.000 Steps", "Drink 2L", "Clean", "Walk", "Meditate", "Workout", "other"};
 
 
     private static DataAccessHelper INSTANCE;
@@ -72,7 +72,8 @@ public class DataAccessHelper {
                 // initialize every entry with 0
                 for (int i = 0; i < LIST_OF_DAILY_TASKS_TO_INDEX.length; i++) {
                     Pair<Integer, Integer> tmpPair = new Pair<>(0, i);
-                    outputList.add(tmpPair);                }
+                    outputList.add(tmpPair);
+                }
 
                 for (int i = 1; i < linesForDailyTask.length; i++) {
 
@@ -138,7 +139,7 @@ public class DataAccessHelper {
         JSONArray jsonArray = (JSONArray) questionaire.get("Q1");
 
         int calmnessIndex = (int)(100 - jsonArray.getInt(0) + jsonArray.getInt(1))/2;
-        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) + jsonArray.getInt(3))/2;
+        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) - jsonArray.getInt(3))/2;
         int energyIndex = (int)(100 - jsonArray.getInt(4) + jsonArray.getInt(5))/2;
 
 
