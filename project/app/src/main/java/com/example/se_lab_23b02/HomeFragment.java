@@ -71,7 +71,8 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                // CHANGE ON COMMIT
+                Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 startActivity(myIntent);
             }
         });

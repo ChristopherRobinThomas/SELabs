@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MultiUserActivity">
 
+    <FrameLayout
+        android:id="@+id/multi_user_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

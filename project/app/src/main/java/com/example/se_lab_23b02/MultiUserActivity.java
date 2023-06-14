@@ -19,7 +19,7 @@ public class MultiUserActivity extends AppCompatActivity {
         //Show the normal Multiuser Fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, new MultiUserMainFragment());
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
         fragmentTransaction.commit();
     }
 }

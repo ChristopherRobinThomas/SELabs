@@ -80,16 +80,16 @@ public class MultiUserMainFragment extends Fragment {
 
 
         topLeft.setText(users.get(0).getName());
-        topRight.setText(users.get(0).getName());
-        bottomLeft.setText(users.get(0).getName());
-        bottomRight.setText(users.get(0).getName());
+        topRight.setText(users.get(1).getName());
+        bottomLeft.setText(users.get(2).getName());
+        bottomRight.setText(users.get(3).getName());
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         topLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(0).getName(),users.get(0).getPassword()));
+                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(0).getName(),users.get(0).getPassword()));
                 fragmentTransaction.commit();
             }
         });
@@ -97,7 +97,7 @@ public class MultiUserMainFragment extends Fragment {
         topRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(1).getName(),users.get(0).getPassword()));
+                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(1).getName(),users.get(0).getPassword()));
                 fragmentTransaction.commit();
             }
         });
@@ -105,7 +105,7 @@ public class MultiUserMainFragment extends Fragment {
         bottomLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(2).getName(),users.get(0).getPassword()));
+                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(2).getName(),users.get(0).getPassword()));
                 fragmentTransaction.commit();
             }
         });
@@ -113,7 +113,7 @@ public class MultiUserMainFragment extends Fragment {
         bottomRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.frame_layout, MultiUserMainFragment.newInstance(users.get(3).getName(),users.get(0).getPassword()));
+                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(3).getName(),users.get(0).getPassword()));
                 fragmentTransaction.commit();
             }
         });
