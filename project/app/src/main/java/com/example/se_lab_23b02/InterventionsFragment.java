@@ -74,7 +74,8 @@ public class InterventionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
         Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
-
+        // TODO: Read from localStorage
+        // TODO: Populate interventionList dynamically
         Vector<Button> buttonList = new Vector<Button>();
         buttonIntervention1 = view.findViewById(R.id.buttonIntervention1);
         buttonList.add(buttonIntervention1);
@@ -92,7 +93,9 @@ public class InterventionsFragment extends Fragment {
     private void openSingleInterventionFragment(String buttonText) {
         SingleIntervention singleIntervention = new SingleIntervention();
         Bundle args = new Bundle();
+        // TODO: Get Name and Desc dynamically
         args.putString("InterventionName", buttonText);
+        args.putString("InterventionDescription", "This is a sample description.");
         singleIntervention.setArguments(args);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(((ViewGroup)getView().getParent()).getId(), singleIntervention, "findThisFragment")

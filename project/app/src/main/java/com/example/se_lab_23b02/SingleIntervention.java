@@ -21,7 +21,9 @@ import static android.content.Intent.getIntent;
 public class SingleIntervention extends Fragment {
 
     private static String pInterventionName;
+    private static String pInterventionDesc;
     TextView interventionName;
+    TextView interventionDesc;
     Button completeButton;
 
     public SingleIntervention() {
@@ -33,6 +35,7 @@ public class SingleIntervention extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             pInterventionName = getArguments().getString("InterventionName");
+            pInterventionDesc = getArguments().getString("InterventionDescription");
         }
     }
 
@@ -41,17 +44,14 @@ public class SingleIntervention extends Fragment {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
 
         interventionName = view.findViewById(R.id.textView3);
+        interventionDesc = view.findViewById(R.id.textView4);
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
             System.out.println("Placeholder");
             // TODO: Do something
         });
-        switch (pInterventionName) {
-            case "sampleIntervention1":  interventionName.setText("Sample Intervention 1");
-                break;
-            default: interventionName.setText("Default Text");
-                break;
-        }
+        interventionName.setText(pInterventionName);
+        interventionDesc.setText(pInterventionDesc);
 
         return view;
     }
