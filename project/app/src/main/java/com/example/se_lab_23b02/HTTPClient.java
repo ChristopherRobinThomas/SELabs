@@ -14,7 +14,12 @@ import retrofit2.http.Url;
 public interface HTTPClient {
 
     @POST
-    Call<ResponseBody> postQuestionnaire(@Url String postURL, @Body JSONObject questionnaire);
+    Call<ResponseBody> postRequest(@Url String postURL, @Body JSONObject body);
+
+
+    @POST
+    Call<ResponseBody> getUniqueID(@Url String postURL);
+
 
     @Streaming
     @GET

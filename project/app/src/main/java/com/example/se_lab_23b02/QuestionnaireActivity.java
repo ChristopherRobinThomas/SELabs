@@ -79,26 +79,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
     void saveAnswers() throws JSONException {
-
-        JSONArray[] valueArrays = {
-                new JSONArray(questionOneValues),
-                new JSONArray(questionTwoValues),
-                new JSONArray(questionThreeValues),
-                new JSONArray(questionFourValue),
-                new JSONArray(questionFiveValue),
-                new JSONArray(questionSixValues),
-                new JSONArray(questionSevenValues),
-                new JSONArray(questionEightValues)
-        };
-        JSONObject toSave = new JSONObject();
-        for (int i = 1; i <= valueArrays.length; i++) {
-            toSave.put("Q"+i, valueArrays[i-1]);
-        }
-        timestamp = TimeStamp.getCurrentTimeStamp();
-        toSave.put("timestamp: ", timestamp);
+        JSONObject toSave = JSONObjectCreator.createQuestionnaireObject(questionOneValues, questionTwoValues, questionThreeValues, questionFourValue, questionFiveValue, questionSixValues, questionSevenValues, questionEightValues);
 
         sHelper.setActivity(this);
-        sHelper.addQuestionaire(toSave);
+        sHelper.addQuestionnaire(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 
