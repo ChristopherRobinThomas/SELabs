@@ -73,11 +73,13 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
+        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
+
         Vector<Button> buttonList = new Vector<Button>();
         buttonIntervention1 = view.findViewById(R.id.buttonIntervention1);
         buttonList.add(buttonIntervention1);
         buttonIntervention2 = view.findViewById(R.id.buttonIntervention2);
-        buttonList.add(buttonIntervention1);
+        buttonList.add(buttonIntervention2);
 
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
