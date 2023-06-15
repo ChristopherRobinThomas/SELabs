@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,8 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -93,28 +90,6 @@ public class ServerHelper {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
-                    JSONObject responseBody;
-                    try {
-                        assert response.body() != null;
-                        responseBody = new JSONObject(response.body().string());
-                    } catch (JSONException | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    System.out.println(responseBody);
-                    System.out.println(responseBody.getClass());
-                    try {
-                        System.out.println(responseBody.getJSONObject("nameValuePairs"));
-                        System.out.println(responseBody.getJSONObject("nameValuePairs").getJSONObject("Q1").getJSONArray("values").get(0));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
-                    //Wird immer nur ein Questionnaire Objekt gespeichert? Und wie realisieren wir, dass sich gemerkt wird, welches Objekt gespeichert wurde und welches noch hochgeladen werden muss.
-                    //Problem, dass die Antwort nicht einfach zurückgegeben werden kann, da call.enqueue Asynchron ist.
-
-
                     Log.i("sHelper", "Questionnaire successfully added");
                     Toast.makeText(activity, "Successfully delivered Questionnaire", Toast.LENGTH_LONG).show();
                 } else {
@@ -175,7 +150,11 @@ public class ServerHelper {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                    try {
+                        dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     Log.i("sHelper", "Successfully got UUID");
                     Toast.makeText(activity, "Successfully got UUID", Toast.LENGTH_LONG).show();
 
@@ -193,7 +172,23 @@ public class ServerHelper {
         });
     }
 
-    public void createNewUser(String userName, String password, String passwordConfirm, Context context) throws JSONException {
+    /**
+     * Creates Call with new User Information in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
+     *
+     * @param userName        username of the Login Information
+     * @param password        password of the Login Information
+     * @param context         needs Context to write UUID to Shared Preferences
+     * @param failedClass     Class to which should be switched if the login failed
+     * @param successfulClass Class to which should be switched if the login is successful
+     */
+    public void createNewUser(String userName, String password, String passwordConfirm, Context context, Class failedClass, Class successfulClass) throws JSONException {
+
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         JSONObject body = JSONObjectCreator.createNewUserObject(userName, password, passwordConfirm);
         Call<ResponseBody> call = httpClient.postRequest(createNewUser, body);
@@ -202,13 +197,43 @@ public class ServerHelper {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
-                    Log.i("sHelper", "Successfully created new Account");
-                    Toast.makeText(activity, "Successfully created new Account", Toast.LENGTH_LONG).show();
 
+                    String result = null;
+                    try {
+                        result = readResponseObject(response);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    switch (result) {
+                        case "-1":
+                            Toast.makeText(activity, "UUID could not created, please try again", Toast.LENGTH_LONG).show();
+                            Log.i("sHelper", "Tried to create User - failed: No UUID could be created");
+                            context.startActivity(new Intent(context, failedClass));
+                            break;
+                        case "-2":
+                            Toast.makeText(activity, "Passwords are not the same", Toast.LENGTH_LONG).show();
+                            Log.i("sHelper", "Tried to create User - failed: Passwords are not the same");
+                            context.startActivity(new Intent(context, failedClass));
+                            break;
+                        case "-3":
+                            Toast.makeText(activity, "Username is already in use", Toast.LENGTH_LONG).show();
+                            Log.i("sHelper", "Tried to create User - failed: Username already in use");
+                            context.startActivity(new Intent(context, failedClass));
+                            break;
+                        default:
+                            Toast.makeText(activity, "New User successfully created", Toast.LENGTH_LONG).show();
+                            Log.i("sHelper", "Successfully created new User");
+                            try {
+                                dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            context.startActivity(new Intent(context, successfulClass));
+                    }
                 } else {
-                    Log.i("sHelper", "Failed to create new Account, Response: " + response);
-                    Toast.makeText(activity, "Failed to create new Account", Toast.LENGTH_LONG).show();
+                    Log.i("sHelper", "Failed to create new User, Response: " + response);
+                    Toast.makeText(activity, "Server Authentication Error", Toast.LENGTH_LONG).show();
+                    context.startActivity(new Intent(context, failedClass));
                 }
             }
 
@@ -216,11 +241,29 @@ public class ServerHelper {
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - createNewUser, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                context.startActivity(new Intent(context, failedClass));
             }
         });
     }
 
-    public void loginUser(String userName, String password, Context context) throws JSONException, IOException {
+
+    /**
+     * Creates Call with loginInformation in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
+     *
+     * @param userName        username of the Login Information
+     * @param password        password of the Login Information
+     * @param context         needs Context to write UUID to Shared Preferences
+     * @param failedClass     Class to which should be switched if the login failed
+     * @param successfulClass Class to which should be switched if the login is successful
+     */
+    public void loginUser(String userName, String password, Context context, Class failedClass, Class successfulClass) throws JSONException, IOException {
+
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         JSONObject body = JSONObjectCreator.createLoginUserObject(userName, password);
         Call<ResponseBody> call = httpClient.postRequest(loginUser, body);
@@ -229,17 +272,34 @@ public class ServerHelper {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Log.i("sHelper", "Successfully logged User");
-                    Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
-                    dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
 
-                    if (response.body())
-
-                    context.startActivity(new Intent(context, HomeScreenActivity.class));
+                    String result = null;
+                    try {
+                        result = readResponseObject(response);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("Ergebniss: " + result);
+                    switch (result) {
+                        case "-1":
+                            Log.i("sHelper", "Login failed");
+                            Toast.makeText(activity, "Login failed, please try again", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Log.i("sHelper", "Successfully logged User in");
+                            Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
+                            try {
+                                dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            context.startActivity(new Intent(context, successfulClass));
+                            break;
+                    }
                 } else {
                     Log.i("sHelper", "Failed to login User, Response: " + response);
                     Toast.makeText(activity, "Server Authentication Error", Toast.LENGTH_LONG).show();
-                    context.startActivity(new Intent(context, LoginActivity.class));
+                    context.startActivity(new Intent(context, failedClass));
                 }
             }
 
@@ -247,33 +307,23 @@ public class ServerHelper {
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - loginUser, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
-                context.startActivity(new Intent(context, LoginActivity.class));
+                context.startActivity(new Intent(context, failedClass));
             }
         });
     }
+
 
     //set Activity to display Toast, can be removed in the final delivery
     public void setActivity(FragmentActivity activity) {
         this.activity = activity;
     }
 
+
     //reads UniqueID fromResponseBodyObject
-    private String readResponseObject(Response<ResponseBody> response) {
-
-        JSONArray json;
-        try {
-            json = new JSONArray(response.body().string());
-        } catch (JSONException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            System.out.println(json.get(0).toString());
-            return json.get(0).toString();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+    private String readResponseObject(Response<ResponseBody> response) throws IOException {
+        return response.body().string();
     }
+
 
     //not yet functional:
     public void getDataFromS3() {
@@ -288,7 +338,7 @@ public class ServerHelper {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                System.out.println(response.body());
+
                 assert response.body() != null;
                 boolean success = writeResponseBodyToDisk(response.body());
 

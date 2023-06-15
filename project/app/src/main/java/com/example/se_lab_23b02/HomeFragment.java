@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -71,8 +75,18 @@ public class HomeFragment extends Fragment {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(myIntent);
+                ServerHelper sHelper = ServerHelper.getInstance();
+                sHelper.setActivity(getActivity());
+
+
+
+                try {
+                    sHelper.loginUser("TestMax7", "Test", getContext(), HomeScreenActivity.class, HomeScreenActivity.class);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         // Inflate the layout for this fragment

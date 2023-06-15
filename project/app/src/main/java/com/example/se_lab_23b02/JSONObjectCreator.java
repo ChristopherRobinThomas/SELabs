@@ -28,7 +28,7 @@ public class JSONObjectCreator {
 
     public static JSONObject createLoginUserObject(String userName, String password) throws JSONException {
         JSONObject toSave = new JSONObject();
-        toSave.put("userName", userName);
+        toSave.put("username", userName);
         toSave.put("password", password);
 
         return toSave;
