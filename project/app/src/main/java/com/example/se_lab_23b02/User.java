@@ -41,6 +41,5 @@ public class User {
         return String.valueOf(getLocalId()) + "," + String.valueOf(getGlobalId()) + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
     }
 
-
     public boolean checkPassword(String pwd){return password.equals(pwd);}
 }
