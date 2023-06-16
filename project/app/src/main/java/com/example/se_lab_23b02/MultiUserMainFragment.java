@@ -31,6 +31,8 @@ public class MultiUserMainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ArrayList<Button> buttons;
+
     public MultiUserMainFragment() {
         // Required empty public constructor
     }
@@ -79,6 +81,7 @@ public class MultiUserMainFragment extends Fragment {
             resetActiveUser();
             users = getAllLoggedInUsers();
         }else{
+            //If the values for The users are not in the settings file add them
             users = new ArrayList<>();
             DataSavingHelper.getInstance().saveSettingAsSharedPref("ActiveUser","None",getContext());
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserOne","",getContext());
@@ -88,70 +91,42 @@ public class MultiUserMainFragment extends Fragment {
         }
 
 
-        //Just for testing-----------------------------------------------------
-
-        for(int i = 0; i < 4; i++) {
-            User u = new User(i , String.valueOf(i),String.valueOf(i));
-            users.add(u);
-        }
-        //----------------------------------------------------------------------
-
-
-        topLeft.setText(users.get(0).getName());
-        topRight.setText(users.get(1).getName());
-        bottomLeft.setText(users.get(2).getName());
-        bottomRight.setText(users.get(3).getName());
-
-        topLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(users.size() > 0) {
-                    setActiveUser(users.get(0));
-                    transition(users.get(0));
-                } else {
-
-                }
-
-            }
-        });
-
-        topRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(users.size() > 1) {
-                    setActiveUser(users.get(1));
-                    transition(users.get(1));
-                } else {
-
-                }
-            }
-        });
-
-        bottomLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(users.size() > 2) {
-                    setActiveUser(users.get(2));
-                    transition(users.get(2));
-                } else {
-
-                }
-            }
-        });
-
-        bottomRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(users.size() > 3) {
-                    setActiveUser(users.get(3));
-                    transition(users.get(3));
-                } else {
-
-                }
-            }
-        });
-
+        buttonSetup(view, users);
         return view;
+    }
+
+    private void buttonSetup(View view, ArrayList<User> users)
+    {
+        buttons = new ArrayList<>();
+        buttons.add(view.findViewById(R.id.ButtonTopLeft));
+        buttons.add(view.findViewById(R.id.ButtonTopRight));
+        buttons.add(view.findViewById(R.id.ButtonBottomLeft));
+        buttons.add(view.findViewById(R.id.ButtonBottomRight));
+
+        for(int i = 0; i < buttons.size(); i++)
+        {
+            final int j = i;
+            if(users.size() < i)
+            {
+                buttons.get(j).setVisibility(View.GONE);
+                buttons.get(j).setEnabled(false);
+            }
+            buttons.get(i).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(users.size() > j ) {
+                    buttons.get(j).setText(users.get(j).getName());
+                    setActiveUser(users.get(j));
+                    transition(users.get(j));
+                    Log.d("ButtonTest","To Login");
+                } else if(users.size() ==  j) {
+                    //Make it to and "Add Button"
+                    transitionToCreateUserFragment();
+                    Log.d("ButtonTest","To Create new user");
+                }
+            }
+        });
+        }
     }
 
     private void transition(User u)
