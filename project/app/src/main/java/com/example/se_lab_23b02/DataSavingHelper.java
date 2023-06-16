@@ -57,6 +57,7 @@ public class DataSavingHelper {
     public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
         //Important for multiuser -> everyone gets a file plus it's local ID
         filename += getCurrentUserId(context);
+
         if (append) {
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
         } else {
