@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,8 +72,24 @@ public class MultiUserMainFragment extends Fragment {
         Button bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
         Button bottomRight = view.findViewById(R.id.ButtonBottomRight);
 
+        //DataStorage
+        ArrayList<User> users;
+        if(DataSavingHelper.getInstance().getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser"))
+        {
+            resetActiveUser();
+            users = getAllLoggedInUsers();
+        }else{
+            users = new ArrayList<>();
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("ActiveUser","None",getContext());
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("UserOne","",getContext());
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("UserTwo","",getContext());
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("UserThree","",getContext());
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("UserFour","",getContext());
+        }
+
+
         //Just for testing-----------------------------------------------------
-        ArrayList<User> users = new ArrayList<>();
+
         for(int i = 0; i < 4; i++) {
             User u = new User(i , String.valueOf(i),String.valueOf(i));
             users.add(u);
@@ -84,40 +102,89 @@ public class MultiUserMainFragment extends Fragment {
         bottomLeft.setText(users.get(2).getName());
         bottomRight.setText(users.get(3).getName());
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         topLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(0).getName(),users.get(0).getPassword()));
-                fragmentTransaction.commit();
+                if(users.size() > 0) {
+                    setActiveUser(users.get(0));
+                    transition(users.get(0));
+                } else {
+
+                }
+
             }
         });
 
         topRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(1).getName(),users.get(0).getPassword()));
-                fragmentTransaction.commit();
+                if(users.size() > 1) {
+                    setActiveUser(users.get(1));
+                    transition(users.get(1));
+                } else {
+
+                }
             }
         });
 
         bottomLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(2).getName(),users.get(0).getPassword()));
-                fragmentTransaction.commit();
+                if(users.size() > 2) {
+                    setActiveUser(users.get(2));
+                    transition(users.get(2));
+                } else {
+
+                }
             }
         });
 
         bottomRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(users.get(3).getName(),users.get(0).getPassword()));
-                fragmentTransaction.commit();
+                if(users.size() > 3) {
+                    setActiveUser(users.get(3));
+                    transition(users.get(3));
+                } else {
+
+                }
             }
         });
 
         return view;
     }
+
+    private void transition(User u)
+    {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(u.getName(),u.getPassword()));
+        fragmentTransaction.commit();
+    }
+
+    private void transitionToCreateUserFragment()
+    {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        //Need to create Fragment to be called
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance("",""));
+        fragmentTransaction.commit();
+    }
+    private ArrayList<User> getAllLoggedInUsers()
+    {
+        return new ArrayList<>();
+    }
+
+    private void resetActiveUser()
+    {
+
+    }
+
+    private void setActiveUser(User u )
+    {
+
+    }
+
 }
