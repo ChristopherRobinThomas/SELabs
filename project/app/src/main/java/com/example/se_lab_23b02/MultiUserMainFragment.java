@@ -90,8 +90,9 @@ public class MultiUserMainFragment extends Fragment {
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserFour","",getContext());
         }
 
-
+        users = getAllLoggedInUsers();
         buttonSetup(view, users);
+
         return view;
     }
 
@@ -134,7 +135,7 @@ public class MultiUserMainFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(u.getName(),u.getPassword()));
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserCreateNewUserFragment.newInstance(u.getName(),u.getPassword()));
         fragmentTransaction.commit();
     }
 
@@ -149,17 +150,44 @@ public class MultiUserMainFragment extends Fragment {
     }
     private ArrayList<User> getAllLoggedInUsers()
     {
+        ArrayList<User> users = new ArrayList<>();
+        DataSavingHelper dsh = DataSavingHelper.getInstance();
+
+        //Find all existing Users
+        String s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne");
+        if(!s.equals(""))
+        {
+            users.add(new User(s));
+        }
+        s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo");
+        if(!s.equals(""))
+        {
+            users.add(new User(s));
+        }
+        s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserThree");
+        if(!s.equals(""))
+        {
+            users.add(new User(s));
+        }
+        s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour");
+        if(!s.equals(""))
+        {
+            users.add(new User(s));
+        }
+
         return new ArrayList<>();
     }
 
     private void resetActiveUser()
     {
-
+        DataSavingHelper dsh = DataSavingHelper.getInstance();
+        dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
     }
 
-    private void setActiveUser(User u )
+    private void setActiveUser(User u)
     {
-
+        DataSavingHelper dsh = DataSavingHelper.getInstance();
+        dsh.saveSettingAsSharedPref("ActiveUser",u.ToString(),getContext());
     }
 
 }

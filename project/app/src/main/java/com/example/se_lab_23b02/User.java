@@ -13,6 +13,15 @@ public class User {
         this.password = password;
     }
 
+    public User(String s)
+    {
+        String[] values = s.split(",");
+        this.localId = Integer.parseInt(values[0]);
+        this.globalId = Integer.parseInt(values[1]);
+        this.name = values[2];
+        this.password = values[3];
+    }
+
     public long getLocalId()
     {
         return this.localId;
