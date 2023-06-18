@@ -6,7 +6,10 @@
 
     <!-- Strings for the home fragment-->
     <string name="home_heading">Home</string>
-
+    <string name="tv_home_title">Home Screen</string>
+    <string name="bt_home_questionnaire">questionnaire</string>
+    <string name="bt_home_daily_goal">pick daily goal</string>
+    <string name="bt_home_goal_complete">mark goal as complete</string>
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analysis</string>

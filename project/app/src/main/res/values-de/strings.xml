@@ -7,6 +7,10 @@
 
     <!-- Strings for the home fragment-->
     <string name="home_heading">Heimat</string>
+    <string name="tv_home_title">Schaltzentrale</string>
+    <string name="bt_home_questionnaire">Fragebogen</string>
+    <string name="bt_home_daily_goal">Tagesaufgabe auswählen</string>
+    <string name="bt_home_goal_complete">Ziel erreicht</string>
 
 
     <!-- Strings for the overview fragment-->

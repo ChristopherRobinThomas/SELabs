@@ -15,10 +15,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/tvHomeTitle" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvHomeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/QuestionnaireButton"
+        android:id="@+id/btHomeQuestionnaire"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-300dp"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@id/buttonLittleBeing" />
 
     <Button
-        android:id="@+id/DailyGoalButton"
+        android:id="@+id/btHomeDailyGoal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-250dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionnaireButton" />
+        app:layout_constraintTop_toBottomOf="@+id/btHomeQuestionnaire" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DailyGoalButton"
+        app:layout_constraintTop_toBottomOf="@+id/btHomeDailyGoal"
         android:gravity="center">
 
         <TextView
@@ -83,7 +83,7 @@
             android:progressDrawable="@drawable/progress_bar_background" />
 
         <Button
-            android:id="@+id/GoalCompleteButton"
+            android:id="@+id/btHomeGoalComplete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mark Goal as Complete"

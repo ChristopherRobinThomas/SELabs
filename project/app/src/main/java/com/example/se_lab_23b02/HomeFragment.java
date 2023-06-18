@@ -6,11 +6,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,7 +18,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,19 +27,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Time;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-
-import java.sql.Time;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +59,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     //---------Variables--------
     private String dailyGoal;
-
     private String todaysDate;
     private String date;
 
@@ -77,13 +69,17 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private int overallWellBeing;
 
     //--------GUI Element-----
-    ProgressBar dailyGoalProgressBar;
-    Button pickDailyGoalButton;
-    Button markGoalAsCompleteButton;
-    TextView dailyGoalTxt;
-    Button questionnaireButton;
-    ImageButton littleBeingButton;
+    private ProgressBar dailyGoalProgressBar;
+    private Button pickDailyGoalButton;
+    private Button markGoalAsCompleteButton;
+    private TextView dailyGoalTxt;
+    private Button questionnaireButton;
+    private ImageButton littleBeingButton;
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
 
+    //--------Context and Resources for Language----
+    private Context context;
+    private Resources resources;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -123,11 +119,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
-        pickDailyGoalButton = view.findViewById(R.id.DailyGoalButton);
-        markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
+        questionnaireButton = view.findViewById(R.id.btHomeQuestionnaire);
+        pickDailyGoalButton = view.findViewById(R.id.btHomeDailyGoal);
+        markGoalAsCompleteButton = view.findViewById(R.id.btHomeGoalComplete);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
+
+        elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeDailyGoal));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeGoalComplete));
 
 
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
@@ -140,6 +141,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         getDailyGoalFromStorage();
         setUpProgress();
         updateLittleBeing();
+        refreshResources();
+        setLanguage();
+
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -365,6 +369,35 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getActivity().getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getActivity().getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+    private void setLanguage() {
+        TextView tv = (TextView) elementsForLanguageChange.get(0);
+        tv.setText(resources.getString(R.string.tv_home_title));
+        Button bt = (Button) elementsForLanguageChange.get(1);
+        bt.setText(resources.getString(R.string.bt_home_questionnaire));
+        bt = (Button) elementsForLanguageChange.get(2);
+        bt.setText(resources.getString(R.string.bt_home_daily_goal));
+        bt = (Button) elementsForLanguageChange.get(3);
+        bt.setText(resources.getString(R.string.bt_home_goal_complete));
 
     }
 
