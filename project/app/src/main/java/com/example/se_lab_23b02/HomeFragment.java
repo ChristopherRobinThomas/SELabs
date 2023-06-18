@@ -39,6 +39,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.sql.Time;
+ 
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +66,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     //---------Variables--------
     private String dailyGoal;
-
     private String todaysDate;
     private String date;
 

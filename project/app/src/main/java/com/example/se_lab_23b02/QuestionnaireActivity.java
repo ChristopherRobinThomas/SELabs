@@ -99,7 +99,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         toSave.put("timestamp: ", timestamp);
 
         sHelper.setActivity(this);
-        sHelper.addQuestionaire(toSave);
+        sHelper.addQuestionnaire(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
     }
 

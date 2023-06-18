@@ -1,0 +1,39 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: gradle
+      - name: show dir
+        run: ls
+      - name: show path
+        run: pwd
+      - name: change dir
+        run: cd project
+       
+      - name: list projects file
+        run: ls
+      - name: set gradlew to executable
+        run: chmod +x ./gradlew
+        working-directory: project
+      - name: build new gradle project      
+        run: gradle init
+        working-directory: project
+      - name: call gradle wrapper
+        run: gradle wrapper
+        working-directory: project     
+      - name: testing
+        run: ./gradlew test
+        working-directory: project            
+      - name: Publish Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'
