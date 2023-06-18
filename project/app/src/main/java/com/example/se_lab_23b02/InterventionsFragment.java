@@ -34,6 +34,7 @@ public class InterventionsFragment extends Fragment {
 
     Button buttonIntervention1;
     Button buttonIntervention2;
+    Button buttonIntervention3;
 
 
 
@@ -84,6 +85,8 @@ public class InterventionsFragment extends Fragment {
         buttonList.add(buttonIntervention1);
         buttonIntervention2 = view.findViewById(R.id.buttonIntervention2);
         buttonList.add(buttonIntervention2);
+        buttonIntervention3 = view.findViewById(R.id.buttonIntervention3);
+        buttonList.add(buttonIntervention3);
 
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {

@@ -45,10 +45,10 @@ public class SingleIntervention extends Fragment {
 
         interventionName = view.findViewById(R.id.textView3);
         interventionDesc = view.findViewById(R.id.textView4);
+        // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
-            System.out.println("Placeholder");
-            // TODO: Do something
+            getActivity().getSupportFragmentManager().popBackStack();
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
