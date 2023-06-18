@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -39,9 +41,11 @@ public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
     private Context context;
+    private Context contextForSharedPreferences;
+    private Resources resources;
     private DataSavingHelper dsHelper;
-
     private HashMap<String, String> settings;
+    private ArrayList<TextView> textViews = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,13 +92,31 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        context = getActivity().getApplicationContext();
+        contextForSharedPreferences = getActivity().getApplicationContext();
 
         dsHelper = DataSavingHelper.getInstance();
 
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
+
+        String language = settings.get("language");
+
+        if(language.equals("deutsch")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
+        }
+        if(language.equals("english")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
+        }
+        if(language.equals("francais")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
+        }
+
+
+
 
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
+        resources = context.getResources();
 
+        textViews.add(view.findViewById(R.id.tvSettingsApperance));
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
         Spinner spinnerColortheme = (Spinner) view.findViewById(R.id.spinner_color);
         Spinner spinnerDarkMode = (Spinner) view.findViewById(R.id.spDarkMode);
@@ -107,8 +129,8 @@ public class SettingsFragment extends Fragment {
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
         saveDefaultValuesInSettings();
+        setAllStrings();
 
-        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
 
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
@@ -121,7 +143,22 @@ public class SettingsFragment extends Fragment {
 
                 String val = parent.getItemAtPosition(position).toString();
 
-                dsHelper.saveSettingAsSharedPref("language", val, context);
+                dsHelper.saveSettingAsSharedPref("language", val, contextForSharedPreferences);
+
+                if(val.equals("english")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
+
+                }
+                if(val.equals("deutsch")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
+                }
+                if(val.equals("francais")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
+                }
+
+                resources = context.getResources();
+                setAllStrings();
+
 
             }
 
@@ -135,7 +172,7 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String val = parent.getItemAtPosition(position).toString();
-                dsHelper.saveSettingAsSharedPref("color", val, context);
+                dsHelper.saveSettingAsSharedPref("color", val, contextForSharedPreferences);
                 System.out.println(val);
             }
 
@@ -150,7 +187,7 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String val = parent.getItemAtPosition(position).toString();
-                dsHelper.saveSettingAsSharedPref("dmValue", val, context);
+                dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
                 System.out.println(val);
             }
 
@@ -163,7 +200,7 @@ public class SettingsFragment extends Fragment {
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), context);
+                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
@@ -176,7 +213,7 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
-                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), context);
+                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
@@ -190,7 +227,7 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
-                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), context);
+                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
@@ -258,7 +295,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v)  {
 
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(context);
+                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
@@ -321,36 +358,43 @@ public class SettingsFragment extends Fragment {
 
     //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
     private void saveDefaultValuesInSettings() {
-        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(context);
+        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
         if(!tempSettings.containsKey("mornCurH"))
-            dsHelper.saveSettingAsSharedPref("mornCurH", "8", context);
+            dsHelper.saveSettingAsSharedPref("mornCurH", "8", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornCurM"))
-            dsHelper.saveSettingAsSharedPref("mornCurM", "15", context);
+            dsHelper.saveSettingAsSharedPref("mornCurM", "15", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornLB"))
-            dsHelper.saveSettingAsSharedPref("mornLB", "7", context);
+            dsHelper.saveSettingAsSharedPref("mornLB", "7", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornUB"))
-            dsHelper.saveSettingAsSharedPref("mornUB", "11", context);
+            dsHelper.saveSettingAsSharedPref("mornUB", "11", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonCurH"))
-            dsHelper.saveSettingAsSharedPref("noonCurH", "13", context);
+            dsHelper.saveSettingAsSharedPref("noonCurH", "13", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonCurM"))
-            dsHelper.saveSettingAsSharedPref("noonCurM", "0", context);
+            dsHelper.saveSettingAsSharedPref("noonCurM", "0", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonLB"))
-            dsHelper.saveSettingAsSharedPref("noonLB", "12", context);
+            dsHelper.saveSettingAsSharedPref("noonLB", "12", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonUB"))
-            dsHelper.saveSettingAsSharedPref("noonUB", "14", context);
+            dsHelper.saveSettingAsSharedPref("noonUB", "14", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnCurH"))
-            dsHelper.saveSettingAsSharedPref("evnCurH", "18", context);
+            dsHelper.saveSettingAsSharedPref("evnCurH", "18", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnCurM"))
-            dsHelper.saveSettingAsSharedPref("evnCurM", "0", context);
+            dsHelper.saveSettingAsSharedPref("evnCurM", "0", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnLB"))
-            dsHelper.saveSettingAsSharedPref("evnLB", "17", context);
+            dsHelper.saveSettingAsSharedPref("evnLB", "17", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnUB"))
-            dsHelper.saveSettingAsSharedPref("evnUB", "19", context);
+            dsHelper.saveSettingAsSharedPref("evnUB", "19", contextForSharedPreferences);
     }
 
     private void refreshSettings() {
-        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
     }
+
+    private void setAllStrings() {
+        TextView tv = textViews.get(0);
+        tv.setText(resources.getString(R.string.settings_title));
+    }
+
+
 
 }
 
