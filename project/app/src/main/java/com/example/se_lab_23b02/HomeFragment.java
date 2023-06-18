@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.system.Os;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,21 +155,26 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 startActivity(myIntent);
             }
         });
+
         pickDailyGoalButton.setOnClickListener(new View.OnClickListener()
         {
+
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v)
             {
 
-                if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                if(Integer.parseInt(Build.VERSION.SDK) > 28) {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                    } else {
+                        Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
+                        startActivity(myIntent);
+                    }
                 } else {
                     Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
                     startActivity(myIntent);
                 }
-
-
             }
         });
 
