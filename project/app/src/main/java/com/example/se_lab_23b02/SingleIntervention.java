@@ -20,6 +20,8 @@ import static android.content.Intent.getIntent;
  */
 public class SingleIntervention extends Fragment {
 
+    DataSavingHelper dsHelper;
+    private static int pInterventionID;
     private static String pInterventionName;
     private static String pInterventionDesc;
     TextView interventionName;
@@ -34,20 +36,24 @@ public class SingleIntervention extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            pInterventionID = getArguments().getInt("InterventionID");
             pInterventionName = getArguments().getString("InterventionName");
             pInterventionDesc = getArguments().getString("InterventionDescription");
         }
+        dsHelper = DataSavingHelper.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
 
+        // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
         interventionName = view.findViewById(R.id.textView3);
         interventionDesc = view.findViewById(R.id.textView4);
         // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
+            interventionComplete();
             getActivity().getSupportFragmentManager().popBackStack();
         });
         interventionName.setText(pInterventionName);

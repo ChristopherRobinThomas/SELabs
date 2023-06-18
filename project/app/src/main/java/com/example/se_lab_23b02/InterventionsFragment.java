@@ -100,6 +100,8 @@ public class InterventionsFragment extends Fragment {
         SingleIntervention singleIntervention = new SingleIntervention();
         Bundle args = new Bundle();
         // TODO: Get Name and Desc dynamically
+        // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
+        args.putInt("InterventionID", 0);
         args.putString("InterventionName", buttonText);
         args.putString("InterventionDescription", "This is a sample description.");
         singleIntervention.setArguments(args);
