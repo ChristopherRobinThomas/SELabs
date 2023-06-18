@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -76,7 +81,6 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
         // TODO: Read from localStorage
         // populateButtonList(interventionList, view);
 
@@ -120,4 +124,32 @@ public class InterventionsFragment extends Fragment {
             cl.addView(newButton, lp);
         }
     }
+    private Vector<Vector<String>> getSavedInterventions() throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String savedInterventionsString = dsHelper.readSavedDataFromInternalStorage("interventions.txt", getContext());
+
+        JSONArray jsonArray = new JSONArray(savedInterventionsString);          // J of J of S
+        Vector<JSONArray> intermediateList = new Vector<JSONArray>();
+        for(int i=0; i < jsonArray.length(); i++) {
+            intermediateList.add(jsonArray.getJSONArray(i));                    // V of J of S
+        }
+        Vector<Vector<String>> endList = new Vector<Vector<String>>();
+        for(int j=0; j < intermediateList.size(); j++) {                        // Jedes JSONA im Vector
+            Vector<String> temp = new Vector<String>();
+            for(int k = 0; k < intermediateList.get(j).length(); k++) {         // Jeden Eintrag im JSONA im Vector
+                temp.add((String) intermediateList.get(j).get(k));              // V of S
+                endList.add(temp);                                              // V of V of S
+            }
+        }
+        return endList;
+    }
+    private void saveInterventions(Vector<Vector<String>> interventions) {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        JSONArray endArray = new JSONArray();
+        // Start: V of V of S
+
+
+        dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), getContext());
+    }
+
 }
