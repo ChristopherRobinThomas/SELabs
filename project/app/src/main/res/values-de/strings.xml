@@ -37,7 +37,30 @@
     <string name="tv_settings_noon_notification">mittags</string>
     <string name="tv_settings_evening_notification">abends</string>
     <string name="bt_settings_delete_data">alle personenbezogenen Daten löschen</string>
-
+    <string name="bt_send">abschicken</string>
+    <string name="tv_questionnaire_q8_2">Seit dem letzten Fragebogen war ich einer anderen Person gegenüber wütend oder aggressiv, was ich später bereute.</string>
+    <string name="tv_questionnaire_q8_1">Seit der letzten Befragung habe ich impulsiv reagiert – das heißt, ich habe gehandelt, ohne über mögliche Konsequenzen nachzudenken.</string>
+    <string name="tv_questionnaire_q7_2">Momentan denke ich über mich selbst, dass ich ein Versager bin.</string>
+    <string name="tv_questionnaire_q7_1">Derzeit bin ich mit mir zufrieden.</string>
+    <string name="tv_questionnaire_q6_4">Noch lange, nachdem ich in einen Streit geraten bin oder eine Meinungsverschiedenheit beigelegt wurde, tauchen meine Gedanken über diese Ereignisse wieder auf.</string>
+    <string name="tv_questionnaire_q6_3">Manchmal fällt es mir schwer, nicht mehr an mich selbst zu denken.</string>
+    <string name="tv_questionnaire_q6_2">Ich habe oft das Gefühl, dass Dinge in meinem Kopf wieder auftauchen, die ich in der Vergangenheit gesagt oder getan habe.</string>
+    <string name="tv_questionnaire_q6_1">Meine Aufmerksamkeit ist oft auf Eigenschaften von mir gerichtet, über die ich nicht nachdenken möchte</string>
+    <string name="tv_questionnaire_q5_1">Wo bist du gerade?</string>
+    <string name="tv_questionnaire_q4_1">Wer ist gerade in deiner Nähe?</string>
+    <string name="tv_questionnaire_q3_1">Wenn Sie an die Menschen denken, die Sie gerade umgeben, wie trifft die folgende Aussage zu? „Ich mag diese Leute nicht“</string>
+    <string name="rb_questionnaire_q3_no">Nein</string>
+    <string name="rb_questionnaire_q3_yes">Ja</string>
+    <string name="tv_questionnaire_q3">Bist du im Moment allein?</string>
+    <string name="tv_questionnaire_q2_3">Wie intensiv war das positivste Ereignis?</string>
+    <string name="tv_questionnaire_q2_2">Wie intensiv war das negativste Ereignis?</string>
+    <string name="tv_questionnaire_q2">Haben Sie seit der letzten Befragung eine oder mehrere negative Erfahrungen gemacht?</string>
+    <string name="tv_questionnaire_q1_6">In den letzten 24 Stunden fühlte ich mich: Müde/Wach</string>
+    <string name="tv_questionnaire_q1_5">In den letzten 24 Stunden fühlte ich mich: voller Energie/ohne Energie</string>
+    <string name="tv_questionnaire_q1_4">In den letzten 24 Stunden fühlte ich mich: entspannt/angespannt</string>
+    <string name="tv_questionnaire_q1_3">In den letzten 24 Stunden fühlte ich mich: Wohl/Unwohl</string>
+    <string name="tv_questionnaire_q1_2">In den letzten 24 Stunden fühlte ich mich: unruhig/ruhig</string>
+    <string name="tv_questionnaire_q1_1">In den letzten 24 Stunden fühlte ich mich: Befriedigt/Unbefriedigt</string>
 
 
     <string-array name="languages">

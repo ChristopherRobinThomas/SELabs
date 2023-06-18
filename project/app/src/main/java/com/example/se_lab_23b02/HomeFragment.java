@@ -141,6 +141,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         getDailyGoalFromStorage();
         setUpProgress();
         updateLittleBeing();
+
+        // set text according to the language
         refreshResources();
         setLanguage();
 

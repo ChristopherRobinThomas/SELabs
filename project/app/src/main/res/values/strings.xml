@@ -35,6 +35,33 @@
     <string name="tv_settings_evening_notification">evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
 
+    <!-- Strings for the questionnaire activity-->
+    <string name="bt_send">Send</string>
+    <string name="tv_questionnaire_q8_2">Since the last questionnaire, I have been angry or aggressive to another person, which I regretted later on.</string>
+    <string name="tv_questionnaire_q8_1">Since the last questionnaire, I reacted impulsive – meaning I acted without thinking about potential consequences.</string>
+    <string name="tv_questionnaire_q7_2">Currently I think about myself that I am a failure.</string>
+    <string name="tv_questionnaire_q7_1">Currently I’m satisfied with myself.</string>
+    <string name="tv_questionnaire_q6_4">For a long time after I got into a fight or a disagreement is settled, my thoughts about these events resurface.</string>
+    <string name="tv_questionnaire_q6_3">Sometimes I have a hard time to stop thinking about myself.</string>
+    <string name="tv_questionnaire_q6_2">I often have the feeling that things resurface in my head that I have said or done in the past.</string>
+    <string name="tv_questionnaire_q6_1">My attention is often focused on characteristics of myself that I don’t want to think about</string>
+    <string name="tv_questionnaire_q5_1">Where are you right now?</string>
+    <string name="tv_questionnaire_q4_1">Who is around you right now?</string>
+    <string name="tv_questionnaire_q3_1">When you think of the people you are around you right now, how does the following statement apply?   “I do not like these people”</string>
+    <string name="rb_questionnaire_q3_no">No</string>
+    <string name="rb_questionnaire_q3_yes">Yes</string>
+    <string name="tv_questionnaire_q3">Are you alone at the moment?</string>
+    <string name="tv_questionnaire_q2_3">How intense was the most positive event?</string>
+    <string name="tv_questionnaire_q2_2">How intense was the most negative event?</string>
+    <string name="tv_questionnaire_q2">Since the last questionnaire, did you have one or more negative experiences?</string>
+    <string name="tv_questionnaire_q1_6">In the last 24 hours I felt: Tired/Awake</string>
+    <string name="tv_questionnaire_q1_5">In the last 24 hours I felt: Full of Energy/Without Energy</string>
+    <string name="tv_questionnaire_q1_4">In the last 24 hours I felt: Relaxed/Tense</string>
+    <string name="tv_questionnaire_q1_3">In the last 24 hours I felt: Well/Unwell</string>
+    <string name="tv_questionnaire_q1_2">In the last 24 hours I felt: Restless/Calm</string>
+    <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
+
+
     <string-array name="languages">
         <item>english</item>
         <item>deutsch</item>
