@@ -30,6 +30,14 @@ public class DataSavingHelper {
         }
         return INSTANCE;
     }
+
+    public String getSelectedLanguage(Context context) {
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        Map<String, String> settingsContents = (Map<String, String>) settings.getAll();
+        return settingsContents.get("language");
+
+
+    }
     public void saveSettingAsSharedPref(String key, String value, Context context) {
         SharedPreferences settings = context.getSharedPreferences("Settings", 0);
         SharedPreferences.Editor editor = settings.edit();
