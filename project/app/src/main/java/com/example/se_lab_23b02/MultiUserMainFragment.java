@@ -91,6 +91,7 @@ public class MultiUserMainFragment extends Fragment {
         }
 
         users = getAllLoggedInUsers();
+        //Log.d("User Length", String.valueOf(users.size()));
         buttonSetup(view, users);
 
         return view;
@@ -104,6 +105,7 @@ public class MultiUserMainFragment extends Fragment {
         buttons.add(view.findViewById(R.id.ButtonBottomLeft));
         buttons.add(view.findViewById(R.id.ButtonBottomRight));
 
+
         for(int i = 0; i < buttons.size(); i++)
         {
             final int j = i;
@@ -112,22 +114,71 @@ public class MultiUserMainFragment extends Fragment {
                 buttons.get(j).setVisibility(View.GONE);
                 buttons.get(j).setEnabled(false);
             }
-            buttons.get(i).setOnClickListener(new View.OnClickListener() {
+        }
+        buttons.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(users.size() > j ) {
-                    buttons.get(j).setText(users.get(j).getName());
-                    setActiveUser(users.get(j));
-                    transition(users.get(j));
+                if(users.size() > 0 ) {
+                    buttons.get(0).setText(users.get(0).getName());
+                    setActiveUser(users.get(0));
+                    transition(users.get(0));
                     Log.d("ButtonTest","To Login");
-                } else if(users.size() ==  j) {
+                } else if(users.size() ==  0) {
                     //Make it to and "Add Button"
                     transitionToCreateUserFragment();
                     Log.d("ButtonTest","To Create new user");
                 }
             }
         });
-        }
+
+        buttons.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(users.size() > 1 ) {
+                    buttons.get(1).setText(users.get(1).getName());
+                    setActiveUser(users.get(1));
+                    transition(users.get(1));
+                    Log.d("ButtonTest","To Login");
+                } else if(users.size() ==  1) {
+                    //Make it to and "Add Button"
+                    transitionToCreateUserFragment();
+                    Log.d("ButtonTest","To Create new user");
+                }
+            }
+        });
+
+
+        buttons.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(users.size() > 2 ) {
+                    buttons.get(2).setText(users.get(2).getName());
+                    setActiveUser(users.get(2));
+                    transition(users.get(2));
+                    Log.d("ButtonTest","To Login");
+                } else if(users.size() ==  2) {
+                    //Make it to and "Add Button"
+                    transitionToCreateUserFragment();
+                    Log.d("ButtonTest","To Create new user");
+                }
+            }
+        });
+
+        buttons.get(3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(users.size() > 3 ) {
+                    buttons.get(3).setText(users.get(3).getName());
+                    setActiveUser(users.get(3));
+                    transition(users.get(3));
+                    Log.d("ButtonTest","To Login");
+                } else if(users.size() ==  3) {
+                    //Make it to and "Add Button"
+                    transitionToCreateUserFragment();
+                    Log.d("ButtonTest","To Create new user");
+                }
+            }
+        });
     }
 
     private void transition(User u)
@@ -135,7 +186,7 @@ public class MultiUserMainFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserCreateNewUserFragment.newInstance(u.getName(),u.getPassword()));
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance(u.getName(),u.getPassword()));
         fragmentTransaction.commit();
     }
 
@@ -145,7 +196,7 @@ public class MultiUserMainFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Need to create Fragment to be called
-        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserLoginFragment.newInstance("",""));
+        fragmentTransaction.replace(R.id.multi_user_frame_layout, MultiUserCreateNewUserFragment.newInstance("",""));
         fragmentTransaction.commit();
     }
     private ArrayList<User> getAllLoggedInUsers()
@@ -154,7 +205,8 @@ public class MultiUserMainFragment extends Fragment {
         DataSavingHelper dsh = DataSavingHelper.getInstance();
 
         //Find all existing Users
-        String s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne");
+
+        String s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne").toString();
         if(!s.equals(""))
         {
             users.add(new User(s));
@@ -175,7 +227,7 @@ public class MultiUserMainFragment extends Fragment {
             users.add(new User(s));
         }
 
-        return new ArrayList<>();
+        return users;
     }
 
     private void resetActiveUser()
@@ -187,7 +239,7 @@ public class MultiUserMainFragment extends Fragment {
     private void setActiveUser(User u)
     {
         DataSavingHelper dsh = DataSavingHelper.getInstance();
-        dsh.saveSettingAsSharedPref("ActiveUser",u.ToString(),getContext());
+        dsh.saveSettingAsSharedPref("ActiveUser",u.toString(),getContext());
     }
 
 }

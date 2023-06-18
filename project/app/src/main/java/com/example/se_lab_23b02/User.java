@@ -36,7 +36,7 @@ public class User {
     public String getName(){ return this.name; }
     public String getPassword(){ return this.password; }
 
-    public String ToString()
+    public String toString()
     {
         return String.valueOf(getLocalId()) + "," + String.valueOf(getGlobalId()) + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
     }
