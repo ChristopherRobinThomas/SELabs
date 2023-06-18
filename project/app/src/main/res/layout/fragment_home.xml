@@ -6,89 +6,111 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <ImageButton
-        android:id="@+id/buttonLittleBeing"
-        android:layout_width="132dp"
-        android:layout_height="210dp"
-        android:layout_marginTop="-350dp"
-        android:background="@drawable/little_being"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Home Screen"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/QuestionnaireButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-300dp"
-        android:onClick="QuestionnaireClicked"
-        android:text="Questionnaire"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonLittleBeing" />
-
-    <Button
-        android:id="@+id/DailyGoalButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-250dp"
-        android:onClick="PickDailyGoalClicked"
-        android:text="Pick Daily Goal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionnaireButton" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/divider"
-        android:orientation="vertical"
-        android:showDividers="middle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DailyGoalButton"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/DailyGoalTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Display Daily Goal Here"
-            android:textSize="20dp" />
-
-        <ProgressBar
-            android:id="@+id/DailyGoalProgressBar"
-            style="?android:progressBarStyleHorizontal"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="50"
-            android:progressDrawable="@drawable/progress_bar_background" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/GoalCompleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mark Goal as Complete"
-            android:onClick="markGoalAsCompleteClicked"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Home Screen"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                />
+            <ImageButton
+                android:id="@+id/buttonLittleBeing"
+                android:layout_width="132dp"
+                android:layout_height="210dp"
+                android:background="@drawable/little_being"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView"
+                android:layout_marginTop="20dp"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/QuestionnaireButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="QuestionnaireClicked"
+                android:text="Questionnaire"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonLittleBeing"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:id="@+id/DailyGoalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="PickDailyGoalClicked"
+                android:text="Pick Daily Goal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/QuestionnaireButton"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/divider"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:showDividers="middle"
+                android:layout_marginTop="20dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DailyGoalButton">
+
+                <TextView
+                    android:id="@+id/DailyGoalTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Display Daily Goal Here"
+                    android:textSize="20dp" />
+
+                <ProgressBar
+                    android:id="@+id/DailyGoalProgressBar"
+                    style="?android:progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/progress_bar_background" />
+
+                <Button
+                    android:id="@+id/GoalCompleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="markGoalAsCompleteClicked"
+                    android:text="Mark Goal as Complete" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/SeeAllPastActivitiesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutHome"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="20dp"
+                android:text="See all past activites"
+                android:onClick="seeAllPastActivitiesClicked"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

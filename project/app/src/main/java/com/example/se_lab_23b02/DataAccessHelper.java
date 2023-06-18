@@ -97,7 +97,7 @@ public class DataAccessHelper {
         JSONArray jsonArray = (JSONArray) questionaire.get("Q1");
 
         int calmnessIndex = (int)(100 - jsonArray.getInt(0) + jsonArray.getInt(1))/2;
-        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) + jsonArray.getInt(3))/2;
+        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) - jsonArray.getInt(3))/2;
         int energyIndex = (int)(100 - jsonArray.getInt(4) + jsonArray.getInt(5))/2;
 
 

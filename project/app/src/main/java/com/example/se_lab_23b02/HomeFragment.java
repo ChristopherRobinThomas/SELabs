@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -78,9 +79,11 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     ProgressBar dailyGoalProgressBar;
     Button pickDailyGoalButton;
     Button markGoalAsCompleteButton;
+    Button seeAllPastActivitiesButton;
     TextView dailyGoalTxt;
     Button questionnaireButton;
     ImageButton littleBeingButton;
+
 
 
     public HomeFragment() {
@@ -126,9 +129,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
-
-
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
+        seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -163,9 +165,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
             }
         });
-
-
-
         markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
@@ -179,7 +178,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
 
                 if(overallWellBeing >=0 && overallWellBeing <= 33) {
-                    Toast.makeText(getActivity(),"[Name] is feeling sag right now. That's okay!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"[Name] is feeling sad right now. That's okay!", Toast.LENGTH_SHORT).show();
                 }
                 else if(overallWellBeing >=33 && overallWellBeing<66)
                 {
@@ -189,6 +188,12 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 {
                     Toast.makeText(getActivity(),"[Name] is feeling really happy right now!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        seeAllPastActivitiesButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent myIntent = new Intent(getActivity(),AllPastInterventionsActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -245,6 +250,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         {
             markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
             dailyGoalTxt.setText("You achieved today's goal!");
+
         }
         else{
             dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
@@ -264,8 +270,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         {
             String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",getActivity()).split("\n");
             String questionnaire = questionnaires[questionnaires.length-1];
+            System.out.println(questionnaire);
             try {
                 overallWellBeing = dataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
+                if(goalProgress==100) overallWellBeing+=34;
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -279,7 +287,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         if(overallWellBeing >= 0 && overallWellBeing <= 33) {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_sad));
         }
-        else if(overallWellBeing > 33 && overallWellBeing < 66)
+        else if(overallWellBeing > 33 && overallWellBeing <= 66)
         {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_okay));
         }
@@ -291,11 +299,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void markGoalAsComplete()
     {
+
         updateProgress();
+        updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
         dailyGoalTxt.setText("You achieved today's goal!");
         todaysDate = TimeStamp.getCurrentTimeStamp();
-
+        dsHelper = DataSavingHelper.getInstance();
+        String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+        String[] temp2 = temp.split("\n");
         //Save Progress Update to Storage
         JSONObject obj = new JSONObject();
         try {
@@ -307,9 +319,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             throw new RuntimeException(e);
         }
         String data = obj.toString() + "\n";
-
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
     }
+
 
 
 
