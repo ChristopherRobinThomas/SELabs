@@ -61,6 +61,10 @@
     <string name="tv_questionnaire_q1_3">In den letzten 24 Stunden fühlte ich mich: Wohl/Unwohl</string>
     <string name="tv_questionnaire_q1_2">In den letzten 24 Stunden fühlte ich mich: unruhig/ruhig</string>
     <string name="tv_questionnaire_q1_1">In den letzten 24 Stunden fühlte ich mich: Befriedigt/Unbefriedigt</string>
+    <string name="bt_overview_health_index">Wert mentaler Gesundheit</string>
+    <string name="bt_overview_interventions_graph">pyhsische Aktivitäten</string>
+    <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
+    <string name="tv_overview_no_data">keine Daten verfügbar</string>
 
 
     <string-array name="languages">
