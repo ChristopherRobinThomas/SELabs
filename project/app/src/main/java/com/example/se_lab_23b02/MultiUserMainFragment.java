@@ -108,11 +108,10 @@ public class MultiUserMainFragment extends Fragment {
 
         for(int i = 0; i < buttons.size(); i++)
         {
-            final int j = i;
             if(users.size() < i)
             {
-                buttons.get(j).setVisibility(View.GONE);
-                buttons.get(j).setEnabled(false);
+                buttons.get(i).setVisibility(View.GONE);
+                buttons.get(i).setEnabled(false);
             }
         }
         buttons.get(0).setOnClickListener(new View.OnClickListener() {
@@ -206,7 +205,7 @@ public class MultiUserMainFragment extends Fragment {
 
         //Find all existing Users
 
-        String s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne").toString();
+        String s = dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne");
         if(!s.equals(""))
         {
             users.add(new User(s));
