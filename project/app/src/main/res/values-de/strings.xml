@@ -5,6 +5,22 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <!-- Strings for the settings fragment-->
+    <string name="settings_title">Erscheinungsbild</string>
+    <string name="tv_settings_language_title">Sprachauswahl</string>
+    <string name="tv_settings_select_color">Farbthema auswählen</string>
+    <string name="tv_settings_settings_sensor">Sensoren konfigurieren</string>
+    <string name="tv_settings_step_counter">Schrittzähler</string>
+    <string name="tv_settings_accel">Beschleunigungssensor</string>
+    <string name="tv_settings_notification_title">Benachrichtungseinstellung</string>
+    <string name="tv_settings_morning_notification">morgens</string>
+    <string name="tv_settings_noon_notification">mittags</string>
+    <string name="tv_settings_evening_notification">abends</string>
+    <string name="bt_settings_delete_data">alle personenbezogenen Daten löschen</string>
+
+
+
     <string-array name="languages">
         <item>english</item>
         <item>deutsch</item>
@@ -20,5 +36,4 @@
         <item>dark-mode</item>
         <item>Betriebssystem</item>
     </string-array>
-    <string name="settings_title">Erscheinungsbild</string>
 </resources>

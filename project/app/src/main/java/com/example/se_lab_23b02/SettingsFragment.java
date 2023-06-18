@@ -45,7 +45,7 @@ public class SettingsFragment extends Fragment {
     private Resources resources;
     private DataSavingHelper dsHelper;
     private HashMap<String, String> settings;
-    private ArrayList<TextView> textViews = new ArrayList<>();
+    private ArrayList<Object> textViews = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -116,7 +116,22 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
         resources = context.getResources();
 
+        // add textviews for language change
         textViews.add(view.findViewById(R.id.tvSettingsApperance));
+        textViews.add(view.findViewById(R.id.tvSettingsLanguage));
+        textViews.add(view.findViewById(R.id.tv_select_color));
+        textViews.add(view.findViewById(R.id.tvSettingsSensor));
+        textViews.add(view.findViewById(R.id.tvSettingsStepCounter));
+        textViews.add(view.findViewById(R.id.tvSettingsAccel));
+        textViews.add(view.findViewById(R.id.tvGeoTagging));
+        textViews.add(view.findViewById(R.id.tvSettingsNotification));
+        textViews.add(view.findViewById(R.id.tvMorningNotification));
+        textViews.add(view.findViewById(R.id.tvSettingsNoon));
+        textViews.add(view.findViewById(R.id.tvSettingsEvening));
+        textViews.add(view.findViewById(R.id.btDeleteData));
+
+
+
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
         Spinner spinnerColortheme = (Spinner) view.findViewById(R.id.spinner_color);
         Spinner spinnerDarkMode = (Spinner) view.findViewById(R.id.spDarkMode);
@@ -390,11 +405,31 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setAllStrings() {
-        TextView tv = textViews.get(0);
+        TextView tv = (TextView) textViews.get(0);
         tv.setText(resources.getString(R.string.settings_title));
+        tv = (TextView) textViews.get(1);
+        tv.setText(resources.getString(R.string.tv_settings_language_title));
+        tv = (TextView) textViews.get(2);
+        tv.setText(resources.getString(R.string.tv_settings_select_color));
+        tv = (TextView) textViews.get(3);
+        tv.setText(resources.getString(R.string.tv_settings_settings_sensor));
+        tv = (TextView) textViews.get(4);
+        tv.setText(resources.getString(R.string.tv_settings_step_counter));
+        tv = (TextView) textViews.get(5);
+        tv.setText(resources.getString(R.string.tv_settings_accel));
+        tv = (TextView) textViews.get(6);
+        tv.setText(resources.getString(R.string.tv_settings_geo_tagging));
+        tv = (TextView) textViews.get(7);
+        tv.setText(resources.getString(R.string.tv_settings_notification_title));
+        tv = (TextView) textViews.get(8);
+        tv.setText(resources.getString(R.string.tv_settings_morning_notification));
+        tv = (TextView) textViews.get(9);
+        tv.setText(resources.getString(R.string.tv_settings_noon_notification));
+        tv = (TextView) textViews.get(10);
+        tv.setText(resources.getString(R.string.tv_settings_evening_notification));
+        Button bt = (Button) textViews.get(11);
+        bt.setText(resources.getString(R.string.bt_settings_delete_data));
     }
-
-
 
 }
 
