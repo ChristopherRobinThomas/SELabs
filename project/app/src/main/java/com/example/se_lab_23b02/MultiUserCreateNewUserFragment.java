@@ -1,12 +1,18 @@
 package com.example.se_lab_23b02;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +66,85 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_create_new_user, container, false);
+
+        Button back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        back.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
+                fragmentTransaction.commit();
+            }
+        });
+
+        Button NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+        TextInputEditText usernameTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_UsernameTextField);
+        TextInputEditText passwordTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_PasswordTextField);
+        NewUser.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v) {
+                int localId = getLocalId();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                if(localId == -1) {
+                    fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
+                    fragmentTransaction.commit();
+                } else {
+
+                    String username = usernameTextField.getText().toString();
+                    String password = passwordTextField.getText().toString();
+                    User newUser = new User(localId,username,password);
+
+                    DataSavingHelper ds = DataSavingHelper.getInstance();
+                    ds.saveSettingAsSharedPref("ActiveUser", newUser.toString(),getContext());
+                    switch (localId)
+                    {
+                        case 1:
+                            ds.saveSettingAsSharedPref("UserOne", newUser.toString(),getContext());
+                            break;
+                        case 2:
+                            ds.saveSettingAsSharedPref("UserTwo", newUser.toString(),getContext());
+                            break;
+                        case 3:
+                            ds.saveSettingAsSharedPref("UserThree", newUser.toString(),getContext());
+                            break;
+                        case 4:
+                            ds.saveSettingAsSharedPref("UserFour", newUser.toString(),getContext());
+                            break;
+                        default: break;
+                    }
+                }
+                Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         return view;
+    }
+
+    private int getLocalId()
+    {
+        DataSavingHelper ds = DataSavingHelper.getInstance();
+        if(!ds.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser"))
+            return -1;
+        if(ds.getAllSettingsFromSharedPref(getContext()).get("UserOne").equals(""))
+        {
+            return 1;
+        }
+        if(ds.getAllSettingsFromSharedPref(getContext()).get("UserTwo").equals(""))
+        {
+            return 2;
+        }
+        if(ds.getAllSettingsFromSharedPref(getContext()).get("UserThree").equals(""))
+        {
+            return 3;
+        }
+        if(ds.getAllSettingsFromSharedPref(getContext()).get("UserFour").equals(""))
+        {
+            return 4;
+        }
+        return -1;
     }
 }
