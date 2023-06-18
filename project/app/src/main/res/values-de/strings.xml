@@ -7,6 +7,7 @@
 
 
     <!-- Strings for the settings fragment-->
+    <string name="settings_heading">Einstellungen</string>
     <string name="settings_title">Erscheinungsbild</string>
     <string name="tv_settings_language_title">Sprachauswahl</string>
     <string name="tv_settings_select_color">Farbthema auswählen</string>

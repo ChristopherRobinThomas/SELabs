@@ -40,6 +40,7 @@ public class DataSavingHelper {
         SharedPreferences settings = context.getSharedPreferences("Settings", 0);
         Map<String, String> settingsContents;
         settingsContents = (Map<String, String>) settings.getAll();
+        System.out.println(settingsContents);
         return settingsContents;
     }
 

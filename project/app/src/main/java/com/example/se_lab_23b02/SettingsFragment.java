@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +132,6 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.btDeleteData));
 
 
-
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
         Spinner spinnerColortheme = (Spinner) view.findViewById(R.id.spinner_color);
         Spinner spinnerDarkMode = (Spinner) view.findViewById(R.id.spDarkMode);
@@ -145,8 +145,6 @@ public class SettingsFragment extends Fragment {
 
         saveDefaultValuesInSettings();
         setAllStrings();
-
-
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
@@ -173,6 +171,8 @@ public class SettingsFragment extends Fragment {
 
                 resources = context.getResources();
                 setAllStrings();
+                refreshSettings();
+                setSpinnerWithoutLanguageSpinner(spinnerColortheme, spinnerDarkMode);
 
 
             }
@@ -186,9 +186,19 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String val = parent.getItemAtPosition(position).toString();
+                String val = "blue";
+
+                switch(position) {
+                    case 1:
+                        val = "red";
+                        break;
+                    case 2:
+                        val = "green";
+                        break;
+                }
+
                 dsHelper.saveSettingAsSharedPref("color", val, contextForSharedPreferences);
-                System.out.println(val);
+
             }
 
             @Override
@@ -201,9 +211,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String val = parent.getItemAtPosition(position).toString();
+                String val = "white-mode";
+                switch(position) {
+                    case 1:
+                        val = "dark-mode";
+                        break;
+                    case 2:
+                        val = "match OS";
+                        break;
+                }
                 dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
-                System.out.println(val);
             }
 
             @Override
@@ -252,14 +269,13 @@ public class SettingsFragment extends Fragment {
 
                 Bundle b = new Bundle();
                 refreshSettings();
-                System.out.println(settings);
 
                 b.putInt("lowerBound", Integer.parseInt(settings.get("mornLB")));
                 b.putInt("upperBound", Integer.parseInt(settings.get("mornUB")));
                 b.putInt("currentHour", Integer.parseInt(settings.get("mornCurH")));
                 b.putInt("currentMin", Integer.parseInt(settings.get("mornCurM")));
                 b.putInt("id", 0);
-                //System.out.println(b);
+
 
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
@@ -326,31 +342,42 @@ public class SettingsFragment extends Fragment {
 
     //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
     private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.languages));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLang.setAdapter(arrayAdapter);
 
+        String[] tempL = getResources().getStringArray(R.array.languages);
+        ArrayList<String> languages = new ArrayList<>(Arrays.asList(tempL));
+
+
+
         if(settings.containsKey("language")) {
-            int spinnerPosition = arrayAdapter.getPosition(settings.get("language"));
+            int spinnerPosition = languages.indexOf(settings.get("language"));
             spLang.setSelection(spinnerPosition);
         }
 
 
-        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colortheme));
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.colortheme));
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColor.setAdapter(colorAdapter);
 
+        String[] tempC = getResources().getStringArray(R.array.colortheme);
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(tempC));
+
         if(settings.containsKey("color")) {
-            int spinnerPosition = colorAdapter.getPosition(settings.get("color"));
+            int spinnerPosition = colors.indexOf(settings.get("color"));
             spColor.setSelection(spinnerPosition);
         }
 
-        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.darkmode));
+        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.darkmode));
         darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDMode.setAdapter(darkModeAdapter);
 
+        String[] tempD = getResources().getStringArray(R.array.darkmode);
+        ArrayList<String> darkmode = new ArrayList<>(Arrays.asList(tempD));
+
         if(settings.containsKey("dmValue")) {
-            int spinnerPosition = darkModeAdapter.getPosition(settings.get("dmValue"));
+            int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
             spDMode.setSelection(spinnerPosition);
         }
     }
@@ -405,6 +432,8 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setAllStrings() {
+        getActivity().setTitle(resources.getString(R.string.settings_heading));
+
         TextView tv = (TextView) textViews.get(0);
         tv.setText(resources.getString(R.string.settings_title));
         tv = (TextView) textViews.get(1);
@@ -429,6 +458,32 @@ public class SettingsFragment extends Fragment {
         tv.setText(resources.getString(R.string.tv_settings_evening_notification));
         Button bt = (Button) textViews.get(11);
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
+    }
+
+    public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.colortheme));
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColor.setAdapter(colorAdapter);
+
+        String[] tempC = getResources().getStringArray(R.array.colortheme);
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(tempC));
+
+        if(settings.containsKey("color")) {
+            int spinnerPosition = colors.indexOf(settings.get("color"));
+            spColor.setSelection(spinnerPosition);
+        }
+
+        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.darkmode));
+        darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDMode.setAdapter(darkModeAdapter);
+
+        String[] tempD = getResources().getStringArray(R.array.darkmode);
+        ArrayList<String> darkmode = new ArrayList<>(Arrays.asList(tempD));
+
+        if(settings.containsKey("dmValue")) {
+            int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
+            spDMode.setSelection(spinnerPosition);
+        }
     }
 
 }
