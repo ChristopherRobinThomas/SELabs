@@ -84,6 +84,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     TextView dailyGoalTxt;
     Button questionnaireButton;
     ImageButton littleBeingButton;
+    TextView stepCountTxt;
 
 
 
@@ -132,6 +133,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
+        stepCountTxt = view.findViewById(R.id.textViewStepCount);
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -280,7 +282,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 else if(getNumberOfTodaysQuestionnaires() == 3)
                 {
                     overallWellBeing+=34;
-                    Toast.makeText(getActivity(),"You've fill out 3 questionnaires. That makes Larry a bit happier!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"You've filled out 3 Questionnaires. That makes Larry a bit happier!",Toast.LENGTH_LONG).show();
                 }
 
             } catch (JSONException e) {
@@ -387,16 +389,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         if(running)
         {
             newStepCount = (int) sensorEvent.values[0];
+            float steps = newStepCount - innitStepCount;
+            stepCountTxt.setText("Today's Steps: \n" + String.valueOf(steps));
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
-                float steps = newStepCount - innitStepCount;
                 goalProgress = (steps/5000)*100;
                 updateProgress();
 
             }
             else if(dailyGoal.equals("Walk 10.000 Steps"))
             {
-                float steps = newStepCount - innitStepCount;
                 goalProgress = (steps/10000)*100;
                 updateProgress();
 
