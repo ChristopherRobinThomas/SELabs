@@ -2,7 +2,9 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +15,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class QuestionnaireActivity extends AppCompatActivity {
@@ -50,12 +55,46 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private DataSavingHelper dsHelper;
     private ServerHelper sHelper;
 
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+    private Context context;
+    private Resources resources;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
+
+        elementsForLanguageChange.add(findViewById(R.id.Question1_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_4Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_5Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_6Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question2_2));
+        elementsForLanguageChange.add(findViewById(R.id.Question2_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question3_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question4_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question5_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_4Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question7_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question7_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question8_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question8_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Send_Button));
+
+        refreshResources();
+        setLanguage();
+
+
+
+
         manageQuestions();
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -429,4 +468,72 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
 
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+
+    private void setLanguage() {
+        TextView tv = (TextView) elementsForLanguageChange.get(0);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_1));
+        tv = (TextView) elementsForLanguageChange.get(1);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_2));
+        tv = (TextView) elementsForLanguageChange.get(2);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_3));
+        tv = (TextView) elementsForLanguageChange.get(3);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_4));
+        tv = (TextView) elementsForLanguageChange.get(4);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_5));
+        tv = (TextView) elementsForLanguageChange.get(5);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q1_6));
+        tv = (TextView) elementsForLanguageChange.get(6);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q2));
+        tv = (TextView) elementsForLanguageChange.get(7);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q2_2));
+        tv = (TextView) elementsForLanguageChange.get(8);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q2_3));
+        tv = (TextView) elementsForLanguageChange.get(9);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q3));
+        tv = (TextView) elementsForLanguageChange.get(10);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q3_1));
+        tv = (TextView) elementsForLanguageChange.get(11);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q4_1));
+        tv = (TextView) elementsForLanguageChange.get(12);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q5_1));
+        tv = (TextView) elementsForLanguageChange.get(13);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q6_1));
+        tv = (TextView) elementsForLanguageChange.get(14);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q6_2));
+        tv = (TextView) elementsForLanguageChange.get(15);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q6_3));
+        tv = (TextView) elementsForLanguageChange.get(16);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q6_4));
+        tv = (TextView) elementsForLanguageChange.get(17);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q7_1));
+        tv = (TextView) elementsForLanguageChange.get(18);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q7_2));
+        tv = (TextView) elementsForLanguageChange.get(19);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q8_1));
+        tv = (TextView) elementsForLanguageChange.get(20);
+        tv.setText(resources.getString(R.string.tv_questionnaire_q8_2));
+        Button bt = (Button) elementsForLanguageChange.get(21);
+        bt.setText(resources.getString(R.string.bt_send));
+
+
+
+
+    }
 }
