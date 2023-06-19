@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -178,15 +179,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
 
                 if(overallWellBeing >=0 && overallWellBeing <= 33) {
-                    Toast.makeText(getActivity(),"[Name] is feeling sad right now. That's okay!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Larry is feeling sad right now. That's okay!", Toast.LENGTH_SHORT).show();
                 }
                 else if(overallWellBeing >=33 && overallWellBeing<66)
                 {
-                    Toast.makeText(getActivity(),"[Name] is feeling okay at the moment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Larry is feeling okay at the moment", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getActivity(),"[Name] is feeling really happy right now!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Larry is feeling really happy right now!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -264,16 +265,23 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void updateLittleBeing()
     {
-
         dataAccessHelper = DataAccessHelper.getInstance();
         try
         {
             String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",getActivity()).split("\n");
             String questionnaire = questionnaires[questionnaires.length-1];
-            System.out.println(questionnaire);
             try {
                 overallWellBeing = dataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
-                if(goalProgress==100) overallWellBeing+=34;
+                if(goalProgress==100)
+                {
+                    overallWellBeing+=34;
+                    Toast.makeText(getActivity(),"You've completed your daily goal. That makes Larry a bit happier!",Toast.LENGTH_SHORT).show();
+                }
+                else if(getNumberOfTodaysQuestionnaires() == 3)
+                {
+                    overallWellBeing+=34;
+                    Toast.makeText(getActivity(),"You've fill out 3 questionnaires. That makes Larry a bit happier!",Toast.LENGTH_LONG).show();
+                }
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -320,6 +328,33 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
         String data = obj.toString() + "\n";
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
+    }
+
+
+    private int getNumberOfTodaysQuestionnaires()
+    {
+
+
+        dataAccessHelper = DataAccessHelper.getInstance();
+        try
+        {
+            String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", getActivity()).split("\n");
+            String temp;
+            int counter = 0;
+            for(int i = questionnaires.length-1; i>0; i--)
+            {
+                temp = questionnaires[i];
+                JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+                date = obj.get("timestamp").getAsString().split(" ")[0];
+                if(date.equals(todaysDate)) counter++;
+                else break;
+            }
+            return counter;
+        }
+        catch(Exception e)
+        {
+            return 0;
+        }
     }
 
 
