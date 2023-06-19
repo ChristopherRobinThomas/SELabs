@@ -2,12 +2,19 @@ package com.example.se_lab_23b02;
 
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+
+import java.util.List;
+import java.util.Vector;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +32,9 @@ public class InterventionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Button buttonIntervention1;
+    Button buttonIntervention2;
+    Button buttonIntervention3;
 
 
 
@@ -57,16 +67,57 @@ public class InterventionsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button questionnaireButton;
+
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        // Inflate the layout for this fragment
+        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
+        // TODO: Read from localStorage
+        // populateButtonList(interventionList, view);
+
+        Vector<Button> buttonList = new Vector<Button>();
+        buttonIntervention1 = view.findViewById(R.id.buttonIntervention1);
+        buttonList.add(buttonIntervention1);
+        buttonIntervention2 = view.findViewById(R.id.buttonIntervention2);
+        buttonList.add(buttonIntervention2);
+        buttonIntervention3 = view.findViewById(R.id.buttonIntervention3);
+        buttonList.add(buttonIntervention3);
+
+        for (Button b : buttonList) {
+            b.setOnClickListener(v -> {
+                openSingleInterventionFragment(b.getText().toString());
+            });
+        }
+        
         return view;
     }
+    private void openSingleInterventionFragment(String buttonText) {
+        SingleIntervention singleIntervention = new SingleIntervention();
+        Bundle args = new Bundle();
+        // TODO: Get Name and Desc dynamically
+        // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
+        args.putInt("InterventionID", 0);
+        args.putString("InterventionName", buttonText);
+        args.putString("InterventionDescription", "This is a sample description.");
+        singleIntervention.setArguments(args);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(((ViewGroup)getView().getParent()).getId(), singleIntervention, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+    private void populateButtonList(Vector<Vector<String>> interventionList, View view) {
+        for (Vector<String> interventionObject : interventionList) {
+            Button newButton = new Button(this.getContext());
+            newButton.setText(interventionObject.get(0));
 
+            ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
+            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            cl.addView(newButton, lp);
+        }
+    }
 }
