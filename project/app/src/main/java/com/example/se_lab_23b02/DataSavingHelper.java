@@ -72,7 +72,7 @@ public class DataSavingHelper {
     // Overload: Access Mode
     public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
         //Important for multiuser -> everyone gets a file plus it's local ID
-        filename += getCurrentUserId(context);
+        filename = getCurrentUserId(context) + filename;
 
         if (append) {
             System.out.println("appending");
@@ -99,7 +99,7 @@ public class DataSavingHelper {
     }
     public String readSavedDataFromInternalStorage(String filename, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
-        filename += getCurrentUserId(context);
+        filename = getCurrentUserId(context) + filename;
         String ret = "";
         try {
             InputStream inputStream = context.openFileInput(filename);
