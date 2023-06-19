@@ -110,6 +110,7 @@ public class DataSavingHelper {
     }
 
     private String getCurrentUserId(Context context)
+
     {
         User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
         return String.valueOf(u.getLocalId());
