@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
@@ -49,14 +48,6 @@
         <activity
             android:name=".HomeScreenActivity"
             android:exported="true" />
-        <activity
-            android:name=".TimePickerActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Dialog" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".TimePickerActivity"
             android:excludeFromRecents="true"
