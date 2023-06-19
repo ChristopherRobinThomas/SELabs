@@ -86,4 +86,5 @@
         <item>dark-mode</item>
         <item>match OS</item>
     </string-array>
+    <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
 </resources>

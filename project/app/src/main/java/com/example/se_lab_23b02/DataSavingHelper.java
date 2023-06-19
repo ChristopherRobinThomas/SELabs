@@ -65,10 +65,15 @@ public class DataSavingHelper {
     }
     // Default usage
     public void writeDataToInternalStorage (String filename, String data, Context context) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename += getCurrentUserId(context);
         accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
     }
     // Overload: Access Mode
     public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename = getCurrentUserId(context) + filename;
+
         if (append) {
             System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
@@ -93,6 +98,8 @@ public class DataSavingHelper {
         }
     }
     public String readSavedDataFromInternalStorage(String filename, Context context) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename = getCurrentUserId(context) + filename;
         String ret = "";
         try {
             InputStream inputStream = context.openFileInput(filename);
@@ -117,5 +124,12 @@ public class DataSavingHelper {
         }
         Log.i("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
+    }
+
+    private String getCurrentUserId(Context context)
+
+    {
+        User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
+        return String.valueOf(u.getLocalId());
     }
 }
