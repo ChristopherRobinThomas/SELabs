@@ -4,8 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -20,9 +23,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +42,11 @@ public class SettingsFragment extends Fragment {
 
     private Switch switchGPS;
     private Context context;
+    private Context contextForSharedPreferences;
+    private Resources resources;
     private DataSavingHelper dsHelper;
-
     private HashMap<String, String> settings;
+    private ArrayList<Object> textViews = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -86,12 +93,44 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        context = getActivity().getApplicationContext();
+        contextForSharedPreferences = getActivity().getApplicationContext();
 
         dsHelper = DataSavingHelper.getInstance();
 
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
+
+        String language = settings.get("language");
+
+        if(language.equals("deutsch")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
+        }
+        if(language.equals("english")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
+        }
+        if(language.equals("francais")) {
+            context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
+        }
+
+
+
 
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
+        resources = context.getResources();
+
+        // add textviews for language change
+        textViews.add(view.findViewById(R.id.tvSettingsApperance));
+        textViews.add(view.findViewById(R.id.tvSettingsLanguage));
+        textViews.add(view.findViewById(R.id.tv_select_color));
+        textViews.add(view.findViewById(R.id.tvSettingsSensor));
+        textViews.add(view.findViewById(R.id.tvSettingsStepCounter));
+        textViews.add(view.findViewById(R.id.tvSettingsAccel));
+        textViews.add(view.findViewById(R.id.tvGeoTagging));
+        textViews.add(view.findViewById(R.id.tvSettingsNotification));
+        textViews.add(view.findViewById(R.id.tvMorningNotification));
+        textViews.add(view.findViewById(R.id.tvSettingsNoon));
+        textViews.add(view.findViewById(R.id.tvSettingsEvening));
+        textViews.add(view.findViewById(R.id.btDeleteData));
+
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
         Spinner spinnerColortheme = (Spinner) view.findViewById(R.id.spinner_color);
@@ -105,9 +144,7 @@ public class SettingsFragment extends Fragment {
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
 
         saveDefaultValuesInSettings();
-
-        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
-
+        setAllStrings();
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
@@ -119,7 +156,24 @@ public class SettingsFragment extends Fragment {
 
                 String val = parent.getItemAtPosition(position).toString();
 
-                dsHelper.saveSettingAsSharedPref("language", val, context);
+                dsHelper.saveSettingAsSharedPref("language", val, contextForSharedPreferences);
+
+                if(val.equals("english")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
+
+                }
+                if(val.equals("deutsch")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
+                }
+                if(val.equals("francais")) {
+                    context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
+                }
+
+                resources = context.getResources();
+                setAllStrings();
+                refreshSettings();
+                setSpinnerWithoutLanguageSpinner(spinnerColortheme, spinnerDarkMode);
+
 
             }
 
@@ -132,9 +186,19 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String val = parent.getItemAtPosition(position).toString();
-                dsHelper.saveSettingAsSharedPref("color", val, context);
-                System.out.println(val);
+                String val = "blue";
+
+                switch(position) {
+                    case 1:
+                        val = "red";
+                        break;
+                    case 2:
+                        val = "green";
+                        break;
+                }
+
+                dsHelper.saveSettingAsSharedPref("color", val, contextForSharedPreferences);
+
             }
 
             @Override
@@ -147,9 +211,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String val = parent.getItemAtPosition(position).toString();
-                dsHelper.saveSettingAsSharedPref("dmValue", val, context);
-                System.out.println(val);
+                String val = "white-mode";
+                switch(position) {
+                    case 1:
+                        val = "dark-mode";
+                        break;
+                    case 2:
+                        val = "match OS";
+                        break;
+                }
+                dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
             }
 
             @Override
@@ -161,7 +232,7 @@ public class SettingsFragment extends Fragment {
         switchAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), context);
+                dsHelper.saveSettingAsSharedPref("AccelAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
@@ -174,14 +245,21 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
-                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), context);
+                dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
         switchStepCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), context);
+                if(b) {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                    }
+
+                }
+                dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
 
@@ -191,14 +269,13 @@ public class SettingsFragment extends Fragment {
 
                 Bundle b = new Bundle();
                 refreshSettings();
-                System.out.println(settings);
 
                 b.putInt("lowerBound", Integer.parseInt(settings.get("mornLB")));
                 b.putInt("upperBound", Integer.parseInt(settings.get("mornUB")));
                 b.putInt("currentHour", Integer.parseInt(settings.get("mornCurH")));
                 b.putInt("currentMin", Integer.parseInt(settings.get("mornCurM")));
                 b.putInt("id", 0);
-                //System.out.println(b);
+
 
                 Intent intent = new Intent(getActivity(), TimePickerActivity.class);
                 intent.putExtras(b);
@@ -249,7 +326,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v)  {
 
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(context);
+                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
@@ -265,31 +342,42 @@ public class SettingsFragment extends Fragment {
 
     //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
     private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.languages));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.languages));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLang.setAdapter(arrayAdapter);
 
+        String[] tempL = getResources().getStringArray(R.array.languages);
+        ArrayList<String> languages = new ArrayList<>(Arrays.asList(tempL));
+
+
+
         if(settings.containsKey("language")) {
-            int spinnerPosition = arrayAdapter.getPosition(settings.get("language"));
+            int spinnerPosition = languages.indexOf(settings.get("language"));
             spLang.setSelection(spinnerPosition);
         }
 
 
-        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colortheme));
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.colortheme));
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColor.setAdapter(colorAdapter);
 
+        String[] tempC = getResources().getStringArray(R.array.colortheme);
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(tempC));
+
         if(settings.containsKey("color")) {
-            int spinnerPosition = colorAdapter.getPosition(settings.get("color"));
+            int spinnerPosition = colors.indexOf(settings.get("color"));
             spColor.setSelection(spinnerPosition);
         }
 
-        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.darkmode));
+        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.darkmode));
         darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDMode.setAdapter(darkModeAdapter);
 
+        String[] tempD = getResources().getStringArray(R.array.darkmode);
+        ArrayList<String> darkmode = new ArrayList<>(Arrays.asList(tempD));
+
         if(settings.containsKey("dmValue")) {
-            int spinnerPosition = darkModeAdapter.getPosition(settings.get("dmValue"));
+            int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
             spDMode.setSelection(spinnerPosition);
         }
     }
@@ -310,50 +398,92 @@ public class SettingsFragment extends Fragment {
         swGPS.setChecked(false);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
-
-        switch(permsRequestCode){
-
-            case 200:
-
-                switchGPS.setChecked(grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                break;
-
-        }
-    }
-
     //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
     private void saveDefaultValuesInSettings() {
-        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(context);
+        Map<String, String> tempSettings = dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
         if(!tempSettings.containsKey("mornCurH"))
-            dsHelper.saveSettingAsSharedPref("mornCurH", "8", context);
+            dsHelper.saveSettingAsSharedPref("mornCurH", "8", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornCurM"))
-            dsHelper.saveSettingAsSharedPref("mornCurM", "15", context);
+            dsHelper.saveSettingAsSharedPref("mornCurM", "15", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornLB"))
-            dsHelper.saveSettingAsSharedPref("mornLB", "7", context);
+            dsHelper.saveSettingAsSharedPref("mornLB", "7", contextForSharedPreferences);
         if(!tempSettings.containsKey("mornUB"))
-            dsHelper.saveSettingAsSharedPref("mornUB", "11", context);
+            dsHelper.saveSettingAsSharedPref("mornUB", "11", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonCurH"))
-            dsHelper.saveSettingAsSharedPref("noonCurH", "13", context);
+            dsHelper.saveSettingAsSharedPref("noonCurH", "13", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonCurM"))
-            dsHelper.saveSettingAsSharedPref("noonCurM", "0", context);
+            dsHelper.saveSettingAsSharedPref("noonCurM", "0", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonLB"))
-            dsHelper.saveSettingAsSharedPref("noonLB", "12", context);
+            dsHelper.saveSettingAsSharedPref("noonLB", "12", contextForSharedPreferences);
         if(!tempSettings.containsKey("noonUB"))
-            dsHelper.saveSettingAsSharedPref("noonUB", "14", context);
+            dsHelper.saveSettingAsSharedPref("noonUB", "14", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnCurH"))
-            dsHelper.saveSettingAsSharedPref("evnCurH", "18", context);
+            dsHelper.saveSettingAsSharedPref("evnCurH", "18", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnCurM"))
-            dsHelper.saveSettingAsSharedPref("evnCurM", "0", context);
+            dsHelper.saveSettingAsSharedPref("evnCurM", "0", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnLB"))
-            dsHelper.saveSettingAsSharedPref("evnLB", "17", context);
+            dsHelper.saveSettingAsSharedPref("evnLB", "17", contextForSharedPreferences);
         if(!tempSettings.containsKey("evnUB"))
-            dsHelper.saveSettingAsSharedPref("evnUB", "19", context);
+            dsHelper.saveSettingAsSharedPref("evnUB", "19", contextForSharedPreferences);
     }
 
     private void refreshSettings() {
-        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(context);
+        settings = (HashMap<String, String>) dsHelper.getAllSettingsFromSharedPref(contextForSharedPreferences);
+    }
+
+    private void setAllStrings() {
+        getActivity().setTitle(resources.getString(R.string.settings_heading));
+
+        TextView tv = (TextView) textViews.get(0);
+        tv.setText(resources.getString(R.string.settings_title));
+        tv = (TextView) textViews.get(1);
+        tv.setText(resources.getString(R.string.tv_settings_language_title));
+        tv = (TextView) textViews.get(2);
+        tv.setText(resources.getString(R.string.tv_settings_select_color));
+        tv = (TextView) textViews.get(3);
+        tv.setText(resources.getString(R.string.tv_settings_settings_sensor));
+        tv = (TextView) textViews.get(4);
+        tv.setText(resources.getString(R.string.tv_settings_step_counter));
+        tv = (TextView) textViews.get(5);
+        tv.setText(resources.getString(R.string.tv_settings_accel));
+        tv = (TextView) textViews.get(6);
+        tv.setText(resources.getString(R.string.tv_settings_geo_tagging));
+        tv = (TextView) textViews.get(7);
+        tv.setText(resources.getString(R.string.tv_settings_notification_title));
+        tv = (TextView) textViews.get(8);
+        tv.setText(resources.getString(R.string.tv_settings_morning_notification));
+        tv = (TextView) textViews.get(9);
+        tv.setText(resources.getString(R.string.tv_settings_noon_notification));
+        tv = (TextView) textViews.get(10);
+        tv.setText(resources.getString(R.string.tv_settings_evening_notification));
+        Button bt = (Button) textViews.get(11);
+        bt.setText(resources.getString(R.string.bt_settings_delete_data));
+    }
+
+    public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.colortheme));
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColor.setAdapter(colorAdapter);
+
+        String[] tempC = getResources().getStringArray(R.array.colortheme);
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(tempC));
+
+        if(settings.containsKey("color")) {
+            int spinnerPosition = colors.indexOf(settings.get("color"));
+            spColor.setSelection(spinnerPosition);
+        }
+
+        ArrayAdapter<String> darkModeAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.darkmode));
+        darkModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDMode.setAdapter(darkModeAdapter);
+
+        String[] tempD = getResources().getStringArray(R.array.darkmode);
+        ArrayList<String> darkmode = new ArrayList<>(Arrays.asList(tempD));
+
+        if(settings.containsKey("dmValue")) {
+            int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
+            spDMode.setSelection(spinnerPosition);
+        }
     }
 
 }

@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.Random;
@@ -26,6 +28,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     private int spanLength;
     private int numberOfRounds;
     private int initSpanLength = 2;
+    private int maxReachedNumbers = 0;
 
     String[] spanNumbers;
 
@@ -34,6 +37,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     Random rand = new Random();
     Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
     DataSavingHelper dsHelper;
+    ServerHelper sHelper;
 
 
     //------GUI Elements----------------------------------------------------
@@ -57,6 +61,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dsHelper = DataSavingHelper.getInstance();
+        sHelper = ServerHelper.getInstance();
         setContentView(R.layout.activity_digit_span_task);
         numberOfRounds = 0;
         try {
@@ -139,6 +144,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         }
         if(inputCount==spanLength)
         {
+            maxReachedNumbers = inputCount;
             switchNumberButtons(false);
             inputField.setText("You won - press start again");
 
@@ -172,8 +178,8 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    public void exitButtonClicked(View v)
-    {
+    public void exitButtonClicked(View v) throws JSONException {
+        int originalInitSpanLength = initSpanLength;
         //If the user did not get past the first round the span task length for the next day decreases
         if(numberOfRounds == 0 && initSpanLength != 0){
             initSpanLength--;
@@ -183,6 +189,12 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         else if(numberOfRounds > 1){
             initSpanLength++;
         }
+
+        JSONObject toSave = JSONObjectCreator.createDigitSpanTaskObject(originalInitSpanLength, initSpanLength, maxReachedNumbers, numberOfRounds);
+
+        sHelper.setActivity(this);
+        sHelper.addDigitSpanTask(toSave, getApplicationContext());
+
         dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength),getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
@@ -252,6 +264,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     {
         if(!spanNumbers[inputCount].equals(input))
         {
+            if(maxReachedNumbers == 0)maxReachedNumbers = inputCount; //if no previous successfully round was completed the number of the fail run is added instead
             inputCount = spanLength+1;
         }
         else

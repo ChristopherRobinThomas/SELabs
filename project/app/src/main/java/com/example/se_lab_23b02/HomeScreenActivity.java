@@ -1,71 +1,79 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
-
-
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
-import java.util.Calendar;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
+
     private ActivityHomeScreenBinding binding;
+
+    private Context context;
+    private Resources resources;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
 
+        refreshResources();
 
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
+            refreshResources();
             switch(item.getItemId())
             {
                 case R.id.home:
+
                     replaceFragment(new HomeFragment());
-                    setTitle("Home");
+                    setTitle(resources.getString(R.string.home_heading));
                     break;
                 case R.id.settings:
                     replaceFragment(new SettingsFragment());
-                    setTitle("Settings");
+                    setTitle(resources.getString(R.string.settings_heading));
                     break;
                 case R.id.data:
                     replaceFragment(new OverviewFragment());
-                    setTitle("Data");
+                    setTitle(resources.getString(R.string.overview_heading));
                     break;
                 case R.id.interventions:
                     replaceFragment(new InterventionsFragment());
-                    setTitle("Interventions");
+                    setTitle(resources.getString(R.string.interventions_heading));
                     break;
             }
 
             return true;
         });
 
+    }
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getApplicationContext(), language_short);
+        resources = context.getResources();
     }
 
     private void replaceFragment(Fragment fragment) {

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools">
+
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -9,6 +11,8 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
         android:allowBackup="true"
@@ -34,6 +38,9 @@
             android:label="@string/title_activity_multi_user_input"
             android:theme="@style/Theme.SELab23B02" />
         <activity
+            android:name=".DailyTaskActivity"
+            android:exported="false" />
+        <activity
             android:name=".DigitSpanTaskActivity"
             android:exported="true" />
         <activity
@@ -42,6 +49,14 @@
         <activity
             android:name=".HomeScreenActivity"
             android:exported="true" />
+        <activity
+            android:name=".TimePickerActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Dialog" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".TimePickerActivity"
             android:excludeFromRecents="true"

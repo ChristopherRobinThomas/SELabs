@@ -30,6 +30,17 @@ public class DataSavingHelper {
         }
         return INSTANCE;
     }
+
+    public String getSelectedLanguage(Context context) {
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        Map<String, String> settingsContents = (Map<String, String>) settings.getAll();
+        if(settingsContents.containsKey("language"))
+            return settingsContents.get("language");
+        saveSettingAsSharedPref("language", "english", context);
+        return "english";
+
+
+    }
     public void saveSettingAsSharedPref(String key, String value, Context context) {
         SharedPreferences settings = context.getSharedPreferences("Settings", 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -41,6 +52,11 @@ public class DataSavingHelper {
         Map<String, String> settingsContents;
         settingsContents = (Map<String, String>) settings.getAll();
         return settingsContents;
+    }
+
+    public String getSpecificSettingsFromSharedPref(String keyValue, Context context){
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        return settings.getString(keyValue, "");
     }
 
     public void deleteAllSettingsFromSharedPref(Context context) {
@@ -59,6 +75,7 @@ public class DataSavingHelper {
         filename += getCurrentUserId(context);
 
         if (append) {
+            System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
         } else {
             accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
@@ -71,10 +88,10 @@ public class DataSavingHelper {
             if(!toWrite.exists()){
                 toWrite.createNewFile();
             }
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-            Log.e("dsHelper", "To file: "+filename+", wrote: "+data);
+            Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -105,7 +122,7 @@ public class DataSavingHelper {
         } catch (IOException e) {
             Log.e("dsHelper", "Can not read file: " + e.toString());
         }
-        Log.e("dsHelper", "From file: "+filename+", read: "+ret);
+        Log.i("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
     }
 
