@@ -143,12 +143,22 @@ public class InterventionsFragment extends Fragment {
         }
         return endList;
     }
-    private void saveInterventions(Vector<Vector<String>> interventions) {
+    private void saveInterventions(Vector<Vector<String>> interventions) throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         JSONArray endArray = new JSONArray();
         // Start: V of V of S
-
-
+        JSONArray intermediateArr = new JSONArray();
+        for(int i=0; i < interventions.size(); i++) {
+            intermediateArr.put(interventions.get(i));                          // J of V of S
+        }
+        for(int j=0; j < intermediateArr.length(); j++) {                        // Jeder Vector im JSONA
+            JSONArray temp = new JSONArray();
+            Vector<String> elem = (Vector<String>)intermediateArr.get(j);
+            for(int k = 0; k < elem.size(); k++) {                              // Jeden Eintrag im Vector im JSONA
+                temp.put((String) (elem.get(k)));                               // J of S
+                endArray.put(temp);                                             // J of J of S
+            }
+        }
         dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), getContext());
     }
 
