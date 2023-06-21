@@ -40,6 +40,8 @@ public class InterventionsFragment extends Fragment {
     Button buttonIntervention1;
     Button buttonIntervention2;
     Button buttonIntervention3;
+    Button buttonAddNewIntervention;
+    Vector<Vector<String>> interventionList;
 
 
 
@@ -81,22 +83,25 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        // TODO: Read from localStorage
-        // populateButtonList(interventionList, view);
+        try {
+            interventionList = getSavedInterventions();
+        } catch (Exception e) {
+            interventionList = new Vector<Vector<String>>();
+            Vector<String> sampleInterventionA = new Vector<String>();
+            sampleInterventionA.add("00000000");
+            sampleInterventionA.add("Sample Name");
+            sampleInterventionA.add("Sample Desc");
+            interventionList.add(sampleInterventionA);
+        }
 
-        Vector<Button> buttonList = new Vector<Button>();
-        buttonIntervention1 = view.findViewById(R.id.buttonIntervention1);
-        buttonList.add(buttonIntervention1);
-        buttonIntervention2 = view.findViewById(R.id.buttonIntervention2);
-        buttonList.add(buttonIntervention2);
-        buttonIntervention3 = view.findViewById(R.id.buttonIntervention3);
-        buttonList.add(buttonIntervention3);
-
+        Vector<Button> buttonList = populateButtonList(interventionList, view);
+        buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
                 openSingleInterventionFragment(b.getText().toString());
             });
         }
+        buttonAddNewIntervention.setOnClickListener(v -> {});
         
         return view;
     }
@@ -114,15 +119,21 @@ public class InterventionsFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-    private void populateButtonList(Vector<Vector<String>> interventionList, View view) {
+    private Vector<Button> populateButtonList(Vector<Vector<String>> interventionList, View view) {
+        int i = 0;
+        Vector<Button> buttonList = new Vector<Button>();
         for (Vector<String> interventionObject : interventionList) {
             Button newButton = new Button(this.getContext());
-            newButton.setText(interventionObject.get(0));
+            newButton.setText(interventionObject.get(1));
 
             ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
-            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
+            lp.topMargin = 58 * i;
             cl.addView(newButton, lp);
+            buttonList.add(newButton);
+            i++;
         }
+        return buttonList;
     }
     private Vector<Vector<String>> getSavedInterventions() throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
