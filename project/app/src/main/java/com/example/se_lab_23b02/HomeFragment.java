@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        System.out.println("StepCount" + String.valueOf(innitStepCount));
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
         pickDailyGoalButton = view.findViewById(R.id.DailyGoalButton);
@@ -143,6 +144,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         getDailyGoalFromStorage();
         setUpProgress();
         updateLittleBeing();
+
+
+
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +230,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             {
                 dailyGoal = obj.get("Daily_Task").getAsString();
                 goalProgress = obj.get("Progress").getAsInt();
-                innitStepCount = obj.get("Step_Count").getAsInt();
                 pickDailyGoalButton.setEnabled(false);
                 if(dailyGoal.equals("Walk 5.000 Steps")||dailyGoal.equals("Walk 10.000 Steps"))
                 {
@@ -324,7 +327,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             obj.put("Date", todaysDate);
             obj.put("Daily_Task", dailyGoal);
             obj.put("Progress", 100);
-            obj.put("Step_Count", innitStepCount);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -364,6 +366,34 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     //---------------Sensor Functions ---------------------
 
+    private void saveInitialStepCount()
+    {
+        String now = TimeStamp.getCurrentTimeStamp();
+        try
+        {
+            //Retrieve Count
+            String temp = dsHelper.readSavedDataFromInternalStorage("TodaysStepCount.txt",getActivity());
+            JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+            date = obj.get("Date").getAsString().split(" ")[0];
+            if(todaysDate.equals(date)) innitStepCount = obj.get("StepCount").getAsInt();
+            else throw new Exception();
+        }
+        catch(Exception e)
+        {
+
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("Date",now);
+                obj.put("StepCount",newStepCount);
+            } catch (JSONException ex) {
+                throw new RuntimeException(ex);
+            }
+            String data = obj.toString();
+            //Save Count for the first time
+            dsHelper.writeDataToInternalStorage("TodaysStepCount.txt",data,getActivity(),true);
+            innitStepCount = newStepCount;
+        }
+    }
 
     @Override
     public void onResume()
@@ -388,7 +418,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent){
         if(running)
         {
+
             newStepCount = (int) sensorEvent.values[0];
+            if(innitStepCount == 0)  saveInitialStepCount();
+            //The first time we start the app we save the current step count so far
             float steps = newStepCount - innitStepCount;
             stepCountTxt.setText("Today's Steps: \n" + String.valueOf(steps));
             if(dailyGoal.equals("Walk 5.000 Steps"))

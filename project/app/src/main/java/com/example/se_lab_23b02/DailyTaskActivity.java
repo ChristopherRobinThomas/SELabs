@@ -162,7 +162,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         obj.put("Date", now);
         obj.put("Daily_Task", dailyTask);
         obj.put("Progress", 0);
-        obj.put("Step_Count", stepCount);
 
         String data = obj.toString() + "\n";
 
