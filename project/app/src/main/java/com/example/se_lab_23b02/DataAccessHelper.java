@@ -15,6 +15,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import kotlin.Triple;
@@ -24,7 +25,9 @@ public class DataAccessHelper {
     // to divide different
     public static final int ACCESS_MENTAL_HEALTH_SCORE = 1;
     public static final int ACCESS_COUNT_OF_INTERVENTIONS = 2;
-    public static final int ACCESS_COUNT_OF_ACTIVITIES = 3;
+    public static final int ACCESS_DAILY_TASK_DISTRIBUTION = 3;
+
+    public static final String[] LIST_OF_DAILY_TASKS_TO_INDEX = {"5.000 Steps", "10.000 Steps", "Drink 2L", "Clean", "Walk", "Meditate", "Workout", "other"};
 
 
     private static DataAccessHelper INSTANCE;
@@ -50,35 +53,53 @@ public class DataAccessHelper {
             // case: list of mental health scores
             case ACCESS_MENTAL_HEALTH_SCORE:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", context);
-                //System.out.println(fileContent);
-                String[] lines = fileContent.split(System.lineSeparator());
-
+                String[] linesForMentalHealth = fileContent.split(System.lineSeparator());
                 // reads data from file and then checks for each element if it is within the given timeframe
-                for (int i = 1; i < lines.length; i++) {
-                    JSONObject jsObject = new JSONObject(lines[i]);
-                    String timestamp = (String) jsObject.get("timestamp");
-                    String[] times = timestamp.split(" ");
-                    LocalDate tmpLocalDate = LocalDate.parse(times[0]);
-                    LocalTime tmpLocalTime = LocalTime.parse(times[1]);
-                    LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
-                    if(ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && ldtTimestampAsDate.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
-                        System.out.println("line read: timestamp: " + ldtTimestampAsDate.toString() + ", lb: " +
-                                lowerBorder.toString() + ", ub: " + upperBorder.toString());
-                        int hours = (int) ChronoUnit.HOURS.between(lowerBorder, ldtTimestampAsDate);
-                        Pair<Integer, Integer> newEntry = new Pair<>(this.calculateHealthScoreFromQuestionaire(lines[i]), hours);
+                for (int i = 1; i < linesForMentalHealth.length; i++) {
+                    JSONObject jsObject = new JSONObject(linesForMentalHealth[i]);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsObject.get("timestamp"));
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        int hours = (int) ChronoUnit.HOURS.between(lowerBorder, timestampAsLocalDateTime);
+                        Pair<Integer, Integer> newEntry = new Pair<>(this.calculateHealthScoreFromQuestionaire(linesForMentalHealth[i]), hours);
                         outputList.add(newEntry);
                     }
                 }
                 break;
 
-            case ACCESS_COUNT_OF_ACTIVITIES:
-                fileContent = dsHelper.readSavedDataFromInternalStorage("activities.txt", context);
-                // count here
-                // append to outputList
+            case ACCESS_DAILY_TASK_DISTRIBUTION:
+                fileContent = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt", context);
+                String[] linesForDailyTask = fileContent.split(System.lineSeparator());
+                // initialize every entry with 0
+                for (int i = 0; i < LIST_OF_DAILY_TASKS_TO_INDEX.length; i++) {
+                    Pair<Integer, Integer> tmpPair = new Pair<>(0, i);
+                    outputList.add(tmpPair);
+                }
+
+                for (int i = 1; i < linesForDailyTask.length; i++) {
+
+                    JSONObject jsonObject = new JSONObject(linesForDailyTask[i]);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("Date"));
+
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        int index = getIndexFromTaskListByString((String) jsonObject.get("Daily_Task"));
+                        Pair<Integer, Integer> newPair = new Pair<>(outputList.get(index).first + 1, index);
+                        outputList.remove(index);
+                        outputList.add(index, newPair);
+
+                    }
+                }
                 break;
 
             case ACCESS_COUNT_OF_INTERVENTIONS:
                 fileContent = dsHelper.readSavedDataFromInternalStorage("", context);
+                String[] linesInterventions = fileContent.split(System.lineSeparator());
+                for (int i = 1; i < linesInterventions.length; i++) {
+                    JSONObject jsonObject = new JSONObject(linesInterventions[i]);
+                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("timestamp"));
+                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                        //append count oder so
+                    }
+                }
                 // count
                 //append
                 break;
@@ -90,6 +111,27 @@ public class DataAccessHelper {
 
 
 
+    private int getIndexFromTaskListByString(String taskString) {
+        switch (taskString) {
+            case "Walk 5.000 Steps":
+                return 0;
+            case "Walk 10.000 Steps":
+                return 1;
+            case "Drink 2L Water":
+                return 2;
+            case "Clean":
+                return 3;
+            case "Gor For A Walk":
+                return 4;
+            case "Meditate":
+                return 5;
+            case "Workout":
+                return 6;
+            default:
+                return 7;
+        }
+    }
+
     public static int calculateHealthScoreFromQuestionaire(String questionaireAnswering) throws JSONException {
         // calculate the questionaire score here, for now using random values
 
@@ -97,7 +139,7 @@ public class DataAccessHelper {
         JSONArray jsonArray = (JSONArray) questionaire.get("Q1");
 
         int calmnessIndex = (int)(100 - jsonArray.getInt(0) + jsonArray.getInt(1))/2;
-        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) + jsonArray.getInt(3))/2;
+        int satisfactionIndex = (int)(200 - jsonArray.getInt(2) - jsonArray.getInt(3))/2;
         int energyIndex = (int)(100 - jsonArray.getInt(4) + jsonArray.getInt(5))/2;
 
 

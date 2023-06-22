@@ -73,13 +73,30 @@ public class QuestionnaireActivity extends AppCompatActivity {
                     Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
                     startActivity(i);
                 }
+                finish();
             }
         });
 
     }
 
     void saveAnswers() throws JSONException {
-        JSONObject toSave = JSONObjectCreator.createQuestionnaireObject(questionOneValues, questionTwoValues, questionThreeValues, questionFourValue, questionFiveValue, questionSixValues, questionSevenValues, questionEightValues);
+
+        JSONArray[] valueArrays = {
+                new JSONArray(questionOneValues),
+                new JSONArray(questionTwoValues),
+                new JSONArray(questionThreeValues),
+                new JSONArray(questionFourValue),
+                new JSONArray(questionFiveValue),
+                new JSONArray(questionSixValues),
+                new JSONArray(questionSevenValues),
+                new JSONArray(questionEightValues)
+        };
+        JSONObject toSave = new JSONObject();
+        for (int i = 1; i <= valueArrays.length; i++) {
+            toSave.put("Q"+i, valueArrays[i-1]);
+        }
+        timestamp = TimeStamp.getCurrentTimeStamp();
+        toSave.put("timestamp: ", timestamp);
 
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());

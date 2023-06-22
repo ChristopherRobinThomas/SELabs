@@ -1,6 +1,8 @@
 package com.example.se_lab_23b02;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimeStamp {
@@ -47,4 +49,14 @@ public class TimeStamp {
         LocalDateTime now = LocalDateTime.now();
         return dateTimeFormatter.format(now);
     }
+
+    public static LocalDateTime getLocalDateTime(Object dateAsObject) {
+        String dateAsString = (String) dateAsObject;
+        String[] times = dateAsString.split(" ");
+        LocalDate tmpLocalDate = LocalDate.parse(times[0]);
+        LocalTime tmpLocalTime = LocalTime.parse(times[1]);
+        LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
+        return ldtTimestampAsDate;
+    }
+
 }
