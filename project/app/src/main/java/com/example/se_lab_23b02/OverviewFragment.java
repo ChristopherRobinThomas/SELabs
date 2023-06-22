@@ -1,6 +1,8 @@
 package com.example.se_lab_23b02;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -64,6 +66,10 @@ public class OverviewFragment extends Fragment {
     private DataAccessHelper daHelper;
     private int currentTypeToPlot = 0;
 
+    private Context context;
+    private Resources resources;
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+
     private LocalDateTime dateLB;
     private LocalDateTime dateUB;
 
@@ -108,6 +114,16 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
+
+
+        // language changing
+        elementsForLanguageChange.add(view.findViewById(R.id.btHealthIndex));
+        elementsForLanguageChange.add(view.findViewById(R.id.btIntervention));
+        elementsForLanguageChange.add(view.findViewById(R.id.btDistributionOfDailytasks));
+        refreshResources();
+        setLanguage();
+
+
 
         // instantiate the plots/charts, make pieChart invisible while plot is visible
         plot = (XYPlot) view.findViewById(R.id.plt_graph);
@@ -317,7 +333,7 @@ public class OverviewFragment extends Fragment {
     // adds the segments to the piechart with the according formatter defined in the xml, so the color and font size fits
     private void drawPieChart(ArrayList<Segment> segments) {
         pieChart.clear();
-        pieChart.setTitle("Distribution of the Daily Tasks");
+        pieChart.setTitle(resources.getString(R.string.bt_overview_task_distribution));
 
         if((int)segments.get(0).getValue() > 0) {
             SegmentFormatter sf0 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_0);
@@ -370,7 +386,7 @@ public class OverviewFragment extends Fragment {
 
 
         if (typeToPlot == 0) {
-            plot.setTitle("Health Index");
+            plot.setTitle(resources.getString(R.string.bt_overview_health_index));
             plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
             plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
             final Number[] domainLabels = domains;
@@ -396,7 +412,7 @@ public class OverviewFragment extends Fragment {
             return;
         }
         if(typeToPlot == 1) {
-            plot.setTitle("Amount of Activities");
+            plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
             BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
             bf.setMarginLeft(PixelUtils.dpToPix(1));
             bf.setMarginRight(PixelUtils.dpToPix(1));
@@ -410,4 +426,30 @@ public class OverviewFragment extends Fragment {
         }
     }
 
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getActivity().getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getActivity().getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+
+    private void setLanguage() {
+        Button bt = (Button) elementsForLanguageChange.get(0);
+        bt.setText(resources.getString(R.string.bt_overview_health_index));
+        bt = (Button) elementsForLanguageChange.get(1);
+        bt.setText(resources.getString(R.string.bt_overview_interventions_graph));
+        bt = (Button) elementsForLanguageChange.get(2);
+        bt.setText(resources.getString(R.string.bt_overview_task_distribution));
+    }
 }
