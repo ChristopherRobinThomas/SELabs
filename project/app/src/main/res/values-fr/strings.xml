@@ -58,6 +58,7 @@
     <string name="tv_questionnaire_q1_3">Au cours des dernières 24 heures, je me suis senti : bien/mal</string>
     <string name="tv_questionnaire_q1_2">Au cours des dernières 24 heures, je me suis senti : Agité/Calme</string>
     <string name="tv_questionnaire_q1_1">Au cours des dernières 24 heures, je me suis senti : Satisfait/Insatisfait</string>
+    <string name="et_questionnaire_additional_notes">notes complémentaires...</string>
     <string name="bt_overview_health_index">score de santé mentale</string>
     <string name="bt_overview_interventions_graph">activités physiques</string>
     <string name="bt_overview_task_distribution">Répartition des tâches quotidiennes</string>

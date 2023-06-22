@@ -61,6 +61,7 @@
     <string name="tv_questionnaire_q1_3">In the last 24 hours I felt: Well/Unwell</string>
     <string name="tv_questionnaire_q1_2">In the last 24 hours I felt: Restless/Calm</string>
     <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
+    <string name="et_questionnaire_additional_notes">additional notes...</string>
 
 
     <!-- overview fragment -->

@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -50,6 +52,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
+    private String additionalNotes = new String();
+
     private String timestamp;
 
     private DataSavingHelper dsHelper;
@@ -88,12 +92,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
         elementsForLanguageChange.add(findViewById(R.id.Question8_1Text));
         elementsForLanguageChange.add(findViewById(R.id.Question8_2Text));
         elementsForLanguageChange.add(findViewById(R.id.Send_Button));
+        elementsForLanguageChange.add(findViewById(R.id.tvQuestionnaireAdditionalNotes));
 
         refreshResources();
         setLanguage();
-
-
-
 
         manageQuestions();
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
@@ -120,6 +122,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     void saveAnswers() throws JSONException {
 
+        String[] additionalNotes = new String[1];
+        EditText et = (EditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
+        additionalNotes[0] = String.valueOf(et.getText());
+
         JSONArray[] valueArrays = {
                 new JSONArray(questionOneValues),
                 new JSONArray(questionTwoValues),
@@ -128,7 +134,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 new JSONArray(questionFiveValue),
                 new JSONArray(questionSixValues),
                 new JSONArray(questionSevenValues),
-                new JSONArray(questionEightValues)
+                new JSONArray(questionEightValues),
+                new JSONArray(additionalNotes)
         };
         JSONObject toSave = new JSONObject();
         for (int i = 1; i <= valueArrays.length; i++) {
@@ -468,6 +475,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
 
+
     private void refreshResources() {
 
         String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
@@ -531,9 +539,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         tv.setText(resources.getString(R.string.tv_questionnaire_q8_2));
         Button bt = (Button) elementsForLanguageChange.get(21);
         bt.setText(resources.getString(R.string.bt_send));
-
-
-
-
+        EditText et = (EditText) elementsForLanguageChange.get(22);
+        et.setHint(resources.getString(R.string.et_questionnaire_additional_notes));
     }
 }
