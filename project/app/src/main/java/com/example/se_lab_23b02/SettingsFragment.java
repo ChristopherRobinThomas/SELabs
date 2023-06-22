@@ -111,9 +111,6 @@ public class SettingsFragment extends Fragment {
             context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
         }
 
-
-
-
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
         resources = context.getResources();
 
@@ -143,6 +140,7 @@ public class SettingsFragment extends Fragment {
         Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
+        Button btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -334,6 +332,15 @@ public class SettingsFragment extends Fragment {
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
                 Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        btLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
+                startActivity(myIntent);
+                getActivity().finish();
             }
         });
 
