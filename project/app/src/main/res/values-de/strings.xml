@@ -65,6 +65,7 @@
     <string name="bt_overview_interventions_graph">pyhsische Aktivitäten</string>
     <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
     <string name="tv_overview_no_data">keine Daten verfügbar</string>
+    <string name="bt_settings_logout">ausloggen</string>
 
 
     <string-array name="languages">

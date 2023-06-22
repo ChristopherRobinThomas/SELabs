@@ -60,6 +60,7 @@
     <string name="bt_overview_interventions_graph">number of interventions</string>
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_no_data">no data available</string>
+    <string name="bt_settings_logout">Logout</string>
 
 
     <string-array name="languages">

@@ -130,6 +130,7 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.tvSettingsNoon));
         textViews.add(view.findViewById(R.id.tvSettingsEvening));
         textViews.add(view.findViewById(R.id.btDeleteData));
+        textViews.add(view.findViewById(R.id.btSettingsLogout));
 
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -458,6 +459,8 @@ public class SettingsFragment extends Fragment {
         tv.setText(resources.getString(R.string.tv_settings_evening_notification));
         Button bt = (Button) textViews.get(11);
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
+        bt = (Button) textViews.get(12);
+        bt.setText(resources.getText(R.string.bt_settings_logout));
     }
 
     public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
