@@ -97,6 +97,7 @@ public class MultiUserLoginFragment extends Fragment {
                     if(testPassword.getText().toString().equals(mParam2)){
                         Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                         startActivity(myIntent);
+                        getActivity().finish();
                     }else
                     {
                         Toast.makeText(getActivity(),"Wrong password",Toast.LENGTH_LONG);
