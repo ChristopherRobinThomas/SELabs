@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private String dailyGoal;
     private String todaysDate;
     private String date;
+    private String innitdailyGoal;
 
     private float goalProgress;
     private boolean running = false;
@@ -152,19 +153,24 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeDailyGoal));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeGoalComplete));
+        elementsForLanguageChange.add(view.findViewById(R.id.SeeAllPastActivitiesButton));
+        elementsForLanguageChange.add(view.findViewById(R.id.textViewStepCount));
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        //Retrieve Daily Goal (If already chosen) from Storage
-        dsHelper = DataSavingHelper.getInstance();
-        getDailyGoalFromStorage();
-        setUpProgress();
-        updateLittleBeing();
 
         // set text according to the language
         refreshResources();
         setLanguage();
+        //Retrieve Daily Goal (If already chosen) from Storage
+        dsHelper = DataSavingHelper.getInstance();
+        getDailyGoalFromStorage();
+        convertDailyGoal();
+        setUpProgress();
+        updateLittleBeing();
+
+
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,8 +188,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v)
             {
 
-                if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
                 if(Integer.parseInt(Build.VERSION.SDK) > 28) {
                     if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
@@ -195,8 +199,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                     Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
                     startActivity(myIntent);
                 }
-
-            });
+            }
+        });
         markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
@@ -210,15 +214,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
 
                 if(overallWellBeing >=0 && overallWellBeing <= 33) {
-                    Toast.makeText(getActivity(),"Larry is feeling sad right now. That's okay!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_sad), Toast.LENGTH_SHORT).show();
                 }
                 else if(overallWellBeing >=33 && overallWellBeing<66)
                 {
-                    Toast.makeText(getActivity(),"Larry is feeling okay at the moment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_okay), Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getActivity(),"Larry is feeling really happy right now!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_happy), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -263,13 +267,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             }
             else
             {
-                dailyGoal = "No Goal chosen yet";
+                dailyGoal = resources.getString(R.string.tv_home_goal_status_not_picked);
                 goalProgress = 0;
                 markGoalAsCompleteButton.setEnabled(false);
             }
 
         }catch(Exception e){
-            dailyGoal = "No Goal chosen yet";
+            dailyGoal = resources.getString(R.string.tv_home_goal_status_not_picked);
             goalProgress = 0;
             markGoalAsCompleteButton.setEnabled(false);
         }
@@ -280,10 +284,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         if(goalProgress==100)
         {
             markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-            dailyGoalTxt.setText("You achieved today's goal!");
+            dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_achieved));
         }
         else{
-            dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+            dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_not_achieved) + " " + dailyGoal);
         }
         dailyGoalProgressBar.setProgress((int)goalProgress);
     }
@@ -294,23 +298,21 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void updateLittleBeing()
     {
-
-        dataAccessHelper = DataAccessHelper.getInstance();
         try
         {
             String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",getActivity()).split("\n");
             String questionnaire = questionnaires[questionnaires.length-1];
             try {
-                overallWellBeing = dataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
+                overallWellBeing = DataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
                 if(goalProgress==100)
                 {
-                    overallWellBeing+=34;
-                    Toast.makeText(getActivity(),"You've completed your daily goal. That makes Larry a bit happier!",Toast.LENGTH_SHORT).show();
+                    overallWellBeing+=33;
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_daily_goal_achieved),Toast.LENGTH_SHORT).show();
                 }
                 else if(getNumberOfTodaysQuestionnaires() == 3)
                 {
-                    overallWellBeing+=34;
-                    Toast.makeText(getActivity(),"You've filled out 3 Questionnaires. That makes Larry a bit happier!",Toast.LENGTH_LONG).show();
+                    overallWellBeing+=33;
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_three_questionnaires_answered),Toast.LENGTH_LONG).show();
                 }
 
             } catch (JSONException e) {
@@ -322,10 +324,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             overallWellBeing = 100;
         }
 
-        if(overallWellBeing >= 0 && overallWellBeing <= 33) {
+        if(overallWellBeing >= 0 && overallWellBeing < 33) {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_sad));
         }
-        else if(overallWellBeing > 33 && overallWellBeing <= 66)
+        else if(overallWellBeing >= 33 && overallWellBeing < 66)
         {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_okay));
         }
@@ -340,7 +342,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         updateProgress();
         updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-        dailyGoalTxt.setText("You achieved today's goal!");
+        dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_achieved));
         todaysDate = TimeStamp.getCurrentTimeStamp();
         dsHelper = DataSavingHelper.getInstance();
         String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
@@ -349,7 +351,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         JSONObject obj = new JSONObject();
         try {
             obj.put("Date", todaysDate);
-            obj.put("Daily_Task", dailyGoal);
+            obj.put("Daily_Task", innitdailyGoal);
             obj.put("Progress", 100);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -445,7 +447,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             if(innitStepCount == 0)  saveInitialStepCount();
             //The first time we start the app we save the current step count so far
             float steps = newStepCount - innitStepCount;
-            stepCountTxt.setText("Today's Steps: \n" +  String.valueOf((int) steps));
+            stepCountTxt.setText(resources.getString(R.string.tv_home_step_count) +"\n" +  String.valueOf((int) steps));
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
                 goalProgress = (steps/5000)*100;
@@ -496,7 +498,40 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         bt.setText(resources.getString(R.string.bt_home_daily_goal));
         bt = (Button) elementsForLanguageChange.get(3);
         bt.setText(resources.getString(R.string.bt_home_goal_complete));
+        bt = (Button) elementsForLanguageChange.get(4);
+        bt.setText(resources.getString(R.string.bt_home_all_past_activities));
+        tv = (TextView) elementsForLanguageChange.get(5);
+        tv.setText(resources.getString(R.string.tv_home_step_count));
 
+    }
+
+
+    private void convertDailyGoal()
+    {
+        innitdailyGoal = dailyGoal;
+        switch(dailyGoal) {
+            case "Walk 5000 Steps":
+                dailyGoal = resources.getString(R.string.goal_walk_5000_steps);
+                break;
+            case "Walk 10000 Steps":
+                dailyGoal = resources.getString(R.string.goal_walk_10000_steps);
+                break;
+            case "Drink 2L Water":
+                dailyGoal = resources.getString(R.string.goal_drink_water);
+                break;
+            case "Clean":
+                dailyGoal = resources.getString(R.string.goal_clean);
+                break;
+            case "Go for a Walk":
+                dailyGoal = resources.getString(R.string.goal_go_for_a_walk);
+                break;
+            case "Meditate":
+                dailyGoal = resources.getString(R.string.goal_meditate);
+                break;
+            case "Do a Workout":
+                dailyGoal = resources.getString(R.string.goal_do_a_workout);
+                break;
+        }
     }
 
 }

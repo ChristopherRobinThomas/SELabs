@@ -4,65 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d804fe6b-b8df-4609-80f8-1b2052889607" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/workflow.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/androidTest/java/com/example/se_lab_23b02/DataSavingHelperTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/JSONObjectCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/LocaleHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/MultiUserActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/MultiUserCreateNewUserFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/MultiUserLoginFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/MultiUserMainFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/SingleIntervention.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/activity_multi_user.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_multi_user_create_new_user.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_multi_user_login.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_multi_user_main.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_single_intervention.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/values-de/strings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/values-en/strings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/values-fr/strings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/main/res/xml/pie_segment_formatter_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/app/src/test/java/com/example/se_lab_23b02/TimeStampTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DailyTaskActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DailyTaskActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DataAccessHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DataAccessHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DataSavingHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DataSavingHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DigitSpanTaskActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/DigitSpanTaskActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HTTPClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HTTPClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeScreenActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeScreenActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/InterventionsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/InterventionsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/OverviewFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/OverviewFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/QuestionnaireActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/QuestionnaireActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/ServerHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/ServerHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/SettingsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/SettingsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/TimeStamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/TimeStamp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/drawable/little_being_okay.png" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/drawable/little_being_okay.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/drawable/little_being_sad.png" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/drawable/little_being_sad.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/activity_questionnaire.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/activity_questionnaire.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_interventions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_interventions.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_overview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_overview.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_settings_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/layout/fragment_settings_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/project/gradle.properties" afterDir="false" />
-    </list>
+    <list default="true" id="d804fe6b-b8df-4609-80f8-1b2052889607" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
