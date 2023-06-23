@@ -423,7 +423,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             if(innitStepCount == 0)  saveInitialStepCount();
             //The first time we start the app we save the current step count so far
             float steps = newStepCount - innitStepCount;
-            stepCountTxt.setText("Today's Steps: \n" + String.valueOf(steps));
+            stepCountTxt.setText("Today's Steps: \n" +  String.valueOf((int) steps));
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
                 goalProgress = (steps/5000)*100;
