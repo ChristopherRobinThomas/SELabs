@@ -30,6 +30,17 @@ public class DataSavingHelper {
         }
         return INSTANCE;
     }
+
+    public String getSelectedLanguage(Context context) {
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        Map<String, String> settingsContents = (Map<String, String>) settings.getAll();
+        if(settingsContents.containsKey("language"))
+            return settingsContents.get("language");
+        saveSettingAsSharedPref("language", "english", context);
+        return "english";
+
+
+    }
     public void saveSettingAsSharedPref(String key, String value, Context context) {
         SharedPreferences settings = context.getSharedPreferences("Settings", 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -43,16 +54,26 @@ public class DataSavingHelper {
         return settingsContents;
     }
 
+    public String getSpecificSettingsFromSharedPref(String keyValue, Context context){
+        SharedPreferences settings = context.getSharedPreferences("Settings", 0);
+        return settings.getString(keyValue, "");
+    }
+
     public void deleteAllSettingsFromSharedPref(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("Settings", 0);
         preferences.edit().clear().apply();
     }
     // Default usage
     public void writeDataToInternalStorage (String filename, String data, Context context) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename += getCurrentUserId(context);
         accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
     }
     // Overload: Access Mode
     public void writeDataToInternalStorage (String filename, String data, Context context, boolean append) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename = getCurrentUserId(context) + filename;
+
         if (append) {
             System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
@@ -70,13 +91,15 @@ public class DataSavingHelper {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-            //Log.e("dsHelper", "To file: "+filename+", wrote: "+data);
+            Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
     public String readSavedDataFromInternalStorage(String filename, Context context) {
+        //Important for multiuser -> everyone gets a file plus it's local ID
+        filename = getCurrentUserId(context) + filename;
         String ret = "";
         try {
             InputStream inputStream = context.openFileInput(filename);
@@ -99,7 +122,14 @@ public class DataSavingHelper {
         } catch (IOException e) {
             Log.e("dsHelper", "Can not read file: " + e.toString());
         }
-        //Log.e("dsHelper", "From file: "+filename+", read: "+ret);
+        Log.i("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
+    }
+
+    private String getCurrentUserId(Context context)
+
+    {
+        User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
+        return String.valueOf(u.getLocalId());
     }
 }

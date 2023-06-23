@@ -169,6 +169,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
+        finish();
     }
 
 

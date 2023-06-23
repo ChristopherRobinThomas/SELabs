@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SE-Lab-23B02</string>
+    <string name="title_activity_main">activité principal</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Strings for the home fragment-->
+    <string name="home_heading">maison</string>
+    <string name="tv_home_title">écran d\'accueil</string>
+    <string name="bt_home_questionnaire">questionnaire</string>
+    <string name="bt_home_daily_goal">choisir un objectif quotidien</string>
+    <string name="bt_home_goal_complete">marquer l\'objectif terminé</string>
+
+
+    <!-- Strings for the overview fragment-->
+    <string name="overview_heading">analyse</string>
+
+
+    <!-- Strings for the interventions fragment-->
+    <string name="interventions_heading">interventions</string>
+
+
+    <!-- Strings for the settings fragment-->
+    <string name="settings_heading">paramètres</string>
+    <string name="settings_title">apparence</string>
+    <string name="tv_settings_language_title">sélection de la langue</string>
+    <string name="tv_settings_select_color">thème de couleur</string>
+    <string name="tv_settings_settings_sensor">Configurer les capteurs</string>
+    <string name="tv_settings_step_counter">pédomètre</string>
+    <string name="tv_settings_accel">accéléromètre</string>
+    <string name="tv_settings_notification_title">paramètres de notification</string>
+    <string name="tv_settings_morning_notification">matin</string>
+    <string name="tv_settings_noon_notification">midi</string>
+    <string name="tv_settings_evening_notification">soir</string>
+    <string name="bt_settings_delete_data">supprimer toutes les données personnelles</string>
+    <string name="bt_send">Envoyer</string>
+    <string name="tv_questionnaire_q8_2">Depuis le dernier questionnaire, j\'ai été en colère ou agressif envers une autre personne, ce que j\'ai regretté plus tard.</string>
+    <string name="tv_questionnaire_q8_1">Depuis le dernier questionnaire, j\'ai réagi de manière impulsive, c\'est-à-dire que j\'ai agi sans penser aux conséquences potentielles.</string>
+    <string name="tv_questionnaire_q7_2">Actuellement, je pense à moi-même que je suis un échec.</string>
+    <string name="tv_questionnaire_q7_1">Actuellement je suis satisfait de moi.</string>
+    <string name="tv_questionnaire_q6_4">Pendant longtemps après que je me sois battu ou qu\'un désaccord soit réglé, mes réflexions sur ces événements refont surface.</string>
+    <string name="tv_questionnaire_q6_3">Parfois, j\'ai du mal à arrêter de penser à moi.</string>
+    <string name="tv_questionnaire_q6_2">J\'ai souvent l\'impression que des choses resurgissent dans ma tête que j\'ai dites ou faites dans le passé.</string>
+    <string name="tv_questionnaire_q6_1">Mon attention est souvent focalisée sur des caractéristiques de moi-même auxquelles je ne veux pas penser</string>
+    <string name="tv_questionnaire_q5_1">Où es-tu actuellement?</string>
+    <string name="tv_questionnaire_q4_1">Qui est autour de vous en ce moment ?</string>
+    <string name="tv_questionnaire_q3_1">Lorsque vous pensez aux personnes qui vous entourent en ce moment, comment l\'énoncé suivant s\'applique-t-il ? \"Je n\'aime pas ces gens\"</string>
+    <string name="rb_questionnaire_q3_no">Non</string>
+    <string name="rb_questionnaire_q3_yes">Oui</string>
+    <string name="tv_questionnaire_q3">Es-tu seul en ce moment ?</string>
+    <string name="tv_questionnaire_q2_3">Quelle a été l\'intensité de l\'événement le plus positif ?</string>
+    <string name="tv_questionnaire_q2_2">Quelle a été l\'intensité de l\'événement le plus négatif ?</string>
+    <string name="tv_questionnaire_q2">Depuis le dernier questionnaire, avez-vous vécu une ou plusieurs expériences négatives ?</string>
+    <string name="tv_questionnaire_q1_6">Au cours des dernières 24 heures, je me suis senti : Fatigué/Éveillé</string>
+    <string name="tv_questionnaire_q1_5">Au cours des dernières 24 heures, je me suis senti : plein d\'énergie/sans énergie</string>
+    <string name="tv_questionnaire_q1_4">Au cours des dernières 24 heures, je me suis senti : détendu/tendu</string>
+    <string name="tv_questionnaire_q1_3">Au cours des dernières 24 heures, je me suis senti : bien/mal</string>
+    <string name="tv_questionnaire_q1_2">Au cours des dernières 24 heures, je me suis senti : Agité/Calme</string>
+    <string name="tv_questionnaire_q1_1">Au cours des dernières 24 heures, je me suis senti : Satisfait/Insatisfait</string>
+    <string name="et_questionnaire_additional_notes">notes complémentaires...</string>
+    <string name="bt_overview_health_index">score de santé mentale</string>
+    <string name="bt_overview_interventions_graph">activités physiques</string>
+    <string name="bt_overview_task_distribution">Répartition des tâches quotidiennes</string>
+    <string name="tv_overview_no_data">pas de données disponibles</string>
+    <string name="bt_settings_logout">déconnecter</string>
+
+
+    <string-array name="languages">
+        <item>english</item>
+        <item>deutsch</item>
+        <item>francais</item>
+    </string-array>
+    <string-array name="colortheme">
+        <item>bleu</item>
+        <item>rouge</item>
+        <item>verte</item>
+    </string-array>
+    <string-array name="darkmode">
+        <item>white-mode</item>
+        <item>dark-mode</item>
+        <item>harmoniser OS</item>
+    </string-array>
+</resources>

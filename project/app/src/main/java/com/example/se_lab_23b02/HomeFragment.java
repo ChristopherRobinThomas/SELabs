@@ -6,6 +6,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,12 +14,11 @@ import android.hardware.SensorManager;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
+import android.system.Os;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +28,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.sql.Time;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -41,6 +51,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +77,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     //---------Variables--------
     private String dailyGoal;
-
     private String todaysDate;
     private String date;
 
@@ -77,16 +87,19 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private int overallWellBeing;
 
     //--------GUI Element-----
-    ProgressBar dailyGoalProgressBar;
-    Button pickDailyGoalButton;
-    Button markGoalAsCompleteButton;
-    Button seeAllPastActivitiesButton;
-    TextView dailyGoalTxt;
-    Button questionnaireButton;
-    ImageButton littleBeingButton;
-    TextView stepCountTxt;
+    private ProgressBar dailyGoalProgressBar;
+    private Button pickDailyGoalButton;
+    private Button markGoalAsCompleteButton;
+    private Button seeAllPastActivitiesButton;
+    private TextView dailyGoalTxt;
+    private Button questionnaireButton;
+    private ImageButton littleBeingButton;
+    private TextView stepCountTxt;
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
 
-
+    //--------Context and Resources for Language----
+    private Context context;
+    private Resources resources;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -125,16 +138,20 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        System.out.println("StepCount" + String.valueOf(innitStepCount));
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        questionnaireButton = view.findViewById(R.id.QuestionnaireButton);
-        pickDailyGoalButton = view.findViewById(R.id.DailyGoalButton);
-        markGoalAsCompleteButton = view.findViewById(R.id.GoalCompleteButton);
+        questionnaireButton = view.findViewById(R.id.btHomeQuestionnaire);
+        pickDailyGoalButton = view.findViewById(R.id.btHomeDailyGoal);
+        markGoalAsCompleteButton = view.findViewById(R.id.btHomeGoalComplete);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+
+        elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeDailyGoal));
+        elementsForLanguageChange.add(view.findViewById(R.id.btHomeGoalComplete));
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -145,8 +162,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         setUpProgress();
         updateLittleBeing();
 
-
-
+        // set text according to the language
+        refreshResources();
+        setLanguage();
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,8 +173,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 startActivity(myIntent);
             }
         });
+
         pickDailyGoalButton.setOnClickListener(new View.OnClickListener()
         {
+
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v)
@@ -164,14 +184,19 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
                 if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                if(Integer.parseInt(Build.VERSION.SDK) > 28) {
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+                    } else {
+                        Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
+                        startActivity(myIntent);
+                    }
                 } else {
                     Intent myIntent = new Intent(getActivity(),DailyTaskActivity.class);
                     startActivity(myIntent);
                 }
 
-
-            }
-        });
+            });
         markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
@@ -256,7 +281,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         {
             markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
             dailyGoalTxt.setText("You achieved today's goal!");
-
         }
         else{
             dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
@@ -270,6 +294,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void updateLittleBeing()
     {
+
         dataAccessHelper = DataAccessHelper.getInstance();
         try
         {
@@ -312,7 +337,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void markGoalAsComplete()
     {
-
         updateProgress();
         updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
@@ -337,8 +361,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private int getNumberOfTodaysQuestionnaires()
     {
-
-
         dataAccessHelper = DataAccessHelper.getInstance();
         try
         {
@@ -445,6 +467,35 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getActivity().getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getActivity().getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+    private void setLanguage() {
+        TextView tv = (TextView) elementsForLanguageChange.get(0);
+        tv.setText(resources.getString(R.string.tv_home_title));
+        Button bt = (Button) elementsForLanguageChange.get(1);
+        bt.setText(resources.getString(R.string.bt_home_questionnaire));
+        bt = (Button) elementsForLanguageChange.get(2);
+        bt.setText(resources.getString(R.string.bt_home_daily_goal));
+        bt = (Button) elementsForLanguageChange.get(3);
+        bt.setText(resources.getString(R.string.bt_home_goal_complete));
 
     }
 
