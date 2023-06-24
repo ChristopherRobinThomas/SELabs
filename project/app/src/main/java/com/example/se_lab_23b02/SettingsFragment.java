@@ -258,6 +258,7 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
+
                 dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
