@@ -32,17 +32,17 @@
 
 
     <!-- Strings for the settings fragment-->
-    <string name="settings_heading">paramètres</string>
-    <string name="settings_title">apparence</string>
-    <string name="tv_settings_language_title">sélection de la langue</string>
-    <string name="tv_settings_select_color">thème de couleur</string>
+    <string name="settings_heading">Paramètres</string>
+    <string name="settings_title">Apparence</string>
+    <string name="tv_settings_language_title">Sélection de la langue</string>
+    <string name="tv_settings_select_color">Thème de couleur</string>
     <string name="tv_settings_settings_sensor">Configurer les capteurs</string>
-    <string name="tv_settings_step_counter">pédomètre</string>
-    <string name="tv_settings_accel">accéléromètre</string>
-    <string name="tv_settings_notification_title">paramètres de notification</string>
-    <string name="tv_settings_morning_notification">matin</string>
-    <string name="tv_settings_noon_notification">midi</string>
-    <string name="tv_settings_evening_notification">soir</string>
+    <string name="tv_settings_step_counter">Pédomètre</string>
+    <string name="tv_settings_accel">Accéléromètre</string>
+    <string name="tv_settings_notification_title">Paramètres de notification</string>
+    <string name="tv_settings_morning_notification">Matin</string>
+    <string name="tv_settings_noon_notification">Midi</string>
+    <string name="tv_settings_evening_notification">Soir</string>
     <string name="bt_settings_delete_data">supprimer toutes les données personnelles</string>
     <string name="bt_send">Envoyer</string>
     <string name="tv_questionnaire_q8_2">Depuis le dernier questionnaire, j\'ai été en colère ou agressif envers une autre personne, ce que j\'ai regretté plus tard.</string>

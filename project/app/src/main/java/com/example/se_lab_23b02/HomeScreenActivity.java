@@ -91,12 +91,12 @@ public class HomeScreenActivity extends AppCompatActivity {
     {
         contextForColor = this.getApplicationContext();
         String test = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        binding.bottomNavigation.setBackgroundColor(contextForColor.getColor(com.androidplot.R.color.ap_transparent));
         binding.bottomNavigation.getBackground().setAlpha(64);
         switch(test)
         {
             case "dark-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                binding.bottomNavigation.setBackgroundColor(contextForColor.getColor(R.color.dark_mode_blue_secondary));
                 break;
             case "white-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

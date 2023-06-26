@@ -40,6 +40,12 @@ public class MultiUserMainFragment extends Fragment {
     private ConstraintLayout constraintLayout;
     private DataSavingHelper dsHelper;
 
+
+    private Button topLeft;
+    private Button topRight;
+    private Button bottomLeft;
+    private Button bottomRight;
+
     public MultiUserMainFragment() {
         // Required empty public constructor
     }
@@ -76,10 +82,10 @@ public class MultiUserMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_main, container, false);
-        Button topLeft = view.findViewById(R.id.ButtonTopLeft);
-        Button topRight = view.findViewById(R.id.ButtonTopRight);
-        Button bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
-        Button bottomRight = view.findViewById(R.id.ButtonBottomRight);
+        topLeft = view.findViewById(R.id.ButtonTopLeft);
+        topRight = view.findViewById(R.id.ButtonTopRight);
+        bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
+        bottomRight = view.findViewById(R.id.ButtonBottomRight);
         constraintLayout = view.findViewById(R.id.multiUserMainFragment);
 
         //DataStorage
@@ -252,6 +258,10 @@ public class MultiUserMainFragment extends Fragment {
 
     private void setColorTheme()
     {
+        topLeft.getBackground().setAlpha(10);
+        bottomRight.getBackground().setAlpha(10);
+        bottomLeft.getBackground().setAlpha(10);
+        topRight.getBackground().setAlpha(10);
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);

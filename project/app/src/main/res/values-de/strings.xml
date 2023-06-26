@@ -45,9 +45,9 @@
     <string name="tv_settings_step_counter">Schrittzähler</string>
     <string name="tv_settings_accel">Beschleunigungssensor</string>
     <string name="tv_settings_notification_title">Benachrichtungseinstellung</string>
-    <string name="tv_settings_morning_notification">morgens</string>
-    <string name="tv_settings_noon_notification">mittags</string>
-    <string name="tv_settings_evening_notification">abends</string>
+    <string name="tv_settings_morning_notification">Morgens</string>
+    <string name="tv_settings_noon_notification">Mittags</string>
+    <string name="tv_settings_evening_notification">Abends</string>
     <string name="bt_settings_delete_data">alle personenbezogenen Daten löschen</string>
     <string name="bt_send">abschicken</string>
     <string name="tv_questionnaire_q8_2">Seit dem letzten Fragebogen war ich einer anderen Person gegenüber wütend oder aggressiv, was ich später bereute.</string>

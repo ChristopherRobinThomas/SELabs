@@ -287,6 +287,20 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
     private void setColorTheme()
     {
+        button0.getBackground().setAlpha(128);
+        button1.getBackground().setAlpha(128);
+        button2.getBackground().setAlpha(128);
+        button3.getBackground().setAlpha(128);
+        button4.getBackground().setAlpha(128);
+        button5.getBackground().setAlpha(128);
+        button5.getBackground().setAlpha(128);
+        button6.getBackground().setAlpha(128);
+        button7.getBackground().setAlpha(128);
+        button8.getBackground().setAlpha(128);
+        button9.getBackground().setAlpha(128);
+        exitButton.getBackground().setAlpha(64);
+        startingButton.getBackground().setAlpha(20);
+
         contextForColor = this.getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);

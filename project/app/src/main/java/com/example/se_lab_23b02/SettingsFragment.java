@@ -207,6 +207,7 @@ public class SettingsFragment extends Fragment {
                 }
 
                 dsHelper.saveSettingAsSharedPref("color", val, contextForSharedPreferences);
+                setColorTheme();
 
             }
 
@@ -230,6 +231,7 @@ public class SettingsFragment extends Fragment {
                         break;
                 }
                 dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
+                setColorTheme();
             }
 
             @Override

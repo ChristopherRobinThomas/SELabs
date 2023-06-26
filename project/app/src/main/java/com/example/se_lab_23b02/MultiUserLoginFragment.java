@@ -36,9 +36,10 @@ public class MultiUserLoginFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
     private String password;
 
+    private Button btnBack;
+    private Button btnLogin;
     private Context contextForColor;
     private ConstraintLayout constraintLayout;
     private DataSavingHelper dsHelper;
@@ -80,6 +81,8 @@ public class MultiUserLoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_login, container, false);
         TextView username = view.findViewById(R.id.Login_Name);
+        btnBack = view.findViewById(R.id.BackButton);
+        btnLogin = view.findViewById(R.id.LoginButton);
         username.setText(mParam1);
         constraintLayout = view.findViewById(R.id.multiUserLoginFragment);
         setColorTheme();
@@ -122,6 +125,8 @@ public class MultiUserLoginFragment extends Fragment {
 
     private void setColorTheme()
     {
+        btnLogin.getBackground().setAlpha(10);
+        btnBack.getBackground().setAlpha(10);
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);

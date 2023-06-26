@@ -32,6 +32,8 @@ public class MultiUserCreateNewUserFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button back;
+    private Button NewUser;
 
     private Context contextForColor;
     private ConstraintLayout constraintLayout;
@@ -74,7 +76,8 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_create_new_user, container, false);
 
-        Button back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
         constraintLayout = view.findViewById(R.id.multiUserCreateNewUserFragment);
         setColorTheme();
         back.setOnClickListener(new View.OnClickListener()
@@ -88,7 +91,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
             }
         });
 
-        Button NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+
         TextInputEditText usernameTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_UsernameTextField);
         TextInputEditText passwordTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_PasswordTextField);
         NewUser.setOnClickListener(new View.OnClickListener()
@@ -161,6 +164,8 @@ public class MultiUserCreateNewUserFragment extends Fragment {
 
     private void setColorTheme()
     {
+        back.getBackground().setAlpha(10);
+        NewUser.getBackground().setAlpha(10);
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);

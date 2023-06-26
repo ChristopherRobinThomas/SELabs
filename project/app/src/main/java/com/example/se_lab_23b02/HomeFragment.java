@@ -550,6 +550,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         questionnaireButton.getBackground().setAlpha(10);
         seeAllPastActivitiesButton.getBackground().setAlpha(10);
         pickDailyGoalButton.getBackground().setAlpha(10);
+        markGoalAsCompleteButton.getBackground().setAlpha(10);
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
