@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +16,9 @@ import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
@@ -97,11 +101,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private ImageButton littleBeingButton;
     private TextView stepCountTxt;
     private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+    private ConstraintLayout constraintLayout;
 
     //--------Context and Resources for Language----
     private Context context;
     private Resources resources;
 
+
+    private Context contextForColor;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -148,6 +155,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+        constraintLayout = view.findViewById(R.id.homeFragment);
 
         elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
@@ -159,6 +167,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
+        setColorTheme();
 
         // set text according to the language
         refreshResources();
@@ -534,4 +543,50 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
+
+    //----------Color Functions ---------------------
+    private void setColorTheme()
+    {
+        questionnaireButton.getBackground().setAlpha(10);
+        seeAllPastActivitiesButton.getBackground().setAlpha(10);
+        pickDailyGoalButton.getBackground().setAlpha(10);
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
+    }
 }

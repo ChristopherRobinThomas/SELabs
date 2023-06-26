@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MultiUserCreateNewUserFragment">
+    tools:context=".MultiUserCreateNewUserFragment"
+    android:id="@+id/multiUserCreateNewUserFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -101,7 +102,7 @@
             android:id="@+id/CreateNewUser_BackButton"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="100dp"
             android:text="Back"
             android:textSize="20dp"

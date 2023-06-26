@@ -1,7 +1,9 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -36,6 +38,10 @@ public class InterventionsFragment extends Fragment {
     Button buttonIntervention2;
     Button buttonIntervention3;
 
+
+    private LinearLayout linearLayout;
+    private Context contextForColor;
+    private DataSavingHelper dsHelper;
 
 
     public InterventionsFragment() {
@@ -76,6 +82,7 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
+        linearLayout = view.findViewById(R.id.interventionsFragment);
         Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
         // TODO: Read from localStorage
         // populateButtonList(interventionList, view);
@@ -93,6 +100,7 @@ public class InterventionsFragment extends Fragment {
                 openSingleInterventionFragment(b.getText().toString());
             });
         }
+        setColorTheme();
         
         return view;
     }
@@ -118,6 +126,54 @@ public class InterventionsFragment extends Fragment {
             ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
             ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
             cl.addView(newButton, lp);
+        }
+    }
+
+
+
+
+
+
+    private void setColorTheme()
+    {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
         }
     }
 }

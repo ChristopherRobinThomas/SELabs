@@ -2,6 +2,8 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,6 +66,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
     private Context context;
     private Resources resources;
 
+    //---------Conext and Layout for Theme-----------
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+
     //---------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonOwnDailyTask = findViewById(R.id.buttonOwnDailyGoal);
         buttonSaveDailyTask = findViewById(R.id.buttonSaveDailyTask);
         txtChosenDailyGoal = findViewById(R.id.txtChosenDailyGoal);
+        constraintLayout = findViewById(R.id.dailyTaskActivity);
 
 
         buttonX.setOnClickListener(this);
@@ -111,6 +119,8 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         // set text according to the language
         refreshResources();
         setLanguage();
+
+        setColorTheme();
 
         buttonSaveDailyTask.setEnabled(false);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -291,5 +301,61 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         bt = (Button) elementsForLanguageChange.get(10);
         bt.setText(resources.getString(R.string.bt_daily_goal_save_daily_goal));
 
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        buttonX.getBackground().setAlpha(10);
+        buttonWalk5000Steps.getBackground().setAlpha(10);
+        buttonWalk10000Steps.getBackground().setAlpha(10);
+        buttonClean.getBackground().setAlpha(10);
+        buttonWorkout.getBackground().setAlpha(10);
+        buttonMeditate.getBackground().setAlpha(10);
+        buttonOwnDailyTask.getBackground().setAlpha(10);
+        buttonGoForAWalk.getBackground().setAlpha(10);
+        buttonDrinkWater.getBackground().setAlpha(10);
+        buttonSaveDailyTask.getBackground().setAlpha(10);
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
     }
 }

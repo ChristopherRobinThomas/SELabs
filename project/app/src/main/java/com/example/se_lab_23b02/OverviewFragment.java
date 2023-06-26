@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Pair;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.pie.PieChart;
+import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
@@ -64,6 +67,10 @@ public class OverviewFragment extends Fragment {
     private TextView tvInfo;
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
+
+    private Button btShowHealthGraph;
+    private Button btNumOfInterventions;
+    private Button btNumOfActivities;
     private int currentTypeToPlot = 0;
 
     private Context context;
@@ -72,6 +79,9 @@ public class OverviewFragment extends Fragment {
 
     private LocalDateTime dateLB;
     private LocalDateTime dateUB;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -114,12 +124,20 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
+        constraintLayout = view.findViewById(R.id.overviewFragment);
+        //button changes current Plot type and updates Plot (bar graph)
+        btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
+        // show xy Plot by changing currentTypeToPlot to 0 and updating the graph
+        btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
+        // show barchart by setting currentTypeToPlot to 2
+        btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
 
 
         // language changing
         elementsForLanguageChange.add(view.findViewById(R.id.btHealthIndex));
         elementsForLanguageChange.add(view.findViewById(R.id.btIntervention));
         elementsForLanguageChange.add(view.findViewById(R.id.btDistributionOfDailytasks));
+        setColorTheme();
         refreshResources();
         setLanguage();
 
@@ -144,8 +162,7 @@ public class OverviewFragment extends Fragment {
         tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
 
-        //button changes current Plot type and updates Plot (bar graph)
-        Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
+
         btNumOfInterventions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,8 +175,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        // show xy Plot by changing currentTypeToPlot to 0 and updating the graph
-        Button btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
+
         btShowHealthGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,8 +188,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        // show barchart by setting currentTypeToPlot to 2
-        Button btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
+
         btNumOfActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -451,5 +466,52 @@ public class OverviewFragment extends Fragment {
         bt.setText(resources.getString(R.string.bt_overview_interventions_graph));
         bt = (Button) elementsForLanguageChange.get(2);
         bt.setText(resources.getString(R.string.bt_overview_task_distribution));
+    }
+
+
+    private void setColorTheme()
+    {
+        btNumOfActivities.getBackground().setAlpha(10);
+        btNumOfInterventions.getBackground().setAlpha(10);
+        btShowHealthGraph.getBackground().setAlpha(10);
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
     }
 }

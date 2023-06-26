@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -47,6 +50,10 @@ public class SettingsFragment extends Fragment {
     private DataSavingHelper dsHelper;
     private HashMap<String, String> settings;
     private ArrayList<Object> textViews = new ArrayList<>();
+
+    private Context contextForColor;
+
+    private LinearLayout linearLayout;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -114,6 +121,8 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
         resources = context.getResources();
 
+        linearLayout = view.findViewById(R.id.settingsFragment);
+
         // add textviews for language change
         textViews.add(view.findViewById(R.id.tvSettingsApperance));
         textViews.add(view.findViewById(R.id.tvSettingsLanguage));
@@ -144,6 +153,7 @@ public class SettingsFragment extends Fragment {
 
         saveDefaultValuesInSettings();
         setAllStrings();
+        setColorTheme();
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
@@ -494,6 +504,51 @@ public class SettingsFragment extends Fragment {
         if(settings.containsKey("dmValue")) {
             int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
             spDMode.setSelection(spinnerPosition);
+        }
+    }
+
+
+
+    private void setColorTheme()
+    {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
         }
     }
 

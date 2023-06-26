@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +16,9 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     private ActivityHomeScreenBinding binding;
 
+    private Context contextForColor;
+    private DataSavingHelper dsHelper;
+
     private Context context;
     private Resources resources;
     @Override
@@ -22,7 +26,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        setColorTheme();
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
 
@@ -30,6 +34,7 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
+            setColorTheme();
             refreshResources();
             switch(item.getItemId())
             {
@@ -80,5 +85,24 @@ public class HomeScreenActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void setColorTheme()
+    {
+        contextForColor = this.getApplicationContext();
+        String test = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        binding.bottomNavigation.getBackground().setAlpha(64);
+        switch(test)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                binding.bottomNavigation.setBackgroundColor(contextForColor.getColor(R.color.dark_mode_blue_secondary));
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "match OS":
+                break;
+        }
     }
 }

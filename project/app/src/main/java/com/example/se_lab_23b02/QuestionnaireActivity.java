@@ -1,6 +1,8 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,6 +65,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private Context context;
     private Resources resources;
 
+    private Button sendButton;
+
+
+    //-----------GUI Elements for Themes------------
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +105,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         refreshResources();
         setLanguage();
+
+        sendButton = findViewById(R.id.Send_Button);
+        constraintLayout = findViewById(R.id.questionnaireActivity);
+        setColorTheme();
 
         manageQuestions();
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
@@ -541,5 +554,53 @@ public class QuestionnaireActivity extends AppCompatActivity {
         bt.setText(resources.getString(R.string.bt_send));
         EditText et = (EditText) elementsForLanguageChange.get(22);
         et.setHint(resources.getString(R.string.et_questionnaire_additional_notes));
+    }
+
+
+
+
+
+    private void setColorTheme()
+    {
+        sendButton.getBackground().setAlpha(10);
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
     }
 }

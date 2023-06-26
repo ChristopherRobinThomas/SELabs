@@ -1,7 +1,10 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +32,9 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     private int numberOfRounds;
     private int initSpanLength = 2;
     private int maxReachedNumbers = 0;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
 
     String[] spanNumbers;
 
@@ -74,6 +80,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         startingButton = findViewById(R.id.startButton);
         exitButton = findViewById(R.id.exitButton);
         numberField = findViewById(R.id.numberView);
+        constraintLayout = findViewById(R.id.digitSpanTaskActivity);
 
         inputField = findViewById(R.id.inputView);
         button0 = findViewById(R.id.button0);
@@ -103,6 +110,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
         inputCount = 0;
         switchNumberButtons(false);
+        setColorTheme();
 
     }
 
@@ -271,6 +279,51 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         {
             inputField.setText(input);
             inputCount++;
+        }
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
         }
     }
 

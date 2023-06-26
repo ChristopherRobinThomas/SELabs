@@ -1,8 +1,11 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,6 +38,10 @@ public class MultiUserLoginFragment extends Fragment {
 
 
     private String password;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+    private DataSavingHelper dsHelper;
 
     public MultiUserLoginFragment() {
         // Required empty public constructor
@@ -74,6 +81,8 @@ public class MultiUserLoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_multi_user_login, container, false);
         TextView username = view.findViewById(R.id.Login_Name);
         username.setText(mParam1);
+        constraintLayout = view.findViewById(R.id.multiUserLoginFragment);
+        setColorTheme();
 
         //BackButton
         view.findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
@@ -107,5 +116,49 @@ public class MultiUserLoginFragment extends Fragment {
         });
 
         return view;
+    }
+
+
+
+    private void setColorTheme()
+    {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
     }
 }

@@ -1,7 +1,10 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,6 +35,10 @@ public class MultiUserMainFragment extends Fragment {
     private String mParam2;
 
     private ArrayList<Button> buttons;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+    private DataSavingHelper dsHelper;
 
     public MultiUserMainFragment() {
         // Required empty public constructor
@@ -73,6 +80,7 @@ public class MultiUserMainFragment extends Fragment {
         Button topRight = view.findViewById(R.id.ButtonTopRight);
         Button bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
         Button bottomRight = view.findViewById(R.id.ButtonBottomRight);
+        constraintLayout = view.findViewById(R.id.multiUserMainFragment);
 
         //DataStorage
         ArrayList<User> users;
@@ -89,7 +97,7 @@ public class MultiUserMainFragment extends Fragment {
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserThree","",getContext());
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserFour","",getContext());
         }
-
+        setColorTheme();
         users = getAllLoggedInUsers();
         //Log.d("User Length", String.valueOf(users.size()));
         buttonSetup(view, users);
@@ -239,6 +247,49 @@ public class MultiUserMainFragment extends Fragment {
     {
         DataSavingHelper dsh = DataSavingHelper.getInstance();
         dsh.saveSettingAsSharedPref("ActiveUser",u.toString(),getContext());
+    }
+
+
+    private void setColorTheme()
+    {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
     }
 
 }
