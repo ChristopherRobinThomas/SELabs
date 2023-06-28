@@ -11,6 +11,17 @@
     <string name="bt_home_questionnaire">questionnaire</string>
     <string name="bt_home_daily_goal">pick daily goal</string>
     <string name="bt_home_goal_complete">mark goal as complete</string>
+    <string name="bt_home_all_past_activities">see all past activities</string>
+    <string name="tv_home_goal_status_achieved">You achieved today\'s goal!</string>
+    <string name="tv_home_goal_status_not_achieved">Today\'s Goal: \u0020 </string>
+    <string name="tv_home_goal_status_not_picked">Pick a Daily Goal </string>
+    <string name="tv_home_step_count">Today\'s Steps: </string>
+    <string name="toast_little_being_sad">Larry is feeling sad right now. That\'s okay! </string>
+    <string name="toast_little_being_okay">Larry is feeling okay at the moment </string>
+    <string name="toast_little_being_happy">Larry is feeling really happy right now! </string>
+    <string name="toast_daily_goal_achieved">You\'ve completed your daily goal. That makes Larry a bit happier! </string>
+    <string name="toast_three_questionnaires_answered">You\'ve filled out 3 Questionnaires. That makes Larry a bit happier!</string>
+
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analysis</string>
@@ -61,6 +72,7 @@
     <string name="tv_questionnaire_q1_3">In the last 24 hours I felt: Well/Unwell</string>
     <string name="tv_questionnaire_q1_2">In the last 24 hours I felt: Restless/Calm</string>
     <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
+    <string name="et_questionnaire_additional_notes">additional notes...</string>
 
 
     <!-- overview fragment -->
@@ -87,4 +99,22 @@
         <item>match OS</item>
     </string-array>
     <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
+    <string name="bt_settings_logout">Logout</string>
+
+
+    <!-- Strings for the daily goals activity-->
+    <string name="goal_walk_5000_steps">Walk 5.000 Steps</string>
+    <string name="goal_walk_10000_steps">Walk 10.000 Steps</string>
+    <string name="goal_drink_water">Drink 2L Water</string>
+    <string name="goal_clean">Clean</string>
+    <string name="goal_go_for_a_walk">Go for a Walk</string>
+    <string name="goal_meditate">Meditate</string>
+    <string name="goal_do_a_workout">Do a Workout</string>
+    <string name="goal_own_daily_goal">Enter own Daily Goal</string>
+    <string name="bt_daily_goal_save_daily_goal">Save Goal</string>
+    <string name="tv_daily_goal_pick_daily_goal">Pick your Daily Goal</string>
+    <string name="tv_daily_goal_goal_choice">Your choice: \u0020</string>
+    <string name="prompt_cancel">Cancel </string>
+
+
 </resources>

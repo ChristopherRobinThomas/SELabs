@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
 
     <application
         android:allowBackup="true"
@@ -22,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SELab23B02"
         tools:targetApi="31">
+        <activity
+            android:name=".AllPastInterventionsActivity"
+            android:exported="false" />
         <activity
             android:name=".MultiUserActivity"
             android:exported="true" >
@@ -47,12 +51,12 @@
             android:exported="false" />
         <activity
             android:name=".HomeScreenActivity"
-            android:exported="true" />
+            android:exported="true"/>
+
         <activity
             android:name=".TimePickerActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Dialog" />
-
         <receiver android:name=".AlarmReceiver" />
     </application>
 

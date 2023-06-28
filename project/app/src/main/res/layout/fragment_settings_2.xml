@@ -64,7 +64,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="select Language"
+                android:text="@string/tv_settings_language_title"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -89,7 +89,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="select colour"
+                android:text="@string/tv_settings_select_color"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -114,7 +114,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Sensor Settings"
+                android:text="@string/tv_settings_settings_sensor"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="0dp"
                         android:layout_marginTop="25dp"
-                        android:text="Stepcounter Sensor"
+                        android:text="@string/tv_settings_step_counter"
                         android:textSize="24sp" />
 
                     <Switch
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Accelerometer"
+                        android:text="@string/tv_settings_accel"
                         android:textSize="24sp" />
 
                     <Switch
@@ -212,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:text="Notifications"
+                android:text="@string/tv_settings_notification_title"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -240,7 +240,7 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Morning"
+                        android:text="@string/tv_settings_morning_notification"
                         android:textAlignment="viewStart"
                         android:textSize="24sp" />
 
@@ -262,7 +262,7 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Noon"
+                        android:text="@string/tv_settings_noon_notification"
                         android:textSize="24sp" />
 
                     <Button
@@ -282,7 +282,7 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Evening"
+                        android:text="@string/tv_settings_evening_notification"
                         android:textSize="24sp" />
 
                     <Button
@@ -303,11 +303,23 @@
                 android:layout_marginEnd="25dp"
                 android:layout_marginBottom="60dp"
                 android:backgroundTint="#FF0000"
-                android:text="Delete all personal data"
+                android:text="@string/bt_settings_delete_data"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogout" />
+
+            <Button
+                android:id="@+id/btSettingsLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="@string/bt_settings_logout"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 

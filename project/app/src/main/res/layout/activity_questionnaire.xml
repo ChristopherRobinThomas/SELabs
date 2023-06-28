@@ -584,6 +584,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Question8_2Text" />
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tvQuestionnaireAdditionalNotes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:ems="10"
+                android:hint="@string/et_questionnaire_additional_notes"
+                android:inputType="textLongMessage|textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question8_2Slider" />
+
             <Button
                 android:id="@+id/Send_Button"
                 android:layout_width="match_parent"
@@ -595,7 +609,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Question8_2Slider" />
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestionnaireAdditionalNotes"
+                 />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

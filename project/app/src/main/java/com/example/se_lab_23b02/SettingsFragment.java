@@ -111,9 +111,6 @@ public class SettingsFragment extends Fragment {
             context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
         }
 
-
-
-
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
         resources = context.getResources();
 
@@ -130,6 +127,7 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.tvSettingsNoon));
         textViews.add(view.findViewById(R.id.tvSettingsEvening));
         textViews.add(view.findViewById(R.id.btDeleteData));
+        textViews.add(view.findViewById(R.id.btSettingsLogout));
 
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -142,6 +140,7 @@ public class SettingsFragment extends Fragment {
         Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
         Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
+        Button btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -259,6 +258,7 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
+
                 dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
@@ -333,6 +333,15 @@ public class SettingsFragment extends Fragment {
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
                 Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        btLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(myIntent);
             }
         });
 
@@ -458,6 +467,8 @@ public class SettingsFragment extends Fragment {
         tv.setText(resources.getString(R.string.tv_settings_evening_notification));
         Button bt = (Button) textViews.get(11);
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
+        bt = (Button) textViews.get(12);
+        bt.setText(resources.getText(R.string.bt_settings_logout));
     }
 
     public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {

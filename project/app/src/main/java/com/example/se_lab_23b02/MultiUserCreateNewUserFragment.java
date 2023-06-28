@@ -118,6 +118,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                 }
                 Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                 startActivity(myIntent);
+                getActivity().finish();
             }
         });
 

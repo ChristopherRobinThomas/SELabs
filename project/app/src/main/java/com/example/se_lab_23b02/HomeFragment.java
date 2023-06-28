@@ -11,13 +11,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.system.Os;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +39,19 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.sql.Time;
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +79,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private String dailyGoal;
     private String todaysDate;
     private String date;
+    private String innitdailyGoal;
 
     private float goalProgress;
     private boolean running = false;
@@ -79,9 +91,11 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private ProgressBar dailyGoalProgressBar;
     private Button pickDailyGoalButton;
     private Button markGoalAsCompleteButton;
+    private Button seeAllPastActivitiesButton;
     private TextView dailyGoalTxt;
     private Button questionnaireButton;
     private ImageButton littleBeingButton;
+    private TextView stepCountTxt;
     private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
 
     //--------Context and Resources for Language----
@@ -131,27 +145,31 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         markGoalAsCompleteButton = view.findViewById(R.id.btHomeGoalComplete);
         dailyGoalTxt = view.findViewById(R.id.DailyGoalTxt);
         dailyGoalProgressBar = view.findViewById(R.id.DailyGoalProgressBar);
+        littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
+        seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
+        stepCountTxt = view.findViewById(R.id.textViewStepCount);
 
         elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeDailyGoal));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeGoalComplete));
-
-
-        littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
+        elementsForLanguageChange.add(view.findViewById(R.id.SeeAllPastActivitiesButton));
+        elementsForLanguageChange.add(view.findViewById(R.id.textViewStepCount));
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        //Retrieve Daily Goal (If already chosen) from Storage
-        dsHelper = DataSavingHelper.getInstance();
-        getDailyGoalFromStorage();
-        setUpProgress();
-        updateLittleBeing();
 
         // set text according to the language
         refreshResources();
         setLanguage();
+        //Retrieve Daily Goal (If already chosen) from Storage
+        dsHelper = DataSavingHelper.getInstance();
+        getDailyGoalFromStorage();
+        convertDailyGoal();
+        setUpProgress();
+        updateLittleBeing();
+
 
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
@@ -183,9 +201,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 }
             }
         });
-
-
-
         markGoalAsCompleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
@@ -199,16 +214,22 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
 
                 if(overallWellBeing >=0 && overallWellBeing <= 33) {
-                    Toast.makeText(getActivity(),"[Name] is feeling sag right now. That's okay!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_sad), Toast.LENGTH_SHORT).show();
                 }
                 else if(overallWellBeing >=33 && overallWellBeing<66)
                 {
-                    Toast.makeText(getActivity(),"[Name] is feeling okay at the moment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_okay), Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getActivity(),"[Name] is feeling really happy right now!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_little_being_happy), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        seeAllPastActivitiesButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent myIntent = new Intent(getActivity(),AllPastInterventionsActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -238,7 +259,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             {
                 dailyGoal = obj.get("Daily_Task").getAsString();
                 goalProgress = obj.get("Progress").getAsInt();
-                innitStepCount = obj.get("Step_Count").getAsInt();
                 pickDailyGoalButton.setEnabled(false);
                 if(dailyGoal.equals("Walk 5.000 Steps")||dailyGoal.equals("Walk 10.000 Steps"))
                 {
@@ -247,13 +267,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             }
             else
             {
-                dailyGoal = "No Goal chosen yet";
+                dailyGoal = resources.getString(R.string.tv_home_goal_status_not_picked);
                 goalProgress = 0;
                 markGoalAsCompleteButton.setEnabled(false);
             }
 
         }catch(Exception e){
-            dailyGoal = "No Goal chosen yet";
+            dailyGoal = resources.getString(R.string.tv_home_goal_status_not_picked);
             goalProgress = 0;
             markGoalAsCompleteButton.setEnabled(false);
         }
@@ -264,10 +284,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         if(goalProgress==100)
         {
             markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-            dailyGoalTxt.setText("You achieved today's goal!");
+            dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_achieved));
         }
         else{
-            dailyGoalTxt.setText("Today's Goal: "+ dailyGoal);
+            dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_not_achieved) + " " + dailyGoal);
         }
         dailyGoalProgressBar.setProgress((int)goalProgress);
     }
@@ -278,14 +298,22 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void updateLittleBeing()
     {
-
-        dataAccessHelper = DataAccessHelper.getInstance();
         try
         {
             String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",getActivity()).split("\n");
             String questionnaire = questionnaires[questionnaires.length-1];
             try {
-                overallWellBeing = dataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
+                overallWellBeing = DataAccessHelper.calculateHealthScoreFromQuestionaire(questionnaire);
+                if(goalProgress==100)
+                {
+                    overallWellBeing+=33;
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_daily_goal_achieved),Toast.LENGTH_SHORT).show();
+                }
+                else if(getNumberOfTodaysQuestionnaires() == 3)
+                {
+                    overallWellBeing+=33;
+                    Toast.makeText(getActivity(),resources.getString(R.string.toast_three_questionnaires_answered),Toast.LENGTH_LONG).show();
+                }
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -296,10 +324,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             overallWellBeing = 100;
         }
 
-        if(overallWellBeing >= 0 && overallWellBeing <= 33) {
+        if(overallWellBeing >= 0 && overallWellBeing < 33) {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_sad));
         }
-        else if(overallWellBeing > 33 && overallWellBeing < 66)
+        else if(overallWellBeing >= 33 && overallWellBeing < 66)
         {
             littleBeingButton.setBackground(getResources().getDrawable(R.drawable.little_being_okay));
         }
@@ -312,29 +340,84 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private void markGoalAsComplete()
     {
         updateProgress();
+        updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
-        dailyGoalTxt.setText("You achieved today's goal!");
+        dailyGoalTxt.setText(resources.getString(R.string.tv_home_goal_status_achieved));
         todaysDate = TimeStamp.getCurrentTimeStamp();
-
+        dsHelper = DataSavingHelper.getInstance();
+        String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
+        String[] temp2 = temp.split("\n");
         //Save Progress Update to Storage
         JSONObject obj = new JSONObject();
         try {
             obj.put("Date", todaysDate);
-            obj.put("Daily_Task", dailyGoal);
+            obj.put("Daily_Task", innitdailyGoal);
             obj.put("Progress", 100);
-            obj.put("Step_Count", innitStepCount);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
         String data = obj.toString() + "\n";
-
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
     }
+
+
+    private int getNumberOfTodaysQuestionnaires()
+    {
+        dataAccessHelper = DataAccessHelper.getInstance();
+        try
+        {
+            String[] questionnaires = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", getActivity()).split("\n");
+            String temp;
+            int counter = 0;
+            for(int i = questionnaires.length-1; i>0; i--)
+            {
+                temp = questionnaires[i];
+                JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+                date = obj.get("timestamp").getAsString().split(" ")[0];
+                if(date.equals(todaysDate)) counter++;
+                else break;
+            }
+            return counter;
+        }
+        catch(Exception e)
+        {
+            return 0;
+        }
+    }
+
 
 
 
     //---------------Sensor Functions ---------------------
 
+    private void saveInitialStepCount()
+    {
+        String now = TimeStamp.getCurrentTimeStamp();
+        try
+        {
+            //Retrieve Count
+            String temp = dsHelper.readSavedDataFromInternalStorage("TodaysStepCount.txt",getActivity());
+            JsonObject obj = new JsonParser().parse(temp).getAsJsonObject();
+            date = obj.get("Date").getAsString().split(" ")[0];
+            if(todaysDate.equals(date)) innitStepCount = obj.get("StepCount").getAsInt();
+            else throw new Exception();
+        }
+        catch(Exception e)
+        {
+
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("Date",now);
+                obj.put("StepCount",newStepCount);
+            } catch (JSONException ex) {
+                throw new RuntimeException(ex);
+            }
+            String data = obj.toString();
+            //Save Count for the first time
+            dsHelper.writeDataToInternalStorage("TodaysStepCount.txt",data,getActivity(),true);
+            innitStepCount = newStepCount;
+        }
+    }
 
     @Override
     public void onResume()
@@ -359,17 +442,20 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent){
         if(running)
         {
+
             newStepCount = (int) sensorEvent.values[0];
+            if(innitStepCount == 0)  saveInitialStepCount();
+            //The first time we start the app we save the current step count so far
+            float steps = newStepCount - innitStepCount;
+            stepCountTxt.setText(resources.getString(R.string.tv_home_step_count) +"\n" +  String.valueOf((int) steps));
             if(dailyGoal.equals("Walk 5.000 Steps"))
             {
-                float steps = newStepCount - innitStepCount;
                 goalProgress = (steps/5000)*100;
                 updateProgress();
 
             }
             else if(dailyGoal.equals("Walk 10.000 Steps"))
             {
-                float steps = newStepCount - innitStepCount;
                 goalProgress = (steps/10000)*100;
                 updateProgress();
 
@@ -412,7 +498,40 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         bt.setText(resources.getString(R.string.bt_home_daily_goal));
         bt = (Button) elementsForLanguageChange.get(3);
         bt.setText(resources.getString(R.string.bt_home_goal_complete));
+        bt = (Button) elementsForLanguageChange.get(4);
+        bt.setText(resources.getString(R.string.bt_home_all_past_activities));
+        tv = (TextView) elementsForLanguageChange.get(5);
+        tv.setText(resources.getString(R.string.tv_home_step_count));
 
+    }
+
+
+    private void convertDailyGoal()
+    {
+        innitdailyGoal = dailyGoal;
+        switch(dailyGoal) {
+            case "Walk 5000 Steps":
+                dailyGoal = resources.getString(R.string.goal_walk_5000_steps);
+                break;
+            case "Walk 10000 Steps":
+                dailyGoal = resources.getString(R.string.goal_walk_10000_steps);
+                break;
+            case "Drink 2L Water":
+                dailyGoal = resources.getString(R.string.goal_drink_water);
+                break;
+            case "Clean":
+                dailyGoal = resources.getString(R.string.goal_clean);
+                break;
+            case "Go for a Walk":
+                dailyGoal = resources.getString(R.string.goal_go_for_a_walk);
+                break;
+            case "Meditate":
+                dailyGoal = resources.getString(R.string.goal_meditate);
+                break;
+            case "Do a Workout":
+                dailyGoal = resources.getString(R.string.goal_do_a_workout);
+                break;
+        }
     }
 
 }
