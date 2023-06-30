@@ -324,7 +324,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 //delete data here
-                //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences)
+
+                dsHelper.deleteFileFromInternalStorage("Questionaire",getContext());
 
 
                 saveDefaultValuesInSettings();

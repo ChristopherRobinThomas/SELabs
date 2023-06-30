@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
@@ -98,10 +99,15 @@ public class DataSavingHelper {
         }
     }
 
-    public void deleteFileFromInternalStorage(String filename,Context context)
+    public boolean deleteFileFromInternalStorage(String filename,Context context)
     {
+        File toWrite = new File(context.getFilesDir(), filename);
+        if(!toWrite.exists())
+            return false;
+
         filename += getCurrentUserId(context) + filename;
         context.deleteFile(filename);
+        return true;
     }
 
     public String readSavedDataFromInternalStorage(String filename, Context context) {
