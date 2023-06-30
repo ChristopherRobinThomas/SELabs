@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,10 +19,33 @@ public class MultiUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_user);
 
-        //Show the normal Multiuser Fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
-        fragmentTransaction.commit();
+        if(checkForActiveUser()){
+            Intent i = new Intent(this, HomeScreenActivity.class);
+            startActivity(i);
+            finish();
+        }else{
+            //Show the normal Multiuser Fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
+            fragmentTransaction.commit();
+        }
+    }
+
+    private boolean checkForActiveUser(){
+        DataSavingHelper dsh = DataSavingHelper.getInstance();
+        if(dsh.getAllSettingsFromSharedPref(this).containsKey("ActiveUser")){
+            String current = dsh.getAllSettingsFromSharedPref(this).get("ActiveUser");
+
+            if(current.equals(dsh.getAllSettingsFromSharedPref(this).get("UserOne")))
+                return true;
+            if(current.equals(dsh.getAllSettingsFromSharedPref(this).get("UserTwo")))
+                return true;
+            if(current.equals(dsh.getAllSettingsFromSharedPref(this).get("UserThree")))
+                return true;
+            if(current.equals(dsh.getAllSettingsFromSharedPref(this).get("UserFour")))
+                return true;
+        }
+        return false;
     }
 }
