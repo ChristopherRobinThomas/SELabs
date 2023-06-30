@@ -323,9 +323,10 @@ public class SettingsFragment extends Fragment {
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
-
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences)
+
+
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
@@ -512,6 +513,5 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
-
 }
 

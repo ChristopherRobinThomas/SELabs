@@ -97,6 +97,13 @@ public class DataSavingHelper {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
+    public void deleteFileFromInternalStorage(String filename,Context context)
+    {
+        filename += getCurrentUserId(context) + filename;
+        context.deleteFile(filename);
+    }
+
     public String readSavedDataFromInternalStorage(String filename, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
         filename = getCurrentUserId(context) + filename;
@@ -127,9 +134,9 @@ public class DataSavingHelper {
     }
 
     private String getCurrentUserId(Context context)
-
     {
-        User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
+        UserHelper us = UserHelper.getInstance();
+        User u = us.getCurrentUser(context);
         return String.valueOf(u.getLocalId());
     }
 }
