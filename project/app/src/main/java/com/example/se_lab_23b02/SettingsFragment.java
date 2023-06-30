@@ -338,7 +338,24 @@ public class SettingsFragment extends Fragment {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataSavingHelper dsh = DataSavingHelper.getInstance();
+                if(dsh.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser")){
+                    String current = dsh.getAllSettingsFromSharedPref(getContext()).get("ActiveUser");
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne")))
+                        dsh.saveSettingAsSharedPref("UserOne","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo")))
+                        dsh.saveSettingAsSharedPref("UserTwo","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserThree")))
+                        dsh.saveSettingAsSharedPref("UserThree","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour")))
+                        dsh.saveSettingAsSharedPref("UserFour","",getContext());
+
+                    dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
+                }
+
+
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
+
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
             }
