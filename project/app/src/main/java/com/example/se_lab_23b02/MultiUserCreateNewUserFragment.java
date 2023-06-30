@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -95,6 +96,12 @@ public class MultiUserCreateNewUserFragment extends Fragment {
 
                     String username = usernameTextField.getText().toString();
                     String password = passwordTextField.getText().toString();
+
+                    if (username.equals("") || password.equals("")){
+                        Toast.makeText(getContext(), "Please ente username AND password!", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
                     User newUser = new User(localId,username,password);
 
                     DataSavingHelper ds = DataSavingHelper.getInstance();
