@@ -17,11 +17,6 @@ import org.json.JSONObject;
 
 import static android.content.Intent.getIntent;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SingleIntervention#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SingleIntervention extends Fragment {
 
     DataSavingHelper dsHelper;
@@ -79,7 +74,7 @@ public class SingleIntervention extends Fragment {
     public void saveInterventionCompleted() {
         // TODO: checkCompletedIntervention();
 
-        String additionalNotes = new String;
+        String additionalNotes;
         additionalNotes = String.valueOf(et.getText());
 
         String now = TimeStamp.getCurrentTimeStamp();
