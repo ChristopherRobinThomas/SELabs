@@ -74,12 +74,13 @@ public class SingleIntervention extends Fragment {
 
     public void saveInterventionCompleted() {
         // TODO: checkCompletedIntervention();
+        String now = TimeStamp.getCurrentTimeStamp();
         JSONObject j = new JSONObject();
         try {
-            j.put("timestamp", System.currentTimeMillis());
+            j.put("timestamp",now);
             j.put("id", pInterventionID);
             j.put("completed", hasCompletedIntervention);
         } catch (JSONException ignored) {}
-        dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString(), getActivity().getApplicationContext());
+        dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString()+"\n", getActivity().getApplicationContext(),true);
     }
 }
