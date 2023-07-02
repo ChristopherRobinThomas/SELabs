@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -31,6 +32,7 @@ public class SingleIntervention extends Fragment {
     TextView interventionName;
     TextView interventionDesc;
     Button completeButton;
+    EditText et;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -51,6 +53,8 @@ public class SingleIntervention extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
+
+        et = (EditText) view.findViewById(R.id.tvInterventionAdditionalNotes);
 
         // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
         interventionName = view.findViewById(R.id.textView3);
@@ -74,12 +78,17 @@ public class SingleIntervention extends Fragment {
 
     public void saveInterventionCompleted() {
         // TODO: checkCompletedIntervention();
+
+        String additionalNotes = new String;
+        additionalNotes = String.valueOf(et.getText());
+
         String now = TimeStamp.getCurrentTimeStamp();
         JSONObject j = new JSONObject();
         try {
-            j.put("timestamp",now);
+            j.put("timestamp", now);
             j.put("id", pInterventionID);
             j.put("completed", hasCompletedIntervention);
+            j.put("notes", additionalNotes);
         } catch (JSONException ignored) {}
         dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString()+"\n", getActivity().getApplicationContext(),true);
     }
