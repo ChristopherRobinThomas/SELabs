@@ -1,5 +1,7 @@
 package com.example.se_lab_23b02;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -7,10 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import org.json.JSONArray;
@@ -37,10 +41,13 @@ public class InterventionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String m_Text = "";
+
     Button buttonIntervention1;
     Button buttonIntervention2;
     Button buttonIntervention3;
     Button buttonAddNewIntervention;
+    Vector<Button> buttonList;
     Vector<Vector<String>> interventionList;
 
 
@@ -94,16 +101,56 @@ public class InterventionsFragment extends Fragment {
             interventionList.add(sampleInterventionA);
         }
 
-        Vector<Button> buttonList = populateButtonList(interventionList, view);
+        buttonList = populateButtonList(interventionList, view);
         buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
                 openSingleInterventionFragment(b.getText().toString());
             });
         }
-        buttonAddNewIntervention.setOnClickListener(v -> {});
+        buttonAddNewIntervention.setOnClickListener(v -> {
+            showAddInterventionDialogue(view);
+        });
         
         return view;
+    }
+    private void showAddInterventionDialogue(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Title");
+        final EditText input = new EditText(this.getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                addNewIntervention(input.getText().toString(), view);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    private void addNewIntervention(String name, View view) {
+        Vector<String> newIntervention = new Vector<String>();
+        int currHighestIndex = Integer.parseInt(interventionList.get(interventionList.size() - 1).get(0));
+        newIntervention.add(String.valueOf(currHighestIndex + 1));
+        newIntervention.add(name);
+        newIntervention.add("");
+        interventionList.add(newIntervention);
+
+        int newButtonTopMargin = 58 * (interventionList.size() - 1);
+        Button newButton = new Button(this.getContext());
+        newButton.setText(name);
+        ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
+        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
+        lp.topMargin = newButtonTopMargin;
+        cl.addView(newButton, lp);
+        buttonList.add(newButton);
     }
     private void openSingleInterventionFragment(String buttonText) {
         SingleIntervention singleIntervention = new SingleIntervention();
