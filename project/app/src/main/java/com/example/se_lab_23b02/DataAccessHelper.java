@@ -1,6 +1,8 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.Pair;
 
 import org.json.JSONArray;
@@ -16,6 +18,8 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import kotlin.Triple;
@@ -108,9 +112,6 @@ public class DataAccessHelper {
         }
         return outputList;
     }
-
-
-
 
     private int getIndexFromTaskListByString(String taskString) {
         switch (taskString) {
