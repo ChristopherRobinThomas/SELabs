@@ -28,11 +28,11 @@
             <TextView
                 android:id="@+id/Question1_1Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Satisfied/Unsatisfied "
+                android:text="@string/tv_questionnaire_q1_1"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,11 +53,11 @@
             <TextView
                 android:id="@+id/Question1_2Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Restless/Calm"
+                android:text="@string/tv_questionnaire_q1_2"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +78,11 @@
             <TextView
                 android:id="@+id/Question1_3Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Well/Unwell"
+                android:text="@string/tv_questionnaire_q1_3"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -103,11 +103,11 @@
             <TextView
                 android:id="@+id/Question1_4Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Relaxed/Tense"
+                android:text="@string/tv_questionnaire_q1_4"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -129,11 +129,11 @@
             <TextView
                 android:id="@+id/Question1_5Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Full of Energy/Without Energy"
+                android:text="@string/tv_questionnaire_q1_5"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -154,11 +154,11 @@
             <TextView
                 android:id="@+id/Question1_6Text"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="In the last 24 hours I felt: Tired/Awake "
+                android:text="@string/tv_questionnaire_q1_6"
                 android:textAlignment="textStart"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -183,9 +183,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:text="Since the last questionnaire, did you have one or more
-negative experiences?
-"
+                android:text="@string/tv_questionnaire_q2"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -207,13 +205,13 @@ negative experiences?
                     android:id="@+id/Question2Yes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Yes" />
+                    android:text="@string/rb_questionnaire_q3_yes" />
 
                 <RadioButton
                     android:id="@+id/Question2No"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No" />
+                    android:text="@string/rb_questionnaire_q3_no" />
             </RadioGroup>
 
 
@@ -224,7 +222,7 @@ negative experiences?
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="How intense was the most negative event?"
+                android:text="@string/tv_questionnaire_q2_2"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -249,7 +247,7 @@ negative experiences?
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="How intense was the most positive event?"
+                android:text="@string/tv_questionnaire_q2_3"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -275,7 +273,7 @@ negative experiences?
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Are you alone at the moment?"
+                android:text="@string/tv_questionnaire_q3"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -297,13 +295,13 @@ negative experiences?
                     android:id="@+id/Question3Yes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Yes" />
+                    android:text="@string/rb_questionnaire_q3_yes" />
 
                 <RadioButton
                     android:id="@+id/Question3No"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No" />
+                    android:text="@string/rb_questionnaire_q3_no" />
             </RadioGroup>
 
             <TextView
@@ -313,10 +311,7 @@ negative experiences?
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="When you think of the people you are around you right
-now, how does the following statement apply? \n
-“I do not like these people”
-"
+                android:text="@string/tv_questionnaire_q3_1"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -341,7 +336,7 @@ now, how does the following statement apply? \n
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Who is around you right now?"
+                android:text="@string/tv_questionnaire_q4_1"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -368,7 +363,7 @@ now, how does the following statement apply? \n
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Where are you right now?"
+                android:text="@string/tv_questionnaire_q5_1"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -395,8 +390,7 @@ now, how does the following statement apply? \n
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="My attention is often focused on characteristics of myself
-that I don’t want to think about"
+                android:text="@string/tv_questionnaire_q6_1"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -421,8 +415,7 @@ that I don’t want to think about"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="I often have the feeling that things resurface in my head
-that I have said or done in the past. "
+                android:text="@string/tv_questionnaire_q6_2"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -447,8 +440,7 @@ that I have said or done in the past. "
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Sometimes I have a hard time to stop thinking about
-myself. "
+                android:text="@string/tv_questionnaire_q6_3"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -473,8 +465,7 @@ myself. "
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="For a long time after I got into a fight or a disagreement is
-settled, my thoughts about these events resurface."
+                android:text="@string/tv_questionnaire_q6_4"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -499,7 +490,7 @@ settled, my thoughts about these events resurface."
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Currently I’m satisfied with myself. "
+                android:text="@string/tv_questionnaire_q7_1"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -524,7 +515,7 @@ settled, my thoughts about these events resurface."
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Currently I think about myself that I am a failure."
+                android:text="@string/tv_questionnaire_q7_2"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -549,9 +540,7 @@ settled, my thoughts about these events resurface."
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Since the last questionnaire, I reacted impulsive –
-meaning I acted without thinking about potential
-consequences."
+                android:text="@string/tv_questionnaire_q8_1"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -576,8 +565,7 @@ consequences."
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:text="Since the last questionnaire, I have been angry or
-aggressive to another person, which I regretted later on."
+                android:text="@string/tv_questionnaire_q8_2"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -596,6 +584,20 @@ aggressive to another person, which I regretted later on."
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Question8_2Text" />
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tvQuestionnaireAdditionalNotes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:ems="10"
+                android:hint="@string/et_questionnaire_additional_notes"
+                android:inputType="textLongMessage|textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Question8_2Slider" />
+
             <Button
                 android:id="@+id/Send_Button"
                 android:layout_width="match_parent"
@@ -603,11 +605,12 @@ aggressive to another person, which I regretted later on."
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:text="Send"
+                android:text="@string/bt_send"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Question8_2Slider" />
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestionnaireAdditionalNotes"
+                 />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
