@@ -276,7 +276,6 @@ public class ServerHelper {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println("Ergebnis: " + result);
                     if ("-1".equals(result)) {
                         Log.i("sHelper", "Login failed");
                         Toast.makeText(activity, "Login failed, please try again", Toast.LENGTH_LONG).show();
