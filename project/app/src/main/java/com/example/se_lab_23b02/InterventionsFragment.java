@@ -1,5 +1,8 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -88,12 +91,25 @@ public class InterventionsFragment extends Fragment {
         buttonIntervention3 = view.findViewById(R.id.buttonIntervention3);
         buttonList.add(buttonIntervention3);
 
+        Button btRecording = view.findViewById(R.id.btStartRecording);
+
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
                 openSingleInterventionFragment(b.getText().toString());
             });
         }
-        
+
+        btRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SensorManager mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+                Sensor sensor_to_read = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                SensorRecorder sRecorder = new SensorRecorder(getContext());
+                mSensorManager.registerListener(sRecorder, sensor_to_read, SensorManager.SENSOR_DELAY_NORMAL);
+
+            }
+        });
+
         return view;
     }
     private void openSingleInterventionFragment(String buttonText) {
