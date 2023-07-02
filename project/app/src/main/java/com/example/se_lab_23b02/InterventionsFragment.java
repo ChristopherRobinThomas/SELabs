@@ -1,22 +1,23 @@
 package com.example.se_lab_23b02;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -91,7 +92,8 @@ public class InterventionsFragment extends Fragment {
         buttonIntervention3 = view.findViewById(R.id.buttonIntervention3);
         buttonList.add(buttonIntervention3);
 
-        Button btRecording = view.findViewById(R.id.btStartRecording);
+        Button btStartRecording = view.findViewById(R.id.btStartRecording);
+        Button btStopRecording = view.findViewById(R.id.btEndRecording);
 
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
@@ -99,18 +101,47 @@ public class InterventionsFragment extends Fragment {
             });
         }
 
-        btRecording.setOnClickListener(new View.OnClickListener() {
+        btStartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 SensorManager mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
                 Sensor sensor_to_read = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                 SensorRecorder sRecorder = new SensorRecorder(getContext());
                 mSensorManager.registerListener(sRecorder, sensor_to_read, SensorManager.SENSOR_DELAY_NORMAL);
 
+
+                AlarmManager scheduler = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(getActivity().getApplicationContext(), SensorRecorder.class);
+                PendingIntent scheduledIntent = PendingIntent.getService(getActivity().getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                scheduler.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, scheduledIntent);
+                //getActivity().startService(intent);
+                */
+                startService();
+            }
+        });
+        btStopRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService();
             }
         });
 
         return view;
+    }
+
+    private void startService() {
+        Intent serviceIntent = new Intent(getActivity(), SensorForegroundService.class);
+        serviceIntent.putExtra("extras", "start");
+        ContextCompat.startForegroundService(getActivity().getApplicationContext(), serviceIntent);
+    }
+
+    private void stopService() {
+        Intent serviceIntent = new Intent(getActivity(), SensorForegroundService.class);
+        serviceIntent.putExtra("extras", "stop");
+        ContextCompat.startForegroundService(getActivity().getApplicationContext(), serviceIntent);
+
+
     }
     private void openSingleInterventionFragment(String buttonText) {
         SingleIntervention singleIntervention = new SingleIntervention();
