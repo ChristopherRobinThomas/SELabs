@@ -94,7 +94,6 @@ public class InterventionsFragment extends Fragment {
         buttonList.add(buttonIntervention3);
 
         Button btStartRecording = view.findViewById(R.id.btStartRecording);
-        Button btStopRecording = view.findViewById(R.id.btEndRecording);
 
         for (Button b : buttonList) {
             b.setOnClickListener(v -> {
@@ -103,12 +102,6 @@ public class InterventionsFragment extends Fragment {
         }
 
         btStartRecording.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SensorManager.toggleService(getActivity());
-            }
-        });
-        btStopRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SensorManager.toggleService(getActivity());

@@ -3,6 +3,7 @@ package com.example.se_lab_23b02;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -33,12 +34,14 @@ public class SensorManager {
         return false;
     }
     private static void startService(Context context) {
+        Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
         serviceIntent.putExtra("extras", "start");
         ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
     }
 
     private static void stopService(Context context) {
+        Toast.makeText(context, "recording ended", Toast.LENGTH_SHORT).show();
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
         serviceIntent.putExtra("extras", "stop");
         ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
