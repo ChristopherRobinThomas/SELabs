@@ -325,7 +325,23 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v)  {
                 //delete data here
 
-                dsHelper.deleteFileFromInternalStorage("Questionaire",getContext());
+                dsHelper.deleteFileFromInternalStorage("questionnaire.txt",getContext());
+                DataSavingHelper dsh = DataSavingHelper.getInstance();
+
+                if(dsh.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser")){
+                    String current = dsh.getAllSettingsFromSharedPref(getContext()).get("ActiveUser");
+
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne")))
+                        dsh.saveSettingAsSharedPref("UserOne","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo")))
+                        dsh.saveSettingAsSharedPref("UserTwo","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserThree")))
+                        dsh.saveSettingAsSharedPref("UserThree","",getContext());
+                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour")))
+                        dsh.saveSettingAsSharedPref("UserFour","",getContext());
+
+                    dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
+                }
 
 
                 saveDefaultValuesInSettings();
@@ -343,6 +359,8 @@ public class SettingsFragment extends Fragment {
                 DataSavingHelper dsh = DataSavingHelper.getInstance();
                 if(dsh.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser")){
                     String current = dsh.getAllSettingsFromSharedPref(getContext()).get("ActiveUser");
+                    /*
+                    Delete User
                     if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne")))
                         dsh.saveSettingAsSharedPref("UserOne","",getContext());
                     if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo")))
@@ -351,7 +369,7 @@ public class SettingsFragment extends Fragment {
                         dsh.saveSettingAsSharedPref("UserThree","",getContext());
                     if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour")))
                         dsh.saveSettingAsSharedPref("UserFour","",getContext());
-
+                    */
                     dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
                 }
 

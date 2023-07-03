@@ -101,11 +101,12 @@ public class DataSavingHelper {
 
     public boolean deleteFileFromInternalStorage(String filename,Context context)
     {
+        filename = getCurrentUserId(context) + filename;
+
         File toWrite = new File(context.getFilesDir(), filename);
         if(!toWrite.exists())
             return false;
 
-        filename += getCurrentUserId(context) + filename;
         context.deleteFile(filename);
         return true;
     }
