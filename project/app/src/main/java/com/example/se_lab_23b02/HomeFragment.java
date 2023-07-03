@@ -632,6 +632,14 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);
 
+        linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Open Activity that shows Data
+                System.out.println(time[0] + ":" + time[1] + ":" + time[2] + "\n");
+            }
+        });
+
         linearLayout.addView(linearLayoutToAdd);
     }
 

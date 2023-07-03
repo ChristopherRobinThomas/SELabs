@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -110,7 +111,16 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);
 
-        linearLayout.addView(linearLayoutToAdd);
+
+        linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Open Activity that shows Data and übergebe Timestamp
+                System.out.println(time[0] + ":" + time[1] + ":" + time[2] + "\n");
+            }
+        });
+
+        linearLayout.addView(linearLayoutToAdd); 
     }
 }
 
