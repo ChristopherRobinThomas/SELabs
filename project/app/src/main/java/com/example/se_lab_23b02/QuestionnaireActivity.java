@@ -77,13 +77,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
-
+        /*
         if(timeSlotExistsAlready()){
             Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
             startActivity(i);
             finish();
-        }
-
+        }*/
 
         languageChangeSetup();
 
@@ -144,7 +143,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         String text = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",this);
         if(text.equals(""))
             return false;
-        String[] allQuestionnaire = text.split("\n");
+        String[] allQuestionnaire = text.split(System.lineSeparator());
         String timestamp = TimeStamp.getCurrentTimeStamp();
         TimeStamp.TimeSlot timeSLot = TimeStamp.getCurrentTimeSlot();
         for(int i = 0; i < allQuestionnaire.length; i++){
