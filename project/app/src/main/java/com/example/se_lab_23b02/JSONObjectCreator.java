@@ -60,7 +60,8 @@ public class JSONObjectCreator {
         toSave.put("InitSpanLengthTomorrow",initSpanLength);
         toSave.put("MaxKnownNumbers",maxReachedNumbers);
         toSave.put("numberOfSuccessfulRounds", numberOfRounds);
-
+        String timestamp = TimeStamp.getCurrentTimeStamp();
+        toSave.put("timestamp", timestamp);
         return toSave;
     }
 
@@ -71,6 +72,16 @@ public class JSONObjectCreator {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();
         toSave.put("Questionnaires", jdata);
+        return toSave;
+    }
+
+    public static JSONObject createAllDigitSpanTaskObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("digitspantask.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("DigitSpanTasks", jdata);
         return toSave;
     }
 }

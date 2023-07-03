@@ -167,8 +167,38 @@ public class ServerHelper {
         });
     }
 
+    public void synchronizeDigitSpanTask(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONObject body = JSONObjectCreator.createAllDigitSpanTaskObject(context);
+        Call<ResponseBody> call = httpClient.postRequest(addAllQuestionnaires, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+
+                    Log.i("sHelper", "Successfully synchronized Questionnaire");
+                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("sHelper", "Failed to synchronize Questionnaire, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     /**
-     * Adds an DigitSpanTask to the RDS Database using retrofit Interfache
+     * Adds an DigitSpanTask to the RDS Database using retrofit Interface
      *
      * @param toSave  the JSON Object which will be send to the Server. Is created inside the DigitSpanTaskActivity
      * @param context needs Context to get UUID from Shared Preferences
