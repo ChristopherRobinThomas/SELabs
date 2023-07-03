@@ -78,6 +78,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
 
+        if(timeSlotExistsAlready()){
+            Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
+            startActivity(i);
+            finish();
+        }
+
+
         languageChangeSetup();
 
         refreshResources();
@@ -129,6 +136,29 @@ public class QuestionnaireActivity extends AppCompatActivity {
         elementsForLanguageChange.add(findViewById(R.id.Question8_2Text));
         elementsForLanguageChange.add(findViewById(R.id.Send_Button));
         elementsForLanguageChange.add(findViewById(R.id.tvQuestionnaireAdditionalNotes));
+    }
+
+    private boolean timeSlotExistsAlready() {
+        dsHelper = DataSavingHelper.getInstance();
+
+        String text = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",this);
+        if(text.equals(""))
+            return false;
+        String[] allQuestionnaire = text.split("\n");
+        String timestamp = TimeStamp.getCurrentTimeStamp();
+        TimeStamp.TimeSlot timeSLot = TimeStamp.getCurrentTimeSlot();
+        for(int i = 0; i < allQuestionnaire.length; i++){
+            Log.d("TimeSlotTest",allQuestionnaire[i]);
+            if( allQuestionnaire[i].equals(""))
+                continue;
+
+            String temp = allQuestionnaire[i].split(",")[(allQuestionnaire.length-1)];
+            String day = temp.split(" ")[1];
+            TimeStamp.TimeSlot timeS = TimeStamp.getTimeSlotFromString(temp);
+            if(day.equals(timestamp.split(" ")[1]) && timeS == timeSLot)
+                return true;
+        }
+        return false;
     }
     void saveAnswers() throws JSONException {
 
