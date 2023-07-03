@@ -12,9 +12,7 @@ public class JSONObjectCreator {
 
     public static JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
         toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
-        toSave.put("timestamp", timeStamp);
         return toSave;
     }
     public static JSONObject createNewUserObject(String userName, String password, String passwordConfirm) throws JSONException {
