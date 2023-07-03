@@ -77,12 +77,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questionnaire);
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
-        /*
+
         if(timeSlotExistsAlready()){
             Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
             startActivity(i);
             finish();
-        }*/
+        }
 
         languageChangeSetup();
 
@@ -151,7 +151,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             if( allQuestionnaire[i].equals(""))
                 continue;
 
-            String temp = allQuestionnaire[i].split(",")[(allQuestionnaire.length-1)];
+            String temp = allQuestionnaire[i].split(",")[(allQuestionnaire.length-2)];
             String day = temp.split(" ")[1];
             TimeStamp.TimeSlot timeS = TimeStamp.getTimeSlotFromString(temp);
             if(day.equals(timestamp.split(" ")[1]) && timeS == timeSLot)
