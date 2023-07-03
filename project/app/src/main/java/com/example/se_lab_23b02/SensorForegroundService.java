@@ -30,6 +30,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
     private ArrayList<ArrayList<String>> values;
     private boolean active = false;
     private int startSteps = -1;
+    private String timestamp;
 
     @Override
     public void onCreate() {
@@ -40,6 +41,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
     public int onStartCommand(Intent intent, int flags, int startId) {
         String input = intent.getStringExtra("extras");
         if (input.equals("start")) {
+            timestamp = TimeStamp.getCurrentTimeStamp();
             createNotificationChannel();
             Intent notificationIntent = new Intent(this, HomeScreenActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -81,7 +83,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
                 }
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                String sensorValues = "{\"timestamp\": \"" + TimeStamp.getCurrentTimeStamp() + "\", \"acceleration\": \"" + values.get(0).toString() + "\", \"stepcounter\": \"" + values.get(1).toString() + "\"}\n";
+                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": \"" + values.get(0).toString() + "\", \"stepcounter\": \"" + values.get(1).toString() + "\"}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
                 Debug.logStack("values", values.get(1).toString(), 1);
                 active = false;

@@ -1,5 +1,6 @@
 package com.example.se_lab_23b02;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -104,45 +105,20 @@ public class InterventionsFragment extends Fragment {
         btStartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                SensorManager mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-                Sensor sensor_to_read = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                SensorRecorder sRecorder = new SensorRecorder(getContext());
-                mSensorManager.registerListener(sRecorder, sensor_to_read, SensorManager.SENSOR_DELAY_NORMAL);
-
-
-                AlarmManager scheduler = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(getActivity().getApplicationContext(), SensorRecorder.class);
-                PendingIntent scheduledIntent = PendingIntent.getService(getActivity().getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                scheduler.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, scheduledIntent);
-                //getActivity().startService(intent);
-                */
-                startService();
+                SensorManager.toggleService(getActivity());
             }
         });
         btStopRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopService();
+                SensorManager.toggleService(getActivity());
             }
         });
 
         return view;
     }
 
-    private void startService() {
-        Intent serviceIntent = new Intent(getActivity(), SensorForegroundService.class);
-        serviceIntent.putExtra("extras", "start");
-        ContextCompat.startForegroundService(getActivity().getApplicationContext(), serviceIntent);
-    }
 
-    private void stopService() {
-        Intent serviceIntent = new Intent(getActivity(), SensorForegroundService.class);
-        serviceIntent.putExtra("extras", "stop");
-        ContextCompat.startForegroundService(getActivity().getApplicationContext(), serviceIntent);
-
-
-    }
     private void openSingleInterventionFragment(String buttonText) {
         SingleIntervention singleIntervention = new SingleIntervention();
         Bundle args = new Bundle();
