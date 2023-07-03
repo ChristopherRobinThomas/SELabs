@@ -26,6 +26,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -332,6 +334,15 @@ public class SettingsFragment extends Fragment {
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
                 Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
+
+                //try to delete Online Data
+                ServerHelper sHelper = ServerHelper.getInstance();
+                sHelper.setActivity(getActivity());
+                try {
+                    sHelper.deleteEverything(getContext());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
             }
         });

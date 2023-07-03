@@ -64,4 +64,12 @@ public class JSONObjectCreator {
 
         return toSave;
     }
+
+    public static JSONObject createDeleteObject(Context context) throws JSONException {
+        JSONObject toSave = new JSONObject();
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id",context));
+
+        return toSave;
+    }
 }
