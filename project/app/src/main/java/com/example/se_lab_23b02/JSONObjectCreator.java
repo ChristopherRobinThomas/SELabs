@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 public class JSONObjectCreator {
 
@@ -60,6 +61,16 @@ public class JSONObjectCreator {
         toSave.put("MaxKnownNumbers",maxReachedNumbers);
         toSave.put("numberOfSuccessfulRounds", numberOfRounds);
 
+        return toSave;
+    }
+
+    public static JSONObject createAllQuestionnaireObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("Questionnaires", jdata);
         return toSave;
     }
 }

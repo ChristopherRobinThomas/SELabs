@@ -97,6 +97,18 @@ public class DataSavingHelper {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
+    public boolean deleteFileFromInternalStorage(String filename,Context context)
+    {
+        filename = getCurrentUserId(context) + filename;
+
+        File toWrite = new File(context.getFilesDir(), filename);
+        if(!toWrite.exists())
+            return false;
+
+        context.deleteFile(filename);
+        return true;
+    }
     public String readSavedDataFromInternalStorage(String filename, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
         filename = getCurrentUserId(context) + filename;
