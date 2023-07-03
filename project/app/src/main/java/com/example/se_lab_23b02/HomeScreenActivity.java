@@ -8,14 +8,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
-
-
-
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
 
