@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -258,6 +259,7 @@ public class SettingsFragment extends Fragment {
                     }
 
                 }
+
                 dsHelper.saveSettingAsSharedPref("StepCounterAllowed", String.valueOf(b), contextForSharedPreferences);
             }
         });
@@ -323,27 +325,10 @@ public class SettingsFragment extends Fragment {
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
+                cancelAlarms();
+
                 //delete data here
-
-                dsHelper.deleteFileFromInternalStorage("questionnaire.txt",getContext());
-                DataSavingHelper dsh = DataSavingHelper.getInstance();
-
-                if(dsh.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser")){
-                    String current = dsh.getAllSettingsFromSharedPref(getContext()).get("ActiveUser");
-
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne")))
-                        dsh.saveSettingAsSharedPref("UserOne","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo")))
-                        dsh.saveSettingAsSharedPref("UserTwo","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserThree")))
-                        dsh.saveSettingAsSharedPref("UserThree","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour")))
-                        dsh.saveSettingAsSharedPref("UserFour","",getContext());
-
-                    dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
-                }
-
-
+                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
@@ -356,26 +341,8 @@ public class SettingsFragment extends Fragment {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataSavingHelper dsh = DataSavingHelper.getInstance();
-                if(dsh.getAllSettingsFromSharedPref(getContext()).containsKey("ActiveUser")){
-                    String current = dsh.getAllSettingsFromSharedPref(getContext()).get("ActiveUser");
-                    /*
-                    Delete User
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserOne")))
-                        dsh.saveSettingAsSharedPref("UserOne","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserTwo")))
-                        dsh.saveSettingAsSharedPref("UserTwo","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserThree")))
-                        dsh.saveSettingAsSharedPref("UserThree","",getContext());
-                    if(current.equals(dsh.getAllSettingsFromSharedPref(getContext()).get("UserFour")))
-                        dsh.saveSettingAsSharedPref("UserFour","",getContext());
-                    */
-                    dsh.saveSettingAsSharedPref("ActiveUser","None",getContext());
-                }
-
-
+                cancelAlarms();
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
-
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
             }
@@ -530,6 +497,13 @@ public class SettingsFragment extends Fragment {
         if(settings.containsKey("dmValue")) {
             int spinnerPosition = darkmode.indexOf(settings.get("dmValue"));
             spDMode.setSelection(spinnerPosition);
+        }
+    }
+    private void cancelAlarms()
+    {
+        for (int i = 0; i<3;i++){
+            Alarm a = new Alarm(i);
+            a.cancelAlarm(getContext());
         }
     }
 }
