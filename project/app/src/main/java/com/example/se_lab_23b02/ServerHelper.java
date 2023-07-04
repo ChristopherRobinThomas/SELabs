@@ -35,6 +35,9 @@ public class ServerHelper {
     private final String loginUser = "development/useradministration/loginuser";
     private final String createNewUser = "development/useradministration/createnewuser";
     private final String deleteAllData = "development/useradministration/deletealluserdata";
+    private final String synchronizeQuestionnaires = "development/databaseentrys/questionaire/allquestionnaires";
+    private final String synchronizeDigitSpanTask = "development/databaseentrys/digitspantask/alldigitspantasks";
+
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
@@ -103,8 +106,131 @@ public class ServerHelper {
         });
     }
 
+    public void synchronizeQuestionnaire(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONObject body = JSONObjectCreator.createAllQuestionnaireObject(context);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeQuestionnaires, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    JSONArray jarray;
+                    try {
+                        jarray = new JSONArray(response.body().string());
+                        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                        dsHelper.deleteFileFromInternalStorage("questionnaire.txt", context);
+                        for (int i = 0; i < jarray.length(); i++){
+                            JSONObject questionnaire = new JSONObject(jarray.get(i).toString().replaceAll(" ", ""));
+                            JSONObject tempLeerzeichenData = new JSONObject(jarray.get(i).toString());
+                            String timestamp = tempLeerzeichenData.getString("timestamp");
+                            JSONArray q4 = tempLeerzeichenData.getJSONArray("Q4");
+                            JSONArray q5 = tempLeerzeichenData.getJSONArray("Q5");
+                            JSONArray q9 = tempLeerzeichenData.getJSONArray("Q9");
+                            timestamp = timestamp.replace(".000000", "");
+                            String user_id = questionnaire.getString("user_id");
+                            questionnaire.remove("user_id");
+                            questionnaire.put("timestamp", timestamp);
+                            questionnaire.put("Q4", q4);
+                            questionnaire.put("Q5", q5);
+                            questionnaire.put("Q9", q9);
+                            questionnaire.put("user_id", user_id);
+                            dsHelper.writeDataToInternalStorage("questionnaire.txt", questionnaire.toString()+"\n", context, true);
+                        }
+
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Log.i("sHelper", "Successfully synchronized Questionnaire");
+                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("sHelper", "Failed to synchronize Questionnaire, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void synchronizeDigitSpanTask(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONObject body = JSONObjectCreator.createAllDigitSpanTaskObject(context);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeDigitSpanTask, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    JSONArray jarray;
+                    try {
+                        jarray = new JSONArray(response.body().string());
+                        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                        dsHelper.deleteFileFromInternalStorage("DigitSpanTask.txt", context);
+                        for (int i = 0; i < jarray.length(); i++){
+                            JSONObject digitSpanTask = new JSONObject(jarray.get(i).toString());
+                            int initSpanLengtToday = digitSpanTask.getInt("InitSpanLengtToday");
+                            int initSpanLengthTomorrow = digitSpanTask.getInt("InitSpanLengthTomorrow");
+                            int maxKnownNumbers = digitSpanTask.getInt("MaxKnownNumbers");
+                            int numberOfSuccessfulRounds = digitSpanTask.getInt("numberOfSuccessfulRounds");
+                            String timestamp = digitSpanTask.getString("timestamp");
+                            timestamp = timestamp.replace(".000000", "");
+                            String user_id = digitSpanTask.getString("user_id");
+
+                            JSONObject newEntry = new JSONObject();
+                            newEntry.put("InitSpanLengtToday", initSpanLengtToday);
+                            newEntry.put("InitSpanLengthTomorrow", initSpanLengthTomorrow);
+                            newEntry.put("MaxKnownNumbers", maxKnownNumbers);
+                            newEntry.put("numberOfSuccessfulRounds", numberOfSuccessfulRounds);
+                            newEntry.put("timestamp", timestamp);
+                            newEntry.put("user_id", user_id);
+
+                            dsHelper.writeDataToInternalStorage("DigitSpanTask.txt", newEntry.toString()+"\n", context, true);
+                        }
+
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Log.i("sHelper", "Successfully synchronized DigitSpanTask");
+                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     /**
-     * Adds an DigitSpanTask to the RDS Database using retrofit Interfache
+     * Adds an DigitSpanTask to the RDS Database using retrofit Interface
      *
      * @param toSave  the JSON Object which will be send to the Server. Is created inside the DigitSpanTaskActivity
      * @param context needs Context to get UUID from Shared Preferences
