@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
@@ -229,6 +231,7 @@ public class ServerHelper {
         });
     }
 
+
     /**
      * Adds an DigitSpanTask to the RDS Database using retrofit Interface
      *
@@ -369,7 +372,6 @@ public class ServerHelper {
         });
     }
 
-
     /**
      * Creates Call with loginInformation in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
      *
@@ -430,7 +432,6 @@ public class ServerHelper {
             }
         });
     }
-
 
     public void deleteEverything(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
