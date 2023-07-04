@@ -96,20 +96,38 @@ public class TimePickerActivity extends Activity {
                 Alarm cur = new Alarm(id);
                 cur.addTime(cHour[0], cMin[0]);
                 cur.setAlarm(TimePickerActivity.this);
+                String dataFromStorage = dsHelper.readSavedDataFromInternalStorage("Timers",getApplicationContext());
+                String data = "";
                 switch(id) {
                     case 0:
-                        dsHelper.saveSettingAsSharedPref("mornCurH", Integer.toString(cHour[0]), getApplicationContext());
-                        dsHelper.saveSettingAsSharedPref("mornCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        data = "mornCurH:" + String.valueOf(cHour[0]) + ",mornCurM" + String.valueOf(cMin[0]);
+                        //dsHelper.saveSettingAsSharedPref("mornCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        //dsHelper.saveSettingAsSharedPref("mornCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
                     case 1:
-                        dsHelper.saveSettingAsSharedPref("noonCurH", Integer.toString(cHour[0]), getApplicationContext());
-                        dsHelper.saveSettingAsSharedPref("noonCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        data = "noonCurH:" + String.valueOf(cHour[0]) + ",noonCurM" + String.valueOf(cMin[0]);
+                        //dsHelper.saveSettingAsSharedPref("noonCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        //dsHelper.saveSettingAsSharedPref("noonCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
                     case 2:
-                        dsHelper.saveSettingAsSharedPref("evnCurH", Integer.toString(cHour[0]), getApplicationContext());
-                        dsHelper.saveSettingAsSharedPref("evnCurM", Integer.toString(cMin[0]), getApplicationContext());
+                        data = "evnCurH:" + String.valueOf(cHour[0]) + ",evnCurM" + String.valueOf(cMin[0]);
+                        //dsHelper.saveSettingAsSharedPref("evnCurH", Integer.toString(cHour[0]), getApplicationContext());
+                        //dsHelper.saveSettingAsSharedPref("evnCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
                 }
+
+                if(!dataFromStorage.equals("")){
+                    String[] timeslots = dataFromStorage.split("\n");
+                    for(int i = 0; i < timeslots.length;i++){
+                        if(timeslots[i].contains(data.split(":")[0]))
+                            timeslots[i] = data;
+                    }
+                    data = "";
+                    for(int i = 0; i < timeslots.length;i++){
+                        data += (timeslots[i] + "\n");
+                    }
+                }
+                dsHelper.writeDataToInternalStorage("Timers",data,getApplicationContext());
                 Toast.makeText(TimePickerActivity.this, "Alarm set successfully", Toast.LENGTH_SHORT).show();
                 finish();
             }
