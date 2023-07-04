@@ -357,8 +357,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    private void markGoalAsComplete()
-    {
+    private void markGoalAsComplete() {
         updateProgress();
         updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
@@ -367,17 +366,25 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dsHelper = DataSavingHelper.getInstance();
         String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
         String[] temp2 = temp.split("\n");
-        //Save Progress Update to Storage
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("Date", todaysDate);
-            obj.put("Daily_Task", innitdailyGoal);
+
+        temp = temp2[temp2.length-1];
+        try
+        {
+            JSONObject obj = new JSONObject(temp);
             obj.put("Progress", 100);
-        } catch (JSONException e) {
+            String data = obj + "\n";
+            temp2[temp2.length-1] = data;
+            String toSave = "";
+            for(int i = 1; i<temp2.length-1;i++)
+            {
+                toSave += temp2[i] + "\n";
+            }
+            toSave += temp2[temp2.length-1];
+            dsHelper.writeDataToInternalStorage("DailyGoal.txt",toSave,getActivity());
+        }
+        catch(JSONException e){
             throw new RuntimeException(e);
         }
-        String data = obj.toString() + "\n";
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
     }
 
 
