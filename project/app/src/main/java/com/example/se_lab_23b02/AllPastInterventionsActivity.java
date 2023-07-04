@@ -123,14 +123,3 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         linearLayout.addView(linearLayoutToAdd); 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
