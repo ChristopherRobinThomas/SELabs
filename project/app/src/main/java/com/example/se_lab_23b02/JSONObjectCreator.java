@@ -77,7 +77,7 @@ public class JSONObjectCreator {
 
     public static JSONObject createAllDigitSpanTaskObject(Context context) throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String localData = dsHelper.readSavedDataFromInternalStorage("digitspantask.txt", context);
+        String localData = dsHelper.readSavedDataFromInternalStorage("DigitSpanTask.txt", context);
         localData = localData.trim();
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();

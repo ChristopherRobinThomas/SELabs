@@ -75,7 +75,6 @@ public class DataSavingHelper {
         filename = getCurrentUserId(context) + filename;
 
         if (append) {
-            System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
         } else {
             accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);

@@ -38,7 +38,8 @@ public class ServerHelper {
     private final String getUniqueID = "development/databaseentrys/getuniqueuserid";
     private final String loginUser = "development/useradministration/loginuser";
     private final String createNewUser = "development/useradministration/createnewuser";
-    private final String addAllQuestionnaires = "development/databaseentrys/questionaire/allquestionnaires";
+    private final String synchronizeQuestionnaires = "development/databaseentrys/questionaire/allquestionnaires";
+    private final String synchronizeDigitSpanTask = "development/databaseentrys/digitspantask/alldigitspantasks";
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
@@ -115,7 +116,7 @@ public class ServerHelper {
         }
 
         JSONObject body = JSONObjectCreator.createAllQuestionnaireObject(context);
-        Call<ResponseBody> call = httpClient.postRequest(addAllQuestionnaires, body);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeQuestionnaires, body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -175,17 +176,49 @@ public class ServerHelper {
         }
 
         JSONObject body = JSONObjectCreator.createAllDigitSpanTaskObject(context);
-        Call<ResponseBody> call = httpClient.postRequest(addAllQuestionnaires, body);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeDigitSpanTask, body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+                    JSONArray jarray;
+                    try {
+                        jarray = new JSONArray(response.body().string());
+                        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                        dsHelper.deleteFileFromInternalStorage("DigitSpanTask.txt", context);
+                        for (int i = 0; i < jarray.length(); i++){
+                            JSONObject digitSpanTask = new JSONObject(jarray.get(i).toString());
+                            int initSpanLengtToday = digitSpanTask.getInt("InitSpanLengtToday");
+                            int initSpanLengthTomorrow = digitSpanTask.getInt("InitSpanLengthTomorrow");
+                            int maxKnownNumbers = digitSpanTask.getInt("MaxKnownNumbers");
+                            int numberOfSuccessfulRounds = digitSpanTask.getInt("numberOfSuccessfulRounds");
+                            String timestamp = digitSpanTask.getString("timestamp");
+                            timestamp = timestamp.replace(".000000", "");
+                            String user_id = digitSpanTask.getString("user_id");
 
-                    Log.i("sHelper", "Successfully synchronized Questionnaire");
+                            JSONObject newEntry = new JSONObject();
+                            newEntry.put("InitSpanLengtToday", initSpanLengtToday);
+                            newEntry.put("InitSpanLengthTomorrow", initSpanLengthTomorrow);
+                            newEntry.put("MaxKnownNumbers", maxKnownNumbers);
+                            newEntry.put("numberOfSuccessfulRounds", numberOfSuccessfulRounds);
+                            newEntry.put("timestamp", timestamp);
+                            newEntry.put("user_id", user_id);
+
+                            dsHelper.writeDataToInternalStorage("DigitSpanTask.txt", newEntry.toString()+"\n", context, true);
+                        }
+
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Log.i("sHelper", "Successfully synchronized DigitSpanTask");
                     Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.e("sHelper", "Failed to synchronize Questionnaire, Response: " + response);
+                    Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
                     Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
                 }
             }
@@ -197,6 +230,7 @@ public class ServerHelper {
             }
         });
     }
+
     /**
      * Adds an DigitSpanTask to the RDS Database using retrofit Interface
      *
