@@ -87,5 +87,6 @@
         <item>match OS</item>
     </string-array>
     <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
+    <string name="multi_user_main_terms_of_service">Terms of Service</string>
     <string name="bt_settings_logout">Logout</string>
 </resources>

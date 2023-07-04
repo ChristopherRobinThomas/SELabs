@@ -69,6 +69,14 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_multi_user_create_new_user, container, false);
 
         Button back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+
+        view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Show Terms of service
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v) {
