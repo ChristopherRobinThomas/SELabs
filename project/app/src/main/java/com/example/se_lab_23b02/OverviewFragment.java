@@ -155,10 +155,13 @@ public class OverviewFragment extends Fragment {
         Paint blackColor = new Paint();
         blackColor.setColor(Color.BLACK);
 
+        Paint transparentColor = new Paint();
+        transparentColor.setColor(Color.TRANSPARENT);
 
-        plot.getGraph().setBackgroundPaint(whiteColor);
-        plot.getGraph().setGridBackgroundPaint(whiteColor);
 
+        plot.getGraph().setBackgroundPaint(transparentColor);
+        plot.getGraph().setGridBackgroundPaint(transparentColor);
+        
         tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
 
