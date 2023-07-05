@@ -27,6 +27,7 @@
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analyse</string>
+    <string name="overview_navigation_bar">Daten</string>
 
 
     <!-- Strings for the interventions fragment-->

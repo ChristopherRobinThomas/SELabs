@@ -8,7 +8,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
+
+import java.util.ArrayList;
 
 
 public class HomeScreenActivity extends AppCompatActivity {
@@ -21,6 +26,8 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     private Context context;
     private Resources resources;
+
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +36,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setColorTheme();
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
-
         refreshResources();
-
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
             setColorTheme();
@@ -39,21 +44,20 @@ public class HomeScreenActivity extends AppCompatActivity {
             switch(item.getItemId())
             {
                 case R.id.home:
-
                     replaceFragment(new HomeFragment());
-                    setTitle(resources.getString(R.string.home_heading));
+                    item.setTitle(resources.getString(R.string.home_heading));
                     break;
                 case R.id.settings:
                     replaceFragment(new SettingsFragment());
-                    setTitle(resources.getString(R.string.settings_heading));
+                    item.setTitle(resources.getString(R.string.settings_heading));
                     break;
                 case R.id.data:
                     replaceFragment(new OverviewFragment());
-                    setTitle(resources.getString(R.string.overview_heading));
+                    item.setTitle(resources.getString(R.string.overview_navigation_bar));
                     break;
                 case R.id.interventions:
                     replaceFragment(new InterventionsFragment());
-                    setTitle(resources.getString(R.string.interventions_heading));
+                    item.setTitle(resources.getString(R.string.interventions_heading));
                     break;
             }
 
@@ -79,6 +83,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         context = LocaleHelper.setLocale(getApplicationContext(), language_short);
         resources = context.getResources();
     }
+
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
