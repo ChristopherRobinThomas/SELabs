@@ -1,5 +1,7 @@
 package com.example.se_lab_23b02;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -136,6 +139,28 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
+        TOS.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String tosText = "Terms and Conditions  \n====================\n\nLast updated: July 04, 2023\nPlease read these terms and conditions carefully before using Our Service.\n\nInterpretation and Definitions  \n==============================\n\nInterpretation  \n--------------\n\nThe words of which the initial letter is capitalized have meanings defined\nunder the following conditions. The following definitions shall have the same\nmeaning regardless of whether they appear in singular or in plural.\n\nDefinitions  \n-----------";
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Terms of Service");
+                final TextView tos = new TextView(getContext());
+                tos.setText(tosText);
+                builder.setView(tos);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+
+                builder.show();
+            }
+        });
+
+
 
         return view;
     }
