@@ -90,22 +90,32 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        try {
-            interventionList = getSavedInterventions();
-        } catch (Exception e) {
-            interventionList = new Vector<Vector<String>>();
-            Vector<String> sampleInterventionA = new Vector<String>();
-            sampleInterventionA.add("00000000");
-            sampleInterventionA.add("Sample Name");
-            sampleInterventionA.add("Sample Desc");
-            interventionList.add(sampleInterventionA);
-        }
+        // TODO: Save Interventions in file, then:
+        //  interventionList = getSavedInterventions();
+
+        interventionList = new Vector<Vector<String>>();
+        Vector<String> sampleInterventionA = new Vector<String>();
+        sampleInterventionA.add("0");
+        sampleInterventionA.add("Push-Ups");
+        sampleInterventionA.add("Perform 10 push-ups.");
+        interventionList.add(sampleInterventionA);
+        Vector<String> sampleInterventionB = new Vector<String>();
+        sampleInterventionA.add("1");
+        sampleInterventionA.add("Sit-Ups");
+        sampleInterventionA.add("Perform 10 sit-ups.");
+        interventionList.add(sampleInterventionB);
+        Vector<String> sampleInterventionC = new Vector<String>();
+        sampleInterventionA.add("2");
+        sampleInterventionA.add("Light Run");
+        sampleInterventionA.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
+        interventionList.add(sampleInterventionC);
 
         buttonList = populateButtonList(interventionList, view);
         buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
-        for (Button b : buttonList) {
-            b.setOnClickListener(v -> {
-                openSingleInterventionFragment(b.getText().toString());
+        for (int i = 0; i < buttonList.size(); i++) {
+            int finalI = i;
+            buttonList.get(i).setOnClickListener(v -> {
+                openSingleInterventionFragment(interventionList.get(finalI));
             });
         }
         buttonAddNewIntervention.setOnClickListener(v -> {
@@ -152,14 +162,12 @@ public class InterventionsFragment extends Fragment {
         cl.addView(newButton, lp);
         buttonList.add(newButton);
     }
-    private void openSingleInterventionFragment(String buttonText) {
+    private void openSingleInterventionFragment(Vector<String> intervention) {
         SingleIntervention singleIntervention = new SingleIntervention();
         Bundle args = new Bundle();
-        // TODO: Get Name and Desc dynamically
-        // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
-        args.putInt("InterventionID", 0);
-        args.putString("InterventionName", buttonText);
-        args.putString("InterventionDescription", "This is a sample description.");
+        args.putInt("InterventionID", Integer.parseInt(intervention.get(0)));
+        args.putString("InterventionName", intervention.get(1));
+        args.putString("InterventionDescription", intervention.get(2));
         singleIntervention.setArguments(args);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(((ViewGroup)getView().getParent()).getId(), singleIntervention, "findThisFragment")
@@ -170,7 +178,7 @@ public class InterventionsFragment extends Fragment {
         int i = 0;
         Vector<Button> buttonList = new Vector<Button>();
         for (Vector<String> interventionObject : interventionList) {
-            Button newButton = new Button(this.getContext());
+            Button newButton = new Button(getContext());
             newButton.setText(interventionObject.get(1));
 
             ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);

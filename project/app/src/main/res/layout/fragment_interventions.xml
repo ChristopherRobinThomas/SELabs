@@ -31,10 +31,8 @@
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="24sp"
-                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="invisible" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/buttonIntervention2"
@@ -49,10 +47,8 @@
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="24sp"
-                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="invisible" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/buttonIntervention3"
@@ -67,18 +63,16 @@
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="24sp"
-                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="invisible" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/buttonAddNewIntervention"
                     android:layout_width="148dp"
                     android:layout_height="58dp"
                     android:layout_marginStart="244dp"
-                    android:layout_marginTop="652dp"
-                    android:text="Add New Intervention"
+                    android:layout_marginTop="568dp"
+                    android:text="Load Plugin"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
