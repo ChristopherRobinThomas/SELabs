@@ -35,7 +35,6 @@ import java.util.Calendar;
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     //------------GUI Elements-----------------
-    private Button buttonX;
     private Button buttonWalk5000Steps;
     private Button buttonWalk10000Steps;
     private Button buttonDrinkWater;
@@ -79,7 +78,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
         dsHelper = DataSavingHelper.getInstance();
 
-        buttonX = findViewById(R.id.buttonX);
         buttonWalk5000Steps = findViewById(R.id.buttonWalk5000Steps);
         buttonWalk10000Steps = findViewById(R.id.buttonWalk10000Steps);
         buttonDrinkWater = findViewById(R.id.buttonDrinkWater);
@@ -93,7 +91,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         constraintLayout = findViewById(R.id.dailyTaskActivity);
 
 
-        buttonX.setOnClickListener(this);
         buttonWalk5000Steps.setOnClickListener(this);
         buttonWalk10000Steps.setOnClickListener(this);
         buttonDrinkWater.setOnClickListener(this);
@@ -133,9 +130,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         switch(v.getId())
         {
 
-            case R.id.buttonX:
-                finish();
-                break;
             case R.id.buttonWalk5000Steps:
                 saveDailyTask = "Walk 5000 Steps";
                 dailyTask = resources.getString(R.string.goal_walk_5000_steps);
@@ -308,16 +302,8 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
     private void setColorTheme()
     {
-        buttonX.getBackground().setAlpha(10);
-        buttonWalk5000Steps.getBackground().setAlpha(10);
-        buttonWalk10000Steps.getBackground().setAlpha(10);
-        buttonClean.getBackground().setAlpha(10);
-        buttonWorkout.getBackground().setAlpha(10);
-        buttonMeditate.getBackground().setAlpha(10);
-        buttonOwnDailyTask.getBackground().setAlpha(10);
-        buttonGoForAWalk.getBackground().setAlpha(10);
-        buttonDrinkWater.getBackground().setAlpha(10);
-        buttonSaveDailyTask.getBackground().setAlpha(10);
+        int ButtonTransparency = 50;
+
         contextForColor = this.getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
@@ -326,6 +312,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         {
             case "dark-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
                 switch (color)
                 {
                     case "blue":
@@ -341,6 +328,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                 break;
             case "white-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
                 switch (color)
                 {
                     case "blue":
@@ -355,7 +343,18 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                 }
                 break;
             case "match OS":
+                //TODO Make it match the OS
                 break;
         }
+
+        buttonWalk5000Steps.getBackground().setAlpha(ButtonTransparency);
+        buttonWalk10000Steps.getBackground().setAlpha(ButtonTransparency);
+        buttonClean.getBackground().setAlpha(ButtonTransparency);
+        buttonWorkout.getBackground().setAlpha(ButtonTransparency);
+        buttonMeditate.getBackground().setAlpha(ButtonTransparency);
+        buttonOwnDailyTask.getBackground().setAlpha(ButtonTransparency);
+        buttonGoForAWalk.getBackground().setAlpha(ButtonTransparency);
+        buttonDrinkWater.getBackground().setAlpha(ButtonTransparency);
+        buttonSaveDailyTask.getBackground().setAlpha(ButtonTransparency);
     }
 }

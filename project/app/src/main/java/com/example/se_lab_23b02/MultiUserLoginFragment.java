@@ -125,8 +125,8 @@ public class MultiUserLoginFragment extends Fragment {
 
     private void setColorTheme()
     {
-        btnLogin.getBackground().setAlpha(10);
-        btnBack.getBackground().setAlpha(10);
+        int ButtonTransparency = 150;
+
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
@@ -134,6 +134,7 @@ public class MultiUserLoginFragment extends Fragment {
         {
             case "dark-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
                 switch (color)
                 {
                     case "blue":
@@ -149,6 +150,7 @@ public class MultiUserLoginFragment extends Fragment {
                 break;
             case "white-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
                 switch (color)
                 {
                     case "blue":
@@ -165,5 +167,7 @@ public class MultiUserLoginFragment extends Fragment {
             case "match OS":
                 break;
         }
+        btnLogin.getBackground().setAlpha(ButtonTransparency);
+        btnBack.getBackground().setAlpha(ButtonTransparency);
     }
 }

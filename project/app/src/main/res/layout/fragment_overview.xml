@@ -80,7 +80,8 @@
             android:layout_weight="1"
             android:text="@string/bt_overview_health_index"
             android:textSize="11sp"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
 
         <Button
             android:id="@+id/btIntervention"
@@ -89,7 +90,8 @@
             android:layout_weight="1"
             android:text="@string/bt_overview_interventions_graph"
             android:textSize="11sp"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
 
         <Button
             android:id="@+id/btDistributionOfDailytasks"
@@ -98,7 +100,8 @@
             android:layout_weight="1"
             android:text="@string/bt_overview_task_distribution"
             android:textSize="11sp"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
     </LinearLayout>
 
     <EditText

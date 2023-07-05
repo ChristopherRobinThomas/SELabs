@@ -127,7 +127,16 @@ public class MultiUserMainFragment extends Fragment {
                 buttons.get(i).setVisibility(View.GONE);
                 buttons.get(i).setEnabled(false);
             }
+            else
+            {
+                buttons.get(i).setText("Add User");
+            }
         }
+        for(int i = 0; i<=3;i++)
+        {
+            if(users.size() > i ) buttons.get(i).setText(users.get(i).getName());
+        }
+
         buttons.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,16 +267,14 @@ public class MultiUserMainFragment extends Fragment {
 
     private void setColorTheme()
     {
-        topLeft.getBackground().setAlpha(10);
-        bottomRight.getBackground().setAlpha(10);
-        bottomLeft.getBackground().setAlpha(10);
-        topRight.getBackground().setAlpha(10);
+        int ButtonTransparency = 150;
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
         switch(mode)
         {
             case "dark-mode":
+                ButtonTransparency = 70;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 switch (color)
                 {
@@ -283,6 +290,7 @@ public class MultiUserMainFragment extends Fragment {
                 }
                 break;
             case "white-mode":
+                ButtonTransparency = 150;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 switch (color)
                 {
@@ -300,6 +308,10 @@ public class MultiUserMainFragment extends Fragment {
             case "match OS":
                 break;
         }
+        topLeft.getBackground().setAlpha(ButtonTransparency);
+        bottomRight.getBackground().setAlpha(ButtonTransparency);
+        bottomLeft.getBackground().setAlpha(ButtonTransparency);
+        topRight.getBackground().setAlpha(ButtonTransparency);
     }
 
 }

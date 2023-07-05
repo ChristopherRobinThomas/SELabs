@@ -55,6 +55,12 @@ public class SettingsFragment extends Fragment {
 
     private LinearLayout linearLayout;
 
+    //--------GUI Elements--------
+    private Button btnNotifMorning;
+    private Button btnNotifNoon;
+    private Button btnNotifEvening;
+    private Button btLogout;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -145,11 +151,11 @@ public class SettingsFragment extends Fragment {
         Switch switchStepCount = (Switch) view.findViewById(R.id.swStepCounter);
         Switch switchAccel = (Switch) view.findViewById(R.id.swAccelSensor);
         switchGPS = (Switch) view.findViewById(R.id.swGPS);
-        Button btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
-        Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
-        Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
+        btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
+        btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
+        btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
-        Button btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
+        btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -513,6 +519,7 @@ public class SettingsFragment extends Fragment {
 
     private void setColorTheme()
     {
+        int ButtonTransparency = 50;
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
@@ -520,6 +527,7 @@ public class SettingsFragment extends Fragment {
         switch(mode)
         {
             case "dark-mode":
+                ButtonTransparency = 70;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 switch (color)
                 {
@@ -535,6 +543,7 @@ public class SettingsFragment extends Fragment {
                 }
                 break;
             case "white-mode":
+                ButtonTransparency = 150;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 switch (color)
                 {
@@ -552,6 +561,10 @@ public class SettingsFragment extends Fragment {
             case "match OS":
                 break;
         }
+        btnNotifEvening.getBackground().setAlpha(ButtonTransparency);
+        btnNotifNoon.getBackground().setAlpha(ButtonTransparency);
+        btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
+        btLogout.getBackground().setAlpha(ButtonTransparency);
     }
 
 }

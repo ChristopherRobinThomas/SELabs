@@ -562,7 +562,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     private void setColorTheme()
     {
-        sendButton.getBackground().setAlpha(10);
+        int ButtonTransparency = 50;
+
         contextForColor = this.getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
@@ -570,6 +571,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         switch(mode)
         {
             case "dark-mode":
+                ButtonTransparency = 70;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 switch (color)
                 {
@@ -585,6 +587,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 }
                 break;
             case "white-mode":
+                ButtonTransparency = 150;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 switch (color)
                 {
@@ -602,5 +605,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
             case "match OS":
                 break;
         }
+        sendButton.getBackground().setAlpha(ButtonTransparency);
     }
 }

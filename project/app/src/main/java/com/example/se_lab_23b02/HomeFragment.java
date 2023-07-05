@@ -553,62 +553,65 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     //----------Color Functions ---------------------
     private void setColorTheme()
     {
-            questionnaireButton.getBackground().setAlpha(50);
-            seeAllPastActivitiesButton.getBackground().setAlpha(50);
-            pickDailyGoalButton.getBackground().setAlpha(50);
-            markGoalAsCompleteButton.getBackground().setAlpha(50);
+        int ButtonTransparency = 50;
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24_dark_mode);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
-            contextForColor = getActivity().getApplicationContext();
-            String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
-            String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
-            switch(mode)
-            {
-                case "dark-mode":
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24_dark_mode);
-                    linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border));
+                //TODO Do the same thing for the dynamic Interventions when you add them
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
 
-                    //TODO Do the same thing for the dynamic Interventions when you add them
-                    switch (color)
-                    {
-                        case "blue":
-                            constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background));
-                            break;
-                        case "red":
-                            constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_dark_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_blue));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
+        questionnaireButton.getBackground().setAlpha(ButtonTransparency);
+        seeAllPastActivitiesButton.getBackground().setAlpha(ButtonTransparency);
+        pickDailyGoalButton.getBackground().setAlpha(ButtonTransparency);
+        markGoalAsCompleteButton.getBackground().setAlpha(ButtonTransparency);
+        linearLayoutStepCount.setPadding(100,50,100,50);
 
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_dark_mode_red));
-                            break;
-                        case "green":
-                            constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
-                            break;
-                    }
-                    break;
-                case "white-mode":
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24);
-                    linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
-                    switch (color)
-                    {
-                        case "blue":
-                            constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_blue));
-                            break;
-                        case "red":
-                            constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_red));
-                            break;
-                        case "green":
-                            constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
-                            dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
-                            break;
-                    }
-                    break;
-                case "match OS":
-                    break;
-            }
-            linearLayoutStepCount.setPadding(100,50,100,50);
     }
 }

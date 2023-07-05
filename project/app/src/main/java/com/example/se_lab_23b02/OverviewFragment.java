@@ -474,9 +474,8 @@ public class OverviewFragment extends Fragment {
 
     private void setColorTheme()
     {
-        btNumOfActivities.getBackground().setAlpha(10);
-        btNumOfInterventions.getBackground().setAlpha(10);
-        btShowHealthGraph.getBackground().setAlpha(10);
+        int ButtonTransparency = 50;
+
         contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
@@ -484,6 +483,7 @@ public class OverviewFragment extends Fragment {
         switch(mode)
         {
             case "dark-mode":
+                ButtonTransparency = 70;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 switch (color)
                 {
@@ -499,6 +499,7 @@ public class OverviewFragment extends Fragment {
                 }
                 break;
             case "white-mode":
+                ButtonTransparency = 150;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 switch (color)
                 {
@@ -516,5 +517,8 @@ public class OverviewFragment extends Fragment {
             case "match OS":
                 break;
         }
+        btNumOfActivities.getBackground().setAlpha(ButtonTransparency);
+        btNumOfInterventions.getBackground().setAlpha(ButtonTransparency);
+        btShowHealthGraph.getBackground().setAlpha(ButtonTransparency);
     }
 }

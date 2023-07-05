@@ -287,26 +287,14 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
     private void setColorTheme()
     {
-        button0.getBackground().setAlpha(128);
-        button1.getBackground().setAlpha(128);
-        button2.getBackground().setAlpha(128);
-        button3.getBackground().setAlpha(128);
-        button4.getBackground().setAlpha(128);
-        button5.getBackground().setAlpha(128);
-        button5.getBackground().setAlpha(128);
-        button6.getBackground().setAlpha(128);
-        button7.getBackground().setAlpha(128);
-        button8.getBackground().setAlpha(128);
-        button9.getBackground().setAlpha(128);
-        exitButton.getBackground().setAlpha(64);
-        startingButton.getBackground().setAlpha(20);
-
+        int ButtonTransparency = 50;
         contextForColor = this.getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
         switch(mode)
         {
             case "dark-mode":
+                ButtonTransparency = 70;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 switch (color)
                 {
@@ -322,6 +310,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
             case "white-mode":
+                ButtonTransparency = 150;
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 switch (color)
                 {
@@ -339,6 +328,20 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
             case "match OS":
                 break;
         }
+
+        button0.getBackground().setAlpha(ButtonTransparency);
+        button1.getBackground().setAlpha(ButtonTransparency);
+        button2.getBackground().setAlpha(ButtonTransparency);
+        button3.getBackground().setAlpha(ButtonTransparency);
+        button4.getBackground().setAlpha(ButtonTransparency);
+        button5.getBackground().setAlpha(ButtonTransparency);
+        button5.getBackground().setAlpha(ButtonTransparency);
+        button6.getBackground().setAlpha(ButtonTransparency);
+        button7.getBackground().setAlpha(ButtonTransparency);
+        button8.getBackground().setAlpha(ButtonTransparency);
+        button9.getBackground().setAlpha(ButtonTransparency);
+        exitButton.getBackground().setAlpha(64);
+        startingButton.getBackground().setAlpha(ButtonTransparency);
     }
 
 }

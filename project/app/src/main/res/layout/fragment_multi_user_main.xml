@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MultiUserMainFragment"
-    android:id="@+id/multiUserMainFragment">
+    android:id="@+id/multiUserMainFragment"
+    android:background="@drawable/blue_light_mode_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -26,45 +27,61 @@
             android:textSize="24dp"
             tools:layout_editor_absoluteX="6dp"
             tools:layout_editor_absoluteY="32dp" />
-        <Button
-            android:id="@+id/ButtonTopLeft"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="100dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:divider="@drawable/divider_very_big_vertical"
+            android:showDividers="middle"
+
             app:layout_constraintTop_toBottomOf="@+id/HeadlineText"
-            app:layout_constraintLeft_toLeftOf="@id/linearLayout"
-            />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/divider_very_big"
+                android:showDividers="middle"
+                android:layout_gravity="center">
+                <Button
+                    android:id="@+id/ButtonTopLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:background="@drawable/step_count_border"/>
 
-        <Button
-            android:id="@+id/ButtonTopRight"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="100dp"
-            app:layout_constraintTop_toBottomOf="@+id/HeadlineText"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout"
-            />
+                <Button
+                    android:id="@+id/ButtonTopRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:background="@drawable/step_count_border"
 
-        <Button
-            android:id="@+id/ButtonBottomLeft"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="100dp"
-            app:layout_constraintTop_toBottomOf="@+id/ButtonTopLeft"
-            app:layout_constraintLeft_toLeftOf="@id/linearLayout"
-            />
 
-        <Button
-            android:id="@+id/ButtonBottomRight"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="100dp"
-            app:layout_constraintTop_toBottomOf="@+id/ButtonTopRight"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout"
-            />
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/divider_very_big"
+                android:showDividers="middle"
+                >
+                <Button
+                    android:id="@+id/ButtonBottomLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:background="@drawable/step_count_border"
+                    />
+
+                <Button
+                    android:id="@+id/ButtonBottomRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:background="@drawable/step_count_border"
+                    />
+                </LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

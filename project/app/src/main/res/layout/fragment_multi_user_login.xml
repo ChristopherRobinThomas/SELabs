@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MultiUserLoginFragment"
-    android:id="@+id/multiUserLoginFragment">
+    android:id="@+id/multiUserLoginFragment"
+    android:background="@drawable/blue_light_mode_background">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,14 +73,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Login"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:background="@drawable/step_count_border"/>
 
                 <Button
                     android:id="@+id/BackButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Back"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:background="@drawable/step_count_border"/>
             </LinearLayout>
 
 
