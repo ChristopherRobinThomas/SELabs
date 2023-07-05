@@ -1,26 +1,23 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.util.Pair;
+
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
-import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import kotlin.Triple;
 
@@ -111,6 +108,52 @@ public class DataAccessHelper {
                 break;
         }
         return outputList;
+    }
+
+    public Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> getValuesFromRecording(String timestamp, Context context) throws JSONException {
+
+        ArrayList<Pair<Long, Float>> x_list = new ArrayList<>();
+        ArrayList<Pair<Long, Float>> y_list = new ArrayList<>();
+        ArrayList<Pair<Long, Float>> z_list = new ArrayList<>();
+
+        String[] timestampSplitted = timestamp.split(" ");
+
+        LocalDate compTimestampDate = LocalDate.parse(timestampSplitted[0]);
+        LocalTime compTimestampTime = LocalTime.parse(timestampSplitted[1]);
+
+        String fileContent = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+
+        String[] fileLines = fileContent.split(System.lineSeparator());
+        for (int i = 1; i < fileLines.length; i++) {
+            System.out.println("i: " + i + "line: " + fileLines[i]);
+            JSONObject jsonLine = new JSONObject(fileLines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+
+            if(compTimestampDate.isEqual(jsTimestampDate) && compTimestampTime.equals(jsTimestampTime)) {
+
+
+                JSONArray jsonArrayAcceleration = (JSONArray) jsonLine.get("acceleration");
+                for(int entryIndex = 0; entryIndex < jsonArrayAcceleration.length(); entryIndex++) {
+
+                    JSONObject entry = (JSONObject) jsonArrayAcceleration.get(entryIndex);
+                    Pair<Long, Float> x = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("x")));
+                    x_list.add(x);
+                    Pair<Long, Float> y = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("y")));
+                    y_list.add(y);
+                    Pair<Long, Float> z = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("z")));
+                    z_list.add(z);
+                }
+                Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> triple = new Triple<>(x_list, y_list, z_list);
+                return triple;
+            }
+
+        }
+
+        return new Triple<>(x_list, y_list, z_list);
+
     }
 
     private int getIndexFromTaskListByString(String taskString) {
