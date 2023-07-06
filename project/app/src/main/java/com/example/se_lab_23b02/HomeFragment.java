@@ -19,11 +19,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.system.Os;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +105,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private Context context;
     private Resources resources;
 
+    //--------GUI Elements to add Dynamically-------------
+    private LinearLayout linearLayout;
+    private TextView txtViewDate;
+
+    private LinearLayout linearLayoutToAdd;
+    private ImageView imageViewIntervention;
+
+    private TextView txtViewInterventions;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -148,6 +160,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+        linearLayout = view.findViewById(R.id.linearLayoutHomeRecentActivities);
+
 
         elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
@@ -169,6 +183,12 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         convertDailyGoal();
         setUpProgress();
         updateLittleBeing();
+
+        getPastInterventions();
+        txtViewDate = new TextView(getActivity());
+        txtViewDate.setTextSize(20);
+        txtViewDate.setGravity(Gravity.CENTER);
+        linearLayout.addView(txtViewDate);
 
 
 
@@ -337,8 +357,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    private void markGoalAsComplete()
-    {
+    private void markGoalAsComplete() {
         updateProgress();
         updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
@@ -347,17 +366,25 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dsHelper = DataSavingHelper.getInstance();
         String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
         String[] temp2 = temp.split("\n");
-        //Save Progress Update to Storage
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("Date", todaysDate);
-            obj.put("Daily_Task", innitdailyGoal);
+
+        temp = temp2[temp2.length-1];
+        try
+        {
+            JSONObject obj = new JSONObject(temp);
             obj.put("Progress", 100);
-        } catch (JSONException e) {
+            String data = obj + "\n";
+            temp2[temp2.length-1] = data;
+            String toSave = "";
+            for(int i = 1; i<temp2.length-1;i++)
+            {
+                toSave += temp2[i] + "\n";
+            }
+            toSave += temp2[temp2.length-1];
+            dsHelper.writeDataToInternalStorage("DailyGoal.txt",toSave,getActivity());
+        }
+        catch(JSONException e){
             throw new RuntimeException(e);
         }
-        String data = obj.toString() + "\n";
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
     }
 
 
@@ -532,6 +559,95 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 dailyGoal = resources.getString(R.string.goal_do_a_workout);
                 break;
         }
+    }
+
+
+
+
+
+
+
+    //--------------Display Last Interventions--------------------
+
+
+
+    private void getPastInterventions()
+    {
+        //-----Variables----------
+        JsonObject obj;
+        JsonParser parser = new JsonParser();
+        String date = " ";
+        String id;
+        String[] time;
+        dsHelper = DataSavingHelper.getInstance();
+
+        try {
+            String temp = dsHelper.readSavedDataFromInternalStorage("completedInterventions.txt",getActivity());
+            String[] allInterventions = temp.split("\n");
+            String singleIntervention;
+            for(int i = allInterventions.length-1; i>0; i--)
+            {
+                singleIntervention = allInterventions[i];
+                obj = parser.parse(singleIntervention).getAsJsonObject();
+                if(!date.equals(obj.get("timestamp").getAsString().split(" ")[0]))
+                {
+                    date = obj.get("timestamp").getAsString().split(" ")[0];
+                    addTextView(date);
+                }
+                id = String.valueOf(obj.get("id").getAsInt());
+                time = obj.get("timestamp").getAsString().split(" ")[1].split(":");
+                addInterventionView(id, time);
+                if(i == allInterventions.length-5) break;
+
+            }
+        }
+        catch(Exception e){
+
+        }
+    }
+    private void addTextView(String date)
+    {
+        txtViewDate = new TextView(getActivity());
+        txtViewDate.setTextSize(20);
+        txtViewDate.setGravity(Gravity.CENTER);
+        txtViewDate.setText(date);
+        linearLayout.addView(txtViewDate);
+    }
+
+    private void addInterventionView(String id, String[] time)
+    {
+        linearLayoutToAdd = new LinearLayout(getActivity());
+        linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutToAdd.setGravity(Gravity.LEFT);
+        linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
+        linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.linear_layout_border));
+
+
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity=Gravity.CENTER;
+        imageViewIntervention = new ImageView(getActivity());
+        imageViewIntervention.setLayoutParams(layoutParams);
+        imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+        imageViewIntervention.setForegroundGravity(Gravity.CENTER);
+        linearLayoutToAdd.addView(imageViewIntervention);
+
+        txtViewInterventions = new TextView(getActivity());
+        txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+        txtViewInterventions.setTextSize(20);
+        linearLayoutToAdd.addView(txtViewInterventions);
+
+        linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Open Activity that shows Data
+                System.out.println(time[0] + ":" + time[1] + ":" + time[2] + "\n");
+            }
+        });
+
+        linearLayout.addView(linearLayoutToAdd);
     }
 
 }

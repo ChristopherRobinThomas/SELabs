@@ -66,7 +66,8 @@ public class DataSavingHelper {
     // Default usage
     public void writeDataToInternalStorage (String filename, String data, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
-        filename += getCurrentUserId(context);
+        //filename += getCurrentUserId(context);
+        filename = getCurrentUserId(context) + filename;
         accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
     }
     // Overload: Access Mode
