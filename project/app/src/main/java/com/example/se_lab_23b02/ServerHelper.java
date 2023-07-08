@@ -11,17 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +34,7 @@ public class ServerHelper {
     private final String getUniqueID = "development/databaseentrys/getuniqueuserid";
     private final String loginUser = "development/useradministration/loginuser";
     private final String createNewUser = "development/useradministration/createnewuser";
+    private final String deleteAllData = "development/useradministration/deletealluserdata";
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
@@ -198,7 +195,7 @@ public class ServerHelper {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
-                    String result = null;
+                    String result;
                     try {
                         result = readResponseObject(response);
                     } catch (IOException e) {
@@ -256,7 +253,7 @@ public class ServerHelper {
      * @param failedClass     Class to which should be switched if the login failed
      * @param successfulClass Class to which should be switched if the login is successful
      */
-    public void loginUser(String userName, String password, Context context, Class failedClass, Class successfulClass) throws JSONException, IOException {
+    public void loginUser(String userName, String password, Context context, Class failedClass, Class successfulClass) throws JSONException {
 
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
@@ -273,28 +270,24 @@ public class ServerHelper {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
-                    String result = null;
+                    String result;
                     try {
                         result = readResponseObject(response);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println("Ergebniss: " + result);
-                    switch (result) {
-                        case "-1":
-                            Log.i("sHelper", "Login failed");
-                            Toast.makeText(activity, "Login failed, please try again", Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                            Log.i("sHelper", "Successfully logged User in");
-                            Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
-                            try {
-                                dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            context.startActivity(new Intent(context, successfulClass));
-                            break;
+                    if ("-1".equals(result)) {
+                        Log.i("sHelper", "Login failed");
+                        Toast.makeText(activity, "Login failed, please try again", Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.i("sHelper", "Successfully logged User in");
+                        Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
+                        try {
+                            dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        context.startActivity(new Intent(context, successfulClass));
                     }
                 } else {
                     Log.i("sHelper", "Failed to login User, Response: " + response);
@@ -313,6 +306,37 @@ public class ServerHelper {
     }
 
 
+    public void deleteEverything(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONObject body = JSONObjectCreator.createDeleteObject(context);
+        Call<ResponseBody> call = httpClient.postRequest(deleteAllData, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.i("sHelper", "Successfully deleted all Data");
+                    Toast.makeText(activity, "Successfully deleted all Data online", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Log.i("sHelper", "Failed to delete all Data, Response: " + response);
+                    Toast.makeText(activity, "Failed to get delete all Data", Toast.LENGTH_LONG).show();
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - deleteAllData, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
     //set Activity to display Toast, can be removed in the final delivery
     public void setActivity(FragmentActivity activity) {
         this.activity = activity;
@@ -321,6 +345,7 @@ public class ServerHelper {
 
     //reads UniqueID fromResponseBodyObject
     private String readResponseObject(Response<ResponseBody> response) throws IOException {
+        assert response.body() != null;
         return response.body().string();
     }
 
@@ -337,7 +362,7 @@ public class ServerHelper {
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
 
                 assert response.body() != null;
                 boolean success = writeResponseBodyToDisk(response.body());

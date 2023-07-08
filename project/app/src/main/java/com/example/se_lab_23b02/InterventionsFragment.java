@@ -2,12 +2,19 @@ package com.example.se_lab_23b02;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 
 import android.text.InputType;
 import android.view.Gravity;
@@ -123,6 +130,15 @@ public class InterventionsFragment extends Fragment {
             showAddInterventionDialogue(view);
         });
         
+        Button btStartRecording = view.findViewById(R.id.btStartRecording);
+
+        btStartRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SensorManager.toggleService(getActivity());
+            }
+        });
+
         return view;
     }
     private void showAddInterventionDialogue(View view) {
