@@ -1,5 +1,8 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,5 +61,27 @@ public class TimeStamp {
         LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
         return ldtTimestampAsDate;
     }
+    public static boolean timeSlotExistsAlready(Context context) {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
 
+        String text = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",context);
+        if(text.equals(""))
+            return false;
+        String[] allQuestionnaire = text.split(System.lineSeparator());
+        String currentTimeStamp = TimeStamp.getCurrentTimeStamp();
+        TimeStamp.TimeSlot currentTimeSlot = TimeStamp.getCurrentTimeSlot();
+        for(int i = 0; i < allQuestionnaire.length; i++){
+            Log.d("TimeSlotTest",allQuestionnaire[i]);
+            if( allQuestionnaire[i].equals(""))
+                continue;
+
+            String temp = allQuestionnaire[i];
+            temp = temp.split("\":")[10].split(",")[0].replace("\"","");
+            String day = temp.split(" ")[1];
+            TimeStamp.TimeSlot timeS = TimeStamp.getTimeSlotFromString(temp);
+            if(day.equals(currentTimeStamp.split(" ")[1]) && timeS == currentTimeSlot)
+                return true;
+        }
+        return false;
+    }
 }
