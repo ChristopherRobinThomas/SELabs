@@ -38,7 +38,9 @@ public class ServerHelper {
     private final String createNewUser = "development/useradministration/createnewuser";
     private final String deleteAllData = "development/useradministration/deletealluserdata";
     private final String synchronizeQuestionnaires = "development/databaseentrys/questionaire/allquestionnaires";
-    private final String synchronizeDigitSpanTask = "development/databaseentrys/digitspantask/alldigitspantasks";
+    private final String synchronizeDigitSpanTasks = "development/databaseentrys/digitspantask/alldigitspantasks";
+
+    private final String synchronizeDailyGoals = "development/databaseentrys/dailytasks/alldailytasks";
 
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
@@ -176,7 +178,7 @@ public class ServerHelper {
         }
 
         JSONObject body = JSONObjectCreator.createAllDigitSpanTaskObject(context);
-        Call<ResponseBody> call = httpClient.postRequest(synchronizeDigitSpanTask, body);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeDigitSpanTasks, body);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -206,6 +208,53 @@ public class ServerHelper {
                             newEntry.put("user_id", user_id);
 
                             dsHelper.writeDataToInternalStorage("DigitSpanTask.txt", newEntry.toString()+"\n", context, true);
+                        }
+
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Log.i("sHelper", "Successfully synchronized DigitSpanTask");
+                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void synchronizeDailyGoals(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONObject body = JSONObjectCreator.createAllDailyGoalObject(context);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeDailyGoals, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    JSONArray jarray;
+                    try {
+                        jarray = new JSONArray(response.body().string());
+                        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                        dsHelper.deleteFileFromInternalStorage("DailyTask.txt", context);
+                        for (int i = 0; i < jarray.length(); i++){
+                            JSONObject dailyTasks = new JSONObject(jarray.get(i).toString());
+                            System.out.println(dailyTasks);
                         }
 
 

@@ -85,6 +85,16 @@ public class JSONObjectCreator {
         return toSave;
     }
 
+    public static JSONObject createAllDailyGoalObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("DigitSpanTasks", jdata);
+        return toSave;
+
+    }
     public static JSONObject createDeleteObject(Context context) throws JSONException {
         JSONObject toSave = new JSONObject();
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();

@@ -228,8 +228,17 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         });
         seeAllPastActivitiesButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent myIntent = new Intent(getActivity(),AllPastInterventionsActivity.class);
-                startActivity(myIntent);
+                ServerHelper sHelper = ServerHelper.getInstance();
+                sHelper.setActivity(getActivity());
+                try {
+                    sHelper.synchronizeDailyGoals(getContext());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                //Intent myIntent = new Intent(getActivity(),AllPastInterventionsActivity.class);
+                //startActivity(myIntent);
             }
         });
 
