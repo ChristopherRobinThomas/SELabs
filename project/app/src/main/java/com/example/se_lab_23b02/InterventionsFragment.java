@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ public class InterventionsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private String m_Text = "";
 
     Button buttonIntervention1;
@@ -49,6 +49,7 @@ public class InterventionsFragment extends Fragment {
     Button buttonAddNewIntervention;
     Vector<Button> buttonList;
     Vector<Vector<String>> interventionList;
+    private LinearLayout linearLayoutToAdd;
 
 
 
@@ -178,16 +179,18 @@ public class InterventionsFragment extends Fragment {
         int i = 0;
         Vector<Button> buttonList = new Vector<Button>();
         for (Vector<String> interventionObject : interventionList) {
-            Button newButton = new Button(getContext());
-            try {
-                newButton.setText(interventionObject.get(1));
-            } catch (Exception e) {
-                break;
-            }
-            newButton.setText(interventionObject.get(1));
+            linearLayoutToAdd = new LinearLayout(getContext());
+            linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutToAdd.setGravity(Gravity.LEFT);
+            linearLayoutToAdd.setDividerDrawable(getDrawable(R.drawable.divider_big));
+            linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+            linearLayoutToAdd.setBackground(getDrawable(R.drawable.linear_layout_border));
+
 
             ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
             ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
+            lp.leftMargin = 0;
             lp.topMargin = 58 * i;
             cl.addView(newButton, lp);
             buttonList.add(newButton);

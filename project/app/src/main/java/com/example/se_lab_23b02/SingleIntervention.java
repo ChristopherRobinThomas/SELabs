@@ -80,7 +80,7 @@ public class SingleIntervention extends Fragment {
             completeButton.setClickable(false);
         }
 
-        // TODO: 
+        // TODO:
         // Frederick.RecordSensorData();
         // if (Frederick.GetSensorData() fulfills condition && requireSensordata) {
         //    completeButton.setClickable(true);
