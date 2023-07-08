@@ -10,22 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:id="@+id/linearLayoutAllPastInterventions"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Activities will be displayed here"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="Your Past Interventions"
+                android:textSize="20sp" />
+        </LinearLayout>
 
 
     </ScrollView>

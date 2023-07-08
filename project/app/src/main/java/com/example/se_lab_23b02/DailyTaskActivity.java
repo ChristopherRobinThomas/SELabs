@@ -170,6 +170,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dailyTask = String.valueOf(userInput.getText());
+                                saveDailyTask = dailyTask;
                                 txtChosenDailyGoal.setText(resources.getString(R.string.tv_daily_goal_goal_choice)+ dailyTask);
                             }
                         })
