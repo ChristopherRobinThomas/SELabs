@@ -100,14 +100,14 @@ public class InterventionsFragment extends Fragment {
         sampleInterventionA.add("Perform 10 push-ups.");
         interventionList.add(sampleInterventionA);
         Vector<String> sampleInterventionB = new Vector<String>();
-        sampleInterventionA.add("1");
-        sampleInterventionA.add("Sit-Ups");
-        sampleInterventionA.add("Perform 10 sit-ups.");
+        sampleInterventionB.add("1");
+        sampleInterventionB.add("Sit-Ups");
+        sampleInterventionB.add("Perform 10 sit-ups.");
         interventionList.add(sampleInterventionB);
         Vector<String> sampleInterventionC = new Vector<String>();
-        sampleInterventionA.add("2");
-        sampleInterventionA.add("Light Run");
-        sampleInterventionA.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
+        sampleInterventionC.add("2");
+        sampleInterventionC.add("Light Run");
+        sampleInterventionC.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
         interventionList.add(sampleInterventionC);
 
         buttonList = populateButtonList(interventionList, view);
@@ -179,6 +179,11 @@ public class InterventionsFragment extends Fragment {
         Vector<Button> buttonList = new Vector<Button>();
         for (Vector<String> interventionObject : interventionList) {
             Button newButton = new Button(getContext());
+            try {
+                newButton.setText(interventionObject.get(1));
+            } catch (Exception e) {
+                break;
+            }
             newButton.setText(interventionObject.get(1));
 
             ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);

@@ -24,6 +24,7 @@ public class SingleIntervention extends Fragment {
     private static String pInterventionName;
     private static String pInterventionDesc;
     private boolean hasCompletedIntervention;
+    private boolean requireSensordata;
     TextView interventionName;
     TextView interventionDesc;
     Button completeButton;
@@ -43,6 +44,7 @@ public class SingleIntervention extends Fragment {
         }
         dsHelper = DataSavingHelper.getInstance();
         hasCompletedIntervention = false;
+        requireSensordata = false;
     }
 
     @Override
@@ -72,7 +74,17 @@ public class SingleIntervention extends Fragment {
     }
 
     public void saveInterventionCompleted() {
-        // TODO: checkCompletedIntervention();
+        completeButton.setText("Complete!");
+
+        if (requireSensordata) {
+            completeButton.setClickable(false);
+        }
+
+        // TODO: 
+        // Frederick.RecordSensorData();
+        // if (Frederick.GetSensorData() fulfills condition && requireSensordata) {
+        //    completeButton.setClickable(true);
+        // }
 
         String additionalNotes;
         additionalNotes = String.valueOf(et.getText());

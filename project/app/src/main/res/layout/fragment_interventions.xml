@@ -20,53 +20,6 @@
                 android:layout_height="728dp">
 
                 <Button
-                    android:id="@+id/buttonIntervention1"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/buttonIntervention2"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="58dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/buttonIntervention3"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="116dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
                     android:id="@+id/buttonAddNewIntervention"
                     android:layout_width="148dp"
                     android:layout_height="58dp"
