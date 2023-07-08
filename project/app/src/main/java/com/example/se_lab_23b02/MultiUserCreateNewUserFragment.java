@@ -142,7 +142,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
         TOS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String tosText = "Terms and Conditions  \n====================\n\nLast updated: July 04, 2023\nPlease read these terms and conditions carefully before using Our Service.\n\nInterpretation and Definitions  \n==============================\n\nInterpretation  \n--------------\n\nThe words of which the initial letter is capitalized have meanings defined\nunder the following conditions. The following definitions shall have the same\nmeaning regardless of whether they appear in singular or in plural.\n\nDefinitions  \n-----------";
+                String tosText = "For our Terms of Service, refer to: https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0";
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Terms of Service");
                 final TextView tos = new TextView(getContext());
