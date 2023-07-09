@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,25 +27,30 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     //------------GUI Elements-----------------
-    Button buttonX;
-    Button buttonWalk5000Steps;
-    Button buttonWalk10000Steps;
-    Button buttonDrinkWater;
-    Button buttonClean;
-    Button buttonGoForAWalk;
-    Button buttonMeditate;
-    Button buttonWorkout;
-    Button buttonOwnDailyTask;
-    Button buttonSaveDailyTask;
-    TextView txtChosenDailyGoal;
+    private Button buttonX;
+    private Button buttonWalk5000Steps;
+    private Button buttonWalk10000Steps;
+    private Button buttonDrinkWater;
+    private Button buttonClean;
+    private Button buttonGoForAWalk;
+    private Button buttonMeditate;
+    private Button buttonWorkout;
+    private Button buttonOwnDailyTask;
+    private Button buttonSaveDailyTask;
+    private TextView txtChosenDailyGoal;
+
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
 
     //-------------Variables---------------------
     private String dailyTask;
+
+    private String saveDailyTask;
     private int stepCount;
     private boolean running = false;
 
@@ -52,6 +58,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
     private DataSavingHelper dsHelper;
     private SensorManager sensorManager;
     private Sensor sensor_to_read;
+
+
+    //--------Context and Resources for Language----
+    private Context context;
+    private Resources resources;
 
     //---------------------------------------------
     @Override
@@ -84,6 +95,23 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonWorkout.setOnClickListener(this);
         buttonOwnDailyTask.setOnClickListener(this);
 
+
+        elementsForLanguageChange.add(findViewById(R.id.pickDailyGoalTxt));
+        elementsForLanguageChange.add(findViewById(R.id.buttonWalk5000Steps));
+        elementsForLanguageChange.add(findViewById(R.id.buttonWalk10000Steps));
+        elementsForLanguageChange.add(findViewById(R.id.buttonDrinkWater));
+        elementsForLanguageChange.add(findViewById(R.id.buttonClean));
+        elementsForLanguageChange.add(findViewById(R.id.buttonGoForAWalk));
+        elementsForLanguageChange.add(findViewById(R.id.buttonMeditate));
+        elementsForLanguageChange.add(findViewById(R.id.buttonWorkout));
+        elementsForLanguageChange.add(findViewById(R.id.buttonOwnDailyGoal));
+        elementsForLanguageChange.add(findViewById(R.id.txtChosenDailyGoal));
+        elementsForLanguageChange.add(findViewById(R.id.buttonSaveDailyTask));
+
+        // set text according to the language
+        refreshResources();
+        setLanguage();
+
         buttonSaveDailyTask.setEnabled(false);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -94,29 +122,37 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonSaveDailyTask.setEnabled(true);
         switch(v.getId())
         {
+
             case R.id.buttonX:
                 finish();
                 break;
             case R.id.buttonWalk5000Steps:
-                dailyTask = "Walk 5.000 Steps";
+                saveDailyTask = "Walk 5000 Steps";
+                dailyTask = resources.getString(R.string.goal_walk_5000_steps);
                 break;
             case R.id.buttonWalk10000Steps:
-                dailyTask = "Walk 10.000 Steps";
+                saveDailyTask = "Walk 10000 Steps";
+                dailyTask = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case R.id.buttonDrinkWater:
-                dailyTask = "Drink 2L Water";
+                saveDailyTask = "Drink 2L Water";
+                dailyTask = resources.getString(R.string.goal_drink_water);
                 break;
             case R.id.buttonClean:
-                dailyTask = "Clean";
+                saveDailyTask = "Clean";
+                dailyTask = resources.getString(R.string.goal_clean);
                 break;
             case R.id.buttonGoForAWalk:
-                dailyTask = "Gor For A Walk";
+                saveDailyTask = "Go for a Walk";
+                dailyTask = resources.getString(R.string.goal_go_for_a_walk);
                 break;
             case R.id.buttonMeditate:
-                dailyTask = "Meditate";
+                saveDailyTask = "Meditate";
+                dailyTask = resources.getString(R.string.goal_meditate);
                 break;
             case R.id.buttonWorkout:
-                dailyTask = "Workout";
+                saveDailyTask = "Do a Workout";
+                dailyTask = resources.getString(R.string.goal_do_a_workout);
                 break;
             case R.id.buttonOwnDailyGoal:
 
@@ -134,10 +170,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dailyTask = String.valueOf(userInput.getText());
-                                txtChosenDailyGoal.setText("Your choice: "+ dailyTask);
+                                saveDailyTask = dailyTask;
+                                txtChosenDailyGoal.setText(resources.getString(R.string.tv_daily_goal_goal_choice)+ dailyTask);
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(resources.getString(R.string.prompt_cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
@@ -148,7 +185,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                 alertDialog.show();
                 break;
         }
-        txtChosenDailyGoal.setText("Your choice: " + dailyTask);
+        txtChosenDailyGoal.setText(resources.getString(R.string.tv_daily_goal_goal_choice) + dailyTask);
     }
 
 
@@ -160,9 +197,9 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         //Save Date, Task, Progress, and Step Count
         JSONObject obj = new JSONObject();
         obj.put("Date", now);
-        obj.put("Daily_Task", dailyTask);
+        obj.put("Daily_Task", saveDailyTask);
         obj.put("Progress", 0);
-        obj.put("Step_Count", stepCount);
+        obj.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()));
 
         String data = obj.toString() + "\n";
 
@@ -206,6 +243,55 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+
+
+
+    //---------------Language Functions----------------
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+    private void setLanguage() {
+
+        TextView tv = (TextView) elementsForLanguageChange.get(0);
+        tv.setText(resources.getString(R.string.tv_daily_goal_pick_daily_goal));
+        Button bt = (Button) elementsForLanguageChange.get(1);
+        bt.setText(resources.getString(R.string.goal_walk_5000_steps));
+        bt = (Button) elementsForLanguageChange.get(2);
+        bt.setText(resources.getString(R.string.goal_walk_10000_steps));
+        bt = (Button) elementsForLanguageChange.get(3);
+        bt.setText(resources.getString(R.string.goal_drink_water));
+        bt = (Button) elementsForLanguageChange.get(4);
+        bt.setText(resources.getString(R.string.goal_clean));
+        bt = (Button) elementsForLanguageChange.get(5);
+        bt.setText(resources.getString(R.string.goal_go_for_a_walk));
+        bt = (Button) elementsForLanguageChange.get(6);
+        bt.setText(resources.getString(R.string.goal_meditate));
+        bt = (Button) elementsForLanguageChange.get(7);
+        bt.setText(resources.getString(R.string.goal_do_a_workout));
+        bt = (Button) elementsForLanguageChange.get(8);
+        bt.setText(resources.getString(R.string.goal_own_daily_goal));
+        tv = (TextView) elementsForLanguageChange.get(9);
+        tv.setText(resources.getString(R.string.tv_daily_goal_goal_choice));
+        bt = (Button) elementsForLanguageChange.get(10);
+        bt.setText(resources.getString(R.string.bt_daily_goal_save_daily_goal));
 
     }
 }
