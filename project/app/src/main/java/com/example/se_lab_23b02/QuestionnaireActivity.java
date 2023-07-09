@@ -128,10 +128,11 @@ public class QuestionnaireActivity extends AppCompatActivity {
         final TextView tv = new TextView(QuestionnaireActivity.this);
         tv.setText("Based on your response, we recommend an intervention.\nDo intervention now?");
         builder.setView(tv);
+        Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(QuestionnaireActivity.this, SingleIntervention.class);
+                i.putExtra("openRandomIntervention", true);
                 startActivity(i);
                 finish();
             }
@@ -139,7 +140,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
                 startActivity(i);
                 finish();
             }

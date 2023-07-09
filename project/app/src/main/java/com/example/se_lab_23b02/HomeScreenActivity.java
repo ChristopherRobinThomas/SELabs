@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -55,7 +56,21 @@ public class HomeScreenActivity extends AppCompatActivity {
 
             return true;
         });
+        try {
+            Intent sourceIntent = getIntent();
+            boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
+            if(doRandIntv) {
+                SingleIntervention singleIntervention = new SingleIntervention();
+                Bundle args = new Bundle();
+                args.putInt("InterventionID", 0);
+                args.putString("InterventionName", "");
+                args.putString("InterventionDescription", "This is a sample description.");
+                singleIntervention.setArguments(args);
+                setTitle(resources.getString(R.string.interventions_heading));
+            }
+        } catch (Exception ignored) {
 
+        }
     }
 
     private void refreshResources() {
