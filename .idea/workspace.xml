@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d804fe6b-b8df-4609-80f8-1b2052889607" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/project/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/app/src/main/java/com/example/se_lab_23b02/HomeFragment.java" afterDir="false" />
-    </list>
+    <list default="true" id="d804fe6b-b8df-4609-80f8-1b2052889607" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

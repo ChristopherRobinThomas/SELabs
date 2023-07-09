@@ -1,21 +1,31 @@
 package com.example.se_lab_23b02;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +60,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
+    private String additionalNotes = new String();
+
     private String timestamp;
 
     private DataSavingHelper dsHelper;
@@ -66,34 +78,16 @@ public class QuestionnaireActivity extends AppCompatActivity {
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
 
-        elementsForLanguageChange.add(findViewById(R.id.Question1_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question1_2Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question1_3Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question1_4Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question1_5Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question1_6Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question2Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question2_2));
-        elementsForLanguageChange.add(findViewById(R.id.Question2_3Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question3Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question3_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question4_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question5_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question6_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question6_2Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question6_3Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question6_4Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question7_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question7_2Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question8_1Text));
-        elementsForLanguageChange.add(findViewById(R.id.Question8_2Text));
-        elementsForLanguageChange.add(findViewById(R.id.Send_Button));
+        if(TimeStamp.timeSlotExistsAlready(this)){
+            Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
+            startActivity(i);
+            finish();
+        }
+
+        languageChangeSetup();
 
         refreshResources();
         setLanguage();
-
-
-
 
         manageQuestions();
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
@@ -117,8 +111,38 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
 
     }
+    private void languageChangeSetup() {
+        elementsForLanguageChange.add(findViewById(R.id.Question1_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_4Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_5Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question1_6Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question2_2));
+        elementsForLanguageChange.add(findViewById(R.id.Question2_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question3_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question4_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question5_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_3Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question6_4Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question7_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question7_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question8_1Text));
+        elementsForLanguageChange.add(findViewById(R.id.Question8_2Text));
+        elementsForLanguageChange.add(findViewById(R.id.Send_Button));
+        elementsForLanguageChange.add(findViewById(R.id.tvQuestionnaireAdditionalNotes));
+    }
+
 
     void saveAnswers() throws JSONException {
+
+        String[] additionalNotes = new String[1];
+        EditText et = (EditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
+        additionalNotes[0] = String.valueOf(et.getText());
 
         JSONArray[] valueArrays = {
                 new JSONArray(questionOneValues),
@@ -128,14 +152,15 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 new JSONArray(questionFiveValue),
                 new JSONArray(questionSixValues),
                 new JSONArray(questionSevenValues),
-                new JSONArray(questionEightValues)
+                new JSONArray(questionEightValues),
+                new JSONArray(additionalNotes)
         };
         JSONObject toSave = new JSONObject();
         for (int i = 1; i <= valueArrays.length; i++) {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
         timestamp = TimeStamp.getCurrentTimeStamp();
-        toSave.put("timestamp: ", timestamp);
+        toSave.put("timestamp", timestamp);
 
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());
@@ -325,7 +350,15 @@ public class QuestionnaireActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                questionFourValue[0] = parent.getItemAtPosition(position).toString();
+                String val =  parent.getItemAtPosition(position).toString();
+
+                if(val.equals("Other")) {
+                    Log.d("Other","Other should be shown");
+                    showPopup(questionFourValue, 0,spinner);
+                }else{
+                    Log.d("Other","Other should not be shown");
+                    questionFourValue[0] = val;
+                }
             }
 
             @Override
@@ -353,7 +386,15 @@ public class QuestionnaireActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                questionFiveValue[0] = parent.getItemAtPosition(position).toString();
+                String val =  parent.getItemAtPosition(position).toString();
+
+                if(val.equals("Other")) {
+                    Log.d("Other","Other should be shown");
+                    showPopup(questionFiveValue, 0,spinner);
+                }else{
+                    Log.d("Other","Other should not be shown");
+                    questionFiveValue[0] = val;
+                }
             }
 
             @Override
@@ -467,6 +508,36 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
     }
 
+    private void showPopup(String[] arr, int index,View relativ){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View inputView = inflater.inflate(R.layout.layout_questionnaire_popup,null);
+        dialogBuilder.setView(inputView);
+
+        PopupWindow popupWindow = new PopupWindow(inputView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+
+        relativ.post(new Runnable() {
+            @Override
+            public void run() {
+                popupWindow.showAtLocation(relativ, Gravity.TOP,0,1000);
+            }
+        });
+
+        Button enter = (Button) inputView.findViewById(R.id.questionnaire_popup_AcceptButton);
+        enter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextInputEditText text =  (TextInputEditText)inputView.findViewById(R.id.questionnaire_popup_textinput);
+                arr[index] =text.getText().toString();
+                popupWindow.dismiss();
+            }
+        });
+
+    }
+
 
     private void refreshResources() {
 
@@ -531,9 +602,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         tv.setText(resources.getString(R.string.tv_questionnaire_q8_2));
         Button bt = (Button) elementsForLanguageChange.get(21);
         bt.setText(resources.getString(R.string.bt_send));
-
-
-
-
+        EditText et = (EditText) elementsForLanguageChange.get(22);
+        et.setHint(resources.getString(R.string.et_questionnaire_additional_notes));
     }
 }

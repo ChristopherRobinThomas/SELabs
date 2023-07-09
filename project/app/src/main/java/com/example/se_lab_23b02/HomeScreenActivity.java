@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
 

@@ -5,72 +5,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btStartRecording"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="70dp"
+            android:background="#00FFFFFF"
+            android:textAlignment="center"
+            app:icon="@android:drawable/ic_media_next"
+            app:iconGravity="textStart"
+            app:iconTint="#000000"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/singleInterventionConstraintLayout"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/buttonIntervention1"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/singleInterventionConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/buttonIntervention2"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="58dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                    <Button
+                        android:id="@+id/buttonIntervention1"
+                        android:layout_width="407dp"
+                        android:layout_height="58dp"
+                        android:background="@android:color/transparent"
+                        android:onClick="openSingleInterventionFragment"
+                        android:outlineAmbientShadowColor="#000000"
+                        android:outlineProvider="none"
+                        android:text="Intervention Name"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
 
-                <Button
-                    android:id="@+id/buttonIntervention3"
-                    android:layout_width="407dp"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="116dp"
-                    android:background="@android:color/transparent"
-                    android:onClick="openSingleInterventionFragment"
-                    android:outlineAmbientShadowColor="#000000"
-                    android:outlineProvider="none"
-                    android:text="Intervention Name"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                    <Button
+                        android:id="@+id/buttonIntervention2"
+                        android:layout_width="407dp"
+                        android:layout_height="58dp"
+                        android:layout_marginTop="58dp"
+                        android:background="@android:color/transparent"
+                        android:onClick="openSingleInterventionFragment"
+                        android:outlineAmbientShadowColor="#000000"
+                        android:outlineProvider="none"
+                        android:text="Intervention Name"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-    </ScrollView>
+                    <Button
+                        android:id="@+id/buttonIntervention3"
+                        android:layout_width="407dp"
+                        android:layout_height="58dp"
+                        android:layout_marginTop="116dp"
+                        android:background="@android:color/transparent"
+                        android:onClick="openSingleInterventionFragment"
+                        android:outlineAmbientShadowColor="#000000"
+                        android:outlineProvider="none"
+                        android:text="Intervention Name"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

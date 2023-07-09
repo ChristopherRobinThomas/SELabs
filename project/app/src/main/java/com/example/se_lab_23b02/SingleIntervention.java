@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.content.Intent.getIntent;
 
 /**
@@ -24,6 +27,7 @@ public class SingleIntervention extends Fragment {
     private static int pInterventionID;
     private static String pInterventionName;
     private static String pInterventionDesc;
+    private boolean hasCompletedIntervention;
     TextView interventionName;
     TextView interventionDesc;
     Button completeButton;
@@ -41,6 +45,7 @@ public class SingleIntervention extends Fragment {
             pInterventionDesc = getArguments().getString("InterventionDescription");
         }
         dsHelper = DataSavingHelper.getInstance();
+        hasCompletedIntervention = false;
     }
 
     @Override
@@ -53,16 +58,29 @@ public class SingleIntervention extends Fragment {
         // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
-            interventionComplete();
+            saveInterventionCompleted();
             getActivity().getSupportFragmentManager().popBackStack();
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
 
+        // TODO:
+        // startCapturingSensorData();
+        // In that function: switch(pInterventionID): capture different data.
+        // Implement checkCompletedIntervention() and again switch(pInterventionID) and validate if intervention has been completed.
+
         return view;
     }
 
-    public void interventionComplete() {
-
+    public void saveInterventionCompleted() {
+        // TODO: checkCompletedIntervention();
+        String now = TimeStamp.getCurrentTimeStamp();
+        JSONObject j = new JSONObject();
+        try {
+            j.put("timestamp",now);
+            j.put("id", pInterventionID);
+            j.put("completed", hasCompletedIntervention);
+        } catch (JSONException ignored) {}
+        dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString()+"\n", getActivity().getApplicationContext(),true);
     }
 }
