@@ -40,7 +40,7 @@ public class ServerHelper {
     private final String synchronizeQuestionnaires = "development/databaseentrys/questionaire/allquestionnaires";
     private final String synchronizeDigitSpanTasks = "development/databaseentrys/digitspantask/alldigitspantasks";
 
-    private final String synchronizeDailyGoals = "development/databaseentrys/dailytasks/alldailytasks";
+    private final String synchronizeDailyGoals = "development/databaseentrys/dailygoal/alldailygoals";
 
     private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
@@ -247,17 +247,21 @@ public class ServerHelper {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+
                     JSONArray jarray;
                     try {
                         jarray = new JSONArray(response.body().string());
                         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                        dsHelper.deleteFileFromInternalStorage("DailyTask.txt", context);
+                        dsHelper.deleteFileFromInternalStorage("DailyGoal.txt", context);
                         for (int i = 0; i < jarray.length(); i++){
                             JSONObject dailyTasks = new JSONObject(jarray.get(i).toString());
-                            System.out.println(dailyTasks);
+                            JSONObject newEntry = new JSONObject();
+                            newEntry.put("Date", dailyTasks.get("Date").toString().replace(".000000", ""));
+                            newEntry.put("Daily_Task", dailyTasks.get("Daily_Task"));
+                            newEntry.put("progress", dailyTasks.get("progress"));
+                            newEntry.put("user_id", dailyTasks.get("user_id"));
+                            dsHelper.writeDataToInternalStorage("DailyGoal.txt", newEntry.toString() + "\n", context, true);
                         }
-
-
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     } catch (IOException e) {
