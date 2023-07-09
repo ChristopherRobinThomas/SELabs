@@ -19,13 +19,10 @@ import com.androidplot.xy.XYSeries;
 
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
+
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import kotlin.Triple;
@@ -99,7 +96,7 @@ public class SensorRecordingGraphActivity extends Activity {
     }
 
     private void getValues(String timestamp) {
-        timestamp = "2023-07-05 13:09:14";
+        timestamp = "2023-07-09 11:27:12";
         try {
             values = daHelper.getValuesFromRecording(timestamp, getApplicationContext());
         } catch (JSONException e) {
@@ -122,9 +119,11 @@ public class SensorRecordingGraphActivity extends Activity {
         Float[] y = new Float[y_list.size()];
         Float[] z = new Float[z_list.size()];
 
+        long min_timestamp = (x_list.get(0).first / 1000);
+        int ts_as_int = (int) min_timestamp; // get the first timestamp as int in seconds
 
         for(int i = 0; i < x_list.size(); i++) {
-            domains[i] = x_list.get(i).first;
+            domains[i] = x_list.get(i).first - x_list.get(0).first; // normalize x_vals to 0 so every timeseries starts at 0 (PanZoom not working otherwise)
             x[i] = x_list.get(i).second;
             y[i] = y_list.get(i).second;
             z[i] = z_list.get(i).second;
@@ -150,18 +149,12 @@ public class SensorRecordingGraphActivity extends Activity {
         xyPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                char[] objectAsString = obj.toString().toCharArray();
-                char[] charList = new char[10];
-                int counter = 0;
-                for(int i = 0; i < 11; i++) {
-                    if(i != 1) {
-                        charList[counter] = objectAsString[i];
-                        counter++;
-                    }
-                }
-                int timestamp = Integer.parseInt(String.valueOf(charList));
 
-                return toAppendTo.append(TimeStamp.getLocalTimeAsStringFromSeconds(timestamp));
+                // converting the labels to timestamps in seconds in int
+                int objAsInt = (int)(Float.parseFloat(obj.toString()) / 1000);
+                int new_ts = objAsInt + ts_as_int; // add first ts so we get real timestamp
+                return toAppendTo.append(TimeStamp.getLocalTimeAsStringFromSeconds(new_ts));
+
             }
 
             @Override
@@ -171,9 +164,11 @@ public class SensorRecordingGraphActivity extends Activity {
         });
 
 
-
+        //panzoom to make it zoomable
         PanZoom.attach(xyPlot);
         xyPlot.invalidate();
+
+
 
     }
 
