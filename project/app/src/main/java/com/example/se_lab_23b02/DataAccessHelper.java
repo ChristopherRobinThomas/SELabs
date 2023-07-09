@@ -110,6 +110,33 @@ public class DataAccessHelper {
         return outputList;
     }
 
+    public int getStepCountFromRecording(String timestamp, Context context) throws JSONException {
+        String[] splitTS = timestamp.split(" ");
+        String content = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+
+        LocalDate tsDate = LocalDate.parse(splitTS[0]);
+        LocalTime tsTime = LocalTime.parse(splitTS[1]);
+
+        String[] lines = content.split(System.lineSeparator());
+        for (int i = 1; i < lines.length; i++) {
+            JSONObject jsonLine = new JSONObject(lines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+
+            if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
+                JSONArray jsonArray = (JSONArray) jsonLine.get("stepcounter");
+                String stepContent = String.valueOf(jsonArray.get(0));
+                if(stepContent.length() == 0)
+                    return -1;
+                return (int) (Float.parseFloat(stepContent));
+            }
+
+        }
+        return -1;
+    }
+
     public Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> getValuesFromRecording(String timestamp, Context context) throws JSONException {
 
         ArrayList<Pair<Long, Float>> x_list = new ArrayList<>();
@@ -125,7 +152,6 @@ public class DataAccessHelper {
 
         String[] fileLines = fileContent.split(System.lineSeparator());
         for (int i = 1; i < fileLines.length; i++) {
-            System.out.println("i: " + i + "line: " + fileLines[i]);
             JSONObject jsonLine = new JSONObject(fileLines[i]);
             String jsonTimestampString = (String) jsonLine.get("timestamp");
             String[] jsonTimestampSplitted = jsonTimestampString.split(" ");

@@ -89,14 +89,21 @@ public class SensorRecordingGraphActivity extends Activity {
         String timestamp = day + " " + dateTime[0] + ":" + dateTime[1] + ":" + dateTime[2];
 
         TextView tvDate = (TextView) findViewById(R.id.tvDate);
-        tvDate.setText("recording: " + timestamp);
+        try {
+            int steps = daHelper.getStepCountFromRecording(timestamp, getApplicationContext());
+            if(steps != -1)
+                tvDate.setText("steps: " + steps);
+            else
+                tvDate.setText("no steps were recorded");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         getValues(timestamp);
         plotting();
     }
 
     private void getValues(String timestamp) {
-        timestamp = "2023-07-09 11:27:12";
         try {
             values = daHelper.getValuesFromRecording(timestamp, getApplicationContext());
         } catch (JSONException e) {
