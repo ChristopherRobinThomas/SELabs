@@ -124,8 +124,11 @@ public class TimePickerActivity extends Activity {
                     }
                     data = "";
                     for(int i = 0; i < timeslots.length;i++){
-                        data += (timeslots[i] + "\n");
-                    }
+                        if(i < timeslots.length - 1 )
+                            data += timeslots[i] + "\n";
+                        else
+                            data += timeslots[i];
+                   }
                 }
                 dsHelper.writeDataToInternalStorage("Timers",data,getApplicationContext());
                 Toast.makeText(TimePickerActivity.this, "Alarm set successfully", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,7 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -57,6 +59,22 @@ public class TimeStamp {
         LocalTime tmpLocalTime = LocalTime.parse(times[1]);
         LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
         return ldtTimestampAsDate;
+    }
+    static public void setStandardTimers(Context context)
+    {
+        Alarm cur = new Alarm(0);
+        cur.addTime(7, 0);
+        cur = new Alarm(1);
+        cur.addTime(12, 0);
+        cur = new Alarm(2);
+        cur.addTime(17, 0);
+
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String data;
+        data = "mornCurH:" + String.valueOf(7) + ",mornCurM" + String.valueOf(0) + "\n";
+        data += "noonCurH:" + String.valueOf(12) + ",noonCurM" + String.valueOf(0) + "\n";
+        data += "evnCurH:" + String.valueOf(17) + ",evnCurM" + String.valueOf(0);
+        dsHelper.writeDataToInternalStorage("Timers",data,context);
     }
 
 }

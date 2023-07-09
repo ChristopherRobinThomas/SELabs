@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.sql.Time;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MultiUserCreateNewUserFragment#newInstance} factory method to
@@ -134,6 +136,9 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                         default: break;
                     }
                 }
+
+                TimeStamp.setStandardTimers(getContext());
+
                 Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                 startActivity(myIntent);
                 getActivity().finish();
@@ -159,8 +164,6 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                 builder.show();
             }
         });
-
-
 
         return view;
     }
