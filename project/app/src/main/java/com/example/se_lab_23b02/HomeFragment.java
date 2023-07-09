@@ -175,8 +175,11 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
-                startActivity(myIntent);
+                if(!TimeStamp.timeSlotExistsAlready(getContext()))
+                {
+                    Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                    startActivity(myIntent);
+                }
             }
         });
 
