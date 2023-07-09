@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.fragment.app.Fragment;
 
 import android.util.Pair;
@@ -45,6 +46,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+
+import kotlin.Triple;
 
 
 /**
@@ -173,8 +176,8 @@ public class OverviewFragment extends Fragment {
         });
 
         // show barchart by setting currentTypeToPlot to 2
-        Button btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
-        btNumOfActivities.setOnClickListener(new View.OnClickListener() {
+        Button btDailyTaskDistribution = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
+        btDailyTaskDistribution.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -287,13 +290,14 @@ public class OverviewFragment extends Fragment {
 
     // updates the graph by reading the data from file (DAHelper) and then drawing it using draw/drawPieChart
     private void updateGraph(int typeToPlot) throws JSONException {
-
+        plot.clear();
+        pieChart.clear();
         daHelper = DataAccessHelper.getInstance();
-        if(typeToPlot == 2) {
+        if (typeToPlot == 2) {
             plot.setVisibility(View.INVISIBLE);
             pieChart.setVisibility(View.VISIBLE);
             ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_DAILY_TASK_DISTRIBUTION, getContext());
-            ArrayList<Segment> segments = new ArrayList<Segment>();
+            ArrayList<Segment> segments = new ArrayList<>();
             for (int i = 0; i < data.size(); i++) {
                 Segment temp = new Segment(DataAccessHelper.LIST_OF_DAILY_TASKS_TO_INDEX[data.get(i).second], data.get(i).first);
                 segments.add(temp);
@@ -302,31 +306,46 @@ public class OverviewFragment extends Fragment {
             return;
 
         }
-        // get current values
-        plot.setVisibility(View.VISIBLE);
-        pieChart.setVisibility(View.INVISIBLE);
-        ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
-        int amountOfHours = (int)dateLB.until(dateUB, ChronoUnit.HOURS);
-        Number[] yVals = new Number[data.size()];
-        String[] labels = new String[amountOfHours];
-        Number[] xVals = new Number[data.size()];
+        if (typeToPlot == 0) {
+
+            // get current values
+            plot.setVisibility(View.VISIBLE);
+            pieChart.setVisibility(View.INVISIBLE);
+            ArrayList<Pair<Integer, Integer>> data = daHelper.collectDataFromTimeframe(dateLB, dateUB, DataAccessHelper.ACCESS_MENTAL_HEALTH_SCORE, getContext());
+            int amountOfHours = (int) dateLB.until(dateUB, ChronoUnit.HOURS);
+            Number[] yVals = new Number[data.size()];
+            String[] labels = new String[amountOfHours];
+            Number[] xVals = new Number[data.size()];
 
 
-        // create Labels
-        LocalDateTime tempDate = dateLB;
-        labels[0] = tempDate.toLocalDate().toString();
-        for (int i = 1; i < amountOfHours; i++) {
-            tempDate = tempDate.plusHours(1);
-            labels[i] = tempDate.toLocalDate().toString();
+            // create Labels
+            LocalDateTime tempDate = dateLB;
+            labels[0] = tempDate.toLocalDate().toString();
+            for (int i = 1; i < amountOfHours; i++) {
+                tempDate = tempDate.plusHours(1);
+                labels[i] = tempDate.toLocalDate().toString();
+            }
+
+            for (int i = 0; i < data.size(); i++) {
+                yVals[i] = data.get(i).first;
+                xVals[i] = data.get(i).second;
+            }
+
+            drawMentalHealth(yVals, labels, xVals);
+            return;
         }
 
-        for(int i = 0; i < data.size(); i++) {
-            yVals[i] = data.get(i).first;
-            xVals[i] = data.get(i).second;
+        if(typeToPlot == 1) {
+            plot.setVisibility(View.VISIBLE);
+            pieChart.setVisibility(View.INVISIBLE);
+            Triple<ArrayList<String>, ArrayList<Integer>, ArrayList<Integer>> data = daHelper.getInterventionsValues(dateLB, dateUB, getContext());
+            String[] datesList = data.getFirst().toArray(new String[0]);
+            Integer[] completed = data.getSecond().toArray(new Integer[0]);
+            Integer[] incompleted = data.getThird().toArray(new Integer[0]);
+
+            drawInterventions(datesList, completed, incompleted);
+
         }
-
-        draw(typeToPlot, yVals, labels, xVals);
-
     }
 
 
@@ -334,72 +353,148 @@ public class OverviewFragment extends Fragment {
     private void drawPieChart(ArrayList<Segment> segments) {
         pieChart.clear();
         pieChart.setTitle(resources.getString(R.string.bt_overview_task_distribution));
+        boolean content = false;
 
         if((int)segments.get(0).getValue() > 0) {
             SegmentFormatter sf0 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_0);
             pieChart.addSegment(segments.get(0), sf0);
+            content = true;
         }
         if((int)segments.get(1).getValue() > 0) {
             SegmentFormatter sf1 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_1);
             pieChart.addSegment(segments.get(1), sf1);
+            content = true;
         }
         if((int)segments.get(2).getValue() > 0) {
             SegmentFormatter sf2 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_2);
             pieChart.addSegment(segments.get(2), sf2);
+            content = true;
         }
         if((int)segments.get(3).getValue() > 0) {
             SegmentFormatter sf3 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_3);
             pieChart.addSegment(segments.get(3), sf3);
+            content = true;
         }
         if((int)segments.get(4).getValue() > 0) {
             SegmentFormatter sf4 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_4);
             pieChart.addSegment(segments.get(4), sf4);
+            content = true;
         }
         if((int)segments.get(5).getValue() > 0) {
             SegmentFormatter sf5 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_5);
             pieChart.addSegment(segments.get(5), sf5);
+            content = true;
         }
         if((int)segments.get(6).getValue() > 0) {
             SegmentFormatter sf6 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_6);
             pieChart.addSegment(segments.get(6), sf6);
+            content = true;
         }
         if((int)segments.get(7).getValue() > 0) {
             SegmentFormatter sf7 = new SegmentFormatter(getContext(), R.xml.pie_segment_formatter_7);
             pieChart.addSegment(segments.get(7), sf7);
+            content = true;
         }
+        if(content)
+            tvInfo.setVisibility(TextView.INVISIBLE);
+        else
+            tvInfo.setVisibility(TextView.VISIBLE);
         pieChart.invalidate();
     }
 
-
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
-    private void draw(int typeToPlot, Number[] dataList, String[] labels, Number[] domains) {
+    private void drawMentalHealth(Number[] dataList, String[] labels, Number[] domains) {
 
         plot.clear();
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
         plot.getLayoutManager().remove(plot.getLegend());
 
-        if(dataList.length == 0) {
+        if (dataList.length == 0) {
             tvInfo.setVisibility(TextView.VISIBLE);
+            plot.invalidate();
+            return;
         } else
             tvInfo.setVisibility(TextView.INVISIBLE);
 
 
-        if (typeToPlot == 0) {
-            plot.setTitle(resources.getString(R.string.bt_overview_health_index));
-            plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
-            plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
-            final Number[] domainLabels = domains;
+        plot.setTitle(resources.getString(R.string.bt_overview_health_index));
+        plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
+        plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
+        final Number[] domainLabels = domains;
 
-            XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
-            LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
-            plot.addSeries(series, seriesFormatter);
+        XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
+        LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+        plot.addSeries(series, seriesFormatter);
+
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+            @Override
+            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+                int i = Math.round(((Number) obj).floatValue());
+                return toAppendTo.append(labels[i]);
+            }
+
+            @Override
+            public Object parseObject(String source, ParsePosition pos) {
+                return null;
+            }
+        });
+
+        plot.invalidate();
+    }
+    private void drawInterventions(String[] dates, Number[] completed, Number[] incompleted) {
+        plot.clear();
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+        //plot.getLayoutManager().remove(plot.getLegend());
+        plot.setRangeLowerBoundary(0, BoundaryMode.AUTO);
+
+        plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
+        BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
+        bf.setMarginLeft(PixelUtils.dpToPix(1));
+        bf.setMarginRight(PixelUtils.dpToPix(1));
+
+        int max = 0;
+        for (int i = 0; i < completed.length; i++) {
+            if((int)completed[i] + (int)incompleted[i] > max)
+                max = (int)completed[i] + (int)incompleted[i];
+        }
+
+        if(max == 0) {
+            tvInfo.setVisibility(View.VISIBLE);
+            plot.invalidate();
+            return;
+        } else
+            tvInfo.setVisibility(View.INVISIBLE);
+
+        plot.setRangeBoundaries(0, max, BoundaryMode.FIXED);
+
+
+        BarFormatter bf1 = new BarFormatter(Color.RED, Color.TRANSPARENT);
+        XYSeries series1 = new SimpleXYSeries(Arrays.asList(incompleted), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
+        plot.addSeries(series1, bf1);
+
+        BarFormatter bf2 = new BarFormatter(Color.GREEN, Color.TRANSPARENT);
+        XYSeries series2 = new SimpleXYSeries(Arrays.asList(completed), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
+        plot.addSeries(series2, bf2);
+
+
+        BarRenderer renderer = plot.getRenderer(BarRenderer.class);
+        renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
+        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, PixelUtils.dpToPix(10));
+
 
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
                 public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
                     int i = Math.round(((Number) obj).floatValue());
-                    return toAppendTo.append(labels[i]);
+                    try {
+                        return toAppendTo.append(dates[i]);
+                    } catch(ArrayIndexOutOfBoundsException e) {
+                        Debug.logStack("ERROR", "index out of bounds while plotting bar chart", 0);
+                        return toAppendTo.append("");
+                    }
+
                 }
 
                 @Override
@@ -408,22 +503,8 @@ public class OverviewFragment extends Fragment {
                 }
             });
 
-            plot.invalidate();
-            return;
-        }
-        if(typeToPlot == 1) {
-            plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
-            BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
-            bf.setMarginLeft(PixelUtils.dpToPix(1));
-            bf.setMarginRight(PixelUtils.dpToPix(1));
-            XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
-            plot.addSeries(series, bf);
-            BarRenderer renderer = plot.getRenderer(BarRenderer.class);
-            plot.invalidate();
-            renderer.setBarOrientation(BarRenderer.BarOrientation.SIDE_BY_SIDE);
-            renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, PixelUtils.dpToPix(5));
+        plot.invalidate();
 
-        }
     }
 
     private void refreshResources() {
