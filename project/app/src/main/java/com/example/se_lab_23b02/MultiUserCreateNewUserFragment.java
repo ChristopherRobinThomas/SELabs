@@ -1,5 +1,7 @@
 package com.example.se_lab_23b02;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,8 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.sql.Time;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +74,14 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_multi_user_create_new_user, container, false);
 
         Button back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+
+        view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Show Terms of service
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v) {
@@ -95,6 +109,12 @@ public class MultiUserCreateNewUserFragment extends Fragment {
 
                     String username = usernameTextField.getText().toString();
                     String password = passwordTextField.getText().toString();
+
+                    if (username.equals("") || password.equals("")){
+                        Toast.makeText(getContext(), "Please ente username AND password!", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
                     User newUser = new User(localId,username,password);
 
                     DataSavingHelper ds = DataSavingHelper.getInstance();
@@ -116,9 +136,32 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                         default: break;
                     }
                 }
+
+                TimeStamp.setStandardTimers(getContext());
+
                 Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                 startActivity(myIntent);
                 getActivity().finish();
+            }
+        });
+        Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
+        TOS.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String tosText = "For our Terms of Service, refer to: https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0";
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Terms of Service");
+                final TextView tos = new TextView(getContext());
+                tos.setText(tosText);
+                builder.setView(tos);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+
+                builder.show();
             }
         });
 
