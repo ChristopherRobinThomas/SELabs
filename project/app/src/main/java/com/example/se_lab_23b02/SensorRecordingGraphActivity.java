@@ -89,12 +89,25 @@ public class SensorRecordingGraphActivity extends Activity {
         String timestamp = day + " " + dateTime[0] + ":" + dateTime[1] + ":" + dateTime[2];
 
         TextView tvDate = (TextView) findViewById(R.id.tvDate);
+        tvDate.setText(timestamp);
+        TextView tvStepCounter = (TextView) findViewById(R.id.tvStepCounterDisplay);
         try {
             int steps = daHelper.getStepCountFromRecording(timestamp, getApplicationContext());
             if(steps != -1)
-                tvDate.setText("steps: " + steps);
+                tvStepCounter.setText("steps: " + steps);
             else
-                tvDate.setText("no steps were recorded");
+                tvStepCounter.setText("no steps were recorded");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        TextView tvDistance = (TextView) findViewById(R.id.tvWalkedDistance);
+        try {
+            float distance = daHelper.getWalkedDistanceFromRecording(timestamp, getApplicationContext());
+            if(distance != -1)
+                tvDistance.setText("distance: " + distance + " m");
+            else
+                tvDistance.setText("no GPS data was available during recording");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -125,57 +138,55 @@ public class SensorRecordingGraphActivity extends Activity {
         Float[] x = new Float[x_list.size()];
         Float[] y = new Float[y_list.size()];
         Float[] z = new Float[z_list.size()];
+        if(x_list.size() > 0) {
+            long min_timestamp = (x_list.get(0).first / 1000);
+            int ts_as_int = (int) min_timestamp; // get the first timestamp as int in seconds
 
-        long min_timestamp = (x_list.get(0).first / 1000);
-        int ts_as_int = (int) min_timestamp; // get the first timestamp as int in seconds
+            for (int i = 0; i < x_list.size(); i++) {
+                domains[i] = x_list.get(i).first - x_list.get(0).first; // normalize x_vals to 0 so every timeseries starts at 0 (PanZoom not working otherwise)
+                x[i] = x_list.get(i).second;
+                y[i] = y_list.get(i).second;
+                z[i] = z_list.get(i).second;
+            }
 
-        for(int i = 0; i < x_list.size(); i++) {
-            domains[i] = x_list.get(i).first - x_list.get(0).first; // normalize x_vals to 0 so every timeseries starts at 0 (PanZoom not working otherwise)
-            x[i] = x_list.get(i).second;
-            y[i] = y_list.get(i).second;
-            z[i] = z_list.get(i).second;
+            XYSeries x_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(x), "x-Values");
+            XYSeries y_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(y), "y-Values");
+            XYSeries z_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(z), "z-Values");
+
+            LineAndPointFormatter xFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+            LineAndPointFormatter yFormatter = new LineAndPointFormatter(Color.GREEN, null, null, null);
+            LineAndPointFormatter zFormatter = new LineAndPointFormatter(Color.BLUE, null, null, null);
+            if (xChecked)
+                xyPlot.addSeries(x_series, xFormatter);
+            if (yChecked)
+                xyPlot.addSeries(y_series, yFormatter);
+            if (zChecked)
+                xyPlot.addSeries(z_series, zFormatter);
+
+
+            xyPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+                @Override
+                public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+
+                    // converting the labels to timestamps in seconds in int
+                    int objAsInt = (int) (Float.parseFloat(obj.toString()) / 1000);
+                    int new_ts = objAsInt + ts_as_int; // add first ts so we get real timestamp
+                    return toAppendTo.append(TimeStamp.getLocalTimeAsStringFromSeconds(new_ts));
+
+                }
+
+                @Override
+                public Object parseObject(String source, ParsePosition pos) {
+                    return null;
+                }
+            });
+
+
+            //panzoom to make it zoomable
+            PanZoom.attach(xyPlot);
+            xyPlot.invalidate();
+
         }
-
-        XYSeries x_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(x), "x-Values");
-        XYSeries y_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(y), "y-Values");
-        XYSeries z_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(z), "z-Values");
-
-        LineAndPointFormatter xFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
-        LineAndPointFormatter yFormatter = new LineAndPointFormatter(Color.GREEN, null, null, null);
-        LineAndPointFormatter zFormatter = new LineAndPointFormatter(Color.BLUE, null, null, null);
-        if(xChecked)
-            xyPlot.addSeries(x_series, xFormatter);
-        if(yChecked)
-            xyPlot.addSeries(y_series, yFormatter);
-        if(zChecked)
-            xyPlot.addSeries(z_series, zFormatter);
-
-
-
-
-        xyPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-            @Override
-            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-
-                // converting the labels to timestamps in seconds in int
-                int objAsInt = (int)(Float.parseFloat(obj.toString()) / 1000);
-                int new_ts = objAsInt + ts_as_int; // add first ts so we get real timestamp
-                return toAppendTo.append(TimeStamp.getLocalTimeAsStringFromSeconds(new_ts));
-
-            }
-
-            @Override
-            public Object parseObject(String source, ParsePosition pos) {
-                return null;
-            }
-        });
-
-
-        //panzoom to make it zoomable
-        PanZoom.attach(xyPlot);
-        xyPlot.invalidate();
-
-
 
     }
 

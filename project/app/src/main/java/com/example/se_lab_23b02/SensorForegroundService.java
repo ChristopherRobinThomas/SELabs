@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,13 +13,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.IBinder;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.NotificationCompat;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +32,12 @@ import java.util.List;
 public class SensorForegroundService extends Service implements SensorEventListener {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     private SensorManager sensorManager;
+    private LocationManager locationManager;
     private Sensor[] sensors = new Sensor[3];
     private boolean[] bools = new boolean[3];
+
+    private Location lastKnownLocation;
+    private MyLocationListener myLocationListener;
     private ArrayList<ArrayList<String>> values;
     private boolean active = false;
     private int startSteps = -1;
@@ -38,6 +48,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
         super.onCreate();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String input = intent.getStringExtra("extras");
@@ -56,6 +67,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
             startForeground(1, notification);
 
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             bools = getActivatedSensors();
             values = new ArrayList<>();
             for (int i = 0; i < 3; i ++) {
@@ -71,22 +83,28 @@ public class SensorForegroundService extends Service implements SensorEventListe
                 sensorManager.registerListener(this, sensors[1], SensorManager.SENSOR_DELAY_NORMAL);
             }
             if(bools[2]) {
-                // GPS
+                myLocationListener = new MyLocationListener();
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, myLocationListener);
+
             }
             active = true;
 
 
         } else {
             if(active) {
-                for(int i = 0; i < sensors.length; i++) {
-                    if(bools[i])
-                        sensorManager.unregisterListener(this, sensors[i]);
 
-                }
+
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + "}\n";
+                DecimalFormat df = new DecimalFormat("0.00");
+                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + ", \"distance\": [" + df.format(myLocationListener.getWalkedDistance()) + "]}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
-                Debug.logStack("values", values.get(1).toString(), 1);
+                Debug.logStack("values", values.get(2 ).toString(), 1);
+
+                //deregister listener
+                sensorManager.unregisterListener(this, sensors[0]);
+                sensorManager.unregisterListener(this, sensors[1]);
+                locationManager.removeUpdates(myLocationListener);
+
                 active = false;
                 stopForeground(true);
                 stopSelf();
@@ -95,6 +113,8 @@ public class SensorForegroundService extends Service implements SensorEventListe
         }
         return START_NOT_STICKY;
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -133,10 +153,6 @@ public class SensorForegroundService extends Service implements SensorEventListe
             values.get(1).remove(0);
             values.get(1).add(String.valueOf(event.values[0] - startSteps));
         }
-        if(event.sensor == sensors[2]) {
-            // GPS
-        }
-
     }
 
     @Override
@@ -157,6 +173,10 @@ public class SensorForegroundService extends Service implements SensorEventListe
         String stepStatusAsString = dsHelper.getSpecificSettingsFromSharedPref("StepCounterAllowed", getApplicationContext());
         if (stepStatusAsString.equals("true")) {
             bools[1] = true;
+        }
+        String gpsAllowedAsString = dsHelper.getSpecificSettingsFromSharedPref("GPSAllowed", getApplicationContext());
+        if(gpsAllowedAsString.equals("true")) {
+            bools[2] = true;
         }
         return bools;
     }
