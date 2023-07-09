@@ -116,5 +116,9 @@
     <string name="tv_daily_goal_goal_choice">Your choice: \u0020</string>
     <string name="prompt_cancel">Cancel </string>
 
+    <!-- Strings for the popups-->
+    <string name="questionnaire_popup_AcceptButton">OK</string>
+    <string name="questionnaire_popup_DenyButton">Close</string>
+    <string name="questionnaire_popup_HintText">Enter Text</string>
 
 </resources>
