@@ -17,6 +17,8 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.system.Os;
 import android.view.Gravity;
@@ -143,8 +145,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
