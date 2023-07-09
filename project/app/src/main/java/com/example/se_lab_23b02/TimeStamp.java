@@ -1,5 +1,8 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+
+import android.util.Log;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,7 +63,45 @@ public class TimeStamp {
         LocalDateTime ldtTimestampAsDate = LocalDateTime.of(tmpLocalDate, tmpLocalTime);
         return ldtTimestampAsDate;
     }
+    static public void setStandardTimers(Context context)
+    {
+        Alarm cur = new Alarm(0);
+        cur.addTime(7, 0);
+        cur = new Alarm(1);
+        cur.addTime(12, 0);
+        cur = new Alarm(2);
+        cur.addTime(17, 0);
 
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String data;
+        data = "mornCurH:" + String.valueOf(7) + ",mornCurM" + String.valueOf(0) + "\n";
+        data += "noonCurH:" + String.valueOf(12) + ",noonCurM" + String.valueOf(0) + "\n";
+        data += "evnCurH:" + String.valueOf(17) + ",evnCurM" + String.valueOf(0);
+        dsHelper.writeDataToInternalStorage("Timers",data,context);
+    }
+    public static boolean timeSlotExistsAlready(Context context) {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+
+        String text = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt",context);
+        if(text.equals(""))
+            return false;
+        String[] allQuestionnaire = text.split(System.lineSeparator());
+        String currentTimeStamp = TimeStamp.getCurrentTimeStamp();
+        TimeStamp.TimeSlot currentTimeSlot = TimeStamp.getCurrentTimeSlot();
+        for(int i = 0; i < allQuestionnaire.length; i++){
+            Log.d("TimeSlotTest",allQuestionnaire[i]);
+            if( allQuestionnaire[i].equals(""))
+                continue;
+
+            String temp = allQuestionnaire[i];
+            temp = temp.split("\":")[10].split(",")[0].replace("\"","");
+            String day = temp.split(" ")[1];
+            TimeStamp.TimeSlot timeS = TimeStamp.getTimeSlotFromString(temp);
+            if(day.equals(currentTimeStamp.split(" ")[1]) && timeS == currentTimeSlot)
+                return true;
+        }
+        return false;
+    }
     public static LocalDateTime getLocalDateTimeFromSeconds(int seconds) {
         LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochSecond(seconds), TimeZone.getDefault().toZoneId());
         return ldt;
@@ -81,5 +122,4 @@ public class TimeStamp {
         LocalTime lt = getLocalTimeFromSeconds(seconds);
         return lt.toString();
     }
-
 }

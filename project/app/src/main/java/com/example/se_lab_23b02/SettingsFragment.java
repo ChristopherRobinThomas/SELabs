@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -326,6 +327,7 @@ public class SettingsFragment extends Fragment {
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
+                cancelAlarms();
 
                 //delete data here
                 dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
@@ -350,6 +352,7 @@ public class SettingsFragment extends Fragment {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cancelAlarms();
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
@@ -499,6 +502,12 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
-
+    private void cancelAlarms()
+    {
+        for (int i = 0; i<3;i++){
+            Alarm a = new Alarm(i);
+            a.cancelAlarm(getContext());
+        }
+    }
 }
 

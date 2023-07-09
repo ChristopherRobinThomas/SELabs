@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
@@ -109,6 +110,7 @@ public class DataSavingHelper {
         context.deleteFile(filename);
         return true;
     }
+  
     public String readSavedDataFromInternalStorage(String filename, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
         filename = getCurrentUserId(context) + filename;
@@ -139,9 +141,9 @@ public class DataSavingHelper {
     }
 
     private String getCurrentUserId(Context context)
-
     {
-        User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
+        UserHelper us = UserHelper.getInstance();
+        User u = us.getCurrentUser(context);
         return String.valueOf(u.getLocalId());
     }
 }
