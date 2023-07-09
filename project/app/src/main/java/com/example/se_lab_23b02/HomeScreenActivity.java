@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+
 import com.example.se_lab_23b02.databinding.ActivityHomeScreenBinding;
 
 

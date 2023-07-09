@@ -160,7 +160,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
         timestamp = TimeStamp.getCurrentTimeStamp();
-        toSave.put("timestamp: ", timestamp);
+        toSave.put("timestamp", timestamp);
 
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());
