@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.NotificationCompat;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
                 }
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": \"" + values.get(0).toString() + "\", \"stepcounter\": \"" + values.get(1).toString() + "\"}\n";
+                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + "}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
                 Debug.logStack("values", values.get(1).toString(), 1);
                 active = false;
@@ -119,7 +120,8 @@ public class SensorForegroundService extends Service implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor == sensors[0]) {
-            String vals = "{\"timestamp\": \""+ event.timestamp + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
+            long ts = System.currentTimeMillis();
+            String vals = "{\"timestamp\": \""+ ts + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
             values.get(0).add(vals);
         }
         if(event.sensor == sensors[1]) {
