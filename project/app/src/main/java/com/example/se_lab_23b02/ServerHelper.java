@@ -20,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +44,6 @@ public class ServerHelper {
 
     private final String synchronizeDailyGoals = "development/databaseentrys/dailygoal/alldailygoals";
 
-    private final String getInterventionSourceListURL = "development/s3/getinterventionsourcelist";
 
 
     private ServerHelper() {
@@ -144,7 +145,7 @@ public class ServerHelper {
                             questionnaire.put("Q5", q5);
                             questionnaire.put("Q9", q9);
                             questionnaire.put("user_id", user_id);
-                            dsHelper.writeDataToInternalStorage("questionnaire.txt", questionnaire.toString()+"\n", context, true);
+                            dsHelper.writeDataToInternalStorage("questionnaire.txt", questionnaire +"\n", context, true);
                         }
 
 
@@ -207,13 +208,11 @@ public class ServerHelper {
                             newEntry.put("timestamp", timestamp);
                             newEntry.put("user_id", user_id);
 
-                            dsHelper.writeDataToInternalStorage("DigitSpanTask.txt", newEntry.toString()+"\n", context, true);
+                            dsHelper.writeDataToInternalStorage("DigitSpanTask.txt", newEntry +"\n", context, true);
                         }
 
 
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         throw new RuntimeException(e);
                     }
 
@@ -260,11 +259,9 @@ public class ServerHelper {
                             newEntry.put("Daily_Task", dailyTasks.get("Daily_Task"));
                             newEntry.put("progress", dailyTasks.get("progress"));
                             newEntry.put("user_id", dailyTasks.get("user_id"));
-                            dsHelper.writeDataToInternalStorage("DailyGoal.txt", newEntry.toString() + "\n", context, true);
+                            dsHelper.writeDataToInternalStorage("DailyGoal.txt", newEntry + "\n", context, true);
                         }
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         throw new RuntimeException(e);
                     }
 
@@ -575,7 +572,7 @@ public class ServerHelper {
                 long fileSizeDownloaded = 0;
 
                 inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
+                outputStream = Files.newOutputStream(futureStudioIconFile.toPath());
 
                 while (true) {
                     int read = inputStream.read(fileReader);
