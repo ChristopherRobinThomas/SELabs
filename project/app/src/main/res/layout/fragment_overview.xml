@@ -127,10 +127,10 @@
         android:layout_height="wrap_content"
         android:text="@string/tv_overview_no_data"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/plt_graph"
-        app:layout_constraintEnd_toEndOf="@+id/plt_graph"
-        app:layout_constraintStart_toStartOf="@+id/plt_graph"
-        app:layout_constraintTop_toTopOf="@+id/plt_graph"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_graph"
+        app:layout_constraintEnd_toEndOf="@+id/activity_graph"
+        app:layout_constraintStart_toStartOf="@+id/activity_graph"
+        app:layout_constraintTop_toTopOf="@+id/activity_graph"
         tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

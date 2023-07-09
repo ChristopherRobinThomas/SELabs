@@ -596,7 +596,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 }
                 id = String.valueOf(obj.get("id").getAsInt());
                 time = obj.get("timestamp").getAsString().split(" ")[1].split(":");
-                addInterventionView(id, time);
+                addInterventionView(id, time, date);
                 if(i == allInterventions.length-5) break;
 
             }
@@ -614,7 +614,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         linearLayout.addView(txtViewDate);
     }
 
-    private void addInterventionView(String id, String[] time)
+    private void addInterventionView(String id, String[] time, String date)
     {
         linearLayoutToAdd = new LinearLayout(getActivity());
         linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -643,6 +643,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 //TODO Open Activity that shows Data
+
+                Bundle b = new Bundle();
+                b.putString("date", date);
+                b.putStringArray("time", time);
+                Intent intent = new Intent(getActivity(), SensorRecordingGraphActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
                 System.out.println(time[0] + ":" + time[1] + ":" + time[2] + "\n");
             }
         });
