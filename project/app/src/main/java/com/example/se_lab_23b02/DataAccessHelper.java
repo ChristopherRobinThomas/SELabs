@@ -3,6 +3,8 @@ package com.example.se_lab_23b02;
 import android.content.Context;
 import android.util.Pair;
 
+import androidx.constraintlayout.motion.widget.Debug;
+
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
@@ -110,6 +112,33 @@ public class DataAccessHelper {
         return outputList;
     }
 
+    public float getWalkedDistanceFromRecording(String timestamp, Context context) throws JSONException {
+        String[] splitted = timestamp.split(" ");
+        String content = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+        LocalDate tsDate = LocalDate.parse(splitted[0]);
+        LocalTime tsTime = LocalTime.parse(splitted[1]);
+
+        String[] lines = content.split(System.lineSeparator());
+        for (int i = 1; i < lines.length; i++) {
+            JSONObject jsonLine = new JSONObject(lines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+            if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
+                JSONArray jsonArray = (JSONArray) jsonLine.get("distance");
+                String distance = String.valueOf(jsonArray.get(0));
+                System.out.println(distance);
+                if (distance.length() == 0)
+                    return -1;
+                return (int) (Float.parseFloat(distance));
+
+
+            }
+        }
+        return -1;
+    }
+
     public int getStepCountFromRecording(String timestamp, Context context) throws JSONException {
         String[] splitTS = timestamp.split(" ");
         String content = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
@@ -126,6 +155,7 @@ public class DataAccessHelper {
             LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
 
             if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
+
                 JSONArray jsonArray = (JSONArray) jsonLine.get("stepcounter");
                 String stepContent = String.valueOf(jsonArray.get(0));
                 if(stepContent.length() == 0)

@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.NotificationCompat;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,16 +93,18 @@ public class SensorForegroundService extends Service implements SensorEventListe
         } else {
             if(active) {
 
-                sensorManager.unregisterListener(this, sensors[0]);
-                sensorManager.unregisterListener(this, sensors[1]);
-
-
 
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + ", \"distance\": \"" + myLocationListener.getWalkedDistance() + "\"}";
+                DecimalFormat df = new DecimalFormat("0.00");
+                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + ", \"distance\": [" + df.format(myLocationListener.getWalkedDistance()) + "]}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
                 Debug.logStack("values", values.get(2 ).toString(), 1);
+
+                //deregister listener
+                sensorManager.unregisterListener(this, sensors[0]);
+                sensorManager.unregisterListener(this, sensors[1]);
                 locationManager.removeUpdates(myLocationListener);
+
                 active = false;
                 stopForeground(true);
                 stopSelf();
