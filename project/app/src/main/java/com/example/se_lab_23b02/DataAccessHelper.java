@@ -118,10 +118,9 @@ public class DataAccessHelper {
             LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
             if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
                 JSONArray jsonArray = (JSONArray) jsonLine.get("distance");
-                String distance = String.valueOf(jsonArray.get(0));
-                System.out.println(distance);
-                if (distance.length() == 0)
+                if(jsonArray.length() == 0)
                     return -1;
+                String distance = String.valueOf(jsonArray.get(0));
                 return (int) (Float.parseFloat(distance));
 
 
@@ -197,6 +196,7 @@ public class DataAccessHelper {
             if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
 
                 JSONArray jsonArray = (JSONArray) jsonLine.get("stepcounter");
+
                 String stepContent = String.valueOf(jsonArray.get(0));
                 if(stepContent.length() == 0)
                     return -1;

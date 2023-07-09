@@ -93,17 +93,22 @@ public class SensorForegroundService extends Service implements SensorEventListe
         } else {
             if(active) {
 
-
+                String gpsValue;
+                if(bools[2]) {
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    gpsValue =  df.format(myLocationListener.getWalkedDistance());
+                    locationManager.removeUpdates(myLocationListener);
+                } else
+                    gpsValue = "";
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-                DecimalFormat df = new DecimalFormat("0.00");
-                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + ", \"distance\": [" + df.format(myLocationListener.getWalkedDistance()) + "]}\n";
+                String sensorValues = "{\"timestamp\": \"" + timestamp + "\", \"acceleration\": " + values.get(0).toString() + ", \"stepcounter\": " + values.get(1).toString() + ", \"distance\": [" + gpsValue + "]}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
                 Debug.logStack("values", values.get(2 ).toString(), 1);
 
                 //deregister listener
                 sensorManager.unregisterListener(this, sensors[0]);
                 sensorManager.unregisterListener(this, sensors[1]);
-                locationManager.removeUpdates(myLocationListener);
+
 
                 active = false;
                 stopForeground(true);
