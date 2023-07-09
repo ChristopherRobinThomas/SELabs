@@ -2,10 +2,13 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -103,21 +106,46 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     saveAnswers();
-                }catch (Exception e) { }
+                }catch (Exception ignored) { }
                 if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon)
                 {
                     Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
                     startActivity(i);
+                    finish();
                 }
                 else
                 {
-                    Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
-                    startActivity(i);
+                    showDoInterventionDialogue();
                 }
+            }
+        });
+
+    }
+
+    void showDoInterventionDialogue() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
+        builder.setTitle("Title");
+        final TextView tv = new TextView(QuestionnaireActivity.this);
+        tv.setText("Based on your response, we recommend an intervention.\nDo intervention now?");
+        builder.setView(tv);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(QuestionnaireActivity.this, SingleIntervention.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
+                startActivity(i);
                 finish();
             }
         });
 
+        builder.show();
     }
 
     void saveAnswers() throws JSONException {
@@ -473,7 +501,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
             });
         }
     }
-
 
 
     private void refreshResources() {
