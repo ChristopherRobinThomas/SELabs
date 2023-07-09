@@ -1,5 +1,7 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+
 public class User {
     private long localId;
     private long globalId;
@@ -13,8 +15,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String s)
-    {
+    public User(String s) {
         String[] values = s.split(",");
         this.localId = Integer.parseInt(values[0]);
         this.globalId = Integer.parseInt(values[1]);

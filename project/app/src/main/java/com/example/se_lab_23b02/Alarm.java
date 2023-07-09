@@ -60,8 +60,12 @@ public class Alarm
         Log.d("setAlarm","ALarm set");
     }
 
-    public void cancelAlarm() {
-
+    public void cancelAlarm(Context context) {
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context,AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
 }
