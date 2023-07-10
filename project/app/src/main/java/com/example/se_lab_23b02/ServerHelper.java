@@ -440,8 +440,10 @@ public class ServerHelper {
                 if (response.isSuccessful()) {
 
                     String result;
+
                     try {
                         result = readResponseObject(response);
+                        System.out.println(result);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -460,32 +462,27 @@ public class ServerHelper {
                             break;
                         default:
                             Log.i("sHelper", "Successfully created new User");
-                            try {
-                                DataSavingHelper ds = DataSavingHelper.getInstance();
-                                String res = readResponseObject(response);
-                                Log.d("Server Test",res);
-                                user.setGlobalId(res);
-                                switch ((int)user.getLocalId())
-                                {
-                                    case 1:
-                                        ds.saveSettingAsSharedPref("UserOne", user.toString(),context);
-                                        break;
-                                    case 2:
-                                        ds.saveSettingAsSharedPref("UserTwo", user.toString(),context);
-                                        break;
-                                    case 3:
-                                        ds.saveSettingAsSharedPref("UserThree", user.toString(),context);
-                                        break;
-                                    case 4:
-                                        ds.saveSettingAsSharedPref("UserFour", user.toString(),context);
-                                        break;
-                                    default: break;
-                                }
-                                ds.saveSettingAsSharedPref("ActiveUser", user.toString(),context);
-                                TimeStamp.setStandardTimers(context);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                            DataSavingHelper ds = DataSavingHelper.getInstance();
+                            String res = result;
+                            user.setGlobalId(res);
+                            switch ((int)user.getLocalId())
+                            {
+                                case 1:
+                                    ds.saveSettingAsSharedPref("UserOne", user.toString(),context);
+                                    break;
+                                case 2:
+                                    ds.saveSettingAsSharedPref("UserTwo", user.toString(),context);
+                                    break;
+                                case 3:
+                                    ds.saveSettingAsSharedPref("UserThree", user.toString(),context);
+                                    break;
+                                case 4:
+                                    ds.saveSettingAsSharedPref("UserFour", user.toString(),context);
+                                    break;
+                                default: break;
                             }
+                            ds.saveSettingAsSharedPref("ActiveUser", user.toString(),context);
+                            TimeStamp.setStandardTimers(context);
                             context.startActivity(new Intent(context, successfulClass));
                     }
                 } else {
