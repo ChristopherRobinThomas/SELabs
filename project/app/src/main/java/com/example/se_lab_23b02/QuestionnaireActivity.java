@@ -133,6 +133,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 i.putExtra("openRandomIntervention", true);
+                Log.i(null, "Extras Put: "+ true);
                 startActivity(i);
                 finish();
             }

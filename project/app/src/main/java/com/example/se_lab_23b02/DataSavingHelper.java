@@ -92,7 +92,7 @@ public class DataSavingHelper {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-            Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
+            //Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -123,7 +123,7 @@ public class DataSavingHelper {
         } catch (IOException e) {
             Log.e("dsHelper", "Can not read file: " + e.toString());
         }
-        Log.i("dsHelper", "From file: "+filename+", read: "+ret);
+        //Log.i("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
     }
 
