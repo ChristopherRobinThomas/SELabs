@@ -104,7 +104,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
                 String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "]" + ",\"user_id\":\"" + dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()) + "\"}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
-                Debug.logStack("values", values.get(2 ).toString(), 1);
+                Debug.logStack("SensorService", "Saving sensor data", 0);
 
                 //deregister listener
                 sensorManager.unregisterListener(this, sensors[0]);
