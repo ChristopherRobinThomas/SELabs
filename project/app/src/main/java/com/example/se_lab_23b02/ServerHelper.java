@@ -447,26 +447,24 @@ public class ServerHelper {
                     }
                     switch (result) {
                         case "-1":
-                            Toast.makeText(activity, "UUID could not created, please try again", Toast.LENGTH_LONG).show();
                             Log.i("sHelper", "Tried to create User - failed: No UUID could be created");
                             context.startActivity(new Intent(context, failedClass));
                             break;
                         case "-2":
-                            Toast.makeText(activity, "Passwords are not the same", Toast.LENGTH_LONG).show();
                             Log.i("sHelper", "Tried to create User - failed: Passwords are not the same");
                             context.startActivity(new Intent(context, failedClass));
                             break;
                         case "-3":
-                            Toast.makeText(activity, "Username is already in use", Toast.LENGTH_LONG).show();
                             Log.i("sHelper", "Tried to create User - failed: Username already in use");
                             context.startActivity(new Intent(context, failedClass));
                             break;
                         default:
-                            Toast.makeText(activity, "New User successfully created", Toast.LENGTH_LONG).show();
                             Log.i("sHelper", "Successfully created new User");
                             try {
                                 DataSavingHelper ds = DataSavingHelper.getInstance();
-                                user.setGlobalId(readResponseObject(response));
+                                String res = readResponseObject(response);
+                                Log.d("Server Test",res);
+                                user.setGlobalId(res);
                                 switch ((int)user.getLocalId())
                                 {
                                     case 1:
@@ -492,7 +490,6 @@ public class ServerHelper {
                     }
                 } else {
                     Log.i("sHelper", "Failed to create new User, Response: " + response);
-                    Toast.makeText(activity, "Server Authentication Error", Toast.LENGTH_LONG).show();
                     context.startActivity(new Intent(context, failedClass));
                 }
             }
@@ -500,7 +497,6 @@ public class ServerHelper {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - createNewUser, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
                 context.startActivity(new Intent(context, failedClass));
             }
         });

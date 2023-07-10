@@ -40,7 +40,7 @@ public class User {
 
     public String toString()
     {
-        return String.valueOf(getLocalId()) + "," + String.valueOf(getGlobalId()) + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
+        return String.valueOf(getLocalId()) + "," + getGlobalId() + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
     }
 
     public boolean checkPassword(String pwd){return password.equals(pwd);}
