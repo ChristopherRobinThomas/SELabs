@@ -77,8 +77,8 @@
 
 
     <!-- overview fragment -->
-    <string name="bt_overview_health_index">mental health score</string>
-    <string name="bt_overview_interventions_graph">number of interventions</string>
+    <string name="bt_overview_health_index">Mental health score</string>
+    <string name="bt_overview_interventions_graph">Number of Interventions</string>
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_bindestrich" translatable="false">-</string>
     <string name="tv_overview_no_data">no data available</string>
@@ -97,7 +97,6 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>match OS</item>
     </string-array>
     <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
     <string name="bt_settings_logout">Logout</string>

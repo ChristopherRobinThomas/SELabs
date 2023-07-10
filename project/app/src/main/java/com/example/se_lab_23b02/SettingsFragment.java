@@ -232,9 +232,6 @@ public class SettingsFragment extends Fragment {
                     case 1:
                         val = "dark-mode";
                         break;
-                    case 2:
-                        val = "match OS";
-                        break;
                 }
                 dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
                 setColorTheme();
@@ -557,8 +554,6 @@ public class SettingsFragment extends Fragment {
                         linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
                         break;
                 }
-                break;
-            case "match OS":
                 break;
         }
         btnNotifEvening.getBackground().setAlpha(ButtonTransparency);

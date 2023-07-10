@@ -75,8 +75,8 @@
     <string name="tv_questionnaire_q1_2">In den letzten 24 Stunden fühlte ich mich: unruhig/ruhig</string>
     <string name="tv_questionnaire_q1_1">In den letzten 24 Stunden fühlte ich mich: Befriedigt/Unbefriedigt</string>
     <string name="et_questionnaire_additional_notes">zusätzliche Notizen...</string>
-    <string name="bt_overview_health_index">Wert mentaler Gesundheit</string>
-    <string name="bt_overview_interventions_graph">pyhsische Aktivitäten</string>
+    <string name="bt_overview_health_index">Mentale Gesundheit</string>
+    <string name="bt_overview_interventions_graph">Pyhsische Aktivitäten</string>
     <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
     <string name="tv_overview_no_data">keine Daten verfügbar</string>
     <string name="bt_settings_logout">ausloggen</string>
@@ -95,7 +95,6 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>Betriebssystem</item>
     </string-array>
 
     <!-- Strings for the daily goals activity-->

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -30,11 +31,14 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.CatmullRomInterpolator;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.android.material.slider.LabelFormatter;
 
 import org.json.JSONException;
 
@@ -158,9 +162,22 @@ public class OverviewFragment extends Fragment {
         Paint transparentColor = new Paint();
         transparentColor.setColor(Color.TRANSPARENT);
 
+        //TODO COSTUMIZE PLOT
+
+        Paint testColor = new Paint();
+        testColor.setColor(getResources().getColor(R.color.below_graph));
+
 
         plot.getGraph().setBackgroundPaint(transparentColor);
         plot.getGraph().setGridBackgroundPaint(transparentColor);
+
+        plot.getGraph().setDomainGridLinePaint(transparentColor);
+        plot.getGraph().setDomainOriginLinePaint(transparentColor); //Y-Achse
+
+        plot.getGraph().setRangeOriginLinePaint(testColor); //x-Achse
+        plot.getGraph().setRangeGridLinePaint(transparentColor);
+
+
         
         tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
@@ -390,11 +407,37 @@ public class OverviewFragment extends Fragment {
 
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
-    private void draw(int typeToPlot, Number[] dataList, String[] labels, Number[] domains) {
+    private void draw(int typeToPlot, Number[] dataList, String[] labels, Number[] domains)
+    {
 
+        //Get Color Scheme
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
+        blackPaint.setTextSize(50);
+        blackPaint.setTextAlign(Paint.Align.CENTER);
+
+        Paint whitePaint = new Paint();
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setTextSize(50);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         plot.clear();
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+        if(mode.equals("white-mode"))
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+            plot.getTitle().setLabelPaint(blackPaint);
+
+        }
+        else
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.WHITE);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
+            plot.getTitle().setLabelPaint(whitePaint);
+
+        }
+
         plot.getLayoutManager().remove(plot.getLegend());
 
         if(dataList.length == 0) {
@@ -407,11 +450,16 @@ public class OverviewFragment extends Fragment {
             plot.setTitle(resources.getString(R.string.bt_overview_health_index));
             plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
             plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
+
             final Number[] domainLabels = domains;
 
+            PointLabelFormatter test = new PointLabelFormatter();
+            //-----------------------TODO BIG COSTUMISE ---------------------------------
             XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
-            LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+            LineAndPointFormatter seriesFormatter = new LineAndPointFormatter( getResources().getColor(R.color.below_graph), null, getResources().getColor(R.color.below_graph), null);
+            seriesFormatter.setInterpolationParams(new CatmullRomInterpolator.Params(30, CatmullRomInterpolator.Type.Uniform));
             plot.addSeries(series, seriesFormatter);
+
 
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
@@ -431,7 +479,7 @@ public class OverviewFragment extends Fragment {
         }
         if(typeToPlot == 1) {
             plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
-            BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
+            BarFormatter bf = new BarFormatter(getResources().getColor(R.color.below_graph), Color.WHITE);
             bf.setMarginLeft(PixelUtils.dpToPix(1));
             bf.setMarginRight(PixelUtils.dpToPix(1));
             XYSeries series = new SimpleXYSeries(Arrays.asList(dataList), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");

@@ -69,8 +69,8 @@
     <string name="tv_questionnaire_q1_2">In the last 24 hours I felt: Restless/Calm</string>
     <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
     <string name="et_questionnaire_additional_notes">additional notes...</string>
-    <string name="bt_overview_health_index">mental health score</string>
-    <string name="bt_overview_interventions_graph">number of interventions</string>
+    <string name="bt_overview_health_index">Mental health score</string>
+    <string name="bt_overview_interventions_graph">Number of interventions</string>
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_no_data">no data available</string>
     <string name="bt_settings_logout">Logout</string>
@@ -89,7 +89,6 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>match OS</item>
     </string-array>
 
 

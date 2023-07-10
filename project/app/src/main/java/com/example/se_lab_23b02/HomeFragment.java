@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.system.Os;
 import android.view.LayoutInflater;
@@ -574,7 +576,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                         break;
                     case "red":
                         constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
-
                         dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_dark_mode_red));
                         break;
                     case "green":
@@ -603,8 +604,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                         dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
                         break;
                 }
-                break;
-            case "match OS":
                 break;
         }
         questionnaireButton.getBackground().setAlpha(ButtonTransparency);
