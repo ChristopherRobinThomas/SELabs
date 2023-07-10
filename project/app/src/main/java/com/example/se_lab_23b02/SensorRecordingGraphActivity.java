@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Pair;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -88,6 +89,8 @@ public class SensorRecordingGraphActivity extends Activity {
         String day = b.getString("date");
         String timestamp = day + " " + dateTime[0] + ":" + dateTime[1] + ":" + dateTime[2];
 
+
+
         TextView tvDate = (TextView) findViewById(R.id.tvDate);
         tvDate.setText(timestamp);
         TextView tvStepCounter = (TextView) findViewById(R.id.tvStepCounterDisplay);
@@ -100,7 +103,7 @@ public class SensorRecordingGraphActivity extends Activity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
+        
         TextView tvDistance = (TextView) findViewById(R.id.tvWalkedDistance);
         try {
             float distance = daHelper.getWalkedDistanceFromRecording(timestamp, getApplicationContext());

@@ -17,6 +17,7 @@ public class MyLocationListener implements LocationListener {
 
         double distanceMeters = location.distanceTo(lastLocationKnown);
         walkedDistance += distanceMeters;
+        lastLocationKnown = location;
         System.out.println("update" + walkedDistance);
     }
 
