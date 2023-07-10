@@ -352,6 +352,8 @@ public class SettingsFragment extends Fragment {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+
                 cancelAlarms();
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

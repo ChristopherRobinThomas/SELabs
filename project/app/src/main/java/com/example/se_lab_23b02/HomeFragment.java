@@ -197,6 +197,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             public void onClick(View v) {
                 if(!TimeStamp.timeSlotExistsAlready(getContext()))
                 {
+                    Log.d("Time Slot", "Time Slot already exists");
                     Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
                     startActivity(myIntent);
                 }

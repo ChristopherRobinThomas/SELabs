@@ -89,15 +89,14 @@ public class TimeStamp {
         String currentTimeStamp = TimeStamp.getCurrentTimeStamp();
         TimeStamp.TimeSlot currentTimeSlot = TimeStamp.getCurrentTimeSlot();
         for(int i = 0; i < allQuestionnaire.length; i++){
-            Log.d("TimeSlotTest",allQuestionnaire[i]);
             if( allQuestionnaire[i].equals(""))
                 continue;
 
             String temp = allQuestionnaire[i];
             temp = temp.split("\":")[10].split(",")[0].replace("\"","");
-            String day = temp.split(" ")[1];
+            String day = temp.split(" ")[0];
             TimeStamp.TimeSlot timeS = TimeStamp.getTimeSlotFromString(temp);
-            if(day.equals(currentTimeStamp.split(" ")[1]) && timeS == currentTimeSlot)
+            if(day.equals(currentTimeStamp.split(" ")[0]) && timeS == currentTimeSlot)
                 return true;
         }
         return false;
