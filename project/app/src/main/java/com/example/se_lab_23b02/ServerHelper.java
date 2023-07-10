@@ -418,13 +418,11 @@ public class ServerHelper {
     /**
      * Creates Call with new User Information in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
      *
-     * @param userName        username of the Login Information
-     * @param password        password of the Login Information
      * @param context         needs Context to write UUID to Shared Preferences
      * @param failedClass     Class to which should be switched if the login failed
      * @param successfulClass Class to which should be switched if the login is successful
      */
-    public void createNewUser(String userName, String password, String passwordConfirm, Context context, Class failedClass, Class successfulClass) throws JSONException {
+    public void createNewUser(User user, Context context, Class failedClass, Class successfulClass) throws JSONException {
 
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
@@ -433,7 +431,7 @@ public class ServerHelper {
         }
 
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        JSONObject body = JSONObjectCreator.createNewUserObject(userName, password, passwordConfirm);
+        JSONObject body = JSONObjectCreator.createNewUserObject(user.getName(), user.getPassword(), user.getPassword());
         Call<ResponseBody> call = httpClient.postRequest(createNewUser, body);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -467,7 +465,26 @@ public class ServerHelper {
                             Toast.makeText(activity, "New User successfully created", Toast.LENGTH_LONG).show();
                             Log.i("sHelper", "Successfully created new User");
                             try {
-                                dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                                DataSavingHelper ds = DataSavingHelper.getInstance();
+                                user.setGlobalId(readResponseObject(response));
+                                switch ((int)user.getLocalId())
+                                {
+                                    case 1:
+                                        ds.saveSettingAsSharedPref("UserOne", user.toString(),context);
+                                        break;
+                                    case 2:
+                                        ds.saveSettingAsSharedPref("UserTwo", user.toString(),context);
+                                        break;
+                                    case 3:
+                                        ds.saveSettingAsSharedPref("UserThree", user.toString(),context);
+                                        break;
+                                    case 4:
+                                        ds.saveSettingAsSharedPref("UserFour", user.toString(),context);
+                                        break;
+                                    default: break;
+                                }
+                                ds.saveSettingAsSharedPref("ActiveUser", user.toString(),context);
+                                TimeStamp.setStandardTimers(context);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -492,13 +509,11 @@ public class ServerHelper {
     /**
      * Creates Call with loginInformation in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
      *
-     * @param userName        username of the Login Information
-     * @param password        password of the Login Information
      * @param context         needs Context to write UUID to Shared Preferences
      * @param failedClass     Class to which should be switched if the login failed
      * @param successfulClass Class to which should be switched if the login is successful
      */
-    public void loginUser(String userName, String password, Context context, Class failedClass, Class successfulClass) throws JSONException {
+    public void loginUser(User user, Context context, Class failedClass, Class successfulClass) throws JSONException {
 
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
@@ -507,7 +522,7 @@ public class ServerHelper {
         }
 
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        JSONObject body = JSONObjectCreator.createLoginUserObject(userName, password);
+        JSONObject body = JSONObjectCreator.createLoginUserObject(user.getName(), user.getPassword());
         Call<ResponseBody> call = httpClient.postRequest(loginUser, body);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -528,7 +543,7 @@ public class ServerHelper {
                         Log.i("sHelper", "Successfully logged User in");
                         Toast.makeText(activity, "Login successful", Toast.LENGTH_LONG).show();
                         try {
-                            dsHelper.saveSettingAsSharedPref("user_id", readResponseObject(response), context);
+                            user.setGlobalId(readResponseObject(response));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

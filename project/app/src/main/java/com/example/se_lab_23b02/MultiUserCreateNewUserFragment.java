@@ -111,37 +111,20 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                     String password = passwordTextField.getText().toString();
 
                     if (username.equals("") || password.equals("")){
-                        Toast.makeText(getContext(), "Please ente username AND password!", Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), "Please enter username AND password!", Toast.LENGTH_SHORT);
                         return;
                     }
 
                     User newUser = new User(localId,username,password);
-
-                    DataSavingHelper ds = DataSavingHelper.getInstance();
-                    ds.saveSettingAsSharedPref("ActiveUser", newUser.toString(),getContext());
-                    switch (localId)
+                    ServerHelper sh = ServerHelper.getInstance();
+                    try {
+                        sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class);
+                    }catch (Exception e )
                     {
-                        case 1:
-                            ds.saveSettingAsSharedPref("UserOne", newUser.toString(),getContext());
-                            break;
-                        case 2:
-                            ds.saveSettingAsSharedPref("UserTwo", newUser.toString(),getContext());
-                            break;
-                        case 3:
-                            ds.saveSettingAsSharedPref("UserThree", newUser.toString(),getContext());
-                            break;
-                        case 4:
-                            ds.saveSettingAsSharedPref("UserFour", newUser.toString(),getContext());
-                            break;
-                        default: break;
+                        fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
+                        fragmentTransaction.commit();
                     }
                 }
-
-                TimeStamp.setStandardTimers(getContext());
-
-                Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
-                startActivity(myIntent);
-                getActivity().finish();
             }
         });
         Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
