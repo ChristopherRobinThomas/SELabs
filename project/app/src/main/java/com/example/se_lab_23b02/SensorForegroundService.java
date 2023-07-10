@@ -42,6 +42,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
     private boolean active = false;
     private int startSteps = -1;
     private String timestamp;
+    private long curTS = 0;
 
     @Override
     public void onCreate() {
@@ -147,8 +148,14 @@ public class SensorForegroundService extends Service implements SensorEventListe
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor == sensors[0]) {
             long ts = System.currentTimeMillis();
-            String vals = "{\"timestamp\": \""+ ts + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
-            values.get(0).add(vals);
+            if(curTS == 0) {
+                curTS = ts;
+            }
+            if(ts != curTS) {
+                String vals = "{\"timestamp\": \"" + ts + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
+                values.get(0).add(vals);
+                curTS = ts;
+            }
         }
         if(event.sensor == sensors[1]) {
             if (startSteps < 0) {
