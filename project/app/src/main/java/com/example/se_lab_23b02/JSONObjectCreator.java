@@ -102,4 +102,14 @@ public class JSONObjectCreator {
 
         return toSave;
     }
+
+    public static JSONObject createAllSensorreadingsObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("Sensorrecordings", jdata);
+        return toSave;
+    }
 }
