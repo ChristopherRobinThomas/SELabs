@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".HomeFragment"
     android:background="@drawable/blue_light_mode_background"
-    android:id="@+id/homeFragment">
+    android:id="@+id/homeFragment"
+    android:layout_marginBottom="65dp">
+
+
 
 
     <ScrollView
@@ -169,6 +173,7 @@
 
             </LinearLayout>
 
+
             <Button
                 android:id="@+id/SeeAllPastActivitiesButton"
                 android:layout_width="wrap_content"
@@ -179,11 +184,35 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:background="@drawable/step_count_border"
-
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutHomeDailyGoal" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutHomeRecentActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:divider="@drawable/divider"
+                android:showDividers="middle"
+
+                app:layout_constraintTop_toBottomOf="@+id/SeeAllPastActivitiesButton"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Recent Interventions"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

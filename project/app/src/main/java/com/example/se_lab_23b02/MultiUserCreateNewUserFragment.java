@@ -1,6 +1,10 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,8 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.sql.Time;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +88,14 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
         constraintLayout = view.findViewById(R.id.multiUserCreateNewUserFragment);
         setColorTheme();
+
+        view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Show Terms of service
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v) {
@@ -107,30 +123,42 @@ public class MultiUserCreateNewUserFragment extends Fragment {
 
                     String username = usernameTextField.getText().toString();
                     String password = passwordTextField.getText().toString();
-                    User newUser = new User(localId,username,password);
 
-                    DataSavingHelper ds = DataSavingHelper.getInstance();
-                    ds.saveSettingAsSharedPref("ActiveUser", newUser.toString(),getContext());
-                    switch (localId)
+                    if (username.equals("") || password.equals("")){
+                        Toast.makeText(getContext(), "Please enter username AND password!", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
+                    User newUser = new User(localId,username,password);
+                    ServerHelper sh = ServerHelper.getInstance();
+                    try {
+                        sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class);
+                    }catch (Exception e )
                     {
-                        case 1:
-                            ds.saveSettingAsSharedPref("UserOne", newUser.toString(),getContext());
-                            break;
-                        case 2:
-                            ds.saveSettingAsSharedPref("UserTwo", newUser.toString(),getContext());
-                            break;
-                        case 3:
-                            ds.saveSettingAsSharedPref("UserThree", newUser.toString(),getContext());
-                            break;
-                        case 4:
-                            ds.saveSettingAsSharedPref("UserFour", newUser.toString(),getContext());
-                            break;
-                        default: break;
+                        fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
+                        fragmentTransaction.commit();
                     }
                 }
-                Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
-                startActivity(myIntent);
-                getActivity().finish();
+            }
+        });
+        Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
+        TOS.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String tosText = "For our Terms of Service, refer to: https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0";
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Terms of Service");
+                final TextView tos = new TextView(getContext());
+                tos.setText(tosText);
+                builder.setView(tos);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+
+                builder.show();
             }
         });
 

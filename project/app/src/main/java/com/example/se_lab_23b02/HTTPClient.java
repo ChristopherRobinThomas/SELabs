@@ -1,8 +1,6 @@
 package com.example.se_lab_23b02;
 
-
 import org.json.JSONObject;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,5 +22,4 @@ public interface HTTPClient {
     @Streaming
     @GET
     Call<ResponseBody> downloadFile(@Url String fileUrl);
-
 }

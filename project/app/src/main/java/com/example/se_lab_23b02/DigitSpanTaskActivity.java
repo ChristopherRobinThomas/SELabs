@@ -71,11 +71,14 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_digit_span_task);
         numberOfRounds = 0;
         try {
-            initSpanLength = Integer.parseInt(dsHelper.readSavedDataFromInternalStorage("DigitSpanTask.txt",getApplicationContext()));
+            String[] data = dsHelper.readSavedDataFromInternalStorage("DigitSpanTask.txt", getApplicationContext()).split("\n");
+            String lastOne = data[data.length-1];
+            JSONObject savedDST = new JSONObject(lastOne);
+            initSpanLength = savedDST.getInt("InitSpanLengthTomorrow");
         } catch (Exception e) {
-            dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(2),getApplicationContext());
             initSpanLength = 2;
         }
+        System.out.println(initSpanLength);
         spanLength = initSpanLength;
         startingButton = findViewById(R.id.startButton);
         exitButton = findViewById(R.id.exitButton);
@@ -203,7 +206,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         sHelper.setActivity(this);
         sHelper.addDigitSpanTask(toSave, getApplicationContext());
 
-        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength),getApplicationContext());
+        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",toSave.toString()+"\n", getApplicationContext(), true);
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
     }

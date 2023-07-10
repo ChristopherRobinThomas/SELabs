@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.sql.Time;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MultiUserLoginFragment#newInstance} factory method to
@@ -107,6 +109,8 @@ public class MultiUserLoginFragment extends Fragment {
                     Log.d("Login Test",mParam2);
                     Log.d("Login Test",String.valueOf(testPassword.getText().toString().equals(mParam2)));
                     if(testPassword.getText().toString().equals(mParam2)){
+                        TimeStamp.setStandardTimers(getContext());
+
                         Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                         startActivity(myIntent);
                         getActivity().finish();

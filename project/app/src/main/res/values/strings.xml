@@ -99,6 +99,7 @@
         <item>dark-mode</item>
     </string-array>
     <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
+    <string name="multi_user_main_terms_of_service">Terms of Service</string>
     <string name="bt_settings_logout">Logout</string>
 
 
@@ -116,5 +117,9 @@
     <string name="tv_daily_goal_goal_choice">Your choice: \u0020</string>
     <string name="prompt_cancel">Cancel </string>
 
+    <!-- Strings for the popups-->
+    <string name="questionnaire_popup_AcceptButton">OK</string>
+    <string name="questionnaire_popup_DenyButton">Close</string>
+    <string name="questionnaire_popup_HintText">Enter Text</string>
 
 </resources>

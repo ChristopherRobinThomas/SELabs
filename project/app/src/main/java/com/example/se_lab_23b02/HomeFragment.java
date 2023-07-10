@@ -23,8 +23,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.system.Os;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,8 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.sql.Time;
 import com.google.gson.Gson;
@@ -113,8 +117,16 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private Context context;
     private Resources resources;
 
-
     private Context contextForColor;
+    //--------GUI Elements to add Dynamically-------------
+    private LinearLayout linearLayout;
+    private TextView txtViewDate;
+
+    private LinearLayout linearLayoutToAdd;
+    private ImageView imageViewIntervention;
+
+    private TextView txtViewInterventions;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -144,8 +156,6 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
@@ -161,9 +171,12 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+
         constraintLayout = view.findViewById(R.id.homeFragment);
         linearLayoutStepCount = view.findViewById(R.id.linearLayoutStepCount);
         imageViewStepCount = view.findViewById(R.id.imageViewStepCount);
+        linearLayout = view.findViewById(R.id.linearLayoutHomeRecentActivities);
+
 
         elementsForLanguageChange.add(view.findViewById(R.id.tvHomeTitle));
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeQuestionnaire));
@@ -187,13 +200,23 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         setUpProgress();
         updateLittleBeing();
 
+        getPastInterventions();
+        txtViewDate = new TextView(getActivity());
+        txtViewDate.setTextSize(20);
+        txtViewDate.setGravity(Gravity.CENTER);
+        linearLayout.addView(txtViewDate);
+
 
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
-                startActivity(myIntent);
+                if(!TimeStamp.timeSlotExistsAlready(getContext()))
+                {
+                    Log.d("Time Slot", "Time Slot already exists");
+                    Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                    startActivity(myIntent);
+                }
             }
         });
 
@@ -354,8 +377,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    private void markGoalAsComplete()
-    {
+    private void markGoalAsComplete() {
         updateProgress();
         updateLittleBeing();
         markGoalAsCompleteButton.setVisibility(View.INVISIBLE);
@@ -364,17 +386,25 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         dsHelper = DataSavingHelper.getInstance();
         String temp = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt",getActivity());
         String[] temp2 = temp.split("\n");
-        //Save Progress Update to Storage
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("Date", todaysDate);
-            obj.put("Daily_Task", innitdailyGoal);
+
+        temp = temp2[temp2.length-1];
+        try
+        {
+            JSONObject obj = new JSONObject(temp);
             obj.put("Progress", 100);
-        } catch (JSONException e) {
+            String data = obj + "\n";
+            temp2[temp2.length-1] = data;
+            String toSave = "";
+            for(int i = 1; i<temp2.length-1;i++)
+            {
+                toSave += temp2[i] + "\n";
+            }
+            toSave += temp2[temp2.length-1];
+            dsHelper.writeDataToInternalStorage("DailyGoal.txt",toSave,getActivity());
+        }
+        catch(JSONException e){
             throw new RuntimeException(e);
         }
-        String data = obj.toString() + "\n";
-        dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getActivity(),true);
     }
 
 
@@ -613,4 +643,189 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         linearLayoutStepCount.setPadding(100,50,100,50);
 
     }
+
+
+
+
+
+    //--------------Display Last Interventions--------------------
+
+
+
+    private void getPastInterventions()
+    {
+        //-----Variables----------
+        JsonObject obj = new JsonObject();
+        JsonObject obj2 = new JsonObject();
+        JsonParser parser = new JsonParser();
+        String date = " ";
+        String currentDate;
+        String id;
+        String[] time;
+        String type;
+
+
+        String singleIntervention;
+        String singleRecording;
+        int interventionCounter;
+        int recordingCounter;
+        String[] allInterventions;
+        String[] allRecordings;
+        dsHelper = DataSavingHelper.getInstance();
+
+        try {
+            String temp = dsHelper.readSavedDataFromInternalStorage("completedInterventions.txt",getActivity());
+            allInterventions = temp.split("\n");
+            interventionCounter = allInterventions.length-1;
+
+        }
+        catch(Exception e){
+            interventionCounter = 0;
+            allInterventions = new String[]{" "};
+        }
+
+        try {
+            String temp2 = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", getActivity());
+            allRecordings = temp2.split("\n");
+            recordingCounter = allRecordings.length-1;
+        }
+        catch(Exception e)
+        {
+            recordingCounter = 0;
+            allRecordings = new String[]{" "};
+        }
+
+        for(int i = 0; i<5; i++) {
+
+            boolean isBefore;
+            if (interventionCounter >= 1 && recordingCounter >= 1) {
+
+                //Both Recordings and Interventions exists
+                singleIntervention = allInterventions[interventionCounter];
+                obj = parser.parse(singleIntervention).getAsJsonObject();
+                singleRecording = allRecordings[recordingCounter];
+                obj2 = parser.parse(singleRecording).getAsJsonObject();
+
+                //--------------------Check Date-------------------------------
+                String startInput = obj.get("timestamp").getAsString();
+                String stopInput = obj2.get("timestamp").getAsString();
+                DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+
+                LocalDateTime start = LocalDateTime.parse(startInput, f);
+                LocalDateTime stop = LocalDateTime.parse(stopInput, f);
+                isBefore = start.isBefore(stop);
+                //---------------------------------------------------
+            }
+            else if(recordingCounter < 1 && interventionCounter >= 1)
+            {
+                //No Recordings exists but interventions do
+                singleIntervention = allInterventions[interventionCounter];
+                obj = parser.parse(singleIntervention).getAsJsonObject();
+                isBefore = false;
+            }
+            else if(recordingCounter >= 1 && interventionCounter < 1)
+            {
+                //No interventions exists but recordings do
+                singleRecording = allRecordings[recordingCounter];
+                obj2 = parser.parse(singleRecording).getAsJsonObject();
+                isBefore = true;
+
+            }
+            else
+            {
+                //None of them exists
+                break;
+            }
+
+
+            if (!isBefore) {
+                currentDate = obj.get("timestamp").getAsString().split(" ")[0];
+                time = obj.get("timestamp").getAsString().split(" ")[1].split(":");
+                type = "Intervention";
+                id = String.valueOf(obj.get("id").getAsInt());
+                interventionCounter--;
+            }
+            else if (recordingCounter >= 1) {
+                currentDate = obj2.get("timestamp").getAsString().split(" ")[0];
+                time = obj2.get("timestamp").getAsString().split(" ")[1].split(":");
+                type = "Recording";
+                recordingCounter--;
+                id = "0";
+            }
+            else {
+                break;
+            }
+
+            if (!date.equals(currentDate)) {
+                date = currentDate;
+                addTextView(currentDate);
+            }
+
+            addInterventionView(id, time, date, type);
+        }
+    }
+    private void addTextView(String date)
+    {
+        txtViewDate = new TextView(getActivity());
+        txtViewDate.setTextSize(20);
+        txtViewDate.setGravity(Gravity.CENTER);
+        txtViewDate.setText(date);
+        linearLayout.addView(txtViewDate);
+    }
+
+    private void addInterventionView(String id, String[] time, String date, String type)
+    {
+        linearLayoutToAdd = new LinearLayout(getActivity());
+        linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutToAdd.setGravity(Gravity.LEFT);
+        linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
+        linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.linear_layout_border));
+
+
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity=Gravity.CENTER;
+        imageViewIntervention = new ImageView(getActivity());
+        imageViewIntervention.setLayoutParams(layoutParams);
+        //If else with different Picture
+        if(type.equals("Recording")) {
+            imageViewIntervention.setImageResource((R.drawable.baseline_play_circle_24));
+        }
+        else
+        {
+            imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+        }
+        imageViewIntervention.setForegroundGravity(Gravity.CENTER);
+        linearLayoutToAdd.addView(imageViewIntervention);
+
+        txtViewInterventions = new TextView(getActivity());
+        txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        //If else with different Text
+        if(type.equals("Recording")) {
+
+            txtViewInterventions.setText("Own Recording \n" + "Time: " + time[0] + ":" + time[1]);
+        }
+        else
+        {
+            txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+        }
+        txtViewInterventions.setTextSize(20);
+        linearLayoutToAdd.addView(txtViewInterventions);
+
+        linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("date", date);
+                b.putStringArray("time", time);
+                Intent intent = new Intent(getActivity(), SensorRecordingGraphActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        linearLayout.addView(linearLayoutToAdd);
+    }
+
 }
