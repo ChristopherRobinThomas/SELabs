@@ -38,7 +38,6 @@ public class HomeScreenActivity extends AppCompatActivity {
     private Context context;
     private Resources resources;
     private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
-    DataSavingHelper dsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
