@@ -70,11 +70,11 @@ public class HomeScreenActivity extends AppCompatActivity {
         Vector<Vector<String>> emptyV = new Vector<Vector<String>>();
         Vector<Vector<String>> tempV = new Vector<Vector<String>>();
         try {
-            tempV = getSavedInterventions();
+            tempV = dsHelper.getSavedInterventions(HomeScreenActivity.this);
         } catch (JSONException e) {}
         if(tempV.equals(emptyV)) {
             try {
-                saveInterventions(dsHelper.getSampleInterventions());
+                dsHelper.saveInterventions(dsHelper.getSampleInterventions(), HomeScreenActivity.this);
             } catch (JSONException e) {}
         }
         try {
@@ -82,7 +82,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
             if(doRandIntv) {
                 Log.i("HomeScreen", "Trying to open random intervention");
-                Vector<Vector<String>> allI = getSavedInterventions();
+                Vector<Vector<String>> allI = dsHelper.getSavedInterventions(HomeScreenActivity.this);
                 int randomNum = ThreadLocalRandom.current().nextInt(0, allI.size());
                 Vector<String> randomIntervention = allI.get(randomNum);
                 SingleIntervention singleIntervention = new SingleIntervention();
@@ -95,44 +95,6 @@ public class HomeScreenActivity extends AppCompatActivity {
                 setTitle(resources.getString(R.string.interventions_heading));
             }
         } catch (Exception ignored) {}
-    }
-    private Vector<Vector<String>> getSavedInterventions() throws JSONException {
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String savedInterventionsString = dsHelper.readSavedDataFromInternalStorage("interventions.txt", HomeScreenActivity.this);
-        JSONArray jsonArray = new JSONArray(savedInterventionsString);          // J of J of S
-        Vector<JSONArray> intermediateList = new Vector<JSONArray>();
-        for(int i=0; i < jsonArray.length(); i++) {
-            intermediateList.add(jsonArray.getJSONArray(i));                    // V of J of S
-        }
-        Vector<Vector<String>> endList = new Vector<Vector<String>>();
-        for(int j=0; j < intermediateList.size(); j++) {                        // Jedes JSONA im Vector
-            Vector<String> temp = new Vector<String>();
-            for(int k = 0; k < intermediateList.get(j).length(); k++) {         // Jeden Eintrag im JSONA im Vector
-                temp.add((String) intermediateList.get(j).get(k));              // V of S
-                // V of V of S
-            }
-            endList.add(temp);
-        }
-        return endList;
-    }
-    private void saveInterventions(Vector<Vector<String>> interventions) throws JSONException {
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        JSONArray endArray = new JSONArray();
-        // Start: V of V of S
-        JSONArray intermediateArr = new JSONArray();
-        for(int i=0; i < interventions.size(); i++) {
-            intermediateArr.put(interventions.get(i));                          // J of V of S
-        }
-        for(int j=0; j < intermediateArr.length(); j++) {                        // Jeder Vector im JSONA
-            JSONArray temp = new JSONArray();
-            Vector<String> elem = (Vector<String>)intermediateArr.get(j);
-            for(int k = 0; k < elem.size(); k++) {                              // Jeden Eintrag im Vector im JSONA
-                temp.put((String) (elem.get(k)));                               // J of S
-                // J of J of S
-            }
-            endArray.put(temp);
-        }
-        dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), HomeScreenActivity.this);
     }
 
     private void refreshResources() {
