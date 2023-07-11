@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class TimePickerActivity extends Activity {
 
@@ -136,18 +139,28 @@ public class TimePickerActivity extends Activity {
 
                 if(!dataFromStorage.equals("")){
                     String[] timeslots = dataFromStorage.split("\n");
+                    boolean changed = false;
                     for(int i = 0; i < timeslots.length;i++){
                         if(timeslots[i].contains(data.split(":")[0]))
+                        {
                             timeslots[i] = data;
+                            changed = true;
+                            break;
+                        }
                     }
+                    String oldData = data;
                     data = "";
-                    for(int i = 0; i < timeslots.length;i++){
-                        if(i < timeslots.length - 1 )
-                            data += timeslots[i] + "\n";
-                        else
-                            data += timeslots[i];
+
+                    for(int i = 0; i < timeslots.length; i++){
+                        String s = timeslots[i].replace("\n","");
+                        if(s.equals(""))
+                            continue;
+                        data += s + "\n";
                    }
+                    if(!changed)
+                        data += oldData;
                 }
+
                 dsHelper.writeDataToInternalStorage("Timers",data,getApplicationContext());
                 Toast.makeText(TimePickerActivity.this, "Alarm set successfully", Toast.LENGTH_SHORT).show();
                 finish();
