@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -118,9 +119,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
-                    Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
+                    Log.i(null, String.valueOf(calculateAffectiveWellbeingScore(questResult)));
                     if(shouldDoInterventionAlgorithm(questResult)) {
                         showDoInterventionDialogue(i);
+                    } else {
+                        startActivity(i);
+                        finish();
                     }
                 }
             }
@@ -146,7 +151,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
         builder.setTitle("Title");
         final TextView tv = new TextView(QuestionnaireActivity.this);
-        tv.setText("Based on your response, we recommend an intervention.\nDo intervention now?");
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Based on your response, \nwe recommend an intervention.\nDo intervention now?");
         builder.setView(tv);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
