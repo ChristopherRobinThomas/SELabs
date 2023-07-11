@@ -64,10 +64,9 @@ public class Alarm
         try {
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, AlarmReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
             alarmManager.cancel(pendingIntent);
-            pendingIntent.cancel();
-            Log.d("Alarm","Alarm couldn't be canceled: " + String.valueOf(id));
+            Log.d("Alarm","Alarm got canceled : " + String.valueOf(id));
         }catch (Exception e)
         {
             Log.d("Alarm","Alarm couldn't be canceled");
