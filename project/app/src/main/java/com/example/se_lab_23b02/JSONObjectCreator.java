@@ -7,14 +7,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 public class JSONObjectCreator {
 
     public static JSONObject addInformationToJSONObject(JSONObject toSave, Context context) throws JSONException {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
         toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", context));
-        toSave.put("timestamp", timeStamp);
         return toSave;
     }
     public static JSONObject createNewUserObject(String userName, String password, String passwordConfirm) throws JSONException {
@@ -61,15 +60,56 @@ public class JSONObjectCreator {
         toSave.put("InitSpanLengthTomorrow",initSpanLength);
         toSave.put("MaxKnownNumbers",maxReachedNumbers);
         toSave.put("numberOfSuccessfulRounds", numberOfRounds);
-
+        String timestamp = TimeStamp.getCurrentTimeStamp();
+        toSave.put("timestamp", timestamp);
         return toSave;
     }
 
+    public static JSONObject createAllQuestionnaireObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("questionnaire.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("Questionnaires", jdata);
+        return toSave;
+    }
+
+    public static JSONObject createAllDigitSpanTaskObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("DigitSpanTask.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("DigitSpanTasks", jdata);
+        return toSave;
+    }
+
+    public static JSONObject createAllDailyGoalObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("DailyGoal.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("DigitSpanTasks", jdata);
+        return toSave;
+
+    }
     public static JSONObject createDeleteObject(Context context) throws JSONException {
         JSONObject toSave = new JSONObject();
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id",context));
 
+        return toSave;
+    }
+
+    public static JSONObject createAllSensorreadingsObject(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+        localData = localData.trim();
+        JSONArray jdata = new JSONArray(localData.split("\n"));
+        JSONObject toSave = new JSONObject();
+        toSave.put("Sensorrecordings", jdata);
         return toSave;
     }
 }
