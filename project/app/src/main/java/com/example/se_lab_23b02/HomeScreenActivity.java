@@ -107,6 +107,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 args.putString("InterventionName", randomIntervention.get(1));
                 args.putString("InterventionDescription", randomIntervention.get(2));
                 singleIntervention.setArguments(args);
+                replaceFragment(singleIntervention);
                 setTitle(resources.getString(R.string.interventions_heading));
             }
         } catch (Exception ignored) {}
@@ -142,8 +143,9 @@ public class HomeScreenActivity extends AppCompatActivity {
             Vector<String> elem = (Vector<String>)intermediateArr.get(j);
             for(int k = 0; k < elem.size(); k++) {                              // Jeden Eintrag im Vector im JSONA
                 temp.put((String) (elem.get(k)));                               // J of S
-                endArray.put(temp);                                             // J of J of S
+                // J of J of S
             }
+            endArray.put(temp);
         }
         dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), HomeScreenActivity.this);
     }
