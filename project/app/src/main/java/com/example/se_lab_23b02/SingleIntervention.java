@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -28,6 +29,7 @@ public class SingleIntervention extends Fragment {
     TextView interventionDesc;
     Button completeButton;
     EditText et;
+    RatingBar bar;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -54,6 +56,7 @@ public class SingleIntervention extends Fragment {
         // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
         interventionName = view.findViewById(R.id.textView3);
         interventionDesc = view.findViewById(R.id.textView4);
+        bar = (RatingBar) view.findViewById(R.id.ratingBar);
         // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
@@ -89,6 +92,7 @@ public class SingleIntervention extends Fragment {
             j.put("id", pInterventionID);
             j.put("completed", hasCompletedIntervention);
             j.put("notes", additionalNotes);
+            j.put("rating", bar.getRating());
         } catch (JSONException ignored) {}
         dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString()+"\n", getActivity().getApplicationContext(),true);
     }

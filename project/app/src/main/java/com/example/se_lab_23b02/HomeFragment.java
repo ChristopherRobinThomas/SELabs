@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,9 +16,13 @@ import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.system.Os;
@@ -104,11 +109,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private ImageButton littleBeingButton;
     private TextView stepCountTxt;
     private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+    private ConstraintLayout constraintLayout;
+    private LinearLayout linearLayoutStepCount;
+    private ImageView imageViewStepCount;
 
     //--------Context and Resources for Language----
     private Context context;
     private Resources resources;
 
+    private Context contextForColor;
     //--------GUI Elements to add Dynamically-------------
     private LinearLayout linearLayout;
     private TextView txtViewDate;
@@ -162,6 +171,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+
+        constraintLayout = view.findViewById(R.id.homeFragment);
+        linearLayoutStepCount = view.findViewById(R.id.linearLayoutStepCount);
+        imageViewStepCount = view.findViewById(R.id.imageViewStepCount);
         linearLayout = view.findViewById(R.id.linearLayoutHomeRecentActivities);
 
 
@@ -175,6 +188,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
+        setColorTheme();
 
         // set text according to the language
         refreshResources();
@@ -543,10 +557,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     {
         innitdailyGoal = dailyGoal;
         switch(dailyGoal) {
-            case "Walk 5000 Steps":
+            case "Walk 5.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_5000_steps);
                 break;
-            case "Walk 10000 Steps":
+            case "Walk 10.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case "Drink 2L Water":
@@ -568,6 +582,67 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     }
 
 
+    //----------Color Functions ---------------------
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24_dark_mode);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border));
+
+                //TODO Do the same thing for the dynamic Interventions when you add them
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_dark_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_blue));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+        }
+        questionnaireButton.getBackground().setAlpha(ButtonTransparency);
+        seeAllPastActivitiesButton.getBackground().setAlpha(ButtonTransparency);
+        pickDailyGoalButton.getBackground().setAlpha(ButtonTransparency);
+        markGoalAsCompleteButton.getBackground().setAlpha(ButtonTransparency);
+        linearLayoutStepCount.setPadding(100,50,100,50);
+
+    }
 
 
 
@@ -700,13 +775,18 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void addInterventionView(String id, String[] time, String date, String type)
     {
+
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+
         linearLayoutToAdd = new LinearLayout(getActivity());
         linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutToAdd.setGravity(Gravity.LEFT);
         linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
         linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.linear_layout_border));
+        if(mode.equals("white-mode")) linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+        else linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
 
         LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -715,11 +795,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         imageViewIntervention.setLayoutParams(layoutParams);
         //If else with different Picture
         if(type.equals("Recording")) {
-            imageViewIntervention.setImageResource((R.drawable.baseline_play_circle_24));
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24));
+            else imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24_dark_mode));
         }
         else
         {
-            imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            else imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24_dark_mode);
         }
         imageViewIntervention.setForegroundGravity(Gravity.CENTER);
         linearLayoutToAdd.addView(imageViewIntervention);

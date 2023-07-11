@@ -7,21 +7,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/constraintLayoutTimerPicker"
+        android:layout_gravity="center">
 
         <SeekBar
             android:id="@+id/sbTimePicker"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="200dp"
             android:max="10"
             android:progress="3"
+            android:maxHeight="3dp"
+            android:minHeight="3dp"
+            android:thumbTint="@color/off_white"
+            android:progressDrawable="@drawable/time_picker_bar_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
         <TextView
             android:id="@+id/tvTimePickerText1"
@@ -30,7 +37,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="25dp"
-            android:text="select your preferred time"
+            android:text="Select your preferred time"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,9 +78,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="35dp"
             android:layout_marginBottom="35dp"
-            android:text="close"
+            android:text="Close"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/step_count_border"
+            android:backgroundTint="@color/off_white"
+            android:textSize="20dp"/>
 
         <Button
             android:id="@+id/btSubmitNewTime"
@@ -83,10 +96,16 @@
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="25dp"
-            android:text="submit"
+            android:text="Submit"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sbTimePicker" />
+            app:layout_constraintTop_toBottomOf="@+id/sbTimePicker"
+            android:background="@drawable/step_count_border"
+            android:textSize="20dp"
+            android:backgroundTint="@color/off_white"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

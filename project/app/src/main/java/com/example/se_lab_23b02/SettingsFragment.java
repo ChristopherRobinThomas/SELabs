@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -50,6 +53,16 @@ public class SettingsFragment extends Fragment {
     private DataSavingHelper dsHelper;
     private HashMap<String, String> settings;
     private ArrayList<Object> textViews = new ArrayList<>();
+
+    private Context contextForColor;
+
+    private LinearLayout linearLayout;
+
+    //--------GUI Elements--------
+    private Button btnNotifMorning;
+    private Button btnNotifNoon;
+    private Button btnNotifEvening;
+    private Button btLogout;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -117,6 +130,8 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_2, container, false);
         resources = context.getResources();
 
+        linearLayout = view.findViewById(R.id.settingsFragment);
+
         // add textviews for language change
         textViews.add(view.findViewById(R.id.tvSettingsApperance));
         textViews.add(view.findViewById(R.id.tvSettingsLanguage));
@@ -139,18 +154,21 @@ public class SettingsFragment extends Fragment {
         Switch switchStepCount = (Switch) view.findViewById(R.id.swStepCounter);
         Switch switchAccel = (Switch) view.findViewById(R.id.swAccelSensor);
         switchGPS = (Switch) view.findViewById(R.id.swGPS);
-        Button btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
-        Button btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
-        Button btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
+        btnNotifMorning = (Button) view.findViewById(R.id.btChangeNotificationMorning);
+        btnNotifNoon = (Button) view.findViewById(R.id.btChangeNotificationNoon);
+        btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
-        Button btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
+        btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
 
         saveDefaultValuesInSettings();
         setAllStrings();
+        setColorTheme();
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS);
 
+
+        setAlarmButtons();
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -200,6 +218,7 @@ public class SettingsFragment extends Fragment {
                 }
 
                 dsHelper.saveSettingAsSharedPref("color", val, contextForSharedPreferences);
+                setColorTheme();
 
             }
 
@@ -218,11 +237,9 @@ public class SettingsFragment extends Fragment {
                     case 1:
                         val = "dark-mode";
                         break;
-                    case 2:
-                        val = "match OS";
-                        break;
                 }
                 dsHelper.saveSettingAsSharedPref("dmValue", val, contextForSharedPreferences);
+                setColorTheme();
             }
 
             @Override
@@ -504,12 +521,90 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        btnNotifEvening.getBackground().setAlpha(ButtonTransparency);
+        btnNotifNoon.getBackground().setAlpha(ButtonTransparency);
+        btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
+        btLogout.getBackground().setAlpha(ButtonTransparency);
+    }
+
     private void cancelAlarms()
     {
         for (int i = 0; i<3;i++){
             Alarm a = new Alarm(i);
             a.cancelAlarm(getContext());
         }
+    }
+
+
+
+    private void setAlarmButtons()
+    {
+        String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
+
+        String[] allEntries = temp.split(":");
+        String[] temp2 = new String[allEntries.length-1];
+
+        int count = 0;
+
+        for(int i = 1; i<=allEntries.length-1; i++)
+        {
+            temp2[count] = String.join(":",allEntries[i].split(",")[0],allEntries[i].split("M")[1].split("\n")[0]);
+            System.out.println(temp2[count] + "\n");
+            count++;
+        }
+        for(int j = 0; j<=temp2.length-1;j++)
+        {
+            String test = temp2[j].split(":")[0];
+            System.out.println(test + "\n");
+            int hour = Integer.valueOf(test);
+            if(hour >=7 && hour <=11) btnNotifMorning.setText(temp2[j]);
+            else if(hour>=12 && hour <=14) btnNotifNoon.setText(temp2[j]);
+            else if(hour>=17 && hour <=18) btnNotifEvening.setText(temp2[j]);
+        }
+
     }
 }
 

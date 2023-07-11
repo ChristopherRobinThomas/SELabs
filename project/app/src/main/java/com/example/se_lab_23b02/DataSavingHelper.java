@@ -6,6 +6,9 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.util.Vector;
 
 // Woah Singleton
 public class DataSavingHelper {
@@ -92,7 +96,7 @@ public class DataSavingHelper {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, accessMode));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-            Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
+            //Log.i("dsHelper", "To file: "+filename+", wrote: "+data);
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -136,7 +140,7 @@ public class DataSavingHelper {
         } catch (IOException e) {
             Log.e("dsHelper", "Can not read file: " + e.toString());
         }
-        Log.i("dsHelper", "From file: "+filename+", read: "+ret);
+        //Log.i("dsHelper", "From file: "+filename+", read: "+ret);
         return ret;
     }
 
@@ -145,5 +149,62 @@ public class DataSavingHelper {
         UserHelper us = UserHelper.getInstance();
         User u = us.getCurrentUser(context);
         return String.valueOf(u.getLocalId());
+    }
+    public Vector<Vector<String>> getSampleInterventions() {
+        Vector<Vector<String>> newInterventions = new Vector<Vector<String>>();
+        Vector<String> sampleInterventionA = new Vector<String>();
+        sampleInterventionA.add("0");
+        sampleInterventionA.add("Push-Ups");
+        sampleInterventionA.add("Perform 10 push-ups.");
+        newInterventions.add(sampleInterventionA);
+        Vector<String> sampleInterventionB = new Vector<String>();
+        sampleInterventionB.add("1");
+        sampleInterventionB.add("Sit-Ups");
+        sampleInterventionB.add("Perform 10 sit-ups.");
+        newInterventions.add(sampleInterventionB);
+        Vector<String> sampleInterventionC = new Vector<String>();
+        sampleInterventionC.add("2");
+        sampleInterventionC.add("Light Run");
+        sampleInterventionC.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
+        newInterventions.add(sampleInterventionC);
+        return newInterventions;
+    }
+    public Vector<Vector<String>> getSavedInterventions(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String savedInterventionsString = dsHelper.readSavedDataFromInternalStorage("interventions.txt", context);
+        JSONArray jsonArray = new JSONArray(savedInterventionsString);          // J of J of S
+        Vector<JSONArray> intermediateList = new Vector<JSONArray>();
+        for(int i=0; i < jsonArray.length(); i++) {
+            intermediateList.add(jsonArray.getJSONArray(i));                    // V of J of S
+        }
+        Vector<Vector<String>> endList = new Vector<Vector<String>>();
+        for(int j=0; j < intermediateList.size(); j++) {                        // Jedes JSONA im Vector
+            Vector<String> temp = new Vector<String>();
+            for(int k = 0; k < intermediateList.get(j).length(); k++) {         // Jeden Eintrag im JSONA im Vector
+                temp.add((String) intermediateList.get(j).get(k));              // V of S
+                // V of V of S
+            }
+            endList.add(temp);
+        }
+        return endList;
+    }
+    public void saveInterventions(Vector<Vector<String>> interventions, Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        JSONArray endArray = new JSONArray();
+        // Start: V of V of S
+        JSONArray intermediateArr = new JSONArray();
+        for(int i=0; i < interventions.size(); i++) {
+            intermediateArr.put(interventions.get(i));                          // J of V of S
+        }
+        for(int j=0; j < intermediateArr.length(); j++) {                        // Jeder Vector im JSONA
+            JSONArray temp = new JSONArray();
+            Vector<String> elem = (Vector<String>)intermediateArr.get(j);
+            for(int k = 0; k < elem.size(); k++) {                              // Jeden Eintrag im Vector im JSONA
+                temp.put((String) (elem.get(k)));                               // J of S
+                // J of J of S
+            }
+            endArray.put(temp);
+        }
+        dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), context);
     }
 }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -59,6 +60,8 @@ public class InterventionsFragment extends Fragment {
     private LinearLayout linearLayoutToAdd;
     DataSavingHelper dsHelper;
 
+    private LinearLayout linearLayout;
+    private Context contextForColor;
 
 
     public InterventionsFragment() {
@@ -100,7 +103,11 @@ public class InterventionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
         dsHelper = DataSavingHelper.getInstance();
-        interventionList = dsHelper.;
+        // interventionList = dsHelper.;
+        linearLayout = view.findViewById(R.id.interventionsFragment);
+        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
+        // TODO: Read from localStorage
+        // populateButtonList(interventionList, view);
 
 
         buttonList = populateButtonList(interventionList, view);
@@ -111,19 +118,18 @@ public class InterventionsFragment extends Fragment {
                 openSingleInterventionFragment(interventionList.get(finalI));
             });
         }
+        setColorTheme();
+
         buttonAddNewIntervention.setOnClickListener(v -> {
             showAddInterventionDialogue(view);
         });
-        
         Button btStartRecording = view.findViewById(R.id.btStartRecording);
-
         btStartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SensorManager.toggleService(getActivity());
             }
         });
-
         return view;
     }
     private void showAddInterventionDialogue(View view) {
@@ -198,5 +204,51 @@ public class InterventionsFragment extends Fragment {
             i++;
         }
         return buttonList;
+    }
+
+
+
+
+
+
+    private void setColorTheme()
+    {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        linearLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        linearLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
     }
 }

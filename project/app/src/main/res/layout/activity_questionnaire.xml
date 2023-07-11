@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuestionnaireActivity">
+    tools:context=".QuestionnaireActivity"
+    android:id="@+id/questionnaireActivity">
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -610,6 +611,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuestionnaireAdditionalNotes"
+                android:background="@drawable/step_count_border"
                  />
 
 

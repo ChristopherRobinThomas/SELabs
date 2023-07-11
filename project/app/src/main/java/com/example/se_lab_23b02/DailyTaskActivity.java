@@ -2,6 +2,8 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +35,6 @@ import java.util.Calendar;
 public class DailyTaskActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     //------------GUI Elements-----------------
-    private Button buttonX;
     private Button buttonWalk5000Steps;
     private Button buttonWalk10000Steps;
     private Button buttonDrinkWater;
@@ -64,6 +65,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
     private Context context;
     private Resources resources;
 
+    //---------Conext and Layout for Theme-----------
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+
     //---------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
 
         dsHelper = DataSavingHelper.getInstance();
 
-        buttonX = findViewById(R.id.buttonX);
         buttonWalk5000Steps = findViewById(R.id.buttonWalk5000Steps);
         buttonWalk10000Steps = findViewById(R.id.buttonWalk10000Steps);
         buttonDrinkWater = findViewById(R.id.buttonDrinkWater);
@@ -83,9 +88,9 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         buttonOwnDailyTask = findViewById(R.id.buttonOwnDailyGoal);
         buttonSaveDailyTask = findViewById(R.id.buttonSaveDailyTask);
         txtChosenDailyGoal = findViewById(R.id.txtChosenDailyGoal);
+        constraintLayout = findViewById(R.id.dailyTaskActivity);
 
 
-        buttonX.setOnClickListener(this);
         buttonWalk5000Steps.setOnClickListener(this);
         buttonWalk10000Steps.setOnClickListener(this);
         buttonDrinkWater.setOnClickListener(this);
@@ -112,6 +117,8 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         refreshResources();
         setLanguage();
 
+        setColorTheme();
+
         buttonSaveDailyTask.setEnabled(false);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -123,15 +130,12 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         switch(v.getId())
         {
 
-            case R.id.buttonX:
-                finish();
-                break;
             case R.id.buttonWalk5000Steps:
-                saveDailyTask = "Walk 5000 Steps";
+                saveDailyTask = "Walk 5.000 Steps";
                 dailyTask = resources.getString(R.string.goal_walk_5000_steps);
                 break;
             case R.id.buttonWalk10000Steps:
-                saveDailyTask = "Walk 10000 Steps";
+                saveDailyTask = "Walk 10.000 Steps";
                 dailyTask = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case R.id.buttonDrinkWater:
@@ -293,5 +297,63 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         bt = (Button) elementsForLanguageChange.get(10);
         bt.setText(resources.getString(R.string.bt_daily_goal_save_daily_goal));
 
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+
+        buttonWalk5000Steps.getBackground().setAlpha(ButtonTransparency);
+        buttonWalk10000Steps.getBackground().setAlpha(ButtonTransparency);
+        buttonClean.getBackground().setAlpha(ButtonTransparency);
+        buttonWorkout.getBackground().setAlpha(ButtonTransparency);
+        buttonMeditate.getBackground().setAlpha(ButtonTransparency);
+        buttonOwnDailyTask.getBackground().setAlpha(ButtonTransparency);
+        buttonGoForAWalk.getBackground().setAlpha(ButtonTransparency);
+        buttonDrinkWater.getBackground().setAlpha(ButtonTransparency);
+        buttonSaveDailyTask.getBackground().setAlpha(ButtonTransparency);
     }
 }
