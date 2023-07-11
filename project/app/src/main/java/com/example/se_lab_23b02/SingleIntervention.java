@@ -60,15 +60,12 @@ public class SingleIntervention extends Fragment {
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
             saveInterventionCompleted();
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(((ViewGroup)getView().getParent()).getId(), new InterventionsFragment(), "findThisFragment")
+                    .commit();
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
-
-        // TODO:
-        // startCapturingSensorData();
-        // In that function: switch(pInterventionID): capture different data.
-        // Implement checkCompletedIntervention() and again switch(pInterventionID) and validate if intervention has been completed.
 
         return view;
     }
@@ -85,6 +82,7 @@ public class SingleIntervention extends Fragment {
         // if (Frederick.GetSensorData() fulfills condition && requireSensordata) {
         //    completeButton.setClickable(true);
         // }
+        SensorManager.toggleService(getActivity());
 
         String additionalNotes;
         additionalNotes = String.valueOf(et.getText());

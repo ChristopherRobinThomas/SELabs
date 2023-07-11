@@ -173,10 +173,10 @@ public class InterventionsFragment extends Fragment {
         int newButtonTopMargin = 58 * (interventionList.size() - 1);
         Button newButton = new Button(this.getContext());
         newButton.setText(name);
-        ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
+        //ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
         ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
         lp.topMargin = newButtonTopMargin;
-        cl.addView(newButton, lp);
+        //cl.addView(newButton, lp);
         buttonList.add(newButton);
     }
     private void openSingleInterventionFragment(Vector<String> intervention) {
@@ -199,17 +199,17 @@ public class InterventionsFragment extends Fragment {
             linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
             linearLayoutToAdd.setGravity(Gravity.LEFT);
-            linearLayoutToAdd.setDividerDrawable(getDrawable(R.drawable.divider_big));
+            //linearLayoutToAdd.setDividerDrawable(getDrawable(R.drawable.divider_big));
             linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            linearLayoutToAdd.setBackground(getDrawable(R.drawable.linear_layout_border));
+            //linearLayoutToAdd.setBackground(getDrawable(R.drawable.linear_layout_border));
 
 
-            ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
+            //ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
             ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
             lp.leftMargin = 0;
             lp.topMargin = 58 * i;
-            cl.addView(newButton, lp);
-            buttonList.add(newButton);
+            //cl.addView(newButton, lp);
+            //buttonList.add(newButton);
             i++;
         }
         return buttonList;
