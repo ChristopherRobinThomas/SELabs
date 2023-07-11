@@ -24,7 +24,6 @@ public class SingleIntervention extends Fragment {
     private static String pInterventionName;
     private static String pInterventionDesc;
     private boolean hasCompletedIntervention;
-    private boolean requireSensordata;
     TextView interventionName;
     TextView interventionDesc;
     Button completeButton;
@@ -44,7 +43,6 @@ public class SingleIntervention extends Fragment {
         }
         dsHelper = DataSavingHelper.getInstance();
         hasCompletedIntervention = false;
-        requireSensordata = false;
     }
 
     @Override
@@ -59,10 +57,7 @@ public class SingleIntervention extends Fragment {
         // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
-            saveInterventionCompleted();
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(((ViewGroup)getView().getParent()).getId(), new InterventionsFragment(), "findThisFragment")
-                    .commit();
+            startDoingIntervention();
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
@@ -70,23 +65,23 @@ public class SingleIntervention extends Fragment {
         return view;
     }
 
-    public void saveInterventionCompleted() {
+    void startDoingIntervention() {
         completeButton.setText("Complete!");
-
-        if (requireSensordata) {
-            completeButton.setClickable(false);
-        }
-
-        // TODO:
-        // Frederick.RecordSensorData();
-        // if (Frederick.GetSensorData() fulfills condition && requireSensordata) {
-        //    completeButton.setClickable(true);
-        // }
         SensorManager.toggleService(getActivity());
 
+        completeButton.setOnClickListener(v -> {
+            SensorManager.toggleService(getActivity());
+            hasCompletedIntervention = true;
+            saveInterventionCompleted();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(((ViewGroup)getView().getParent()).getId(), new InterventionsFragment(), "findThisFragment")
+                    .commit();
+        });
+    }
+
+    public void saveInterventionCompleted() {
         String additionalNotes;
         additionalNotes = String.valueOf(et.getText());
-
         String now = TimeStamp.getCurrentTimeStamp();
         JSONObject j = new JSONObject();
         try {
