@@ -57,6 +57,7 @@ public class InterventionsFragment extends Fragment {
     Vector<Button> buttonList;
     Vector<Vector<String>> interventionList;
     private LinearLayout linearLayoutToAdd;
+    DataSavingHelper dsHelper;
 
 
 
@@ -98,25 +99,9 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
 
-        // TODO: Save Interventions in file, then:
-        //  interventionList = getSavedInterventions();
+        dsHelper = DataSavingHelper.getInstance();
+        interventionList = dsHelper.;
 
-        interventionList = new Vector<Vector<String>>();
-        Vector<String> sampleInterventionA = new Vector<String>();
-        sampleInterventionA.add("0");
-        sampleInterventionA.add("Push-Ups");
-        sampleInterventionA.add("Perform 10 push-ups.");
-        interventionList.add(sampleInterventionA);
-        Vector<String> sampleInterventionB = new Vector<String>();
-        sampleInterventionB.add("1");
-        sampleInterventionB.add("Sit-Ups");
-        sampleInterventionB.add("Perform 10 sit-ups.");
-        interventionList.add(sampleInterventionB);
-        Vector<String> sampleInterventionC = new Vector<String>();
-        sampleInterventionC.add("2");
-        sampleInterventionC.add("Light Run");
-        sampleInterventionC.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
-        interventionList.add(sampleInterventionC);
 
         buttonList = populateButtonList(interventionList, view);
         buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
@@ -214,42 +199,4 @@ public class InterventionsFragment extends Fragment {
         }
         return buttonList;
     }
-    private Vector<Vector<String>> getSavedInterventions() throws JSONException {
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String savedInterventionsString = dsHelper.readSavedDataFromInternalStorage("interventions.txt", getContext());
-
-        JSONArray jsonArray = new JSONArray(savedInterventionsString);          // J of J of S
-        Vector<JSONArray> intermediateList = new Vector<JSONArray>();
-        for(int i=0; i < jsonArray.length(); i++) {
-            intermediateList.add(jsonArray.getJSONArray(i));                    // V of J of S
-        }
-        Vector<Vector<String>> endList = new Vector<Vector<String>>();
-        for(int j=0; j < intermediateList.size(); j++) {                        // Jedes JSONA im Vector
-            Vector<String> temp = new Vector<String>();
-            for(int k = 0; k < intermediateList.get(j).length(); k++) {         // Jeden Eintrag im JSONA im Vector
-                temp.add((String) intermediateList.get(j).get(k));              // V of S
-                endList.add(temp);                                              // V of V of S
-            }
-        }
-        return endList;
-    }
-    private void saveInterventions(Vector<Vector<String>> interventions) throws JSONException {
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        JSONArray endArray = new JSONArray();
-        // Start: V of V of S
-        JSONArray intermediateArr = new JSONArray();
-        for(int i=0; i < interventions.size(); i++) {
-            intermediateArr.put(interventions.get(i));                          // J of V of S
-        }
-        for(int j=0; j < intermediateArr.length(); j++) {                        // Jeder Vector im JSONA
-            JSONArray temp = new JSONArray();
-            Vector<String> elem = (Vector<String>)intermediateArr.get(j);
-            for(int k = 0; k < elem.size(); k++) {                              // Jeden Eintrag im Vector im JSONA
-                temp.put((String) (elem.get(k)));                               // J of S
-                endArray.put(temp);                                             // J of J of S
-            }
-        }
-        dsHelper.writeDataToInternalStorage("interventions.txt", endArray.toString(), getContext());
-    }
-
 }
