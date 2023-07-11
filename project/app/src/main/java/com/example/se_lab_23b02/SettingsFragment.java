@@ -168,9 +168,7 @@ public class SettingsFragment extends Fragment {
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS);
 
 
-        //TODO: -------------Display Picked Time in Button-------------
-        String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
-
+        setAlarmButtons();
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -578,6 +576,35 @@ public class SettingsFragment extends Fragment {
             Alarm a = new Alarm(i);
             a.cancelAlarm(getContext());
         }
+    }
+
+
+
+    private void setAlarmButtons()
+    {
+        String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
+
+        String[] allEntries = temp.split(":");
+        String[] temp2 = new String[allEntries.length-1];
+
+        int count = 0;
+
+        for(int i = 1; i<=allEntries.length-1; i++)
+        {
+            temp2[count] = String.join(":",allEntries[i].split(",")[0],allEntries[i].split("M")[1].split("\n")[0]);
+            System.out.println(temp2[count] + "\n");
+            count++;
+        }
+        for(int j = 0; j<=temp2.length-1;j++)
+        {
+            String test = temp2[j].split(":")[0];
+            System.out.println(test + "\n");
+            int hour = Integer.valueOf(test);
+            if(hour >=7 && hour <=11) btnNotifMorning.setText(temp2[j]);
+            else if(hour>=12 && hour <=14) btnNotifNoon.setText(temp2[j]);
+            else if(hour>=17 && hour <=18) btnNotifEvening.setText(temp2[j]);
+        }
+
     }
 }
 

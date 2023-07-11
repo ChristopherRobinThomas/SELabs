@@ -122,4 +122,13 @@
     <string name="questionnaire_popup_DenyButton">Close</string>
     <string name="questionnaire_popup_HintText">Enter Text</string>
 
+
+
+    <!-- Strings for the time picker activity-->
+    <string name="timepicker_cancel">Cancel</string>
+    <string name="timepicker_submit">Submit</string>
+    <string name="timepicker_preferred_choice">Select your preferred Time</string>
+    <string name="timepicker_selected">Selected:\u0020</string>
+
+
 </resources>

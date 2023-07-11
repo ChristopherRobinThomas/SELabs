@@ -110,4 +110,13 @@
     <string name="tv_daily_goal_pick_daily_goal">Wähle dein Tagesziel</string>
     <string name="tv_daily_goal_goal_choice">Deine Auswahl: \u0020 </string>
     <string name="prompt_cancel">Zurück </string>
+
+
+
+
+    <!-- Strings for the time picker activity-->
+    <string name="timepicker_cancel">Zurück</string>
+    <string name="timepicker_submit">Bestätigen</string>
+    <string name="timepicker_preferred_choice">Wähle deine bevorzugte Uhrzeit</string>
+    <string name="timepicker_selected">Gewählt:\u0020</string>
 </resources>

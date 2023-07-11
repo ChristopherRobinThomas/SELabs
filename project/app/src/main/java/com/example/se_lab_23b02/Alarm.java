@@ -57,7 +57,7 @@ public class Alarm
         pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),10,pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        Log.d("setAlarm","ALarm set");
+        Log.d("setAlarm","Alarm set");
     }
 
     public void cancelAlarm(Context context) {

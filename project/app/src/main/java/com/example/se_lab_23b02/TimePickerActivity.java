@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class TimePickerActivity extends Activity {
 
     private final int interval = 5;
 
+    //----------GUI Elements----------
     private ConstraintLayout constraintLayout;
     private Button btSubmit;
     private Button btDestroy;
@@ -34,6 +36,13 @@ public class TimePickerActivity extends Activity {
     private TextView tv;
     private TextView tvOut;
     private TextView tvTitle;
+
+
+    //--------Context and Resources for Language----
+    private Context context;
+    private Resources resources;
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +57,14 @@ public class TimePickerActivity extends Activity {
         constraintLayout = findViewById(R.id.constraintLayoutTimerPicker);
         tvTitle = findViewById(R.id.tvTimePickerText1);
 
+
+        elementsForLanguageChange.add(btDestroy);
+        elementsForLanguageChange.add(btSubmit);
+        elementsForLanguageChange.add(tvTitle);
+
         dsHelper = DataSavingHelper.getInstance();
+        refreshResources();
+        setLanguage();
 
 
         Bundle b = getIntent().getExtras();
@@ -75,12 +91,11 @@ public class TimePickerActivity extends Activity {
         int prog = (cHour[0] - lb) * stepsPerHour + cMin[0] / interval;
         sliderBar.setProgress(prog);
         if(cMin[0] == 0)
-            tvOut.setText("selected: " + cHour[0] + ":00");
+            tvOut.setText(resources.getString(R.string.timepicker_selected) + cHour[0] + ":00");
         else if(cMin[0] == 5)
-            tvOut.setText("selected: " + cHour[0] + ":05");
+            tvOut.setText(resources.getString(R.string.timepicker_selected) + cHour[0] + ":05");
         else
-            tvOut.setText("selected: " + cHour[0] + ":" + cMin[0]);
-
+            tvOut.setText(resources.getString(R.string.timepicker_selected) + cHour[0] + ":" + cMin[0]);
         sliderBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -92,11 +107,11 @@ public class TimePickerActivity extends Activity {
                 cHour[0] = hours;
                 cMin[0] = mins;
                 if(mins == 0)
-                    tvOut.setText("selected: " + hours + ":00");
+                    tvOut.setText(resources.getString(R.string.timepicker_selected) + hours + ":00");
                 else if (mins == 5)
-                    tvOut.setText("selected: " + hours + ":05");
+                    tvOut.setText(resources.getString(R.string.timepicker_selected)+ hours + ":05");
                 else
-                    tvOut.setText("selected: " + hours + ":" + mins);
+                    tvOut.setText(resources.getString(R.string.timepicker_selected) + hours + ":" + mins);
 
             }
 
@@ -243,4 +258,34 @@ public class TimePickerActivity extends Activity {
         btSubmit.getBackground().setAlpha(ButtonTransparency);
 
     }
+
+
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(this.getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(this.getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+    private void setLanguage() {
+        Button bt = (Button) elementsForLanguageChange.get(0);
+        bt.setText(resources.getString(R.string.timepicker_cancel));
+        bt = (Button) elementsForLanguageChange.get(1);
+        bt.setText(resources.getString(R.string.timepicker_submit));
+        TextView languageTv = (TextView) elementsForLanguageChange.get(2);
+        languageTv.setText(resources.getString(R.string.timepicker_preferred_choice));
+
+    }
+
 }
