@@ -27,6 +27,8 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     private Context context;
     private Resources resources;
+    DataSavingHelper dsHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding.bottomNavigation.setSelectedItemId(R.id.home);
 
         refreshResources();
+        dsHelper = DataSavingHelper.getInstance();
 
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
@@ -65,18 +68,12 @@ public class HomeScreenActivity extends AppCompatActivity {
             return true;
         });
 
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        dsHelper.writeDataToInternalStorage("interventions.txt", "", HomeScreenActivity.this);
-        Vector<Vector<String>> emptyV = new Vector<Vector<String>>();
-        Vector<Vector<String>> tempV = new Vector<Vector<String>>();
-        try {
-            tempV = dsHelper.getSavedInterventions(HomeScreenActivity.this);
-        } catch (JSONException e) {}
-        if(tempV.equals(emptyV)) {
-            try {
-                dsHelper.saveInterventions(dsHelper.getSampleInterventions(), HomeScreenActivity.this);
-            } catch (JSONException e) {}
-        }
+        tryOpenRandomIntervention();
+
+    }
+
+    private void tryOpenRandomIntervention() {
+        ensureInterventions();
         try {
             Intent sourceIntent = getIntent();
             boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
@@ -95,6 +92,19 @@ public class HomeScreenActivity extends AppCompatActivity {
                 setTitle(resources.getString(R.string.interventions_heading));
             }
         } catch (Exception ignored) {}
+    }
+
+    private void ensureInterventions() {
+        Vector<Vector<String>> emptyV = new Vector<Vector<String>>();
+        Vector<Vector<String>> tempV = new Vector<Vector<String>>();
+        try {
+            tempV = dsHelper.getSavedInterventions(HomeScreenActivity.this);
+        } catch (JSONException e) {}
+        if(tempV.equals(emptyV)) {
+            try {
+                dsHelper.saveInterventions(dsHelper.getSampleInterventions(), HomeScreenActivity.this);
+            } catch (JSONException e) {}
+        }
     }
 
     private void refreshResources() {
