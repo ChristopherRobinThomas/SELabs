@@ -306,8 +306,6 @@ public class MultiUserMainFragment extends Fragment {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
         topLeft.getBackground().setAlpha(ButtonTransparency);
         bottomRight.getBackground().setAlpha(ButtonTransparency);

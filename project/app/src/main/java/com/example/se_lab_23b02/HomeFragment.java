@@ -775,13 +775,18 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void addInterventionView(String id, String[] time, String date, String type)
     {
+
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+
         linearLayoutToAdd = new LinearLayout(getActivity());
         linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutToAdd.setGravity(Gravity.LEFT);
         linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
         linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.linear_layout_border));
+        if(mode.equals("white-mode")) linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+        else linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
 
         LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -790,11 +795,13 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         imageViewIntervention.setLayoutParams(layoutParams);
         //If else with different Picture
         if(type.equals("Recording")) {
-            imageViewIntervention.setImageResource((R.drawable.baseline_play_circle_24));
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24));
+            else imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24_dark_mode));
         }
         else
         {
-            imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            else imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24_dark_mode);
         }
         imageViewIntervention.setForegroundGravity(Gravity.CENTER);
         linearLayoutToAdd.addView(imageViewIntervention);

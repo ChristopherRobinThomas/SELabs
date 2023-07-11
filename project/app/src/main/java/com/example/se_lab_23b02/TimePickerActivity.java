@@ -3,6 +3,7 @@ package com.example.se_lab_23b02;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,24 +12,41 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import org.w3c.dom.Text;
 
 public class TimePickerActivity extends Activity {
 
     private final int interval = 5;
 
+    private ConstraintLayout constraintLayout;
+    private Button btSubmit;
+    private Button btDestroy;
+    private DataSavingHelper dsHelper;
+    private Context contextForColor;
+
+    private SeekBar sliderBar;
+    private TextView tv;
+    private TextView tvOut;
+    private TextView tvTitle;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_picker_for_notifications);
         this.setFinishOnTouchOutside(false);
 
-        TextView tv = (TextView) findViewById(R.id.tvSlot);
-        Button btDestroy = (Button) findViewById(R.id.btDestroy);
-        SeekBar sliderBar = (SeekBar) findViewById(R.id.sbTimePicker);
-        TextView tvOut = (TextView) findViewById(R.id.tvTime);
-        Button btSubmit = (Button) findViewById(R.id.btSubmitNewTime);
+        tv = (TextView) findViewById(R.id.tvSlot);
+        btDestroy = (Button) findViewById(R.id.btDestroy);
+        sliderBar = (SeekBar) findViewById(R.id.sbTimePicker);
+        tvOut = (TextView) findViewById(R.id.tvTime);
+        btSubmit = (Button) findViewById(R.id.btSubmitNewTime);
+        constraintLayout = findViewById(R.id.constraintLayoutTimerPicker);
+        tvTitle = findViewById(R.id.tvTimePickerText1);
 
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        dsHelper = DataSavingHelper.getInstance();
+
 
         Bundle b = getIntent().getExtras();
 
@@ -142,6 +160,8 @@ public class TimePickerActivity extends Activity {
                 finish();
             }
         });
+
+        setColorTheme();
     }
 
     private void createNotificationChannel(){
@@ -154,5 +174,60 @@ public class TimePickerActivity extends Activity {
             NotificationManager notificationManager = this.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                tv.setTextColor(getColor(R.color.dark_mode_color_on_primary));
+                tvOut.setTextColor(getColor(R.color.dark_mode_color_on_primary));
+                tvTitle.setTextColor(getColor(R.color.dark_mode_color_on_primary));
+
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                tv.setTextColor(getColor(R.color.black));
+                tvOut.setTextColor(getColor(R.color.black));
+                tvTitle.setTextColor(getColor(R.color.black));
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        btDestroy.getBackground().setAlpha(ButtonTransparency);
+        btSubmit.getBackground().setAlpha(ButtonTransparency);
+
     }
 }

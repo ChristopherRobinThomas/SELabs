@@ -106,8 +106,6 @@ public class HomeScreenActivity extends AppCompatActivity {
             case "white-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
-            case "match OS":
-                break;
         }
     }
 }

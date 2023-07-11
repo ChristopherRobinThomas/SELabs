@@ -665,8 +665,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
         sendButton.getBackground().setAlpha(ButtonTransparency);
     }

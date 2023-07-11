@@ -444,7 +444,7 @@ public class OverviewFragment extends Fragment {
     private void drawMentalHealth(Number[] dataList, String[] labels, Number[] domains) {
 
         //Get Color Scheme
-        Paint blackPaint = new Paint();
+        /**Paint blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(50);
         blackPaint.setTextAlign(Paint.Align.CENTER);
@@ -468,7 +468,8 @@ public class OverviewFragment extends Fragment {
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
             plot.getTitle().setLabelPaint(whitePaint);
 
-        }
+        }*/
+        setPlotColor(plot);
 
         plot.getLayoutManager().remove(plot.getLegend());
 
@@ -495,6 +496,7 @@ public class OverviewFragment extends Fragment {
 
         XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
         LineAndPointFormatter seriesFormatter = new LineAndPointFormatter( getResources().getColor(R.color.below_graph), null, getResources().getColor(R.color.below_graph), null);
+        seriesFormatter.setInterpolationParams(new CatmullRomInterpolator.Params(30, CatmullRomInterpolator.Type.Uniform));
         plot.addSeries(series, seriesFormatter);
 
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
@@ -514,15 +516,14 @@ public class OverviewFragment extends Fragment {
     }
     private void drawInterventions(String[] dates, Number[] completed, Number[] incompleted) {
         plot.clear();
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
-        //plot.getLayoutManager().remove(plot.getLegend());
+        setPlotColor(plot);
         plot.setRangeLowerBoundary(0, BoundaryMode.AUTO);
 
         plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
-        BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
+        BarFormatter bf = new BarFormatter(getResources().getColor(R.color.bar_graph_red), Color.TRANSPARENT);
         bf.setMarginLeft(PixelUtils.dpToPix(1));
         bf.setMarginRight(PixelUtils.dpToPix(1));
+
 
         int max = 0;
         for (int i = 0; i < completed.length; i++) {
@@ -539,12 +540,14 @@ public class OverviewFragment extends Fragment {
 
         plot.setRangeBoundaries(0, max, BoundaryMode.FIXED);
 
+        Paint barGraphRed = new Paint();
+        barGraphRed.setColor(getResources().getColor(R.color.bar_graph_red));
 
-        BarFormatter bf1 = new BarFormatter(Color.RED, Color.TRANSPARENT);
+        BarFormatter bf1 = new BarFormatter(getResources().getColor(R.color.bar_graph_red), Color.TRANSPARENT);
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(incompleted), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
         plot.addSeries(series1, bf1);
 
-        BarFormatter bf2 = new BarFormatter(Color.GREEN, Color.TRANSPARENT);
+        BarFormatter bf2 = new BarFormatter(getResources().getColor(R.color.bar_graph_green), Color.TRANSPARENT);
         XYSeries series2 = new SimpleXYSeries(Arrays.asList(completed), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
         plot.addSeries(series2, bf2);
 
@@ -646,11 +649,42 @@ public class OverviewFragment extends Fragment {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
         btNumOfActivities.getBackground().setAlpha(ButtonTransparency);
         btNumOfInterventions.getBackground().setAlpha(ButtonTransparency);
         btShowHealthGraph.getBackground().setAlpha(ButtonTransparency);
+    }
+
+
+    private void setPlotColor(XYPlot plot)
+    {
+        //Get Color Scheme
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
+        blackPaint.setTextSize(50);
+        blackPaint.setTextAlign(Paint.Align.CENTER);
+
+        Paint whitePaint = new Paint();
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setTextSize(50);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        plot.clear();
+        if(mode.equals("white-mode"))
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+            plot.getTitle().setLabelPaint(blackPaint);
+        }
+        else
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.WHITE);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
+            plot.getTitle().setLabelPaint(whitePaint);
+
+        }
+
+        plot.getLayoutManager().remove(plot.getLegend());
     }
 }

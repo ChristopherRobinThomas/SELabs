@@ -187,8 +187,6 @@ public class InterventionsFragment extends Fragment {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
     }
 }

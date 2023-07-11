@@ -168,8 +168,6 @@ public class MultiUserLoginFragment extends Fragment {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
         btnLogin.getBackground().setAlpha(ButtonTransparency);
         btnBack.getBackground().setAlpha(ButtonTransparency);

@@ -231,8 +231,6 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                         break;
                 }
                 break;
-            case "match OS":
-                break;
         }
         back.getBackground().setAlpha(ButtonTransparency);
         NewUser.getBackground().setAlpha(ButtonTransparency);

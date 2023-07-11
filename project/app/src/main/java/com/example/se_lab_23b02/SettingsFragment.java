@@ -167,6 +167,10 @@ public class SettingsFragment extends Fragment {
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
         setupCheckboxValues(switchAccel, switchStepCount, switchGPS);
 
+
+        //TODO: -------------Display Picked Time in Button-------------
+        String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
+
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

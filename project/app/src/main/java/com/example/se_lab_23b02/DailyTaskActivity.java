@@ -344,9 +344,6 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
                         break;
                 }
                 break;
-            case "match OS":
-                //TODO Make it match the OS
-                break;
         }
 
         buttonWalk5000Steps.getBackground().setAlpha(ButtonTransparency);
