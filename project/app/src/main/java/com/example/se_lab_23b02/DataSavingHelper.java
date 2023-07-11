@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
@@ -80,7 +81,6 @@ public class DataSavingHelper {
         filename = getCurrentUserId(context) + filename;
 
         if (append) {
-            System.out.println("appending");
             accessInternalStorage(filename, data, context, Context.MODE_APPEND);
         } else {
             accessInternalStorage(filename, data, context, Context.MODE_PRIVATE);
@@ -102,6 +102,19 @@ public class DataSavingHelper {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
+    public boolean deleteFileFromInternalStorage(String filename,Context context)
+    {
+        filename = getCurrentUserId(context) + filename;
+
+        File toWrite = new File(context.getFilesDir(), filename);
+        if(!toWrite.exists())
+            return false;
+
+        context.deleteFile(filename);
+        return true;
+    }
+  
     public String readSavedDataFromInternalStorage(String filename, Context context) {
         //Important for multiuser -> everyone gets a file plus it's local ID
         filename = getCurrentUserId(context) + filename;
@@ -132,9 +145,9 @@ public class DataSavingHelper {
     }
 
     private String getCurrentUserId(Context context)
-
     {
-        User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
+        UserHelper us = UserHelper.getInstance();
+        User u = us.getCurrentUser(context);
         return String.valueOf(u.getLocalId());
     }
     public Vector<Vector<String>> getSampleInterventions() {

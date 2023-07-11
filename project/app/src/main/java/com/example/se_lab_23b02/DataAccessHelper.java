@@ -1,26 +1,28 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.util.Pair;
+
+import androidx.constraintlayout.motion.widget.Debug;
+
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
+import java.sql.SQLOutput;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
-import java.time.chrono.ChronoLocalDate;
+import java.time.ZoneOffset;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import kotlin.Triple;
 
@@ -64,7 +66,7 @@ public class DataAccessHelper {
                     LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsObject.get("timestamp"));
                     if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
                         int hours = (int) ChronoUnit.HOURS.between(lowerBorder, timestampAsLocalDateTime);
-                        Pair<Integer, Integer> newEntry = new Pair<>(this.calculateHealthScoreFromQuestionaire(linesForMentalHealth[i]), hours);
+                        Pair<Integer, Integer> newEntry = new Pair<>(calculateHealthScoreFromQuestionaire(linesForMentalHealth[i]), hours);
                         outputList.add(newEntry);
                     }
                 }
@@ -94,23 +96,159 @@ public class DataAccessHelper {
                 }
                 break;
 
-            case ACCESS_COUNT_OF_INTERVENTIONS:
-                fileContent = dsHelper.readSavedDataFromInternalStorage("", context);
-                String[] linesInterventions = fileContent.split(System.lineSeparator());
-                for (int i = 1; i < linesInterventions.length; i++) {
-                    JSONObject jsonObject = new JSONObject(linesInterventions[i]);
-                    LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("timestamp"));
-                    if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
-                        //append count oder so
-                    }
-                }
-                // count
-                //append
-                break;
             default:
                 break;
         }
         return outputList;
+    }
+
+
+    public float getWalkedDistanceFromRecording(String timestamp, Context context) throws JSONException {
+        String[] splitted = timestamp.split(" ");
+        String content = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+        LocalDate tsDate = LocalDate.parse(splitted[0]);
+        LocalTime tsTime = LocalTime.parse(splitted[1]);
+
+        String[] lines = content.split(System.lineSeparator());
+        for (int i = 1; i < lines.length; i++) {
+            JSONObject jsonLine = new JSONObject(lines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+            if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
+                JSONArray jsonArray = (JSONArray) jsonLine.get("distance");
+                if(jsonArray.length() == 0)
+                    return -1;
+                String distance = String.valueOf(jsonArray.get(0));
+                return (int) (Float.parseFloat(distance));
+
+
+            }
+        }
+        return -1;
+   }
+
+    public Triple<ArrayList<String>, ArrayList<Integer>, ArrayList<Integer>> getInterventionsValues(LocalDateTime lowerBorder, LocalDateTime upperBorder, Context context) throws JSONException {
+
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<Integer> completed = new ArrayList<>();
+        ArrayList<Integer> incompleted = new ArrayList<>();
+
+        String fileContent = dsHelper.readSavedDataFromInternalStorage("completedInterventions.txt", context);
+        String[] linesInterventions = fileContent.split(System.lineSeparator());
+
+        Instant instant = Instant.now();
+        long diff = upperBorder.toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(instant)) - lowerBorder.toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(instant));
+
+        int daysDifference = (int) (diff / (60*60*24)) + 2;
+        System.out.println("difference:" + daysDifference);
+
+
+        LocalDateTime tempdate = lowerBorder;
+        for(int i = 0; i < daysDifference; i++) {
+            dates.add(tempdate.toLocalDate().toString());
+            tempdate = tempdate.plusDays(1);
+            completed.add(0);
+            incompleted.add(0);
+        }
+
+
+        for (int i = 1; i < linesInterventions.length; i++) {
+            JSONObject jsonObject = new JSONObject(linesInterventions[i]);
+            LocalDateTime timestampAsLocalDateTime = TimeStamp.getLocalDateTime(jsonObject.get("timestamp"));
+            if(timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(lowerBorder)) >= 0 && timestampAsLocalDateTime.compareTo(ChronoLocalDateTime.from(upperBorder)) <= 0) {
+                long daydiff = timestampAsLocalDateTime.toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(instant)) - lowerBorder.toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(instant));
+                int day = (int) (daydiff / (60*60*24));
+                System.out.println("timestamp: " + timestampAsLocalDateTime + " daysdiff: " + day);
+
+
+                if((boolean)jsonObject.get("completed")) {
+                    int entry = completed.get(day);
+                    completed.remove(day);
+                    completed.add(day, entry + 1);
+                } else {
+                    int entry = incompleted.get(day);
+                    incompleted.remove(day);
+                    incompleted.add(day, entry + 1);
+                }
+            }
+        }
+
+        return new Triple<>(dates, completed, incompleted);
+    }
+
+    public int getStepCountFromRecording(String timestamp, Context context) throws JSONException {
+        String[] splitTS = timestamp.split(" ");
+        String content = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+
+        LocalDate tsDate = LocalDate.parse(splitTS[0]);
+        LocalTime tsTime = LocalTime.parse(splitTS[1]);
+
+        String[] lines = content.split(System.lineSeparator());
+        for (int i = 1; i < lines.length; i++) {
+            JSONObject jsonLine = new JSONObject(lines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+
+            if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
+
+                JSONArray jsonArray = (JSONArray) jsonLine.get("stepcounter");
+                if(jsonArray.length() == 0)
+                    return -1;
+                String stepContent = String.valueOf(jsonArray.get(0));
+                return (int) (Float.parseFloat(stepContent));
+            }
+
+        }
+        return -1;
+    }
+
+    public Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> getValuesFromRecording(String timestamp, Context context) throws JSONException {
+
+        ArrayList<Pair<Long, Float>> x_list = new ArrayList<>();
+        ArrayList<Pair<Long, Float>> y_list = new ArrayList<>();
+        ArrayList<Pair<Long, Float>> z_list = new ArrayList<>();
+
+        String[] timestampSplitted = timestamp.split(" ");
+
+        LocalDate compTimestampDate = LocalDate.parse(timestampSplitted[0]);
+        LocalTime compTimestampTime = LocalTime.parse(timestampSplitted[1]);
+
+        String fileContent = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", context);
+
+        String[] fileLines = fileContent.split(System.lineSeparator());
+        for (int i = 1; i < fileLines.length; i++) {
+            JSONObject jsonLine = new JSONObject(fileLines[i]);
+            String jsonTimestampString = (String) jsonLine.get("timestamp");
+            String[] jsonTimestampSplitted = jsonTimestampString.split(" ");
+            LocalDate jsTimestampDate = LocalDate.parse(jsonTimestampSplitted[0]);
+            LocalTime jsTimestampTime = LocalTime.parse(jsonTimestampSplitted[1]);
+
+            if(compTimestampDate.isEqual(jsTimestampDate) && compTimestampTime.equals(jsTimestampTime)) {
+
+
+                JSONArray jsonArrayAcceleration = (JSONArray) jsonLine.get("acceleration");
+                for(int entryIndex = 0; entryIndex < jsonArrayAcceleration.length(); entryIndex++) {
+
+                    JSONObject entry = (JSONObject) jsonArrayAcceleration.get(entryIndex);
+                    Pair<Long, Float> x = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("x")));
+                    x_list.add(x);
+                    Pair<Long, Float> y = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("y")));
+                    y_list.add(y);
+                    Pair<Long, Float> z = new Pair<>(Long.parseLong((String)entry.get("timestamp")), Float.parseFloat((String)entry.get("z")));
+                    z_list.add(z);
+                }
+                Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> triple = new Triple<>(x_list, y_list, z_list);
+                return triple;
+            }
+
+        }
+
+        return new Triple<>(x_list, y_list, z_list);
+
     }
 
     private int getIndexFromTaskListByString(String taskString) {

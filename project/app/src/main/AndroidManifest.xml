@@ -34,6 +34,9 @@
             android:name=".AllPastInterventionsActivity"
             android:exported="false" />
         <activity
+            android:name=".SensorRecordingGraphActivity"
+            android:exported="false" />
+        <activity
             android:name=".MultiUserActivity"
             android:exported="true" >
             <intent-filter>
@@ -42,11 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MultiUserInputActivity"
-            android:exported="false"
-            android:label="@string/title_activity_multi_user_input"
-            android:theme="@style/Theme.SELab23B02" />
         <activity
             android:name=".DailyTaskActivity"
             android:exported="false" />

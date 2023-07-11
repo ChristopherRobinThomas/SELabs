@@ -1,6 +1,7 @@
 package com.example.se_lab_23b02;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -148,7 +149,7 @@ public class SettingsFragment extends Fragment {
         setAllStrings();
 
         setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
-        setupCheckboxValues(switchAccel, switchStepCount, switchGPS, settings);
+        setupCheckboxValues(switchAccel, switchStepCount, switchGPS);
 
         //language Spinner selection Listener
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -326,12 +327,13 @@ public class SettingsFragment extends Fragment {
         btnDelAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
+                cancelAlarms();
 
                 //delete data here
                 dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
                 refreshSettings();
-                setupCheckboxValues(switchAccel,switchStepCount, switchGPS, settings);
+                setupCheckboxValues(switchAccel,switchStepCount, switchGPS);
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
                 Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
 
@@ -350,6 +352,9 @@ public class SettingsFragment extends Fragment {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+
+                cancelAlarms();
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
@@ -403,19 +408,11 @@ public class SettingsFragment extends Fragment {
     }
 
     //this method takes all switches and the settings map to set the switches to checked if their corresponding value is true/false
-    private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS, HashMap<String, String> settings) {
-        if(settings.containsKey("StepCounterAllowed")) {
-            swStep.setChecked(Boolean.parseBoolean(settings.get("StepCounterAllowed")));
-        } else
-            swStep.setChecked(false);
-        if(settings.containsKey("AccelAllowed")) {
-            swAcc.setChecked(Boolean.parseBoolean(settings.get("AccelAllowed")));
-        } else
-            swAcc.setChecked(false);
-        if(settings.containsKey("GPSAllowed")) {
-            swGPS.setChecked(Boolean.parseBoolean(settings.get("GPSAllowed")));
-        }
-        swGPS.setChecked(false);
+    private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS) {
+        swStep.setChecked(dsHelper.getSpecificSettingsFromSharedPref("StepCounterAllowed", context).equals("true"));
+        swAcc.setChecked(dsHelper.getSpecificSettingsFromSharedPref("AccelAllowed", context).equals("true"));
+        swGPS.setChecked(dsHelper.getSpecificSettingsFromSharedPref("GPSAllowed", context).equals("true"));
+
     }
 
     //this is for the case that all the settings are not set yet so we don't try to access data which isn't available
@@ -507,6 +504,12 @@ public class SettingsFragment extends Fragment {
             spDMode.setSelection(spinnerPosition);
         }
     }
-
+    private void cancelAlarms()
+    {
+        for (int i = 0; i<3;i++){
+            Alarm a = new Alarm(i);
+            a.cancelAlarm(getContext());
+        }
+    }
 }
 

@@ -80,6 +80,7 @@ public class MultiUserMainFragment extends Fragment {
         {
             resetActiveUser();
             users = getAllLoggedInUsers();
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("ActiveUser","None",getContext());
         }else{
             //If the values for The users are not in the settings file add them
             users = new ArrayList<>();
