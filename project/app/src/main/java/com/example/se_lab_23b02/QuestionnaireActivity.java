@@ -104,36 +104,54 @@ public class QuestionnaireActivity extends AppCompatActivity {
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String questResult = "";
                 try {
-                    saveAnswers();
-                }catch (Exception ignored) { }
-                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon)
-                {
+                    questResult = saveAnswers();
+                } catch (Exception ignored) { }
+
+                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon) {
                     Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        i.putExtra("shouldSuggestInterventionAfterDST", true);
+                    }
                     startActivity(i);
                     finish();
                 }
-                else
-                {
-                    showDoInterventionDialogue();
+                else {
+                    Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        showDoInterventionDialogue(i);
+                    }
                 }
             }
         });
 
     }
 
-    void showDoInterventionDialogue() {
+    /**
+     * This highly complex Algorithm based on many parameters can be substituted by the researchers at any time.
+     * @return Whether the Questionnaire indicates that an Intervention should be triggered.
+     */
+    private boolean shouldDoInterventionAlgorithm(String questResult) {
+        return (calculateAffectiveWellbeingScore(questResult) <= 50);
+    }
+
+    private int calculateAffectiveWellbeingScore(String questResult) {
+        try {
+            return DataAccessHelper.calculateHealthScoreFromQuestionaire(questResult);
+        } catch (JSONException e) { return 100;}
+    }
+
+    void showDoInterventionDialogue(Intent i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
         builder.setTitle("Title");
         final TextView tv = new TextView(QuestionnaireActivity.this);
         tv.setText("Based on your response, we recommend an intervention.\nDo intervention now?");
         builder.setView(tv);
-        Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 i.putExtra("openRandomIntervention", true);
-                Log.i(null, "Extras Put: "+ true);
                 startActivity(i);
                 finish();
             }
@@ -149,7 +167,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         builder.show();
     }
 
-    void saveAnswers() throws JSONException {
+    String saveAnswers() throws JSONException {
 
         String[] additionalNotes = new String[1];
         EditText et = (EditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
@@ -176,6 +194,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        return toSave.toString();
     }
 
     void  manageQuestions() {

@@ -125,8 +125,9 @@ public class HomeScreenActivity extends AppCompatActivity {
             Vector<String> temp = new Vector<String>();
             for(int k = 0; k < intermediateList.get(j).length(); k++) {         // Jeden Eintrag im JSONA im Vector
                 temp.add((String) intermediateList.get(j).get(k));              // V of S
-                endList.add(temp);                                              // V of V of S
+                // V of V of S
             }
+            endList.add(temp);
         }
         return endList;
     }
