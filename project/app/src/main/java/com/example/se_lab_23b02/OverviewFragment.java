@@ -443,32 +443,6 @@ public class OverviewFragment extends Fragment {
 
     private void drawMentalHealth(Number[] dataList, String[] labels, Number[] domains) {
 
-        //Get Color Scheme
-        /**Paint blackPaint = new Paint();
-        blackPaint.setColor(Color.BLACK);
-        blackPaint.setTextSize(50);
-        blackPaint.setTextAlign(Paint.Align.CENTER);
-
-        Paint whitePaint = new Paint();
-        whitePaint.setColor(Color.WHITE);
-        whitePaint.setTextSize(50);
-        whitePaint.setTextAlign(Paint.Align.CENTER);
-        contextForColor = getActivity().getApplicationContext();
-        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
-        plot.clear();
-        if(mode.equals("white-mode"))
-        {
-            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
-            plot.getTitle().setLabelPaint(blackPaint);
-        }
-        else
-        {
-            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.WHITE);
-            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
-            plot.getTitle().setLabelPaint(whitePaint);
-
-        }*/
         setPlotColor(plot);
 
         plot.getLayoutManager().remove(plot.getLegend());
@@ -479,13 +453,6 @@ public class OverviewFragment extends Fragment {
             return;
         } else
             tvInfo.setVisibility(TextView.INVISIBLE);
-
-
-        /**if (typeToPlot == 0) {
-            plot.setTitle(resources.getString(R.string.bt_overview_health_index));
-            plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
-            plot.setDomainBoundaries(null, null, BoundaryMode.AUTO);
-        }*/
 
         //final Number[] domainLabels = domains;
 

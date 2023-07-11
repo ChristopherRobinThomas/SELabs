@@ -557,10 +557,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     {
         innitdailyGoal = dailyGoal;
         switch(dailyGoal) {
-            case "Walk 5000 Steps":
+            case "Walk 5.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_5000_steps);
                 break;
-            case "Walk 10000 Steps":
+            case "Walk 10.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case "Drink 2L Water":

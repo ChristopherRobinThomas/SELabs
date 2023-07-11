@@ -131,11 +131,11 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         {
 
             case R.id.buttonWalk5000Steps:
-                saveDailyTask = "Walk 5000 Steps";
+                saveDailyTask = "Walk 5.000 Steps";
                 dailyTask = resources.getString(R.string.goal_walk_5000_steps);
                 break;
             case R.id.buttonWalk10000Steps:
-                saveDailyTask = "Walk 10000 Steps";
+                saveDailyTask = "Walk 10.000 Steps";
                 dailyTask = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case R.id.buttonDrinkWater:
