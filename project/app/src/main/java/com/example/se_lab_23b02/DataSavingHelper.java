@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.util.Vector;
 
 // Woah Singleton
 public class DataSavingHelper {
@@ -132,5 +133,24 @@ public class DataSavingHelper {
     {
         User u = new User(getAllSettingsFromSharedPref(context).get("ActiveUser"));
         return String.valueOf(u.getLocalId());
+    }
+    public Vector<Vector<String>> getSampleInterventions() {
+        Vector<Vector<String>> newInterventions = new Vector<Vector<String>>();
+        Vector<String> sampleInterventionA = new Vector<String>();
+        sampleInterventionA.add("0");
+        sampleInterventionA.add("Push-Ups");
+        sampleInterventionA.add("Perform 10 push-ups.");
+        newInterventions.add(sampleInterventionA);
+        Vector<String> sampleInterventionB = new Vector<String>();
+        sampleInterventionB.add("1");
+        sampleInterventionB.add("Sit-Ups");
+        sampleInterventionB.add("Perform 10 sit-ups.");
+        newInterventions.add(sampleInterventionB);
+        Vector<String> sampleInterventionC = new Vector<String>();
+        sampleInterventionC.add("2");
+        sampleInterventionC.add("Light Run");
+        sampleInterventionC.add("Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes");
+        newInterventions.add(sampleInterventionC);
+        return newInterventions;
     }
 }
