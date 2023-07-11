@@ -101,25 +101,25 @@ public class InterventionsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
-
         dsHelper = DataSavingHelper.getInstance();
-        // interventionList = dsHelper.;
         linearLayout = view.findViewById(R.id.interventionsFragment);
-        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
-        // TODO: Read from localStorage
-        // populateButtonList(interventionList, view);
+        setColorTheme();
 
+        try {
+            interventionList = dsHelper.getSavedInterventions(this.getContext());
+        } catch (JSONException ignored) {}
+
+        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
 
         buttonList = populateButtonList(interventionList, view);
-        buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
         for (int i = 0; i < buttonList.size(); i++) {
             int finalI = i;
             buttonList.get(i).setOnClickListener(v -> {
                 openSingleInterventionFragment(interventionList.get(finalI));
             });
         }
-        setColorTheme();
 
+        buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
         buttonAddNewIntervention.setOnClickListener(v -> {
             showAddInterventionDialogue(view);
         });
