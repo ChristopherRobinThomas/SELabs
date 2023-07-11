@@ -6,16 +6,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_home_24"
-        android:title="Home" />
+        android:title="@string/home_heading" />
     <item
         android:id="@+id/data"
         android:icon="@drawable/baseline_auto_graph_24"
-        android:title="data" />
+        android:title="@string/overview_navigation_bar" />
     <item
         android:id="@+id/interventions"
         android:icon="@drawable/little_being"
-        android:title="tasks" />
-    <item android:title="Settings"
+        android:title="@string/interventions_heading" />
+    <item android:title="@string/settings_heading"
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/settings"/>
 

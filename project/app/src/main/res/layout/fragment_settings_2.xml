@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="65dp"
+    android:id="@+id/settingsFragment">
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -233,7 +235,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:id="@+id/tvMorningNotification"
@@ -248,14 +251,16 @@
                         android:id="@+id/btChangeNotificationMorning"
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:background="@drawable/step_count_border"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:id="@+id/tvSettingsNoon"
@@ -269,13 +274,15 @@
                         android:id="@+id/btChangeNotificationNoon"
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:background="@drawable/step_count_border"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:id="@+id/tvSettingsEvening"
@@ -289,7 +296,8 @@
                         android:id="@+id/btChangeNotificationEvening"
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:background="@drawable/step_count_border"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -319,9 +327,11 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:text="@string/bt_settings_logout"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                android:background="@drawable/step_count_border"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

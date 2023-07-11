@@ -9,4 +9,25 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="accent_color">#516395</color>
+    <color name="test">#18A5A7</color>
+
+
+
+    <!-- Colors for Dark Mode blue-->
+    <color name="dark_mode_blue_primary">#1f2f98</color>
+    <color name="dark_mode_blue_primary_variant">#9ca5ba</color>
+    <color name="dark_mode_color_on_primary">#FFFFFFFF</color>
+    <color name="dark_mode_blue_secondary">#353847</color>
+    <color name="dark_mode_blue_secondary_variant">#FFBB86FC</color>
+    <color name="dark_mode_color_on_secondary">#FFFFFFFF</color>
+
+
+    <!-- Colors for Graphs -->
+    <color name="below_graph">#66FFFFFF</color>
+    <color name="bar_graph_red">#99520d1c</color>
+    <color name="bar_graph_green">#990d4f1e</color>
+
+
+
+
 </resources>

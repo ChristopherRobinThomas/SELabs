@@ -4,32 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DailyTaskActivity">
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/round_button"
-        android:text="x"
-        app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.01"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/buttonX"
-        />
+    tools:context=".DailyTaskActivity"
+    android:id="@+id/dailyTaskActivity">
 
     <TextView
         android:id="@+id/pickDailyGoalTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pick your Daily Goal!"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginTop="-600dp"/>
+        android:layout_marginTop="20dp"/>
 
 
     <LinearLayout
@@ -38,58 +25,68 @@
         android:padding="10dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/pickDailyGoalTxt"
-        android:layout_marginTop="-100dp"
+        android:layout_marginTop="-50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:divider="@drawable/divider"
+        android:showDividers="middle">
 
         <Button
             android:id="@+id/buttonWalk5000Steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Walk 5.000 Steps"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonWalk10000Steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Walk 10.000 Steps"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonDrinkWater"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Drink 2L Water"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonClean"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Clean"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonGoForAWalk"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Go for a Walk"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonMeditate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Meditate"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonWorkout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Do a Workout"
+            android:background="@drawable/step_count_border"
             />
         <Button
             android:id="@+id/buttonOwnDailyGoal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Enter own Daily Goal"
+            android:background="@drawable/step_count_border"
             />
         <TextView
             android:id="@+id/txtChosenDailyGoal"
@@ -98,7 +95,7 @@
             android:text="Your choice:"
             android:textAlignment="center"
             android:textSize="20dp"
-            android:layout_marginTop="20dp"/>
+            />
 
     </LinearLayout>
     <Button
@@ -110,6 +107,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:onClick="saveGoalButtonClicked"
+        android:background="@drawable/step_count_border"
+        android:layout_marginBottom="20dp"
+        android:layout_margin="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

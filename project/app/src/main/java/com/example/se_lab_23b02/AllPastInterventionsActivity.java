@@ -1,7 +1,10 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -33,18 +36,25 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
 
     //------Objects-----------
     private DataSavingHelper dsHelper;
+
+    //-------Color Variables -----
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_past_interventions);
         linearLayout = findViewById(R.id.linearLayoutAllPastInterventions);
-
+        constraintLayout = findViewById(R.id.allPastInterventionConstraintLayout);
 
         getPastInterventions();
         txtViewDate = new TextView(this);
         txtViewDate.setTextSize(20);
         txtViewDate.setGravity(Gravity.CENTER);
         linearLayout.addView(txtViewDate);
+
+        setColorTheme();
+
     }
 
 
@@ -173,25 +183,32 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
 
     private void addInterventionView(String id, String[] time, String date, String type)
     {
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+
         linearLayoutToAdd = new LinearLayout(this);
         linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutToAdd.setGravity(Gravity.LEFT);
-        linearLayoutToAdd.setDividerDrawable(getDrawable(R.drawable.divider_big));
+        linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
         linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        linearLayoutToAdd.setBackground(getDrawable(R.drawable.linear_layout_border));
+        if(mode.equals("white-mode")) linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+        else linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
 
         LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity=Gravity.CENTER;
         imageViewIntervention = new ImageView(this);
         imageViewIntervention.setLayoutParams(layoutParams);
+        //If else with different Picture
         if(type.equals("Recording")) {
-        imageViewIntervention.setImageResource((R.drawable.baseline_play_circle_24));
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24));
+            else imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24_dark_mode));
         }
         else
         {
-            imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            else imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24_dark_mode);
         }
         imageViewIntervention.setForegroundGravity(Gravity.CENTER);
         linearLayoutToAdd.addView(imageViewIntervention);
@@ -213,7 +230,6 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Open Activity that shows Data and übergebe Timestamp
                 Bundle b = new Bundle();
                 b.putString("date", date);
                 b.putStringArray("time", time);
@@ -224,5 +240,55 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         });
 
         linearLayout.addView(linearLayoutToAdd); 
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+
+
     }
 }

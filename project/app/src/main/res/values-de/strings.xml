@@ -27,6 +27,7 @@
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analyse</string>
+    <string name="overview_navigation_bar">Daten</string>
 
 
     <!-- Strings for the interventions fragment-->
@@ -45,9 +46,9 @@
     <string name="tv_settings_step_counter">Schrittzähler</string>
     <string name="tv_settings_accel">Beschleunigungssensor</string>
     <string name="tv_settings_notification_title">Benachrichtungseinstellung</string>
-    <string name="tv_settings_morning_notification">morgens</string>
-    <string name="tv_settings_noon_notification">mittags</string>
-    <string name="tv_settings_evening_notification">abends</string>
+    <string name="tv_settings_morning_notification">Morgens</string>
+    <string name="tv_settings_noon_notification">Mittags</string>
+    <string name="tv_settings_evening_notification">Abends</string>
     <string name="bt_settings_delete_data">alle personenbezogenen Daten löschen</string>
     <string name="bt_send">abschicken</string>
     <string name="tv_questionnaire_q8_2">Seit dem letzten Fragebogen war ich einer anderen Person gegenüber wütend oder aggressiv, was ich später bereute.</string>
@@ -74,8 +75,8 @@
     <string name="tv_questionnaire_q1_2">In den letzten 24 Stunden fühlte ich mich: unruhig/ruhig</string>
     <string name="tv_questionnaire_q1_1">In den letzten 24 Stunden fühlte ich mich: Befriedigt/Unbefriedigt</string>
     <string name="et_questionnaire_additional_notes">zusätzliche Notizen...</string>
-    <string name="bt_overview_health_index">Wert mentaler Gesundheit</string>
-    <string name="bt_overview_interventions_graph">pyhsische Aktivitäten</string>
+    <string name="bt_overview_health_index">Mentale Gesundheit</string>
+    <string name="bt_overview_interventions_graph">Pyhsische Aktivitäten</string>
     <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
     <string name="tv_overview_no_data">keine Daten verfügbar</string>
     <string name="bt_settings_logout">ausloggen</string>
@@ -94,7 +95,6 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>Betriebssystem</item>
     </string-array>
 
     <!-- Strings for the daily goals activity-->
@@ -110,4 +110,13 @@
     <string name="tv_daily_goal_pick_daily_goal">Wähle dein Tagesziel</string>
     <string name="tv_daily_goal_goal_choice">Deine Auswahl: \u0020 </string>
     <string name="prompt_cancel">Zurück </string>
+
+
+
+
+    <!-- Strings for the time picker activity-->
+    <string name="timepicker_cancel">Zurück</string>
+    <string name="timepicker_submit">Bestätigen</string>
+    <string name="timepicker_preferred_choice">Wähle deine bevorzugte Uhrzeit</string>
+    <string name="timepicker_selected">Gewählt:\u0020</string>
 </resources>

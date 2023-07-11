@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OverviewFragment">
+    tools:context=".OverviewFragment"
+    android:id="@+id/overviewFragment">
 
     <EditText
         android:id="@+id/etLowerBoundTimePicker"
@@ -59,39 +60,48 @@
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginBottom="65dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plt_graph"
+        android:divider="@drawable/divider"
+        android:showDividers="middle">
 
         <Button
             android:id="@+id/btHealthIndex"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/bt_overview_health_index"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
 
         <Button
             android:id="@+id/btIntervention"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/bt_overview_interventions_graph"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
 
         <Button
             android:id="@+id/btDistributionOfDailytasks"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/bt_overview_task_distribution"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:padding="10dp"
+            android:background="@drawable/step_count_border"/>
     </LinearLayout>
 
     <EditText

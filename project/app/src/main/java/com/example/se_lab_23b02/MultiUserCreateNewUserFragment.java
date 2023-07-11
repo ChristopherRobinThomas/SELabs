@@ -1,10 +1,15 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,6 +40,12 @@ public class MultiUserCreateNewUserFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button back;
+    private Button NewUser;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+    private DataSavingHelper dsHelper;
 
     public MultiUserCreateNewUserFragment() {
         // Required empty public constructor
@@ -73,7 +84,10 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_create_new_user, container, false);
 
-        Button back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        back = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+        constraintLayout = view.findViewById(R.id.multiUserCreateNewUserFragment);
+        setColorTheme();
 
         view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +107,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
             }
         });
 
-        Button NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+
         TextInputEditText usernameTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_UsernameTextField);
         TextInputEditText passwordTextField = (TextInputEditText) view.findViewById(R.id.CreateNewUser_PasswordTextField);
         NewUser.setOnClickListener(new View.OnClickListener()
@@ -173,5 +187,52 @@ public class MultiUserCreateNewUserFragment extends Fragment {
             return 4;
         }
         return -1;
+    }
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 150;
+
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        back.getBackground().setAlpha(ButtonTransparency);
+        NewUser.getBackground().setAlpha(ButtonTransparency);
     }
 }

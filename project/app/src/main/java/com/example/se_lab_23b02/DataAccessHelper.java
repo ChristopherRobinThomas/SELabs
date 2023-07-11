@@ -261,11 +261,11 @@ public class DataAccessHelper {
                 return 2;
             case "Clean":
                 return 3;
-            case "Gor For A Walk":
+            case "Go for a Walk":
                 return 4;
             case "Meditate":
                 return 5;
-            case "Workout":
+            case "Do a Workout":
                 return 6;
             default:
                 return 7;
