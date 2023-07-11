@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -22,6 +26,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.Random;
+import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -206,11 +212,41 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         sHelper.setActivity(this);
         sHelper.addDigitSpanTask(toSave, getApplicationContext());
 
-        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",toSave.toString()+"\n", getApplicationContext(), true);
-        Intent myIntent = new Intent(this, HomeScreenActivity.class);
-        startActivity(myIntent);
+        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength),getApplicationContext());
+
+        Intent i = new Intent(DigitSpanTaskActivity.this, HomeScreenActivity.class);
+        Intent sourceIntent = getIntent();
+        boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
+        if(doRandIntv) {
+            showDoInterventionDialogue(i);
+        }
     }
 
+    void showDoInterventionDialogue(Intent i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DigitSpanTaskActivity.this);
+        builder.setTitle("Title");
+        final TextView tv = new TextView(DigitSpanTaskActivity.this);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Based on your Questionnaire response, \nwe recommend an intervention.\nDo intervention now?");
+        builder.setView(tv);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                i.putExtra("openRandomIntervention", true);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(i);
+                finish();
+            }
+        });
+
+        builder.show();
+    }
 
     //----------------Helper Functions--------------------------------
 

@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -106,20 +107,29 @@ public class QuestionnaireActivity extends AppCompatActivity {
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String questResult = "";
                 try {
-                    saveAnswers();
-                }catch (Exception e) { }
-                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon)
-                {
+                    questResult = saveAnswers();
+                } catch (Exception ignored) { }
+
+                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon) {
                     Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        i.putExtra("shouldSuggestInterventionAfterDST", true);
+                    }
                     startActivity(i);
+                    finish();
                 }
-                else
-                {
+                else {
                     Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
-                    startActivity(i);
+                    Log.i(null, String.valueOf(calculateAffectiveWellbeingScore(questResult)));
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        showDoInterventionDialogue(i);
+                    } else {
+                        startActivity(i);
+                        finish();
+                    }
                 }
-                finish();
             }
         });
 
@@ -151,7 +161,47 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
 
-    void saveAnswers() throws JSONException {
+    /**
+     * This highly complex Algorithm based on many parameters can be substituted by the researchers at any time.
+     * @return Whether the Questionnaire indicates that an Intervention should be triggered.
+     */
+    private boolean shouldDoInterventionAlgorithm(String questResult) {
+        return (calculateAffectiveWellbeingScore(questResult) <= 50);
+    }
+
+    private int calculateAffectiveWellbeingScore(String questResult) {
+        try {
+            return DataAccessHelper.calculateHealthScoreFromQuestionaire(questResult);
+        } catch (JSONException e) { return 100;}
+    }
+
+    void showDoInterventionDialogue(Intent i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
+        builder.setTitle("Title");
+        final TextView tv = new TextView(QuestionnaireActivity.this);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Based on your response, \nwe recommend an intervention.\nDo intervention now?");
+        builder.setView(tv);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                i.putExtra("openRandomIntervention", true);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(i);
+                finish();
+            }
+        });
+
+        builder.show();
+    }
+
+    String saveAnswers() throws JSONException {
 
         String[] additionalNotes = new String[1];
         EditText et = (EditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
@@ -178,6 +228,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         sHelper.setActivity(this);
         sHelper.addQuestionnaire(toSave, getApplicationContext());
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        return toSave.toString();
     }
 
     void  manageQuestions() {
@@ -550,7 +601,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void refreshResources() {
 
