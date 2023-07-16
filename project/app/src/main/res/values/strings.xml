@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SE-Lab-23B02</string>
+    <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">MainActivity</string>
 
 
@@ -25,6 +25,7 @@
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analysis</string>
+    <string name="overview_navigation_bar">Data</string>
 
 
     <!-- Strings for the interventions fragment-->
@@ -35,16 +36,16 @@
     <!-- Strings for the settings fragment-->
     <string name="settings_heading">Settings</string>
     <string name="settings_title">Appearance</string>
-    <string name="tv_settings_language_title">select Language</string>
-    <string name="tv_settings_select_color">select color</string>
-    <string name="tv_settings_settings_sensor">sensor settings</string>
-    <string name="tv_settings_step_counter">step counter</string>
-    <string name="tv_settings_accel">accelerometer</string>
+    <string name="tv_settings_language_title">Select Language</string>
+    <string name="tv_settings_select_color">Select color</string>
+    <string name="tv_settings_settings_sensor">Sensor settings</string>
+    <string name="tv_settings_step_counter">Step counter</string>
+    <string name="tv_settings_accel">Accelerometer</string>
     <string name="tv_settings_geo_tagging" translatable="false">GPS</string>
-    <string name="tv_settings_notification_title">notifications settings</string>
-    <string name="tv_settings_morning_notification">morning</string>
-    <string name="tv_settings_noon_notification">noon</string>
-    <string name="tv_settings_evening_notification">evening</string>
+    <string name="tv_settings_notification_title">Notifications settings</string>
+    <string name="tv_settings_morning_notification">Morning</string>
+    <string name="tv_settings_noon_notification">Noon</string>
+    <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
 
     <!-- Strings for the questionnaire activity-->
@@ -76,8 +77,8 @@
 
 
     <!-- overview fragment -->
-    <string name="bt_overview_health_index">mental health score</string>
-    <string name="bt_overview_interventions_graph">number of interventions</string>
+    <string name="bt_overview_health_index">Mental health score</string>
+    <string name="bt_overview_interventions_graph">Number of Interventions</string>
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_bindestrich" translatable="false">-</string>
     <string name="tv_overview_no_data">no data available</string>
@@ -96,10 +97,9 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>match OS</item>
     </string-array>
-    <string name="title_activity_multi_user_input">MultiUserInputActivity</string>
-    <string name="multi_user_main_terms_of_service">Terms of Service</string>
+    <string name="title_activity_multi_user_input" translatable="false">MultiUserInputActivity</string>
+    <string name="multi_user_main_terms_of_service" translatable="false">Terms of Service</string>
     <string name="bt_settings_logout">Logout</string>
 
 
@@ -118,8 +118,17 @@
     <string name="prompt_cancel">Cancel </string>
 
     <!-- Strings for the popups-->
-    <string name="questionnaire_popup_AcceptButton">OK</string>
-    <string name="questionnaire_popup_DenyButton">Close</string>
-    <string name="questionnaire_popup_HintText">Enter Text</string>
+    <string name="questionnaire_popup_AcceptButton" translatable="false">OK</string>
+    <string name="questionnaire_popup_DenyButton" translatable="false">Close</string>
+    <string name="questionnaire_popup_HintText" translatable="false">Enter Text</string>
+
+
+
+    <!-- Strings for the time picker activity-->
+    <string name="timepicker_cancel">Cancel</string>
+    <string name="timepicker_submit">Submit</string>
+    <string name="timepicker_preferred_choice">Select your preferred Time</string>
+    <string name="timepicker_selected">Selected:\u0020</string>
+
 
 </resources>

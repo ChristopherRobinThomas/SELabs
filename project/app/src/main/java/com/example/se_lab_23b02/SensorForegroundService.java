@@ -44,6 +44,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
     private boolean active = false;
     private int startSteps = -1;
     private String timestamp;
+    private long curTS = 0;
 
     @Override
     public void onCreate() {
@@ -106,13 +107,17 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
                 String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "]" + ",\"user_id\":\"" + dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()) + "\"}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
+              
+                Debug.logStack("SensorService", "Saving sensor data", 0);
                 Debug.logStack("values", values.get(2 ).toString(), 1);
+              
                 ServerHelper sHelper = ServerHelper.getInstance();
                 try {
                     sHelper.synchronize(getApplicationContext());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+
                 //deregister listener
                 sensorManager.unregisterListener(this, sensors[0]);
                 sensorManager.unregisterListener(this, sensors[1]);
@@ -154,8 +159,14 @@ public class SensorForegroundService extends Service implements SensorEventListe
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor == sensors[0]) {
             long ts = System.currentTimeMillis();
-            String vals = "{\"timestamp\": \""+ ts + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
-            values.get(0).add(vals);
+            if(curTS == 0) {
+                curTS = ts;
+            }
+            if(ts != curTS) {
+                String vals = "{\"timestamp\": \"" + ts + "\", \"x\": \"" + String.valueOf(event.values[0]) + "\", \"y\": \"" + String.valueOf(event.values[1]) + "\", \"z\": \"" + String.valueOf(event.values[2]) + "\"}";
+                values.get(0).add(vals);
+                curTS = ts;
+            }
         }
         if(event.sensor == sensors[1]) {
             if (startSteps < 0) {

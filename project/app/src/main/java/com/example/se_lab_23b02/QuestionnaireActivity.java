@@ -2,12 +2,15 @@ package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -71,6 +74,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private Context context;
     private Resources resources;
 
+    private Button sendButton;
+
+
+    //-----------GUI Elements for Themes------------
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,24 +99,37 @@ public class QuestionnaireActivity extends AppCompatActivity {
         refreshResources();
         setLanguage();
 
+        sendButton = findViewById(R.id.Send_Button);
+        constraintLayout = findViewById(R.id.questionnaireActivity);
+        setColorTheme();
+
         manageQuestions();
         findViewById(R.id.Send_Button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String questResult = "";
                 try {
-                    saveAnswers();
-                }catch (Exception e) { }
-                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon)
-                {
+                    questResult = saveAnswers();
+                } catch (Exception ignored) { }
+
+                if(TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.noon) {
                     Intent i = new Intent(QuestionnaireActivity.this, DigitSpanTaskActivity.class);
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        i.putExtra("shouldSuggestInterventionAfterDST", true);
+                    }
                     startActivity(i);
+                    finish();
                 }
-                else
-                {
+                else {
                     Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
-                    startActivity(i);
+                    Log.i(null, String.valueOf(calculateAffectiveWellbeingScore(questResult)));
+                    if(shouldDoInterventionAlgorithm(questResult)) {
+                        showDoInterventionDialogue(i);
+                    } else {
+                        startActivity(i);
+                        finish();
+                    }
                 }
-                finish();
             }
         });
 
@@ -138,7 +161,47 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
 
 
-    void saveAnswers() throws JSONException {
+    /**
+     * This highly complex Algorithm based on many parameters can be substituted by the researchers at any time.
+     * @return Whether the Questionnaire indicates that an Intervention should be triggered.
+     */
+    private boolean shouldDoInterventionAlgorithm(String questResult) {
+        return (calculateAffectiveWellbeingScore(questResult) <= 50);
+    }
+
+    private int calculateAffectiveWellbeingScore(String questResult) {
+        try {
+            return DataAccessHelper.calculateHealthScoreFromQuestionaire(questResult);
+        } catch (JSONException e) { return 100;}
+    }
+
+    void showDoInterventionDialogue(Intent i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
+        builder.setTitle("Title");
+        final TextView tv = new TextView(QuestionnaireActivity.this);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Based on your response, \nwe recommend an intervention.\nDo intervention now?");
+        builder.setView(tv);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                i.putExtra("openRandomIntervention", true);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(i);
+                finish();
+            }
+        });
+
+        builder.show();
+    }
+
+    String saveAnswers() throws JSONException {
 
         String[] additionalNotes = new String[1];
         EditText et = (EditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
@@ -161,10 +224,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
         timestamp = TimeStamp.getCurrentTimeStamp();
         toSave.put("timestamp", timestamp);
-
-        sHelper.setActivity(this);
+      
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        sHelper.setActivity(this);
         sHelper.synchronize(getApplicationContext());
+      
+        return toSave.toString();
     }
 
     void  manageQuestions() {
@@ -538,7 +603,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     }
 
-
     private void refreshResources() {
 
         String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
@@ -604,5 +668,55 @@ public class QuestionnaireActivity extends AppCompatActivity {
         bt.setText(resources.getString(R.string.bt_send));
         EditText et = (EditText) elementsForLanguageChange.get(22);
         et.setHint(resources.getString(R.string.et_questionnaire_additional_notes));
+    }
+
+
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        sendButton.getBackground().setAlpha(ButtonTransparency);
     }
 }

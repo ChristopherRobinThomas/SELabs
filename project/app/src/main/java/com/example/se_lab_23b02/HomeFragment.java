@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,9 +16,13 @@ import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.system.Os;
@@ -42,6 +47,8 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.sql.Time;
 import com.google.gson.Gson;
@@ -102,11 +109,15 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private ImageButton littleBeingButton;
     private TextView stepCountTxt;
     private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
+    private ConstraintLayout constraintLayout;
+    private LinearLayout linearLayoutStepCount;
+    private ImageView imageViewStepCount;
 
     //--------Context and Resources for Language----
     private Context context;
     private Resources resources;
 
+    private Context contextForColor;
     //--------GUI Elements to add Dynamically-------------
     private LinearLayout linearLayout;
     private TextView txtViewDate;
@@ -160,6 +171,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         littleBeingButton = view.findViewById(R.id.buttonLittleBeing);
         seeAllPastActivitiesButton = view.findViewById(R.id.SeeAllPastActivitiesButton);
         stepCountTxt = view.findViewById(R.id.textViewStepCount);
+
+        constraintLayout = view.findViewById(R.id.homeFragment);
+        linearLayoutStepCount = view.findViewById(R.id.linearLayoutStepCount);
+        imageViewStepCount = view.findViewById(R.id.imageViewStepCount);
         linearLayout = view.findViewById(R.id.linearLayoutHomeRecentActivities);
 
 
@@ -173,6 +188,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
+        setColorTheme();
 
         // set text according to the language
         refreshResources();
@@ -541,10 +557,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     {
         innitdailyGoal = dailyGoal;
         switch(dailyGoal) {
-            case "Walk 5000 Steps":
+            case "Walk 5.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_5000_steps);
                 break;
-            case "Walk 10000 Steps":
+            case "Walk 10.000 Steps":
                 dailyGoal = resources.getString(R.string.goal_walk_10000_steps);
                 break;
             case "Drink 2L Water":
@@ -566,6 +582,67 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     }
 
 
+    //----------Color Functions ---------------------
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24_dark_mode);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border));
+
+                //TODO Do the same thing for the dynamic Interventions when you add them
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_dark_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                imageViewStepCount.setImageResource(R.drawable.baseline_directions_walk_24);
+                linearLayoutStepCount.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_blue));
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_red));
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        dailyGoalProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bar_background_light_mode_green));
+                        break;
+                }
+                break;
+        }
+        questionnaireButton.getBackground().setAlpha(ButtonTransparency);
+        seeAllPastActivitiesButton.getBackground().setAlpha(ButtonTransparency);
+        pickDailyGoalButton.getBackground().setAlpha(ButtonTransparency);
+        markGoalAsCompleteButton.getBackground().setAlpha(ButtonTransparency);
+        linearLayoutStepCount.setPadding(100,50,100,50);
+
+    }
 
 
 
@@ -578,35 +655,113 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private void getPastInterventions()
     {
         //-----Variables----------
-        JsonObject obj;
+        JsonObject obj = new JsonObject();
+        JsonObject obj2 = new JsonObject();
         JsonParser parser = new JsonParser();
         String date = " ";
+        String currentDate;
         String id;
         String[] time;
+        String type;
+
+
+        String singleIntervention;
+        String singleRecording;
+        int interventionCounter;
+        int recordingCounter;
+        String[] allInterventions;
+        String[] allRecordings;
         dsHelper = DataSavingHelper.getInstance();
 
         try {
             String temp = dsHelper.readSavedDataFromInternalStorage("completedInterventions.txt",getActivity());
-            String[] allInterventions = temp.split("\n");
-            String singleIntervention;
-            for(int i = allInterventions.length-1; i>0; i--)
-            {
-                singleIntervention = allInterventions[i];
-                obj = parser.parse(singleIntervention).getAsJsonObject();
-                if(!date.equals(obj.get("timestamp").getAsString().split(" ")[0]))
-                {
-                    date = obj.get("timestamp").getAsString().split(" ")[0];
-                    addTextView(date);
-                }
-                id = String.valueOf(obj.get("id").getAsInt());
-                time = obj.get("timestamp").getAsString().split(" ")[1].split(":");
-                addInterventionView(id, time, date);
-                if(i == allInterventions.length-5) break;
+            allInterventions = temp.split("\n");
+            interventionCounter = allInterventions.length-1;
 
-            }
         }
         catch(Exception e){
+            interventionCounter = 0;
+            allInterventions = new String[]{" "};
+        }
 
+        try {
+            String temp2 = dsHelper.readSavedDataFromInternalStorage("sensorrecordings.txt", getActivity());
+            allRecordings = temp2.split("\n");
+            recordingCounter = allRecordings.length-1;
+        }
+        catch(Exception e)
+        {
+            recordingCounter = 0;
+            allRecordings = new String[]{" "};
+        }
+
+        for(int i = 0; i<5; i++) {
+
+            boolean isBefore;
+            if (interventionCounter >= 1 && recordingCounter >= 1) {
+
+                //Both Recordings and Interventions exists
+                singleIntervention = allInterventions[interventionCounter];
+                obj = parser.parse(singleIntervention).getAsJsonObject();
+                singleRecording = allRecordings[recordingCounter];
+                obj2 = parser.parse(singleRecording).getAsJsonObject();
+
+                //--------------------Check Date-------------------------------
+                String startInput = obj.get("timestamp").getAsString();
+                String stopInput = obj2.get("timestamp").getAsString();
+                DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+
+                LocalDateTime start = LocalDateTime.parse(startInput, f);
+                LocalDateTime stop = LocalDateTime.parse(stopInput, f);
+                isBefore = start.isBefore(stop);
+                //---------------------------------------------------
+            }
+            else if(recordingCounter < 1 && interventionCounter >= 1)
+            {
+                //No Recordings exists but interventions do
+                singleIntervention = allInterventions[interventionCounter];
+                obj = parser.parse(singleIntervention).getAsJsonObject();
+                isBefore = false;
+            }
+            else if(recordingCounter >= 1 && interventionCounter < 1)
+            {
+                //No interventions exists but recordings do
+                singleRecording = allRecordings[recordingCounter];
+                obj2 = parser.parse(singleRecording).getAsJsonObject();
+                isBefore = true;
+
+            }
+            else
+            {
+                //None of them exists
+                break;
+            }
+
+
+            if (!isBefore) {
+                currentDate = obj.get("timestamp").getAsString().split(" ")[0];
+                time = obj.get("timestamp").getAsString().split(" ")[1].split(":");
+                type = "Intervention";
+                id = String.valueOf(obj.get("id").getAsInt());
+                interventionCounter--;
+            }
+            else if (recordingCounter >= 1) {
+                currentDate = obj2.get("timestamp").getAsString().split(" ")[0];
+                time = obj2.get("timestamp").getAsString().split(" ")[1].split(":");
+                type = "Recording";
+                recordingCounter--;
+                id = "0";
+            }
+            else {
+                break;
+            }
+
+            if (!date.equals(currentDate)) {
+                date = currentDate;
+                addTextView(currentDate);
+            }
+
+            addInterventionView(id, time, date, type);
         }
     }
     private void addTextView(String date)
@@ -618,43 +773,62 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         linearLayout.addView(txtViewDate);
     }
 
-    private void addInterventionView(String id, String[] time, String date)
+    private void addInterventionView(String id, String[] time, String date, String type)
     {
+
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+
         linearLayoutToAdd = new LinearLayout(getActivity());
         linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutToAdd.setGravity(Gravity.LEFT);
         linearLayoutToAdd.setDividerDrawable(getResources().getDrawable(R.drawable.divider_big));
         linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.linear_layout_border));
+        if(mode.equals("white-mode")) linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+        else linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
 
         LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity=Gravity.CENTER;
         imageViewIntervention = new ImageView(getActivity());
         imageViewIntervention.setLayoutParams(layoutParams);
-        imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+        //If else with different Picture
+        if(type.equals("Recording")) {
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24));
+            else imageViewIntervention.setImageResource((R.drawable.baseline_sensors_24_dark_mode));
+        }
+        else
+        {
+            if(mode.equals("white-mode")) imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24);
+            else imageViewIntervention.setImageResource(R.drawable.baseline_directions_run_24_dark_mode);
+        }
         imageViewIntervention.setForegroundGravity(Gravity.CENTER);
         linearLayoutToAdd.addView(imageViewIntervention);
 
         txtViewInterventions = new TextView(getActivity());
         txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+        //If else with different Text
+        if(type.equals("Recording")) {
+
+            txtViewInterventions.setText("Own Recording \n" + "Time: " + time[0] + ":" + time[1]);
+        }
+        else
+        {
+            txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+        }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);
 
         linearLayoutToAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Open Activity that shows Data
-
                 Bundle b = new Bundle();
                 b.putString("date", date);
                 b.putStringArray("time", time);
                 Intent intent = new Intent(getActivity(), SensorRecordingGraphActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
-                System.out.println(time[0] + ":" + time[1] + ":" + time[2] + "\n");
             }
         });
 

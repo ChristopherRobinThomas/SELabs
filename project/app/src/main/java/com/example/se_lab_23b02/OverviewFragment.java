@@ -7,6 +7,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.pie.PieChart;
+import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
@@ -28,11 +33,14 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.CatmullRomInterpolator;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.android.material.slider.LabelFormatter;
 
 import org.json.JSONException;
 
@@ -67,6 +75,10 @@ public class OverviewFragment extends Fragment {
     private TextView tvInfo;
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
+
+    private Button btShowHealthGraph;
+    private Button btNumOfInterventions;
+    private Button btNumOfActivities;
     private int currentTypeToPlot = 0;
 
     private Context context;
@@ -75,6 +87,9 @@ public class OverviewFragment extends Fragment {
 
     private LocalDateTime dateLB;
     private LocalDateTime dateUB;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -117,12 +132,20 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
+        constraintLayout = view.findViewById(R.id.overviewFragment);
+        //button changes current Plot type and updates Plot (bar graph)
+        btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
+        // show xy Plot by changing currentTypeToPlot to 0 and updating the graph
+        btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
+        // show barchart by setting currentTypeToPlot to 2
+        btNumOfActivities = (Button) view.findViewById(R.id.btDistributionOfDailytasks);
 
 
         // language changing
         elementsForLanguageChange.add(view.findViewById(R.id.btHealthIndex));
         elementsForLanguageChange.add(view.findViewById(R.id.btIntervention));
         elementsForLanguageChange.add(view.findViewById(R.id.btDistributionOfDailytasks));
+        setColorTheme();
         refreshResources();
         setLanguage();
 
@@ -140,15 +163,30 @@ public class OverviewFragment extends Fragment {
         Paint blackColor = new Paint();
         blackColor.setColor(Color.BLACK);
 
+        Paint transparentColor = new Paint();
+        transparentColor.setColor(Color.TRANSPARENT);
 
-        plot.getGraph().setBackgroundPaint(whiteColor);
-        plot.getGraph().setGridBackgroundPaint(whiteColor);
+        //TODO COSTUMIZE PLOT
 
+        Paint testColor = new Paint();
+        testColor.setColor(getResources().getColor(R.color.below_graph));
+
+
+        plot.getGraph().setBackgroundPaint(transparentColor);
+        plot.getGraph().setGridBackgroundPaint(transparentColor);
+
+        plot.getGraph().setDomainGridLinePaint(transparentColor);
+        plot.getGraph().setDomainOriginLinePaint(transparentColor); //Y-Achse
+
+        plot.getGraph().setRangeOriginLinePaint(testColor); //x-Achse
+        plot.getGraph().setRangeGridLinePaint(transparentColor);
+
+
+        
         tvInfo = (TextView) view.findViewById(R.id.tvNothingToSeeHere);
 
 
-        //button changes current Plot type and updates Plot (bar graph)
-        Button btNumOfInterventions = (Button) view.findViewById(R.id.btIntervention);
+
         btNumOfInterventions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,8 +199,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        // show xy Plot by changing currentTypeToPlot to 0 and updating the graph
-        Button btShowHealthGraph = (Button) view.findViewById(R.id.btHealthIndex);
+
         btShowHealthGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,11 +440,11 @@ public class OverviewFragment extends Fragment {
     }
 
     //draws the data of the parameters, both need to be the same length otherwise the graph doesn't plot properly
+
     private void drawMentalHealth(Number[] dataList, String[] labels, Number[] domains) {
 
-        plot.clear();
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+        setPlotColor(plot);
+
         plot.getLayoutManager().remove(plot.getLegend());
 
         if (dataList.length == 0) {
@@ -417,6 +454,7 @@ public class OverviewFragment extends Fragment {
         } else
             tvInfo.setVisibility(TextView.INVISIBLE);
 
+        //final Number[] domainLabels = domains;
 
         plot.setTitle(resources.getString(R.string.bt_overview_health_index));
         plot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
@@ -424,7 +462,8 @@ public class OverviewFragment extends Fragment {
         final Number[] domainLabels = domains;
 
         XYSeries series = new SimpleXYSeries(Arrays.asList(domainLabels), Arrays.asList(dataList), "Series");
-        LineAndPointFormatter seriesFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+        LineAndPointFormatter seriesFormatter = new LineAndPointFormatter( getResources().getColor(R.color.below_graph), null, getResources().getColor(R.color.below_graph), null);
+        seriesFormatter.setInterpolationParams(new CatmullRomInterpolator.Params(30, CatmullRomInterpolator.Type.Uniform));
         plot.addSeries(series, seriesFormatter);
 
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
@@ -444,15 +483,14 @@ public class OverviewFragment extends Fragment {
     }
     private void drawInterventions(String[] dates, Number[] completed, Number[] incompleted) {
         plot.clear();
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
-        //plot.getLayoutManager().remove(plot.getLegend());
+        setPlotColor(plot);
         plot.setRangeLowerBoundary(0, BoundaryMode.AUTO);
 
         plot.setTitle(resources.getString(R.string.bt_overview_interventions_graph));
-        BarFormatter bf = new BarFormatter(Color.RED, Color.WHITE);
+        BarFormatter bf = new BarFormatter(getResources().getColor(R.color.bar_graph_red), Color.TRANSPARENT);
         bf.setMarginLeft(PixelUtils.dpToPix(1));
         bf.setMarginRight(PixelUtils.dpToPix(1));
+
 
         int max = 0;
         for (int i = 0; i < completed.length; i++) {
@@ -469,12 +507,14 @@ public class OverviewFragment extends Fragment {
 
         plot.setRangeBoundaries(0, max, BoundaryMode.FIXED);
 
+        Paint barGraphRed = new Paint();
+        barGraphRed.setColor(getResources().getColor(R.color.bar_graph_red));
 
-        BarFormatter bf1 = new BarFormatter(Color.RED, Color.TRANSPARENT);
+        BarFormatter bf1 = new BarFormatter(getResources().getColor(R.color.bar_graph_red), Color.TRANSPARENT);
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(incompleted), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
         plot.addSeries(series1, bf1);
 
-        BarFormatter bf2 = new BarFormatter(Color.GREEN, Color.TRANSPARENT);
+        BarFormatter bf2 = new BarFormatter(getResources().getColor(R.color.bar_graph_green), Color.TRANSPARENT);
         XYSeries series2 = new SimpleXYSeries(Arrays.asList(completed), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series");
         plot.addSeries(series2, bf2);
 
@@ -482,7 +522,6 @@ public class OverviewFragment extends Fragment {
         BarRenderer renderer = plot.getRenderer(BarRenderer.class);
         renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
         renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, PixelUtils.dpToPix(10));
-
 
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
@@ -503,9 +542,9 @@ public class OverviewFragment extends Fragment {
                 }
             });
 
-        plot.invalidate();
-
-    }
+            plot.invalidate();
+            return;
+        }
 
     private void refreshResources() {
 
@@ -532,5 +571,87 @@ public class OverviewFragment extends Fragment {
         bt.setText(resources.getString(R.string.bt_overview_interventions_graph));
         bt = (Button) elementsForLanguageChange.get(2);
         bt.setText(resources.getString(R.string.bt_overview_task_distribution));
+    }
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        btNumOfActivities.getBackground().setAlpha(ButtonTransparency);
+        btNumOfInterventions.getBackground().setAlpha(ButtonTransparency);
+        btShowHealthGraph.getBackground().setAlpha(ButtonTransparency);
+    }
+
+
+    private void setPlotColor(XYPlot plot)
+    {
+        //Get Color Scheme
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
+        blackPaint.setTextSize(50);
+        blackPaint.setTextAlign(Paint.Align.CENTER);
+
+        Paint whitePaint = new Paint();
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setTextSize(50);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        plot.clear();
+        if(mode.equals("white-mode"))
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+            plot.getTitle().setLabelPaint(blackPaint);
+        }
+        else
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.WHITE);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
+            plot.getTitle().setLabelPaint(whitePaint);
+
+        }
+
+        plot.getLayoutManager().remove(plot.getLegend());
     }
 }

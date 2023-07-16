@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="65dp"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:background="@drawable/blue_light_mode_background"
+    android:id="@+id/homeFragment"
+    >
+
+
 
 
     <ScrollView
+        android:id="@+id/scrollViewHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="65dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,6 +34,8 @@
                 android:layout_marginTop="20dp"
                 android:text="Home Screen"
                 android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +70,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:onClick="QuestionnaireClicked"
-                        android:text="Questionnaire" />
+                        android:text="Questionnaire"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:background="@drawable/step_count_border"
+                        />
 
                     <Button
                         android:id="@+id/btHomeDailyGoal"
@@ -70,7 +82,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:onClick="PickDailyGoalClicked"
-                        android:text="Pick Daily Goal" />
+                        android:text="Pick Daily Goal"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:background="@drawable/step_count_border"/>
                 </LinearLayout>
 
                 <ImageButton
@@ -80,17 +95,37 @@
                     android:background="@drawable/little_being" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewStepCount"
+            <LinearLayout
+                android:id="@+id/linearLayoutStepCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Today's Steps: "
-                android:textSize="20sp"
-                app:layout_constraintLeft_toLeftOf="parent"
+                android:orientation="horizontal"
+                android:gravity="left"
+                android:divider="@drawable/divider"
+                android:showDividers="middle"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/step_count_border"
+                android:paddingRight="20dp"
+
+                app:layout_constraintLeft_toLeftOf="@id/linearLayoutHomeDailyGoal"
                 app:layout_constraintRight_toRightOf="@id/linearLayoutHomeDailyGoal"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutHomeUpper"
-                android:background="@drawable/progress_bar_background"/>
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutHomeUpper">
+
+                <ImageView
+                    android:id="@+id/imageViewStepCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_directions_walk_24_dark_mode"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/textViewStepCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Today's Steps: \n"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayoutHomeDailyGoal"
@@ -104,7 +139,9 @@
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewStepCount">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutStepCount">
+
+
 
                 <TextView
                     android:id="@+id/DailyGoalTxt"
@@ -121,14 +158,18 @@
                     android:indeterminate="false"
                     android:max="100"
                     android:progress="50"
-                    android:progressDrawable="@drawable/progress_bar_background" />
+                    android:progressDrawable="@drawable/progress_bar_background_light_mode_blue" />
 
                 <Button
                     android:id="@+id/btHomeGoalComplete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="markGoalAsCompleteClicked"
-                    android:text="Mark Goal as Complete" />
+                    android:text="Mark Goal as Complete"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:background="@drawable/step_count_border"
+                    />
 
             </LinearLayout>
 
@@ -140,6 +181,9 @@
                 android:layout_marginTop="20dp"
                 android:onClick="seeAllPastActivitiesClicked"
                 android:text="See all past activities"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/step_count_border"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutHomeDailyGoal" />

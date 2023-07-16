@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class User {
     private long localId;
-    private long globalId;
+    private String globalId;
     private String name;
     private String password;
 
@@ -18,7 +18,7 @@ public class User {
     public User(String s) {
         String[] values = s.split(",");
         this.localId = Integer.parseInt(values[0]);
-        this.globalId = Integer.parseInt(values[1]);
+        this.globalId = values[1];
         this.name = values[2];
         this.password = values[3];
     }
@@ -28,18 +28,19 @@ public class User {
         return this.localId;
     }
 
-    public long getGlobalId()
+    public String getGlobalId()
     {
         return this.globalId;
     }
 
     public void setName(String name){ this.name = name; }
+    public void setGlobalId(String globalId){ this.globalId = globalId; }
     public String getName(){ return this.name; }
     public String getPassword(){ return this.password; }
 
     public String toString()
     {
-        return String.valueOf(getLocalId()) + "," + String.valueOf(getGlobalId()) + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
+        return String.valueOf(getLocalId()) + "," + getGlobalId() + "," + String.valueOf(getName()) + "," + String.valueOf(getPassword());
     }
 
     public boolean checkPassword(String pwd){return password.equals(pwd);}

@@ -196,10 +196,9 @@ public class DataAccessHelper {
             if (tsDate.isEqual(jsTimestampDate) && tsTime.equals(jsTimestampTime)) {
 
                 JSONArray jsonArray = (JSONArray) jsonLine.get("stepcounter");
-
-                String stepContent = String.valueOf(jsonArray.get(0));
-                if(stepContent.length() == 0)
+                if(jsonArray.length() == 0)
                     return -1;
+                String stepContent = String.valueOf(jsonArray.get(0));
                 return (int) (Float.parseFloat(stepContent));
             }
 
@@ -262,11 +261,11 @@ public class DataAccessHelper {
                 return 2;
             case "Clean":
                 return 3;
-            case "Gor For A Walk":
+            case "Go for a Walk":
                 return 4;
             case "Meditate":
                 return 5;
-            case "Workout":
+            case "Do a Workout":
                 return 6;
             default:
                 return 7;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SE-Lab-23B02</string>
+    <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -24,6 +24,7 @@
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analysis</string>
+    <string name="overview_navigation_bar">Data</string>
 
 
     <!-- Strings for the interventions fragment-->
@@ -32,16 +33,16 @@
 
     <!-- Strings for the settings fragment-->
     <string name="settings_heading">Settings</string>
-    <string name="settings_title">Appearence</string>
-    <string name="tv_settings_language_title">select Language</string>
-    <string name="tv_settings_select_color">select color</string>
-    <string name="tv_settings_settings_sensor">sensor settings</string>
-    <string name="tv_settings_step_counter">step counter</string>
-    <string name="tv_settings_accel">accelerometer</string>
-    <string name="tv_settings_notification_title">notifications settings</string>
-    <string name="tv_settings_morning_notification">morning</string>
-    <string name="tv_settings_noon_notification">noon</string>
-    <string name="tv_settings_evening_notification">evening</string>
+    <string name="settings_title">Appearance</string>
+    <string name="tv_settings_language_title">Select Language</string>
+    <string name="tv_settings_select_color">Select color</string>
+    <string name="tv_settings_settings_sensor">Sensor settings</string>
+    <string name="tv_settings_step_counter">Step counter</string>
+    <string name="tv_settings_accel">Accelerometer</string>
+    <string name="tv_settings_notification_title">Notifications settings</string>
+    <string name="tv_settings_morning_notification">Morning</string>
+    <string name="tv_settings_noon_notification">Noon</string>
+    <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
     <string name="bt_send">Send</string>
     <string name="tv_questionnaire_q8_2">Since the last questionnaire, I have been angry or aggressive to another person, which I regretted later on.</string>
@@ -68,8 +69,8 @@
     <string name="tv_questionnaire_q1_2">In the last 24 hours I felt: Restless/Calm</string>
     <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
     <string name="et_questionnaire_additional_notes">additional notes...</string>
-    <string name="bt_overview_health_index">mental health score</string>
-    <string name="bt_overview_interventions_graph">number of interventions</string>
+    <string name="bt_overview_health_index">Mental health score</string>
+    <string name="bt_overview_interventions_graph">Number of interventions</string>
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_no_data">no data available</string>
     <string name="bt_settings_logout">Logout</string>
@@ -88,7 +89,6 @@
     <string-array name="darkmode">
         <item>white-mode</item>
         <item>dark-mode</item>
-        <item>match OS</item>
     </string-array>
 
 
@@ -106,4 +106,11 @@
     <string name="tv_daily_goal_pick_daily_goal">Pick your Daily Goal</string>
     <string name="tv_daily_goal_goal_choice">Your choice: \u0020</string>
     <string name="prompt_cancel">Cancel </string>
+
+
+    <!-- Strings for the time picker activity-->
+    <string name="timepicker_cancel">Cancel</string>
+    <string name="timepicker_submit">Submit</string>
+    <string name="timepicker_preferred_choice">Select your preferred Time</string>
+    <string name="timepicker_selected">Selected:\u0020</string>
 </resources>

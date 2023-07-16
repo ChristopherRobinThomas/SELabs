@@ -57,15 +57,19 @@ public class Alarm
         pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),10,pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        Log.d("setAlarm","ALarm set");
+        Log.d("setAlarm","Alarm set");
     }
 
     public void cancelAlarm(Context context) {
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context,AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntent);
-        pendingIntent.cancel();
+        try {
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context, AlarmReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
+            alarmManager.cancel(pendingIntent);
+            Log.d("Alarm","Alarm got canceled : " + String.valueOf(id));
+        }catch (Exception e)
+        {
+            Log.d("Alarm","Alarm couldn't be canceled");
+        }
     }
-
 }

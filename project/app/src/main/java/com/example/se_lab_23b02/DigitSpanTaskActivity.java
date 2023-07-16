@@ -1,12 +1,19 @@
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -19,6 +26,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.Random;
+import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +38,9 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
     private int numberOfRounds;
     private int initSpanLength = 2;
     private int maxReachedNumbers = 0;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
 
     String[] spanNumbers;
 
@@ -77,6 +89,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         startingButton = findViewById(R.id.startButton);
         exitButton = findViewById(R.id.exitButton);
         numberField = findViewById(R.id.numberView);
+        constraintLayout = findViewById(R.id.digitSpanTaskActivity);
 
         inputField = findViewById(R.id.inputView);
         button0 = findViewById(R.id.button0);
@@ -106,6 +119,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
 
         inputCount = 0;
         switchNumberButtons(false);
+        setColorTheme();
 
     }
 
@@ -194,16 +208,43 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         }
 
         JSONObject toSave = JSONObjectCreator.createDigitSpanTaskObject(originalInitSpanLength, initSpanLength, maxReachedNumbers, numberOfRounds);
-
-        sHelper.setActivity(this);
-
         dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",toSave.toString()+"\n", getApplicationContext(), true);
+        sHelper.setActivity(this);
         sHelper.synchronize(getApplicationContext());
-
-        Intent myIntent = new Intent(this, HomeScreenActivity.class);
-        startActivity(myIntent);
+      
+        Intent i = new Intent(DigitSpanTaskActivity.this, HomeScreenActivity.class);
+        Intent sourceIntent = getIntent();
+        boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
+        if(doRandIntv) {
+            showDoInterventionDialogue(i);
+        }
     }
 
+    void showDoInterventionDialogue(Intent i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DigitSpanTaskActivity.this);
+        builder.setTitle("Title");
+        final TextView tv = new TextView(DigitSpanTaskActivity.this);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText("Based on your Questionnaire response, \nwe recommend an intervention.\nDo intervention now?");
+        builder.setView(tv);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                i.putExtra("openRandomIntervention", true);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(i);
+                finish();
+            }
+        });
+
+        builder.show();
+    }
 
     //----------------Helper Functions--------------------------------
 
@@ -276,6 +317,68 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
             inputField.setText(input);
             inputCount++;
         }
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+            case "match OS":
+                break;
+        }
+
+        button0.getBackground().setAlpha(ButtonTransparency);
+        button1.getBackground().setAlpha(ButtonTransparency);
+        button2.getBackground().setAlpha(ButtonTransparency);
+        button3.getBackground().setAlpha(ButtonTransparency);
+        button4.getBackground().setAlpha(ButtonTransparency);
+        button5.getBackground().setAlpha(ButtonTransparency);
+        button5.getBackground().setAlpha(ButtonTransparency);
+        button6.getBackground().setAlpha(ButtonTransparency);
+        button7.getBackground().setAlpha(ButtonTransparency);
+        button8.getBackground().setAlpha(ButtonTransparency);
+        button9.getBackground().setAlpha(ButtonTransparency);
+        exitButton.getBackground().setAlpha(64);
+        startingButton.getBackground().setAlpha(ButtonTransparency);
     }
 
 }

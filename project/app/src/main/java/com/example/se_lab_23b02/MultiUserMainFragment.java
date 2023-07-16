@@ -1,7 +1,10 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,6 +35,16 @@ public class MultiUserMainFragment extends Fragment {
     private String mParam2;
 
     private ArrayList<Button> buttons;
+
+    private Context contextForColor;
+    private ConstraintLayout constraintLayout;
+    private DataSavingHelper dsHelper;
+
+
+    private Button topLeft;
+    private Button topRight;
+    private Button bottomLeft;
+    private Button bottomRight;
 
     public MultiUserMainFragment() {
         // Required empty public constructor
@@ -69,10 +82,11 @@ public class MultiUserMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multi_user_main, container, false);
-        Button topLeft = view.findViewById(R.id.ButtonTopLeft);
-        Button topRight = view.findViewById(R.id.ButtonTopRight);
-        Button bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
-        Button bottomRight = view.findViewById(R.id.ButtonBottomRight);
+        topLeft = view.findViewById(R.id.ButtonTopLeft);
+        topRight = view.findViewById(R.id.ButtonTopRight);
+        bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
+        bottomRight = view.findViewById(R.id.ButtonBottomRight);
+        constraintLayout = view.findViewById(R.id.multiUserMainFragment);
 
         //DataStorage
         ArrayList<User> users;
@@ -80,6 +94,7 @@ public class MultiUserMainFragment extends Fragment {
         {
             resetActiveUser();
             users = getAllLoggedInUsers();
+            DataSavingHelper.getInstance().saveSettingAsSharedPref("ActiveUser","None",getContext());
         }else{
             //If the values for The users are not in the settings file add them
             users = new ArrayList<>();
@@ -89,7 +104,7 @@ public class MultiUserMainFragment extends Fragment {
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserThree","",getContext());
             DataSavingHelper.getInstance().saveSettingAsSharedPref("UserFour","",getContext());
         }
-
+        setColorTheme();
         users = getAllLoggedInUsers();
         //Log.d("User Length", String.valueOf(users.size()));
         buttonSetup(view, users);
@@ -113,7 +128,16 @@ public class MultiUserMainFragment extends Fragment {
                 buttons.get(i).setVisibility(View.GONE);
                 buttons.get(i).setEnabled(false);
             }
+            else
+            {
+                buttons.get(i).setText("Add User");
+            }
         }
+        for(int i = 0; i<=3;i++)
+        {
+            if(users.size() > i ) buttons.get(i).setText(users.get(i).getName());
+        }
+
         buttons.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,6 +263,54 @@ public class MultiUserMainFragment extends Fragment {
     {
         DataSavingHelper dsh = DataSavingHelper.getInstance();
         dsh.saveSettingAsSharedPref("ActiveUser",u.toString(),getContext());
+    }
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 150;
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                ButtonTransparency = 70;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                ButtonTransparency = 150;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        topLeft.getBackground().setAlpha(ButtonTransparency);
+        bottomRight.getBackground().setAlpha(ButtonTransparency);
+        bottomLeft.getBackground().setAlpha(ButtonTransparency);
+        topRight.getBackground().setAlpha(ButtonTransparency);
     }
 
 }
