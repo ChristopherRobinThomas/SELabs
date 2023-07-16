@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.os.Debug;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -111,6 +112,20 @@ public class ServerHelper {
         });
     }
 
+    public void synchronize (Context context) throws JSONException{
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Log.i("sHelper", "Started Synchronisation of all Data");
+        synchronizeQuestionnaire(context);
+        synchronizeDigitSpanTask(context);
+        synchronizeDailyGoals(context);
+        synchronizeSensorreadings(context);
+    }
+
     public void synchronizeQuestionnaire(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
@@ -156,7 +171,6 @@ public class ServerHelper {
                     }
 
                     Log.i("sHelper", "Successfully synchronized Questionnaire");
-                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
                 } else {
                     Log.e("sHelper", "Failed to synchronize Questionnaire, Response: " + response);
                     Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
@@ -217,7 +231,6 @@ public class ServerHelper {
                     }
 
                     Log.i("sHelper", "Successfully synchronized DigitSpanTask");
-                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
                 } else {
                     Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
                     Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
@@ -265,10 +278,9 @@ public class ServerHelper {
                         throw new RuntimeException(e);
                     }
 
-                    Log.i("sHelper", "Successfully synchronized DigitSpanTask");
-                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
+                    Log.i("sHelper", "Successfully synchronized DailyGoal");
                 } else {
-                    Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
+                    Log.e("sHelper", "Failed to synchronize DailyGoal, Response: " + response);
                     Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
                 }
             }
@@ -332,7 +344,6 @@ public class ServerHelper {
                     }
 
                     Log.i("sHelper", "Successfully synchronized Sensordata");
-                    Toast.makeText(activity, "Synchronization successful", Toast.LENGTH_LONG).show();
                 } else {
                     Log.e("sHelper", "Failed to synchronize Sensordata, Response: " + response);
                     Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();

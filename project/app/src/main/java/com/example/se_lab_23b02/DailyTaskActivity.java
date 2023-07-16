@@ -208,7 +208,9 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         String data = obj.toString() + "\n";
 
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext(), true);
-
+        ServerHelper sHelper = ServerHelper.getInstance();
+        sHelper.setActivity(this);
+        sHelper.synchronize(getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
         finish();

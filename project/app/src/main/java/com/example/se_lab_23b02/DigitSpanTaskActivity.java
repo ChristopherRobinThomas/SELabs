@@ -208,12 +208,10 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         }
 
         JSONObject toSave = JSONObjectCreator.createDigitSpanTaskObject(originalInitSpanLength, initSpanLength, maxReachedNumbers, numberOfRounds);
-
+        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",toSave.toString()+"\n", getApplicationContext(), true);
         sHelper.setActivity(this);
-        sHelper.addDigitSpanTask(toSave, getApplicationContext());
-
-        dsHelper.writeDataToInternalStorage("DigitSpanTask.txt",String.valueOf(initSpanLength),getApplicationContext());
-
+        sHelper.synchronize(getApplicationContext());
+      
         Intent i = new Intent(DigitSpanTaskActivity.this, HomeScreenActivity.class);
         Intent sourceIntent = getIntent();
         boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);

@@ -224,10 +224,11 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
         timestamp = TimeStamp.getCurrentTimeStamp();
         toSave.put("timestamp", timestamp);
-
-        sHelper.setActivity(this);
-        sHelper.addQuestionnaire(toSave, getApplicationContext());
+      
         dsHelper.writeDataToInternalStorage("questionnaire.txt", toSave.toString()+"\n", getApplicationContext(), true);
+        sHelper.setActivity(this);
+        sHelper.synchronize(getApplicationContext());
+      
         return toSave.toString();
     }
 

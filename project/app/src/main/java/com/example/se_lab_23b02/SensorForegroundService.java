@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.NotificationCompat;
 
+import org.json.JSONException;
+
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -105,7 +107,16 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
                 String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "]" + ",\"user_id\":\"" + dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()) + "\"}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
+              
                 Debug.logStack("SensorService", "Saving sensor data", 0);
+                Debug.logStack("values", values.get(2 ).toString(), 1);
+              
+                ServerHelper sHelper = ServerHelper.getInstance();
+                try {
+                    sHelper.synchronize(getApplicationContext());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
                 //deregister listener
                 sensorManager.unregisterListener(this, sensors[0]);
