@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,10 +125,19 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                     String username = usernameTextField.getText().toString();
                     String password = passwordTextField.getText().toString();
 
+                    //Hash password
+                    UserHelper uh = UserHelper.getInstance();
+
                     if (username.equals("") || password.equals("")){
                         Toast.makeText(getContext(), "Please enter username AND password!", Toast.LENGTH_SHORT);
                         return;
                     }
+
+                    password = uh.getSha256(password);
+                    if(password.equals(""))
+                        return;
+
+                    Log.d("HASH",password);
 
                     User newUser = new User(localId,username,password);
                     ServerHelper sh = ServerHelper.getInstance();

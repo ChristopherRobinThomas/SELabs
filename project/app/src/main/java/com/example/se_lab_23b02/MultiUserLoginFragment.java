@@ -105,10 +105,13 @@ public class MultiUserLoginFragment extends Fragment {
             public void onClick(View v) {
                 TextInputEditText testPassword = view.findViewById(R.id.PasswordInput);
                 if(testPassword.getText().toString() != null){
-                    Log.d("Login Test",testPassword.getText().toString());
-                    Log.d("Login Test",mParam2);
-                    Log.d("Login Test",String.valueOf(testPassword.getText().toString().equals(mParam2)));
-                    if(testPassword.getText().toString().equals(mParam2)){
+                    String enteredPassword = testPassword.getText().toString();
+                    UserHelper uh =UserHelper.getInstance();
+                    enteredPassword = uh.getSha256(enteredPassword);
+                    Log.d("HASH",enteredPassword);
+                    Log.d("HASH","");
+                    Log.d("HASH",mParam2);
+                    if(enteredPassword.equals(mParam2)){
                         TimeStamp.setStandardTimers(getContext());
 
                         Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
