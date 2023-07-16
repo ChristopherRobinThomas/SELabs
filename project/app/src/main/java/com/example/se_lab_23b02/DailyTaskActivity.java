@@ -203,7 +203,7 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         obj.put("Date", now);
         obj.put("Daily_Task", saveDailyTask);
         obj.put("Progress", 0);
-        obj.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()));
+        obj.put("user_id", UserHelper.getInstance().getCurrentUser(getApplicationContext()).getGlobalId());
 
         String data = obj.toString() + "\n";
 
