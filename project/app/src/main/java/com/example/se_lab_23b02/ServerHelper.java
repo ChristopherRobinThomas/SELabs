@@ -464,6 +464,11 @@ public class ServerHelper {
                             Log.i("sHelper", "Successfully created new User");
                             DataSavingHelper ds = DataSavingHelper.getInstance();
                             String res = result;
+                            res = res.replace("[","");
+                            res = res.replace("]","");
+                            res = res.replace("\"","");
+                            res = res.split(",")[0];
+                            Log.d("TEST",res);
                             user.setGlobalId(res);
                             switch ((int)user.getLocalId())
                             {
