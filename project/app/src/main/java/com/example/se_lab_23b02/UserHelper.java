@@ -3,6 +3,9 @@ package com.example.se_lab_23b02;
 import android.app.Activity;
 import android.content.Context;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 public class UserHelper {
 
     private static UserHelper instance;
@@ -54,14 +57,27 @@ public class UserHelper {
         return -1;
     }
 
-    public String intToStringOneToFour(int i)
-    {
+    public String intToStringOneToFour(int i) {
         switch (i){
             case 1: return "One";
             case 2: return "Two";
             case 3: return "Three";
             case 4: return "Four";
             default: return "";
+        }
+    }
+    //Returned empty String on failure
+    public String getSha256(String value){
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = messageDigest.digest(value.getBytes(StandardCharsets.UTF_8));
+            StringBuilder stringBuilder = new StringBuilder();
+            for(byte hashByte : hashBytes){
+                stringBuilder.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
+            }
+            return stringBuilder.toString();
+        }catch (Exception e){
+            return "";
         }
     }
 
