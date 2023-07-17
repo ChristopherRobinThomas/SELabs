@@ -50,7 +50,7 @@ public class DataAccessHelperTest {
         ArrayList<Integer> a2 = new ArrayList<>(Arrays.asList(intInit));
         ArrayList<Integer> a3 = new ArrayList<>(Arrays.asList(intInit));
         Triple<ArrayList<String>, ArrayList<Integer>, ArrayList<Integer>> triple = new Triple<>(a1, a2, a3);
-        assertEquals(triple, dataAccessHelper.getInterventionsValues(LocalDateTime.now().minusDays(7), LocalDateTime.now(), context));
+        assertEquals(triple, dataAccessHelper.getInterventionsValues(TimeStamp.getLocalDateTime("2023-06-12 00:00:00"), TimeStamp.getLocalDateTime("2023-06-19 00:00:00"), context));
     }
 
     @Test

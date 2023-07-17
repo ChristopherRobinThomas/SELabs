@@ -1,8 +1,5 @@
 name: CI
-on: 
-  pull_request:
-    branches:
-      - main
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,8 +29,10 @@ jobs:
       - name: call gradle wrapper
         run: gradle wrapper
         working-directory: project     
-      - name: testing
+      - name: testing Unit-tests
         run: ./gradlew test
+      - name: testing Instrumented tests
+        run: ./gradlew connectedAndroidTest
         working-directory: project            
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3

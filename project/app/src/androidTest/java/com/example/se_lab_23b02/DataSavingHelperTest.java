@@ -48,4 +48,9 @@ public class DataSavingHelperTest {
 
         assertEquals(value, returnValue.get(key));
     }
+
+    @Test
+    public void testGetSelectedLanguage() {
+
+    }
 }
