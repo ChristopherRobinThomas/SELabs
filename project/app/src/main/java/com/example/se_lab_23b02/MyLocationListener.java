@@ -15,7 +15,6 @@ public class MyLocationListener implements LocationListener {
     private double walkedDistance;
 
     private double heightGained = 0;
-    private double prefHeight;
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -25,17 +24,15 @@ public class MyLocationListener implements LocationListener {
         if (Objects.isNull(timestamp_start))
             timestamp_start = (long) System.currentTimeMillis() / 1000;
 
-        if (Objects.isNull(prefHeight))
-            prefHeight = location.getAltitude();
 
         double distanceMeters = location.distanceTo(lastLocationKnown);
         walkedDistance += distanceMeters;
 
-        double plusHeight = Math.max(0, location.getAltitude() - prefHeight);
-        heightGained += plusHeight;
+        double plusHeight = Math.max(0, location.getAltitude() - lastLocationKnown.getAltitude());
 
+        heightGained += plusHeight;
         lastLocationKnown = location;
-        System.out.println("update" + walkedDistance);
+
     }
 
     @Override
