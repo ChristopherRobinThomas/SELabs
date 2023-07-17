@@ -46,6 +46,8 @@ public class SensorForegroundService extends Service implements SensorEventListe
     private String timestamp;
     private long curTS = 0;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -95,14 +97,21 @@ public class SensorForegroundService extends Service implements SensorEventListe
 
         } else {
             if(active) {
-
+                String velocityValue;
                 String gpsValue;
+                String heightValue;
                 if(bools[2]) {
                     DecimalFormat df = new DecimalFormat("0.00");
                     gpsValue =  df.format(myLocationListener.getWalkedDistance());
+                    velocityValue = df.format(myLocationListener.getWalkingSpeed());
+                    heightValue = df.format(myLocationListener.getHeightGained());
+
                     locationManager.removeUpdates(myLocationListener);
-                } else
+                } else {
                     gpsValue = "";
+                    velocityValue = "";
+                    heightValue = "";
+                }
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
 
                 String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "]" + ",\"user_id\":\"" + UserHelper.getInstance().getCurrentUser(getApplicationContext()).getGlobalId() + "\"}\n";

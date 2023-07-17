@@ -6,17 +6,34 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+import java.lang.Math;
+
 public class MyLocationListener implements LocationListener {
     private Location lastLocationKnown;
+    private long timestamp_start;
     private double walkedDistance;
+
+    private double heightGained = 0;
+    private double prefHeight;
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if(lastLocationKnown == null)
+        if (lastLocationKnown == null)
             lastLocationKnown = location;
+
+        if (Objects.isNull(timestamp_start))
+            timestamp_start = (long) System.currentTimeMillis() / 1000;
+
+        if (Objects.isNull(prefHeight))
+            prefHeight = location.getAltitude();
 
         double distanceMeters = location.distanceTo(lastLocationKnown);
         walkedDistance += distanceMeters;
+
+        double plusHeight = Math.max(0, location.getAltitude() - prefHeight);
+        heightGained += plusHeight;
+
         lastLocationKnown = location;
         System.out.println("update" + walkedDistance);
     }
@@ -30,7 +47,12 @@ public class MyLocationListener implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-
+    public double getWalkingSpeed() {
+        return walkedDistance / ((System.currentTimeMillis()/1000) - timestamp_start);
+    }
+    public double getHeightGained() {
+        return heightGained;
+    }
     public double getWalkedDistance() {
         return walkedDistance;
     }
