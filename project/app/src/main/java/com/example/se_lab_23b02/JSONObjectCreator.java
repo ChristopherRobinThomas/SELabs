@@ -73,6 +73,7 @@ public class JSONObjectCreator {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();
         toSave.put("Questionnaires", jdata);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
     }
 
@@ -83,6 +84,7 @@ public class JSONObjectCreator {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();
         toSave.put("DigitSpanTasks", jdata);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
     }
 
@@ -93,13 +95,13 @@ public class JSONObjectCreator {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();
         toSave.put("DigitSpanTasks", jdata);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
 
     }
     public static JSONObject createDeleteObject(Context context) throws JSONException {
         JSONObject toSave = new JSONObject();
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        toSave.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id",context));
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
 
         return toSave;
     }
@@ -111,6 +113,7 @@ public class JSONObjectCreator {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject toSave = new JSONObject();
         toSave.put("Sensorrecordings", jdata);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
     }
 }

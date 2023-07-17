@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+
 import java.sql.Time;
 
 /**
@@ -111,6 +113,13 @@ public class MultiUserLoginFragment extends Fragment {
                     if(testPassword.getText().toString().equals(mParam2)){
                         TimeStamp.setStandardTimers(getContext());
 
+                        ServerHelper sHelper = ServerHelper.getInstance();
+                        sHelper.setActivity(getActivity());
+                        try {
+                            sHelper.synchronize(getContext());
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                         Intent myIntent = new Intent(getActivity(), HomeScreenActivity.class);
                         startActivity(myIntent);
                         getActivity().finish();
