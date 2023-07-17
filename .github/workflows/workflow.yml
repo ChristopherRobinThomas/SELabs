@@ -29,8 +29,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew connectedAndroidTest
-          working-directory: project            
+          target: google_apis
+          arch: x86_64
+          script: ./gradlew connectedAndroidTest          
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
