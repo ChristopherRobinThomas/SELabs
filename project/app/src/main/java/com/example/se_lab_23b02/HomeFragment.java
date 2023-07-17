@@ -401,6 +401,10 @@ public class HomeFragment extends Fragment implements SensorEventListener {
             }
             toSave += temp2[temp2.length-1];
             dsHelper.writeDataToInternalStorage("DailyGoal.txt",toSave,getActivity());
+            ServerHelper sHelper = ServerHelper.getInstance();
+            sHelper.setActivity(getActivity());
+            sHelper.synchronize(getContext());
+
         }
         catch(JSONException e){
             throw new RuntimeException(e);

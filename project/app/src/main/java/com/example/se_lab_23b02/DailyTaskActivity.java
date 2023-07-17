@@ -203,12 +203,14 @@ public class DailyTaskActivity extends AppCompatActivity implements View.OnClick
         obj.put("Date", now);
         obj.put("Daily_Task", saveDailyTask);
         obj.put("Progress", 0);
-        obj.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id", getApplicationContext()));
+        obj.put("user_id", UserHelper.getInstance().getCurrentUser(getApplicationContext()).getGlobalId());
 
         String data = obj.toString() + "\n";
 
         dsHelper.writeDataToInternalStorage("DailyGoal.txt",data,getApplicationContext(), true);
-
+        ServerHelper sHelper = ServerHelper.getInstance();
+        sHelper.setActivity(this);
+        sHelper.synchronize(getApplicationContext());
         Intent myIntent = new Intent(this, HomeScreenActivity.class);
         startActivity(myIntent);
         finish();

@@ -53,7 +53,7 @@ public class JSONObjectCreator {
         return toSave;
     }
 
-    public static JSONObject createDigitSpanTaskObject(int originalInitSpanLength, int initSpanLength, int maxReachedNumbers, int numberOfRounds) throws JSONException {
+    public static JSONObject createDigitSpanTaskObject(int originalInitSpanLength, int initSpanLength, int maxReachedNumbers, int numberOfRounds, Context context) throws JSONException {
         JSONObject toSave = new JSONObject();
 
         toSave.put("InitSpanLengtToday",originalInitSpanLength);
@@ -62,6 +62,7 @@ public class JSONObjectCreator {
         toSave.put("numberOfSuccessfulRounds", numberOfRounds);
         String timestamp = TimeStamp.getCurrentTimeStamp();
         toSave.put("timestamp", timestamp);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
     }
 

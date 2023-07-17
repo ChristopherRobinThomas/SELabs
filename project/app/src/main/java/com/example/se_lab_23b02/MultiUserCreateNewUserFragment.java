@@ -131,8 +131,9 @@ public class MultiUserCreateNewUserFragment extends Fragment {
 
                     User newUser = new User(localId,username,password);
                     ServerHelper sh = ServerHelper.getInstance();
+                    sh.setActivity(getActivity());
                     try {
-                        sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class);
+                        sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class, HomeScreenActivity.class);
                     }catch (Exception e )
                     {
                         fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
