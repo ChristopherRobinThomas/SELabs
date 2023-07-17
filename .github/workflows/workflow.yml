@@ -10,14 +10,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: gradle
-      - name: show dir
-        run: ls
-      - name: show path
-        run: pwd
-      - name: change dir
-        run: cd project
-       
+          cache: gradle       
       - name: list projects file
         run: ls
       - name: set gradlew to executable
@@ -31,6 +24,7 @@ jobs:
         working-directory: project     
       - name: testing Unit-tests
         run: ./gradlew test
+        working-directory: project
       - name: testing Instrumented tests
         run: ./gradlew connectedAndroidTest
         working-directory: project            
