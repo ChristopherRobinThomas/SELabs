@@ -2,7 +2,7 @@ name: CI
 on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 17
@@ -31,7 +31,8 @@ jobs:
       - name: testing Instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29          
+          api-level: 29    
+          target: google_apis      
           script: ./gradlew connectedAndroidTest          
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3
