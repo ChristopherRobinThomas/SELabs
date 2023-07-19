@@ -11,8 +11,7 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: gradle       
-      - name: list projects file
-        run: ls
+
       - name: set gradlew to executable
         run: chmod +x ./gradlew
         working-directory: project
@@ -25,12 +24,14 @@ jobs:
       - name: testing Unit-tests
         run: ./gradlew test
         working-directory: project
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: testing Instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
-          target: google_apis
-          arch: x86_64
+          api-level: 29          
           script: ./gradlew connectedAndroidTest          
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3
