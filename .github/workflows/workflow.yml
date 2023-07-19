@@ -21,7 +21,7 @@ jobs:
         run: gradle wrapper
         working-directory: project     
       - name: testing Unit-tests
-        run: ./gradlew test
+        run: ./gradlew testDebugUnitTest
         working-directory: project
       - name: checkout
         uses: actions/checkout@v1
