@@ -65,6 +65,52 @@ public class TimeStamp {
     }
     static public void setStandardTimers(Context context)
     {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String data;
+        data = dsHelper.readSavedDataFromInternalStorage("Timers",context);
+
+        if(data.equals(""))
+        {
+            boolean morn = false;
+            boolean noon = false;
+            boolean evn = false;
+            String[] values = data.split("\n");
+            for(int i = 0; i < values.length;i++)
+            {
+                int id;
+                if(values[i].contains("morn"))
+                {
+                    id = 0;
+                    morn = true;
+                } else if (values[i].contains("noon")) {
+                    id = 1;
+                    noon = true;
+                } else if (values[i].contains("evn")) {
+                    id = 2;
+                    evn = true;
+                }else
+                {
+                    return;
+                }
+                int hour = Integer.parseInt(values[i].split(",")[0].split(":")[1].replace(":",""));
+                int min = Integer.parseInt(values[i].split(",")[1].split(":")[1].replace(":",""));
+                Alarm cur = new Alarm(id);
+                cur.addTime(hour, min);
+            }
+            if(!morn) {
+                Alarm cur = new Alarm(0);
+                cur.addTime(7, 0);
+            }
+            if(!evn){
+                Alarm cur = new Alarm(1);
+                cur.addTime(12, 0);
+            }
+            if(!noon){
+                Alarm cur = new Alarm(2);
+                cur.addTime(17, 0);
+            }
+            return;
+        }
         Alarm cur = new Alarm(0);
         cur.addTime(7, 0);
         cur = new Alarm(1);
@@ -72,11 +118,9 @@ public class TimeStamp {
         cur = new Alarm(2);
         cur.addTime(17, 0);
 
-        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        String data;
-        data = "mornCurH:" + String.valueOf(7) + ",mornCurM" + String.valueOf(0) + "\n";
-        data += "noonCurH:" + String.valueOf(12) + ",noonCurM" + String.valueOf(0) + "\n";
-        data += "evnCurH:" + String.valueOf(17) + ",evnCurM" + String.valueOf(0);
+        data = "mornCurH:" + String.valueOf(7) + ",mornCurM:" + String.valueOf(0) + "\n";
+        data += "noonCurH:" + String.valueOf(12) + ",noonCurM:" + String.valueOf(0) + "\n";
+        data += "evnCurH:" + String.valueOf(17) + ",evnCurM:" + String.valueOf(0);
         dsHelper.writeDataToInternalStorage("Timers",data,context);
     }
     public static boolean timeSlotExistsAlready(Context context) {
