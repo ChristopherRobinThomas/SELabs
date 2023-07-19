@@ -38,8 +38,13 @@ jobs:
           target: google_apis 
           script: ./gradlew connectedAndroidTest --stacktrace
           working-directory: project 
-      - name: Publish Report
+      - name: Unit-test Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
         with:
-          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'
+          report_paths: '**/app/build/test-results/test/*.xml'
+      - name: Unit-test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/app/build/test-results/connectedAndroidTest/*.xml'
