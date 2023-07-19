@@ -211,7 +211,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TimeStamp.timeSlotExistsAlready(getContext()))
+                if(!TimeStamp.timeSlotExistsAlready(getContext()) && TimeStamp.getCurrentTimeSlot() != TimeStamp.TimeSlot.no_TimeSLot)
                 {
                     Log.d("Time Slot", "Time Slot already exists");
                     Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
