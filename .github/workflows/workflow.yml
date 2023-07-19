@@ -33,7 +33,8 @@ jobs:
         with:
           api-level: 29    
           target: google_apis      
-          script: ./gradlew connectedAndroidTest          
+          script: ./gradlew connectedAndroidTest 
+          working-directory: project                    
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
