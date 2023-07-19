@@ -129,9 +129,9 @@ public class InterventionsFragment extends Fragment {
     }
     private void showAddInterventionDialogue(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        builder.setTitle("Title");
+        builder.setTitle("Enter Intervention Name");
         final EditText input = new EditText(this.getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        //input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -218,13 +218,13 @@ public class InterventionsFragment extends Fragment {
                 switch (color)
                 {
                     case "blue":
-                        linearLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        sv.setBackgroundResource(R.drawable.blue_dark_mode_background);
                         break;
                     case "red":
-                        linearLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        sv.setBackgroundResource(R.drawable.red_dark_mode_background);
                         break;
                     case "green":
-                        linearLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        sv.setBackgroundResource(R.drawable.green_dark_mode_background);
                         break;
                 }
                 break;
@@ -233,13 +233,13 @@ public class InterventionsFragment extends Fragment {
                 switch (color)
                 {
                     case "blue":
-                        linearLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        sv.setBackgroundResource(R.drawable.blue_light_mode_background);
                         break;
                     case "red":
-                        linearLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        sv.setBackgroundResource(R.drawable.red_light_mode_background);
                         break;
                     case "green":
-                        linearLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        sv.setBackgroundResource(R.drawable.green_light_mode_background);
                         break;
                 }
                 break;
