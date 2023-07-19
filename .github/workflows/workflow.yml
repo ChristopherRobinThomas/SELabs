@@ -3,9 +3,12 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 17
@@ -13,16 +16,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: gradle
-      - name: show dir
-        run: ls
-      - name: show path
-        run: pwd
-      - name: change dir
-        run: cd project
-       
-      - name: list projects file
-        run: ls
+          cache: gradle  
       - name: set gradlew to executable
         run: chmod +x ./gradlew
         working-directory: project
@@ -32,11 +26,37 @@ jobs:
       - name: call gradle wrapper
         run: gradle wrapper
         working-directory: project     
-      - name: testing
-        run: ./gradlew test
-        working-directory: project            
-      - name: Publish Report
+      - name: testing Unit-tests
+        run: ./gradlew testDebugUnitTest
+        working-directory: project
+
+      - name: Unit-test Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
         with:
-          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'
+          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'     
+          check_name: 'Unit Tests'   
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: set gradlew to executable
+        run: chmod +x ./gradlew
+        working-directory: project
+      - name: testing Instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29    
+          target: google_apis 
+          script: ./gradlew connectedCheck --stacktrace
+          working-directory: project       
+     
+      - name: Instrumented Test
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          check_name: 'Instrumented Tests'
+          report_paths: '**/app/build/outputs/androidTest-results/connected/*.xml'
+            
+
+            
