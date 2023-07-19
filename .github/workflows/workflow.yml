@@ -23,6 +23,12 @@ jobs:
       - name: testing Unit-tests
         run: ./gradlew testDebugUnitTest
         working-directory: project
+
+      - name: Unit-test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'        
       - name: checkout
         uses: actions/checkout@v1
         with:
@@ -37,11 +43,7 @@ jobs:
           target: google_apis 
           script: ./gradlew connectedCheck --stacktrace
           working-directory: project       
-      - name: Unit-test Report
-        uses: mikepenz/action-junit-report@v3
-        if: always() # always run even if the previous step fails
-        with:
-          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'
+     
       - name: Instrumented Test
         uses: mikepenz/action-junit-report@v3
         if: always()
