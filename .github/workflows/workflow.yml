@@ -24,22 +24,20 @@ jobs:
       - name: testing Unit-tests
         run: ./gradlew test
         working-directory: project
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: set gradlew to executable
+        run: chmod +x ./gradlew
+        working-directory: project
       - name: testing Instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29    
           target: google_apis 
           script: ./gradlew connectedAndroidTest --stacktrace
-          working-directory: project                    
-          avd-name: test
-          force-avd-creation: true
-          emulator-boot-timeout: 600
-          emulator-options: -no-window -gpu switftshader_indirect -no-snapshot -noaudio -no-boot-anim
-          disable-animations: true
-          disable-spellchecker: false
-          disable-linux-hw-accel: auto
-          enable-hw-keyboard: false
-          channel: stable
+          working-directory: project 
       - name: Publish Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
