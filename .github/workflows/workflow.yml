@@ -1,5 +1,11 @@
 name: CI
-on: push
+on: 
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: macos-latest
@@ -28,7 +34,8 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
         with:
-          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'        
+          report_paths: '**/app/build/test-results/testDebugUnitTest/*.xml'     
+          check_name: 'Unit Tests'   
       - name: checkout
         uses: actions/checkout@v1
         with:
@@ -48,6 +55,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
+          check_name: 'Instrumented Tests'
           report_paths: '**/app/build/outputs/androidTest-results/connected/*.xml'
             
 
