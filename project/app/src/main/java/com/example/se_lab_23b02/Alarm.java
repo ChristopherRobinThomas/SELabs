@@ -32,7 +32,7 @@ public class Alarm
         id = _id;
     }
 
-    public  void addTime(MaterialTimePicker picker)
+    public void addTime(MaterialTimePicker picker)
     {
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY,picker.getHour());
@@ -41,7 +41,7 @@ public class Alarm
         calendar.set(Calendar.MILLISECOND,0);
     }
 
-    public  void addTime(int hour, int minute)
+    public void addTime(int hour, int minute)
     {
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY,hour);

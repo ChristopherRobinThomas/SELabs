@@ -251,7 +251,7 @@ public class DataAccessHelper {
 
     }
 
-    private int getIndexFromTaskListByString(String taskString) {
+    public int getIndexFromTaskListByString(String taskString) {
         switch (taskString) {
             case "Walk 5.000 Steps":
                 return 0;
