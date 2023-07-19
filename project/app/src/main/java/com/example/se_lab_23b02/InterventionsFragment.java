@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,11 +59,12 @@ public class InterventionsFragment extends Fragment {
     Button buttonAddNewIntervention;
     Vector<Button> buttonList;
     Vector<Vector<String>> interventionList;
-    private LinearLayout linearLayoutToAdd;
     DataSavingHelper dsHelper;
 
+    private TextView txtViewInterventions;
+    private LinearLayout linearLayoutToAdd;
     private LinearLayout linearLayout;
-    private Context contextForColor;
+    private ScrollView sv;
 
 
     public InterventionsFragment() {
@@ -102,23 +105,15 @@ public class InterventionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_interventions, container, false);
         dsHelper = DataSavingHelper.getInstance();
-        linearLayout = view.findViewById(R.id.interventionsFragment);
+        linearLayout = view.findViewById(R.id.linearLayoutInterventions);
+        sv = view.findViewById(R.id.interventionsScrollView);
         setColorTheme();
 
         try {
             interventionList = dsHelper.getSavedInterventions(this.getContext());
         } catch (JSONException ignored) {}
 
-        Vector<Vector<String>> interventionList = new Vector<Vector<String>>();
-
-        buttonList = populateButtonList(interventionList, view);
-        for (int i = 0; i < buttonList.size(); i++) {
-            int finalI = i;
-            buttonList.get(i).setOnClickListener(v -> {
-                openSingleInterventionFragment(interventionList.get(finalI));
-            });
-        }
-
+        populateButtonList(interventionList);
         buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
         buttonAddNewIntervention.setOnClickListener(v -> {
             showAddInterventionDialogue(view);
@@ -161,14 +156,16 @@ public class InterventionsFragment extends Fragment {
         newIntervention.add("");
         interventionList.add(newIntervention);
 
-        int newButtonTopMargin = 58 * (interventionList.size() - 1);
-        Button newButton = new Button(this.getContext());
-        newButton.setText(name);
-        //ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
-        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
-        lp.topMargin = newButtonTopMargin;
-        //cl.addView(newButton, lp);
-        buttonList.add(newButton);
+        try {
+            dsHelper.saveInterventions(interventionList,getActivity().getApplicationContext());
+        } catch (JSONException ignored) {}
+
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
     }
     private void openSingleInterventionFragment(Vector<String> intervention) {
         SingleIntervention singleIntervention = new SingleIntervention();
@@ -182,28 +179,25 @@ public class InterventionsFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-    private Vector<Button> populateButtonList(Vector<Vector<String>> interventionList, View view) {
-        int i = 0;
-        Vector<Button> buttonList = new Vector<Button>();
+    private void populateButtonList(Vector<Vector<String>> interventionList) {
         for (Vector<String> interventionObject : interventionList) {
             linearLayoutToAdd = new LinearLayout(getContext());
             linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
             linearLayoutToAdd.setGravity(Gravity.LEFT);
-            //linearLayoutToAdd.setDividerDrawable(getDrawable(R.drawable.divider_big));
+            linearLayoutToAdd.setDividerDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.divider_big));
             linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            //linearLayoutToAdd.setBackground(getDrawable(R.drawable.linear_layout_border));
+            linearLayoutToAdd.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.linear_layout_border));
 
+            txtViewInterventions = new TextView(getActivity().getApplicationContext());
+            txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            txtViewInterventions.setText(interventionObject.get(1));
+            txtViewInterventions.setTextSize(20);
+            linearLayoutToAdd.addView(txtViewInterventions);
 
-            //ConstraintLayout cl = view.findViewById(R.id.singleInterventionConstraintLayout);
-            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(407, 58);
-            lp.leftMargin = 0;
-            lp.topMargin = 58 * i;
-            //cl.addView(newButton, lp);
-            //buttonList.add(newButton);
-            i++;
+            linearLayoutToAdd.setOnClickListener(v -> openSingleInterventionFragment(interventionObject));
+            linearLayout.addView(linearLayoutToAdd);
         }
-        return buttonList;
     }
 
 
@@ -213,9 +207,9 @@ public class InterventionsFragment extends Fragment {
 
     private void setColorTheme()
     {
-        contextForColor = getActivity().getApplicationContext();
-        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
-        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        Context contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue", contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color", contextForColor);
 
         switch(mode)
         {
