@@ -10,8 +10,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: gradle       
-
+          cache: gradle  
       - name: set gradlew to executable
         run: chmod +x ./gradlew
         working-directory: project
@@ -37,14 +36,13 @@ jobs:
           api-level: 29    
           target: google_apis 
           script: ./gradlew connectedAndroidTest --stacktrace
-          working-directory: project 
+          working-directory: project       
       - name: Unit-test Report
         uses: mikepenz/action-junit-report@v3
         if: always() # always run even if the previous step fails
         with:
-          report_paths: '**/app/build/test-results/test/*.xml'
-      - name: Unit-test Report
-        uses: mikepenz/action-junit-report@v3
-        if: always() # always run even if the previous step fails
-        with:
-          report_paths: '**/app/build/test-results/connectedAndroidTest/*.xml'
+          report_paths: |
+            '**/app/build/test-results/connectedAndroidTest/*.xml'
+            '**/app/build/outputs/androidTest-results/connected/*.xml'
+
+            
