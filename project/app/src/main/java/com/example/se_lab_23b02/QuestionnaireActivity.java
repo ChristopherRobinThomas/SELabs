@@ -64,8 +64,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
-    private String additionalNotes = new String();
-
     private String timestamp;
 
     private DataSavingHelper dsHelper;
