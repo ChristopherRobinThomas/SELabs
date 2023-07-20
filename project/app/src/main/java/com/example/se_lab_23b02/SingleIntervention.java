@@ -30,6 +30,7 @@ public class SingleIntervention extends Fragment {
     Button completeButton;
     EditText et;
     RatingBar bar;
+    String interventionStartTime;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -71,6 +72,7 @@ public class SingleIntervention extends Fragment {
     void startDoingIntervention() {
         completeButton.setText("Complete!");
         SensorManager.toggleService(getActivity());
+        interventionStartTime = TimeStamp.getCurrentTimeStamp();
 
         completeButton.setOnClickListener(v -> {
             SensorManager.toggleService(getActivity());
@@ -85,10 +87,9 @@ public class SingleIntervention extends Fragment {
     public void saveInterventionCompleted() {
         String additionalNotes;
         additionalNotes = String.valueOf(et.getText());
-        String now = TimeStamp.getCurrentTimeStamp();
         JSONObject j = new JSONObject();
         try {
-            j.put("timestamp", now);
+            j.put("timestamp", interventionStartTime);
             j.put("id", pInterventionID);
             j.put("completed", hasCompletedIntervention);
             j.put("notes", additionalNotes);

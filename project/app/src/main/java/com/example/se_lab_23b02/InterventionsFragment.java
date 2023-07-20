@@ -163,9 +163,11 @@ public class InterventionsFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .detach(this)
-                .attach(this)
-                .commit();
+                .detach(this).commit();
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .attach(this).commit();
     }
     private void openSingleInterventionFragment(Vector<String> intervention) {
         SingleIntervention singleIntervention = new SingleIntervention();
