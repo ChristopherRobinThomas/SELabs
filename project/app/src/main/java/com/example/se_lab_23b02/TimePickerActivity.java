@@ -136,17 +136,17 @@ public class TimePickerActivity extends Activity {
                 String data = "";
                 switch(id) {
                     case 0:
-                        data = "mornCurH:" + String.valueOf(cHour[0]) + ",mornCurM" + String.valueOf(cMin[0]);
+                        data = "mornCurH:" + String.valueOf(cHour[0]) + ",mornCurM:" + String.valueOf(cMin[0]);
                         //dsHelper.saveSettingAsSharedPref("mornCurH", Integer.toString(cHour[0]), getApplicationContext());
                         //dsHelper.saveSettingAsSharedPref("mornCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
                     case 1:
-                        data = "noonCurH:" + String.valueOf(cHour[0]) + ",noonCurM" + String.valueOf(cMin[0]);
+                        data = "noonCurH:" + String.valueOf(cHour[0]) + ",noonCurM:" + String.valueOf(cMin[0]);
                         //dsHelper.saveSettingAsSharedPref("noonCurH", Integer.toString(cHour[0]), getApplicationContext());
                         //dsHelper.saveSettingAsSharedPref("noonCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
                     case 2:
-                        data = "evnCurH:" + String.valueOf(cHour[0]) + ",evnCurM" + String.valueOf(cMin[0]);
+                        data = "evnCurH:" + String.valueOf(cHour[0]) + ",evnCurM:" + String.valueOf(cMin[0]);
                         //dsHelper.saveSettingAsSharedPref("evnCurH", Integer.toString(cHour[0]), getApplicationContext());
                         //dsHelper.saveSettingAsSharedPref("evnCurM", Integer.toString(cMin[0]), getApplicationContext());
                         break;
