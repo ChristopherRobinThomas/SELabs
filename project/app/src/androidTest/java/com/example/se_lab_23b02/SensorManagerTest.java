@@ -11,6 +11,8 @@ import android.content.Context;
 
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 @RunWith(AndroidJUnit4.class)
 public class SensorManagerTest {
 
@@ -31,10 +33,11 @@ public class SensorManagerTest {
         return running;
     }
     @Test
-    public void checkToggling() {
-        boolean runningBefore = checkRunning();
+    public void testCheckToggling() throws InterruptedException {
+        boolean result = !checkRunning();
         SensorManager.toggleService(context);
-        assertEquals(runningBefore, !checkRunning());
+        TimeUnit.SECONDS.sleep(1);
+        assertEquals(result, checkRunning());
     }
 
     @Test

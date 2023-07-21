@@ -36,7 +36,10 @@ public class UserHelper {
                 return error;
 
             String userIdString = "User" + intToStringOneToFour(id);
-            return new User(dsh.getAllSettingsFromSharedPref(context).get(userIdString));
+            String userString = dsh.getAllSettingsFromSharedPref(context).get(userIdString);
+            if(userString.equals(""))
+                return error;
+            return new User(userString);
         }
         return error;
     }

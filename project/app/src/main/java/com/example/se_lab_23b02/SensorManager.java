@@ -30,7 +30,7 @@ public class SensorManager {
     private static void startService(Context context) {
         try {
             Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
-        }catch (NullPointerException e) {
+        }catch (Exception e) {
             System.out.println(e.getMessage());
         }
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
@@ -41,7 +41,7 @@ public class SensorManager {
     private static void stopService(Context context) {
         try {
             Toast.makeText(context, "recording ended", Toast.LENGTH_SHORT).show();
-        }catch (NullPointerException e) {
+        }catch (Exception e) {
             System.out.println(e.getMessage());
         }
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
