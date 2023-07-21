@@ -144,6 +144,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                     sh.setActivity(getActivity());
                     try {
                         sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class, HomeScreenActivity.class);
+                        TimeStamp.setStandardTimers(getContext());
                     }catch (Exception e )
                     {
                         fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
