@@ -32,7 +32,7 @@
 
     <!-- Strings for the interventions fragment-->
     <string name="interventions_heading">Interventionen</string>
-
+    <string name="add_intervention_button">Intervention hinzufügen</string>
 
 
 

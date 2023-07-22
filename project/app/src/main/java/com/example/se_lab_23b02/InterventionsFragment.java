@@ -7,6 +7,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -60,11 +61,19 @@ public class InterventionsFragment extends Fragment {
     Vector<Button> buttonList;
     Vector<Vector<String>> interventionList;
     DataSavingHelper dsHelper;
+    private LinearLayout innerLinearLayout;
 
     private TextView txtViewInterventions;
     private LinearLayout linearLayoutToAdd;
     private LinearLayout linearLayout;
     private ScrollView sv;
+    private ConstraintLayout constraintLayout;
+    private Context contextForColor;
+    private Button btStartRecording;
+
+    private Context context;
+    private Resources resources;
+    private ArrayList<Object> elementsForLanguageChange = new ArrayList<>();
 
 
     public InterventionsFragment() {
@@ -107,18 +116,26 @@ public class InterventionsFragment extends Fragment {
         dsHelper = DataSavingHelper.getInstance();
         linearLayout = view.findViewById(R.id.linearLayoutInterventions);
         sv = view.findViewById(R.id.interventionsScrollView);
+        buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
+        constraintLayout = view.findViewById(R.id.interventionsFragment);
+        innerLinearLayout = view.findViewById(R.id.linearLayoutInInterventions);
+        btStartRecording = view.findViewById(R.id.btStartRecording);
+        elementsForLanguageChange.add(buttonAddNewIntervention);
+
         setColorTheme();
+        refreshResources();
+        setLanguage();
 
         try {
             interventionList = dsHelper.getSavedInterventions(this.getContext());
         } catch (JSONException ignored) {}
 
         populateButtonList(interventionList);
-        buttonAddNewIntervention = view.findViewById(R.id.buttonAddNewIntervention);
+
         buttonAddNewIntervention.setOnClickListener(v -> {
             showAddInterventionDialogue(view);
         });
-        Button btStartRecording = view.findViewById(R.id.btStartRecording);
+
         btStartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,23 +199,24 @@ public class InterventionsFragment extends Fragment {
                 .commit();
     }
     private void populateButtonList(Vector<Vector<String>> interventionList) {
+        contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
         for (Vector<String> interventionObject : interventionList) {
-            linearLayoutToAdd = new LinearLayout(getContext());
+            linearLayoutToAdd = new LinearLayout(getActivity());
             linearLayoutToAdd.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             linearLayoutToAdd.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayoutToAdd.setGravity(Gravity.LEFT);
-            linearLayoutToAdd.setDividerDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.divider_big));
-            linearLayoutToAdd.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            linearLayoutToAdd.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.linear_layout_border));
+            linearLayoutToAdd.setGravity(Gravity.CENTER);
+            if(mode.equals("white-mode")) linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border_light_mode));
+            else linearLayoutToAdd.setBackground(getResources().getDrawable(R.drawable.step_count_border));
 
-            txtViewInterventions = new TextView(getActivity().getApplicationContext());
+            txtViewInterventions = new TextView(getActivity());
             txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             txtViewInterventions.setText(interventionObject.get(1));
             txtViewInterventions.setTextSize(20);
             linearLayoutToAdd.addView(txtViewInterventions);
 
             linearLayoutToAdd.setOnClickListener(v -> openSingleInterventionFragment(interventionObject));
-            linearLayout.addView(linearLayoutToAdd);
+            innerLinearLayout.addView(linearLayoutToAdd);
         }
     }
 
@@ -209,6 +227,7 @@ public class InterventionsFragment extends Fragment {
 
     private void setColorTheme()
     {
+        int ButtonTransparency = 50;
         Context contextForColor = getActivity().getApplicationContext();
         String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue", contextForColor);
         String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color", contextForColor);
@@ -217,34 +236,65 @@ public class InterventionsFragment extends Fragment {
         {
             case "dark-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                btStartRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_skip_next_24_dark_mode,0,0,0);
+                ButtonTransparency = 70;
                 switch (color)
                 {
                     case "blue":
-                        sv.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
                         break;
                     case "red":
-                        sv.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
                         break;
                     case "green":
-                        sv.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
                         break;
                 }
                 break;
             case "white-mode":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                btStartRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_skip_next_24_light_mode,0,0,0);
+                ButtonTransparency = 150;
                 switch (color)
                 {
                     case "blue":
-                        sv.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
                         break;
                     case "red":
-                        sv.setBackgroundResource(R.drawable.red_light_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
                         break;
                     case "green":
-                        sv.setBackgroundResource(R.drawable.green_light_mode_background);
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
                         break;
                 }
                 break;
         }
+        buttonAddNewIntervention.getBackground().setAlpha(ButtonTransparency);
+    }
+
+
+
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getActivity().getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getActivity().getApplicationContext(), language_short);
+        resources = context.getResources();
+    }
+    private void setLanguage() {
+        Button bt = (Button) elementsForLanguageChange.get(0);
+        bt.setText(resources.getString(R.string.add_intervention_button));
+
     }
 }

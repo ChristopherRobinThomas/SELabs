@@ -30,6 +30,7 @@
 
     <!-- Strings for the interventions fragment-->
     <string name="interventions_heading">Interventions</string>
+    <string name="add_intervention_button">Add Intervention</string>
 
 
 
@@ -129,6 +130,8 @@
     <string name="timepicker_submit">Submit</string>
     <string name="timepicker_preferred_choice">Select your preferred Time</string>
     <string name="timepicker_selected">Selected:\u0020</string>
+
+
 
 
 </resources>
