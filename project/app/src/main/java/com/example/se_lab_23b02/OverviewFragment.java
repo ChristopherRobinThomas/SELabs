@@ -166,8 +166,6 @@ public class OverviewFragment extends Fragment {
         Paint transparentColor = new Paint();
         transparentColor.setColor(Color.TRANSPARENT);
 
-        //TODO COSTUMIZE PLOT
-
         Paint testColor = new Paint();
         testColor.setColor(getResources().getColor(R.color.below_graph));
 
