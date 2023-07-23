@@ -582,13 +582,13 @@ public class SettingsFragment extends Fragment {
 
     private void setAlarmButtons()
     {
+        /*
         String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
 
         String[] allEntries = temp.split(":");
         String[] temp2 = new String[allEntries.length-1];
 
         int count = 0;
-
         for(int i = 1; i<=allEntries.length-1; i++)
         {
             temp2[count] = String.join(":",allEntries[i].split(",")[0],allEntries[i].split("M")[1].split("\n")[0]);
@@ -604,7 +604,7 @@ public class SettingsFragment extends Fragment {
             else if(hour>=12 && hour <=14) btnNotifNoon.setText(temp2[j]);
             else if(hour>=17 && hour <=18) btnNotifEvening.setText(temp2[j]);
         }
-
+        */
     }
 }
 

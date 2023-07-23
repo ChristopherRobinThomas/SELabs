@@ -52,10 +52,12 @@ public class Alarm
 
 
     public void setAlarm(Context context) {
+        Log.d("ALARM","Alarm Set");
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context,AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
-        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),10,pendingIntent);
+        long delay = 10;
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),delay,pendingIntent);//IF android version 12 or Above automatically clipped to 10min(600.000)
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         Log.d("setAlarm","Alarm set");
     }
