@@ -16,10 +16,12 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Vector;
 
 public class AllPastInterventionsActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
 
     //------Objects-----------
     private DataSavingHelper dsHelper;
+    Vector<Vector<String>> interventionList;
 
     //-------Color Variables -----
     private Context contextForColor;
@@ -60,6 +63,8 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
 
     private void getPastInterventions()
     {
+
+
         //-----Variables----------
         JsonObject obj = new JsonObject();
         JsonObject obj2 = new JsonObject();
@@ -78,6 +83,9 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         String[] allInterventions;
         String[] allRecordings;
         dsHelper = DataSavingHelper.getInstance();
+        try {
+            interventionList = dsHelper.getSavedInterventions(this);
+        } catch (JSONException ignored) {}
 
         try {
             String temp = dsHelper.readSavedDataFromInternalStorage("completedInterventions.txt",this);
@@ -115,11 +123,18 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
                 //--------------------Check Date-------------------------------
                 String startInput = obj.get("timestamp").getAsString();
                 String stopInput = obj2.get("timestamp").getAsString();
-                DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
-
-                LocalDateTime start = LocalDateTime.parse(startInput, f);
-                LocalDateTime stop = LocalDateTime.parse(stopInput, f);
-                isBefore = start.isBefore(stop);
+                if(startInput.equals(stopInput))
+                {
+                    isBefore = false;
+                    recordingCounter--;
+                }
+                else
+                {
+                    DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+                    LocalDateTime start = LocalDateTime.parse(startInput, f);
+                    LocalDateTime stop = LocalDateTime.parse(stopInput, f);
+                    isBefore = start.isBefore(stop);
+                }
                 //---------------------------------------------------
             }
             else if(recordingCounter < 1 && interventionCounter >= 1)
@@ -221,7 +236,8 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         }
         else
         {
-            txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+            String name = interventionList.get(Integer.valueOf(id)).get(1);
+            txtViewInterventions.setText(name + "\nUhrzeit: " + time[0] + ":" + time[1]);
         }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);

@@ -24,6 +24,9 @@
 
     <!-- Colors for Graphs -->
     <color name="below_graph">#66FFFFFF</color>
+    <color name="below_graph_red">#66e0cbca</color>
+    <color name="below_graph_green">#66877978</color>
+    <color name="below_graph_blue">#66302c2c</color>
     <color name="bar_graph_red">#99520d1c</color>
     <color name="bar_graph_green">#990d4f1e</color>
 

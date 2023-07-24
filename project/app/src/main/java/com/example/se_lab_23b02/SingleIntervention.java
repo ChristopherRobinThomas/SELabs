@@ -1,8 +1,11 @@
 package com.example.se_lab_23b02;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -25,12 +28,13 @@ public class SingleIntervention extends Fragment {
     private static String pInterventionName;
     private static String pInterventionDesc;
     private boolean hasCompletedIntervention;
-    TextView interventionName;
-    TextView interventionDesc;
-    Button completeButton;
-    EditText et;
-    RatingBar bar;
+    private TextView interventionName;
+    private TextView interventionDesc;
+    private Button completeButton;
+    private EditText et;
+    private RatingBar bar;
     String interventionStartTime;
+    private ConstraintLayout constraintLayout;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -58,6 +62,7 @@ public class SingleIntervention extends Fragment {
         interventionName = view.findViewById(R.id.textView3);
         interventionDesc = view.findViewById(R.id.textView4);
         bar = (RatingBar) view.findViewById(R.id.ratingBar);
+        constraintLayout = view.findViewById(R.id.singleInterventionFragment);
         // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
@@ -65,6 +70,7 @@ public class SingleIntervention extends Fragment {
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
+        setColorTheme();
 
         return view;
     }
@@ -96,5 +102,53 @@ public class SingleIntervention extends Fragment {
             j.put("rating", bar.getRating());
         } catch (JSONException ignored) {}
         dsHelper.writeDataToInternalStorage("completedInterventions.txt", j.toString()+"\n", getActivity().getApplicationContext(),true);
+    }
+
+
+
+
+    private void setColorTheme()
+    {
+        int ButtonTransparency = 50;
+        Context contextForColor = getActivity().getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue", contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color", contextForColor);
+
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                ButtonTransparency = 70;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                ButtonTransparency = 150;
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+        completeButton.getBackground().setAlpha(ButtonTransparency);
     }
 }

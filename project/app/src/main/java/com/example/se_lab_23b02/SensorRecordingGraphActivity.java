@@ -2,6 +2,7 @@ package com.example.se_lab_23b02;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.util.Pair;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PanZoom;
@@ -34,11 +38,13 @@ public class SensorRecordingGraphActivity extends Activity {
     private CheckBox checkY;
     private CheckBox checkZ;
 
+    private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
     private boolean xChecked = true;
     private boolean yChecked = true;
     private boolean zChecked = true;
-
+    private ConstraintLayout constraintLayout;
+    private Context contextForColor;
     private Triple<ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>, ArrayList<Pair<Long, Float>>> values;
 
     @SuppressLint("SetTextI18n")
@@ -53,6 +59,25 @@ public class SensorRecordingGraphActivity extends Activity {
         whiteColor.setColor(Color.WHITE);
         xyPlot.getGraph().setBackgroundPaint(whiteColor);
         xyPlot.getGraph().setGridBackgroundPaint(whiteColor);
+        constraintLayout = findViewById(R.id.activity_sensor_recording);
+        setColorTheme();
+
+
+        Paint transparentColor = new Paint();
+        transparentColor.setColor(Color.TRANSPARENT);
+        Paint testColor = new Paint();
+        testColor.setColor(getResources().getColor(R.color.below_graph));
+
+
+        xyPlot.getGraph().setBackgroundPaint(transparentColor);
+        xyPlot.getGraph().setGridBackgroundPaint(transparentColor);
+
+        xyPlot.getGraph().setDomainGridLinePaint(transparentColor);
+        xyPlot.getGraph().setDomainOriginLinePaint(transparentColor); //Y-Achse
+
+        xyPlot.getGraph().setRangeOriginLinePaint(testColor); //x-Achse
+        xyPlot.getGraph().setRangeGridLinePaint(transparentColor);
+
 
         checkX = findViewById(R.id.cbX);
         checkY = findViewById(R.id.cbY);
@@ -129,8 +154,7 @@ public class SensorRecordingGraphActivity extends Activity {
 
     private void plotting() {
         xyPlot.clear();
-        xyPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
-        xyPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+        setPlotColor(xyPlot);
         xyPlot.getLayoutManager().remove(xyPlot.getLegend());
 
         ArrayList<Pair<Long, Float>> x_list = values.getFirst();
@@ -141,7 +165,7 @@ public class SensorRecordingGraphActivity extends Activity {
         Float[] x = new Float[x_list.size()];
         Float[] y = new Float[y_list.size()];
         Float[] z = new Float[z_list.size()];
-        if(x_list.size() > 0) {
+        if (x_list.size() > 0) {
             long min_timestamp = (x_list.get(0).first / 1000);
             int ts_as_int = (int) min_timestamp; // get the first timestamp as int in seconds
 
@@ -156,9 +180,9 @@ public class SensorRecordingGraphActivity extends Activity {
             XYSeries y_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(y), "y-Values");
             XYSeries z_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(z), "z-Values");
 
-            LineAndPointFormatter xFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
-            LineAndPointFormatter yFormatter = new LineAndPointFormatter(Color.GREEN, null, null, null);
-            LineAndPointFormatter zFormatter = new LineAndPointFormatter(Color.BLUE, null, null, null);
+            LineAndPointFormatter xFormatter = new LineAndPointFormatter(getResources().getColor(R.color.red), null, getResources().getColor(R.color.red), null);
+            LineAndPointFormatter yFormatter = new LineAndPointFormatter(getResources().getColor(R.color.teal_200), null, getResources().getColor(R.color.teal_200), null);
+            LineAndPointFormatter zFormatter = new LineAndPointFormatter(getResources().getColor(R.color.dark_mode_blue_primary), null, getResources().getColor(R.color.dark_mode_blue_primary), null);
             if (xChecked)
                 xyPlot.addSeries(x_series, xFormatter);
             if (yChecked)
@@ -194,5 +218,78 @@ public class SensorRecordingGraphActivity extends Activity {
     }
 
 
+    private void setColorTheme()
+    {
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        String color = dsHelper.getInstance().getSpecificSettingsFromSharedPref("color",contextForColor);
+        switch(mode)
+        {
+            case "dark-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_dark_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
+                        break;
+                }
+                break;
+            case "white-mode":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                switch (color)
+                {
+                    case "blue":
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
+                    case "red":
+                        constraintLayout.setBackgroundResource(R.drawable.red_light_mode_background);
+                        break;
+                    case "green":
+                        constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
+                        break;
+                }
+                break;
+        }
+    }
+
+
+
+    private void setPlotColor(XYPlot plot)
+    {
+        //Get Color Scheme
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
+        blackPaint.setTextSize(50);
+        blackPaint.setTextAlign(Paint.Align.CENTER);
+
+        Paint whitePaint = new Paint();
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setTextSize(50);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+        contextForColor = this.getApplicationContext();
+        String mode = dsHelper.getInstance().getSpecificSettingsFromSharedPref("dmValue",contextForColor);
+        plot.clear();
+        if(mode.equals("white-mode"))
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.BLACK);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.BLACK);
+            plot.getTitle().setLabelPaint(blackPaint);
+        }
+        else
+        {
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).getPaint().setColor(Color.WHITE);
+            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().setColor(Color.WHITE);
+            plot.getTitle().setLabelPaint(whitePaint);
+
+        }
+
+        plot.getLayoutManager().remove(plot.getLegend());
+    }
 
 }
