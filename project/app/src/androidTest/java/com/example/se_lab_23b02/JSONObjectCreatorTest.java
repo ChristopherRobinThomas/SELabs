@@ -118,8 +118,7 @@ public class JSONObjectCreatorTest {
         compare.put("numberOfSuccessfulRounds", numberOfRounds);
         String timestamp = TimeStamp.getCurrentTimeStamp();
         compare.put("timestamp", timestamp);
-        String globalId = UserHelper.getInstance().getCurrentUser(context).getGlobalId();
-        compare.put("user_id", globalId);
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
 
         assertEquals(compare.toString(), JSONObjectCreator.createDigitSpanTaskObject(originalInitSpanLength, initSpanLength, maxReachedNumbers, numberOfRounds, context).toString());
 
@@ -132,6 +131,7 @@ public class JSONObjectCreatorTest {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject compare = new JSONObject();
         compare.put("Questionnaires", jdata);
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         assertEquals(compare.toString(), JSONObjectCreator.createAllQuestionnaireObject(context).toString());
     }
 
@@ -143,7 +143,7 @@ public class JSONObjectCreatorTest {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject compare = new JSONObject();
         compare.put("DigitSpanTasks", jdata);
-
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         assertEquals(compare.toString(), JSONObjectCreator.createAllDigitSpanTaskObject(context).toString());
     }
 
@@ -155,7 +155,7 @@ public class JSONObjectCreatorTest {
         JSONArray jdata = new JSONArray(localData.split("\n"));
         JSONObject compare = new JSONObject();
         compare.put("DigitSpanTasks", jdata);
-
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         assertEquals(compare.toString(), JSONObjectCreator.createAllDailyGoalObject(context).toString());
     }
 
@@ -163,7 +163,7 @@ public class JSONObjectCreatorTest {
     public void testCreateDeleteObject() throws JSONException {
         JSONObject compare = new JSONObject();
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
-        compare.put("user_id", dsHelper.getSpecificSettingsFromSharedPref("user_id",context));
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
 
         assertEquals(compare.toString(), JSONObjectCreator.createDeleteObject(context).toString());
 
@@ -178,6 +178,9 @@ public class JSONObjectCreatorTest {
         JSONObject compare = new JSONObject();
         compare.put("Sensorrecordings", jdata);
 
+        compare.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
+
+        System.out.println(compare);
         assertEquals(compare.toString(), JSONObjectCreator.createAllSensorreadingsObject(context).toString());
 
     }
