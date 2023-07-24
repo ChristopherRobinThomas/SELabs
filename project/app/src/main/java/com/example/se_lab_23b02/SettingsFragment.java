@@ -345,7 +345,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 cancelAlarms();
-
+                deleteLocalFiles();
                 //delete data here
                 dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
@@ -381,6 +381,17 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    private void deleteLocalFiles() {
+        DataSavingHelper ds = DataSavingHelper.getInstance();
+        ds.deleteFileFromInternalStorage("Timers",getContext());
+        ds.deleteFileFromInternalStorage("DailyGoal.txt",getContext());
+        ds.deleteFileFromInternalStorage("sensorrecordings.txt",getContext());
+        ds.deleteFileFromInternalStorage("questionnaire.txt",getContext());
+        ds.deleteFileFromInternalStorage("interventions.txt",getContext());
+        ds.deleteFileFromInternalStorage("DigitSpanTask.txt",getContext());
+        ds.deleteFileFromInternalStorage("TodaysStepCount.txt",getContext());
+        ds.deleteFileFromInternalStorage("completedInterventions.txt" ,getContext());
+    }
 
     //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
     private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
