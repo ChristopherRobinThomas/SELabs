@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ public class SingleIntervention extends Fragment {
     private RatingBar bar;
     String interventionStartTime;
     private ConstraintLayout constraintLayout;
+    private VideoView vw;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -57,6 +59,7 @@ public class SingleIntervention extends Fragment {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
 
         et = (EditText) view.findViewById(R.id.tvInterventionAdditionalNotes);
+        vw = view.findViewById(R.id.videoView);
 
         // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
         interventionName = view.findViewById(R.id.textView3);
@@ -72,7 +75,14 @@ public class SingleIntervention extends Fragment {
         interventionDesc.setText(pInterventionDesc);
         setColorTheme();
 
+
         return view;
+    }
+
+    void chooseAndLoadVideo() {
+        if(pInterventionID == 0 || pInterventionID == 1 |) {
+
+        }
     }
 
     void startDoingIntervention() {
