@@ -218,6 +218,8 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
         if(doRandIntv) {
             showDoInterventionDialogue(i);
         }
+        finish();
+        this.startActivity(i);
     }
 
     void showDoInterventionDialogue(Intent i) {

@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 
@@ -63,8 +64,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private SeekBar[] slidersEight = new SeekBar[2];
     private int[] questionEightValues = new int[2];
 
-    private String additionalNotes = new String();
-
     private String timestamp;
 
     private DataSavingHelper dsHelper;
@@ -88,7 +87,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         dsHelper = DataSavingHelper.getInstance();
         sHelper = ServerHelper.getInstance();
 
-        if(TimeStamp.timeSlotExistsAlready(this)){
+        if(TimeStamp.timeSlotExistsAlready(this) || TimeStamp.getCurrentTimeSlot() == TimeStamp.TimeSlot.no_TimeSLot){
             Intent i = new Intent(QuestionnaireActivity.this, HomeScreenActivity.class);
             startActivity(i);
             finish();

@@ -114,7 +114,9 @@ public class SensorForegroundService extends Service implements SensorEventListe
                 }
                 DataSavingHelper dsHelper = DataSavingHelper.getInstance();
 
-                String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "]" + ",\"user_id\":\"" + UserHelper.getInstance().getCurrentUser(getApplicationContext()).getGlobalId() + "\"}\n";
+                System.out.println(velocityValue);
+                System.out.println(heightValue);
+                String sensorValues = "{\"timestamp\":\"" + timestamp + "\",\"acceleration\":" + values.get(0).toString() + ",\"stepcounter\":" + values.get(1).toString() + ",\"distance\":[" + gpsValue + "], \"height\": \"" + heightValue + "\", \"velocity\": \"" + velocityValue + "\", \"user_id\":\"" + UserHelper.getInstance().getCurrentUser(getApplicationContext()).getGlobalId() + "\"}\n";
                 dsHelper.writeDataToInternalStorage("sensorrecordings.txt", sensorValues, getApplicationContext(), true);
               
                 Debug.logStack("SensorService", "Saving sensor data", 0);

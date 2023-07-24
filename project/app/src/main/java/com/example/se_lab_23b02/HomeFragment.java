@@ -62,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
 
@@ -86,6 +87,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor_to_read;
     private DataAccessHelper dataAccessHelper;
+    Vector<Vector<String>> interventionList;
 
     //---------Variables--------
     private String dailyGoal;
@@ -211,7 +213,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TimeStamp.timeSlotExistsAlready(getContext()))
+                if(!TimeStamp.timeSlotExistsAlready(getContext()) && TimeStamp.getCurrentTimeSlot() != TimeStamp.TimeSlot.no_TimeSLot)
                 {
                     Log.d("Time Slot", "Time Slot already exists");
                     Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
@@ -658,6 +660,9 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
     private void getPastInterventions()
     {
+        try {
+            interventionList = dsHelper.getSavedInterventions(this.getContext());
+        } catch (JSONException ignored) {}
         //-----Variables----------
         JsonObject obj = new JsonObject();
         JsonObject obj2 = new JsonObject();
@@ -713,11 +718,19 @@ public class HomeFragment extends Fragment implements SensorEventListener {
                 //--------------------Check Date-------------------------------
                 String startInput = obj.get("timestamp").getAsString();
                 String stopInput = obj2.get("timestamp").getAsString();
-                DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+                if(startInput.equals(stopInput))
+                {
+                    isBefore = false;
+                    recordingCounter--;
+                }
+                else
+                {
+                    DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+                    LocalDateTime start = LocalDateTime.parse(startInput, f);
+                    LocalDateTime stop = LocalDateTime.parse(stopInput, f);
+                    isBefore = start.isBefore(stop);
+                }
 
-                LocalDateTime start = LocalDateTime.parse(startInput, f);
-                LocalDateTime stop = LocalDateTime.parse(stopInput, f);
-                isBefore = start.isBefore(stop);
                 //---------------------------------------------------
             }
             else if(recordingCounter < 1 && interventionCounter >= 1)
@@ -819,7 +832,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         }
         else
         {
-            txtViewInterventions.setText("Name: " + id + "\nUhrzeit: " + time[0] + ":" + time[1]);
+            String name = interventionList.get(Integer.valueOf(id)).get(1);
+            txtViewInterventions.setText(name + "\nUhrzeit: " + time[0] + ":" + time[1]);
         }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);

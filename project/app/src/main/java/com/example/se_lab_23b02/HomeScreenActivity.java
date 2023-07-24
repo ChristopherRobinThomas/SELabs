@@ -56,20 +56,20 @@ public class HomeScreenActivity extends AppCompatActivity {
             switch(item.getItemId())
             {
                 case R.id.home:
-                    replaceFragment(new HomeFragment());
                     item.setTitle(resources.getString(R.string.home_heading));
+                    replaceFragment(new HomeFragment());
                     break;
                 case R.id.settings:
-                    replaceFragment(new SettingsFragment());
                     item.setTitle(resources.getString(R.string.settings_heading));
+                    replaceFragment(new SettingsFragment());
                     break;
                 case R.id.data:
-                    replaceFragment(new OverviewFragment());
                     item.setTitle(resources.getString(R.string.overview_navigation_bar));
+                    replaceFragment(new OverviewFragment());
                     break;
                 case R.id.interventions:
-                    replaceFragment(new InterventionsFragment());
                     item.setTitle(resources.getString(R.string.interventions_heading));
+                    replaceFragment(new InterventionsFragment());
                     break;
             }
 
