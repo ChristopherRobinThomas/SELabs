@@ -323,11 +323,25 @@ public class ServerHelper {
                             newEntry.put("stepcounter", accS);
 
                             String distance = sensordata.get("distance").toString();
-
                             distance.substring(1, distance.length() - 1);
-
                             JSONArray accD = new JSONArray(distance);
                             newEntry.put("distance", accD);
+
+                            String height = sensordata.get("height").toString();
+                            if (height.length() > 2) {
+                                height.substring(1, height.length() - 1);
+                            }else {
+                                height = "";
+                            }
+                            newEntry.put("height", height);
+
+                            String velocity = sensordata.get("velocity").toString();
+                            if (velocity.length() > 2) {
+                                velocity.substring(1, velocity.length() - 1);
+                            }else {
+                                velocity = "";
+                            }
+                            newEntry.put("velocity", velocity);
 
                             newEntry.put("user_id", sensordata.get("user_id"));
                             dsHelper.writeDataToInternalStorage("sensorrecordings.txt", newEntry + "\n", context, true);
