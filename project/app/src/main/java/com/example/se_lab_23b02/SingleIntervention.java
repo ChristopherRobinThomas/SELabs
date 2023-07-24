@@ -80,7 +80,10 @@ public class SingleIntervention extends Fragment {
     }
 
     void chooseAndLoadVideo() {
-        if(pInterventionID == 0 || pInterventionID == 1 |) {
+        if(pInterventionName == "Cobra") {
+
+        }
+        else if (pInterventionName == "Rueckentspannung"){
 
         }
     }
