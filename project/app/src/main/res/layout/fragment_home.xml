@@ -9,9 +9,6 @@
     android:id="@+id/homeFragment"
     >
 
-
-
-
     <ScrollView
         android:id="@+id/scrollViewHome"
         android:layout_width="match_parent"

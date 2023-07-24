@@ -31,6 +31,7 @@ public class DataAccessHelperTest {
         User u = new User("2,6b8cd66f-2794-11ee-bd9f-0adab99dbc12,test,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
         DataSavingHelper.getInstance().saveSettingAsSharedPref("ActiveUser",u.toString(), context);
 
+
     }
 
     @Test

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -20,6 +22,14 @@ public class MultiUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_multi_user);
 
         if(checkForActiveUser()){
+            ServerHelper sHelper = ServerHelper.getInstance();
+            sHelper.setActivity(this);
+            try {
+                sHelper.synchronize(getApplicationContext());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
             Intent i = new Intent(this, HomeScreenActivity.class);
             startActivity(i);
             finish();

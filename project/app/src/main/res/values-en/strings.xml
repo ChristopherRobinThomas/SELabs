@@ -29,6 +29,7 @@
 
     <!-- Strings for the interventions fragment-->
     <string name="interventions_heading">Interventions</string>
+    <string name="add_intervention_button">Add Intervention</string>
 
 
     <!-- Strings for the settings fragment-->

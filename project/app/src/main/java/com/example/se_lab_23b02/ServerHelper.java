@@ -102,9 +102,10 @@ public class ServerHelper {
             return;
         }
 
-        if(checkIfFileIsFound("questionnaire.txt", context) < 0){
-            Log.e("sHelper", "Failed to synchronize Questionnaire, no File found");
-            return;
+        String filename = "questionnaire.txt";
+        if(checkIfFileIsFound(filename, context) < 0){
+            Log.e("sHelper", "no File questionnaire.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
 
         JSONObject body = JSONObjectCreator.createAllQuestionnaireObject(context);
@@ -170,9 +171,10 @@ public class ServerHelper {
             return;
         }
 
-        if(checkIfFileIsFound("DigitSpanTask.txt", context) < 0){
-            Log.e("sHelper", "Failed to synchronize DigitSpanTask, no File found");
-            return;
+        String filename = "DigitSpanTask.txt";
+        if(checkIfFileIsFound(filename, context) < 0){
+            Log.e("sHelper", "no File DigitSpanTask.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
 
         JSONObject body = JSONObjectCreator.createAllDigitSpanTaskObject(context);
@@ -235,9 +237,10 @@ public class ServerHelper {
             return;
         }
 
-        if(checkIfFileIsFound("DailyGoal.txt", context) < 0){
-            Log.e("sHelper", "Failed to synchronize DailyGoal, no File found");
-            return;
+        String filename = "DailyGoal.txt";
+        if(checkIfFileIsFound(filename, context) < 0){
+            Log.e("sHelper", "no File DailyGoal.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
 
         JSONObject body = JSONObjectCreator.createAllDailyGoalObject(context);
@@ -288,9 +291,10 @@ public class ServerHelper {
             return;
         }
 
-        if(checkIfFileIsFound("sensorrecordings.txt", context) < 0){
-            Log.e("sHelper", "Failed to synchronize sensorrecordings, no File found");
-            return;
+        String filename = "sensorrecordings.txt";
+        if(checkIfFileIsFound(filename, context) < 0){
+            Log.e("sHelper", "no File sensorrecordings.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
 
         JSONObject body = JSONObjectCreator.createAllSensorreadingsObject(context);
@@ -323,11 +327,25 @@ public class ServerHelper {
                             newEntry.put("stepcounter", accS);
 
                             String distance = sensordata.get("distance").toString();
-
                             distance.substring(1, distance.length() - 1);
-
                             JSONArray accD = new JSONArray(distance);
                             newEntry.put("distance", accD);
+
+                            String height = sensordata.get("height").toString();
+                            if (height.length() > 2) {
+                                height.substring(1, height.length() - 1);
+                            }else {
+                                height = "";
+                            }
+                            newEntry.put("height", height);
+
+                            String velocity = sensordata.get("velocity").toString();
+                            if (velocity.length() > 2) {
+                                velocity.substring(1, velocity.length() - 1);
+                            }else {
+                                velocity = "";
+                            }
+                            newEntry.put("velocity", velocity);
 
                             newEntry.put("user_id", sensordata.get("user_id"));
                             dsHelper.writeDataToInternalStorage("sensorrecordings.txt", newEntry + "\n", context, true);
