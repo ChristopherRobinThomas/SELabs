@@ -45,6 +45,7 @@ public class ServerHelper {
     private final String synchronizeDigitSpanTasks = "development/databaseentrys/digitspantask/alldigitspantasks";
     private final String synchronizeDailyGoals = "development/databaseentrys/dailygoal/alldailygoals";
     private final String synchronizeSensorreadings = "development/databaseentrys/sensorrecordings/allsensorrecordings";
+    private final String synchronizeCompletedInterventions = "development/databaseentrys/completedinterventions/allcompletedinterventions";
 
 
     private ServerHelper() {
@@ -93,6 +94,7 @@ public class ServerHelper {
         synchronizeDigitSpanTask(context);
         synchronizeDailyGoals(context);
         synchronizeSensorreadings(context);
+        synchronizeDoneInterventions(context);
     }
 
     public void synchronizeQuestionnaire(Context context) throws JSONException {
@@ -346,6 +348,69 @@ public class ServerHelper {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Sensordata, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void synchronizeDoneInterventions(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String filename = "completedInterventions.txt";
+        if(checkIfFileIsFound(filename, context) < 0){
+            Log.e("sHelper", "no File completedInterventions.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
+        }
+
+        JSONObject body = JSONObjectCreator.createAllCompletedInterventions(context);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeCompletedInterventions, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+
+                    JSONArray jarray;
+                    try {
+                        jarray = new JSONArray(response.body().string());
+                        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                        dsHelper.deleteFileFromInternalStorage("completedInterventions.txt", context);
+                        for (int i = 0; i < jarray.length(); i++) {
+                            JSONObject completedInterventions = new JSONObject(jarray.get(i).toString());
+                            JSONObject newEntry = new JSONObject();
+                            newEntry.put("timestamp", completedInterventions.get("timestamp").toString().replace(".000000", ""));
+                            newEntry.put("id", completedInterventions.getInt("id"));
+
+                            Boolean completed = false;
+                            if (Integer.parseInt(completedInterventions.get("completed").toString()) == 1){
+                                completed = true;
+                            }else if (Integer.parseInt(completedInterventions.get("completed").toString()) == 0){
+                                completed = false;
+                            }
+
+                            newEntry.put("completed", completed);
+                            newEntry.put("notes", completedInterventions.get("notes"));
+                            newEntry.put("rating", completedInterventions.getInt("rating"));
+                            dsHelper.writeDataToInternalStorage("completedInterventions.txt", newEntry + "\n", context, true);
+                        }
+                    } catch (JSONException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Log.i("sHelper", "Successfully synchronized completedInterventions");
+                } else {
+                    Log.e("sHelper", "Failed to synchronize completedInterventions, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
                 Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         });
