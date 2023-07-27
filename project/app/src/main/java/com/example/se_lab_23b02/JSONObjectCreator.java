@@ -127,4 +127,14 @@ public class JSONObjectCreator {
         toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
         return toSave;
     }
+
+    public static JSONObject createAllInterventions(Context context) throws JSONException {
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String localData = dsHelper.readSavedDataFromInternalStorage("interventions.txt", context);
+        localData = localData.trim();
+        JSONObject toSave = new JSONObject();
+        toSave.put("interventions", localData);
+        toSave.put("user_id", UserHelper.getInstance().getCurrentUser(context).getGlobalId());
+        return toSave;
+    }
 }

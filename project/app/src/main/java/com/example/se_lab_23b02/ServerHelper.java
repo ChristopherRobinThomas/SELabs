@@ -46,6 +46,7 @@ public class ServerHelper {
     private final String synchronizeDailyGoals = "development/databaseentrys/dailygoal/alldailygoals";
     private final String synchronizeSensorreadings = "development/databaseentrys/sensorrecordings/allsensorrecordings";
     private final String synchronizeCompletedInterventions = "development/databaseentrys/completedinterventions/allcompletedinterventions";
+    private final String synchronizeInterventions = "/development/databaseentrys/interventions/allinterventions";
 
 
     private ServerHelper() {
@@ -95,6 +96,7 @@ public class ServerHelper {
         synchronizeDailyGoals(context);
         synchronizeSensorreadings(context);
         synchronizeDoneInterventions(context);
+        synchronizeInterventions(context);
     }
 
     public void synchronizeQuestionnaire(Context context) throws JSONException {
@@ -105,7 +107,7 @@ public class ServerHelper {
         }
 
         String filename = "questionnaire.txt";
-        if(checkIfFileIsFound(filename, context) < 0){
+        if (checkIfFileIsFound(filename, context) < 0) {
             Log.e("sHelper", "no File questionnaire.txt found, empty one created");
             DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
@@ -174,7 +176,7 @@ public class ServerHelper {
         }
 
         String filename = "DigitSpanTask.txt";
-        if(checkIfFileIsFound(filename, context) < 0){
+        if (checkIfFileIsFound(filename, context) < 0) {
             Log.e("sHelper", "no File DigitSpanTask.txt found, empty one created");
             DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
@@ -240,7 +242,7 @@ public class ServerHelper {
         }
 
         String filename = "DailyGoal.txt";
-        if(checkIfFileIsFound(filename, context) < 0){
+        if (checkIfFileIsFound(filename, context) < 0) {
             Log.e("sHelper", "no File DailyGoal.txt found, empty one created");
             DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
@@ -294,7 +296,7 @@ public class ServerHelper {
         }
 
         String filename = "sensorrecordings.txt";
-        if(checkIfFileIsFound(filename, context) < 0){
+        if (checkIfFileIsFound(filename, context) < 0) {
             Log.e("sHelper", "no File sensorrecordings.txt found, empty one created");
             DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
@@ -336,7 +338,7 @@ public class ServerHelper {
                             String height = sensordata.get("height").toString();
                             if (height.length() > 2) {
                                 height.substring(1, height.length() - 1);
-                            }else {
+                            } else {
                                 height = "";
                             }
                             newEntry.put("height", height);
@@ -344,7 +346,7 @@ public class ServerHelper {
                             String velocity = sensordata.get("velocity").toString();
                             if (velocity.length() > 2) {
                                 velocity.substring(1, velocity.length() - 1);
-                            }else {
+                            } else {
                                 velocity = "";
                             }
                             newEntry.put("velocity", velocity);
@@ -359,7 +361,7 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized Sensordata");
                 } else {
                     Log.e("sHelper", "Failed to synchronize Sensordata, Response: " + response);
-                    try{
+                    try {
 
                         Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
                     } catch (NullPointerException e) {
@@ -373,7 +375,7 @@ public class ServerHelper {
                 Log.e("sHelper", "Failed to execute Call - Sensordata, Throwable: " + t);
                 try {
                     Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     System.out.println(e);
                 }
             }
@@ -388,7 +390,7 @@ public class ServerHelper {
         }
 
         String filename = "completedInterventions.txt";
-        if(checkIfFileIsFound(filename, context) < 0){
+        if (checkIfFileIsFound(filename, context) < 0) {
             Log.e("sHelper", "no File completedInterventions.txt found, empty one created");
             DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "", context);
         }
@@ -413,9 +415,9 @@ public class ServerHelper {
                             newEntry.put("id", completedInterventions.getInt("id"));
 
                             Boolean completed = false;
-                            if (Integer.parseInt(completedInterventions.get("completed").toString()) == 1){
+                            if (Integer.parseInt(completedInterventions.get("completed").toString()) == 1) {
                                 completed = true;
-                            }else if (Integer.parseInt(completedInterventions.get("completed").toString()) == 0){
+                            } else if (Integer.parseInt(completedInterventions.get("completed").toString()) == 0) {
                                 completed = false;
                             }
 
@@ -443,6 +445,50 @@ public class ServerHelper {
         });
     }
 
+    public void synchronizeInterventions(Context context) throws JSONException {
+        if (checkInternetAvailability(context) < 0) {
+            Log.i("sHelper", "Checked for Internet, no Internet available");
+            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String filename = "interventions.txt";
+        if (checkIfFileIsFound(filename, context) < 0) {
+            Log.e("sHelper", "no File interventions.txt found, empty one created");
+            DataSavingHelper.getInstance().writeDataToInternalStorage(filename, "[[\"0\",\"Push-Ups\",\"Perform 10 push-ups.\"],[\"1\",\"Sit-Ups\",\"Perform 10 sit-ups.\"],[\"2\",\"Light Run\",\"Run a comfortable distance at a slow pace. Our recommendation: 2 kilometers in 10 minutes\"]]", context);
+        }
+
+        JSONObject body = JSONObjectCreator.createAllInterventions(context);
+        Call<ResponseBody> call = httpClient.postRequest(synchronizeInterventions, body);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                    try {
+                        String res = response.body().string();
+                        res = res.substring(1, res.length() -1);
+                        res = res.replaceAll("\\\\", "");
+                        dsHelper.writeDataToInternalStorage("interventions.txt", res , context);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Log.i("sHelper", "Successfully synchronized interventions");
+                } else {
+                    Log.e("sHelper", "Failed to synchronize interventions, Response: " + response);
+                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
+                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     /**
      * Creates Call with new User Information in HTTP Post Body and saves the response (which should be an UUID) to the Shared Preferences
      *
@@ -457,7 +503,7 @@ public class ServerHelper {
             Log.i("sHelper", "Checked for Internet, no Internet available");
             try {
                 Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println(e);
             }
             return;
