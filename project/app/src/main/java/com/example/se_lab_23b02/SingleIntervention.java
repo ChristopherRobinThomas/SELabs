@@ -86,7 +86,7 @@ public class SingleIntervention extends Fragment {
     void chooseAndLoadVideo() {
         if(pInterventionName == "Cobra") {
             iv.setVisibility(View.INVISIBLE);
-            //vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.Cobra));
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.Cobra));
             vv.setVisibility(View.VISIBLE);
         }
         else if (pInterventionName == "Rueckenentspannung"){
