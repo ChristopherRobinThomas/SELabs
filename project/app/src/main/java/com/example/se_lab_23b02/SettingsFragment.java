@@ -345,7 +345,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 cancelAlarms();
-
+                deleteLocalFiles();
                 //delete data here
                 dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
                 saveDefaultValuesInSettings();
@@ -381,6 +381,17 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    private void deleteLocalFiles() {
+        DataSavingHelper ds = DataSavingHelper.getInstance();
+        ds.deleteFileFromInternalStorage("Timers",getContext());
+        ds.deleteFileFromInternalStorage("DailyGoal.txt",getContext());
+        ds.deleteFileFromInternalStorage("sensorrecordings.txt",getContext());
+        ds.deleteFileFromInternalStorage("questionnaire.txt",getContext());
+        ds.deleteFileFromInternalStorage("interventions.txt",getContext());
+        ds.deleteFileFromInternalStorage("DigitSpanTask.txt",getContext());
+        ds.deleteFileFromInternalStorage("TodaysStepCount.txt",getContext());
+        ds.deleteFileFromInternalStorage("completedInterventions.txt" ,getContext());
+    }
 
     //this method takes the spinner and the settings as parameters to set the spinner's values and the default value
     private void setupSpinnerValues(Spinner spLang, Spinner spColor, Spinner spDMode, HashMap<String, String> settings) {
@@ -582,29 +593,30 @@ public class SettingsFragment extends Fragment {
 
     private void setAlarmButtons()
     {
-        String temp = dsHelper.readSavedDataFromInternalStorage("Timers",getActivity().getApplicationContext());
-
-        String[] allEntries = temp.split(":");
-        String[] temp2 = new String[allEntries.length-1];
-
-        int count = 0;
-
-        for(int i = 1; i<=allEntries.length-1; i++)
+        DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+        String data = dsHelper.readSavedDataFromInternalStorage("Timers",context);
+        if(!data.equals(""))
         {
-            temp2[count] = String.join(":",allEntries[i].split(",")[0],allEntries[i].split("M")[1].split("\n")[0]);
-            System.out.println(temp2[count] + "\n");
-            count++;
-        }
-        for(int j = 0; j<=temp2.length-1;j++)
-        {
-            String test = temp2[j].split(":")[0];
-            System.out.println(test + "\n");
-            int hour = Integer.valueOf(test);
-            if(hour >=7 && hour <=11) btnNotifMorning.setText(temp2[j]);
-            else if(hour>=12 && hour <=14) btnNotifNoon.setText(temp2[j]);
-            else if(hour>=17 && hour <=18) btnNotifEvening.setText(temp2[j]);
-        }
+            String[] values = data.split("\n");
+            for(int i = 0; i < values.length;i++)
+            {
+                Button btn;
+                if(values[i].contains("morn"))
+                {
+                    btn = btnNotifMorning;
+                } else if (values[i].contains("noon")) {
+                    btn = btnNotifNoon;
+                } else if (values[i].contains("evn")) {
+                    btn = btnNotifEvening;
+                }else {
+                    continue;
+                }
+                int hour = Integer.parseInt(values[i].split(",")[0].split(":")[1].replace(":",""));
+                int min = Integer.parseInt(values[i].split(",")[1].split(":")[1].replace(":",""));
 
+                btn.setText(String.valueOf(hour)+":"+String.valueOf(min));
+            }
+        }
     }
 }
 

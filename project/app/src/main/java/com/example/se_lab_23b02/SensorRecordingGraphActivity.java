@@ -180,9 +180,9 @@ public class SensorRecordingGraphActivity extends Activity {
             XYSeries y_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(y), "y-Values");
             XYSeries z_series = new SimpleXYSeries(Arrays.asList(domains), Arrays.asList(z), "z-Values");
 
-            LineAndPointFormatter xFormatter = new LineAndPointFormatter(getResources().getColor(R.color.red), null, getResources().getColor(R.color.red), null);
-            LineAndPointFormatter yFormatter = new LineAndPointFormatter(getResources().getColor(R.color.teal_200), null, getResources().getColor(R.color.teal_200), null);
-            LineAndPointFormatter zFormatter = new LineAndPointFormatter(getResources().getColor(R.color.dark_mode_blue_primary), null, getResources().getColor(R.color.dark_mode_blue_primary), null);
+            LineAndPointFormatter xFormatter = new LineAndPointFormatter(getResources().getColor(R.color.red), null, null, null);
+            LineAndPointFormatter yFormatter = new LineAndPointFormatter(Color.GREEN, null, null, null);
+            LineAndPointFormatter zFormatter = new LineAndPointFormatter(getResources().getColor(R.color.dark_mode_blue_primary), null, null, null);
             if (xChecked)
                 xyPlot.addSeries(x_series, xFormatter);
             if (yChecked)

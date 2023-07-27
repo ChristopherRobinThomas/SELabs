@@ -69,7 +69,7 @@ public class TimeStamp {
         String data;
         data = dsHelper.readSavedDataFromInternalStorage("Timers",context);
 
-        if(data.equals(""))
+        if(!data.equals(""))
         {
             boolean morn = false;
             boolean noon = false;
@@ -96,27 +96,37 @@ public class TimeStamp {
                 int min = Integer.parseInt(values[i].split(",")[1].split(":")[1].replace(":",""));
                 Alarm cur = new Alarm(id);
                 cur.addTime(hour, min);
+                cur.setAlarm(context);
             }
             if(!morn) {
+                data += "mornCurH:" + String.valueOf(7) + ",mornCurM:" + String.valueOf(0) + "\n";
                 Alarm cur = new Alarm(0);
                 cur.addTime(7, 0);
-            }
-            if(!evn){
-                Alarm cur = new Alarm(1);
-                cur.addTime(12, 0);
+                cur.setAlarm(context);
             }
             if(!noon){
+                data += "noonCurH:" + String.valueOf(12) + ",noonCurM:" + String.valueOf(0) + "\n";
+                Alarm cur = new Alarm(1);
+                cur.addTime(12, 0);
+                cur.setAlarm(context);
+            }
+            if(!evn){
                 Alarm cur = new Alarm(2);
                 cur.addTime(17, 0);
+                data += "evnCurH:" + String.valueOf(17) + ",evnCurM:" + String.valueOf(0) + "\n";
+                cur.setAlarm(context);
             }
             return;
         }
         Alarm cur = new Alarm(0);
         cur.addTime(7, 0);
+        cur.setAlarm(context);
         cur = new Alarm(1);
         cur.addTime(12, 0);
+        cur.setAlarm(context);
         cur = new Alarm(2);
         cur.addTime(17, 0);
+        cur.setAlarm(context);
 
         data = "mornCurH:" + String.valueOf(7) + ",mornCurM:" + String.valueOf(0) + "\n";
         data += "noonCurH:" + String.valueOf(12) + ",noonCurM:" + String.valueOf(0) + "\n";

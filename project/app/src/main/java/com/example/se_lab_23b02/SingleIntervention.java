@@ -2,6 +2,7 @@ package com.example.se_lab_23b02;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +38,8 @@ public class SingleIntervention extends Fragment {
     private RatingBar bar;
     String interventionStartTime;
     private ConstraintLayout constraintLayout;
+    private VideoView vv;
+    private ImageView iv;
 
     public SingleIntervention() {
         // Required empty public constructor
@@ -57,6 +62,8 @@ public class SingleIntervention extends Fragment {
         View view = inflater.inflate(R.layout.fragment_single_intervention, container, false);
 
         et = (EditText) view.findViewById(R.id.tvInterventionAdditionalNotes);
+        vv = view.findViewById(R.id.videoView);
+        iv = view.findViewById(R.id.imageView2);
 
         // Draft: add parameter counter to oSIF; interventionList.get(counter).get(1->ID/2->Name/3->Desc)
         interventionName = view.findViewById(R.id.textView3);
@@ -72,7 +79,19 @@ public class SingleIntervention extends Fragment {
         interventionDesc.setText(pInterventionDesc);
         setColorTheme();
 
+
         return view;
+    }
+
+    void chooseAndLoadVideo() {
+        if(pInterventionName == "Cobra") {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.Cobra));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if (pInterventionName == "Rueckenentspannung"){
+
+        }
     }
 
     void startDoingIntervention() {

@@ -69,9 +69,10 @@
             android:id="@+id/imageView2"
             android:layout_width="233dp"
             android:layout_height="187dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:src="@drawable/little_being"
+            app:layout_constraintHorizontal_bias="0.522"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -99,6 +100,16 @@
             app:layout_constraintTop_toBottomOf="@id/textView"
 
             />
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="290dp"
+            android:layout_height="137dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintHorizontal_bias="0.522"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
