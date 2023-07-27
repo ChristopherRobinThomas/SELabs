@@ -49,7 +49,7 @@ public class JSONObjectCreator {
             toSave.put("Q"+i, valueArrays[i-1]);
         }
         String timestamp = TimeStamp.getCurrentTimeStamp();
-        toSave.put("timestamp: ", timestamp);
+        toSave.put("timestamp", timestamp);
         return toSave;
     }
 

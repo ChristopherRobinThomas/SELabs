@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.util.Objects;
 import java.util.Vector;
 
 // Woah Singleton
@@ -61,7 +62,10 @@ public class DataSavingHelper {
 
     public String getSpecificSettingsFromSharedPref(String keyValue, Context context){
         SharedPreferences settings = context.getSharedPreferences("Settings", 0);
-        return settings.getString(keyValue, "");
+        String ret = settings.getString(keyValue, "");
+        if (Objects.isNull(ret))
+            return "";
+        return ret;
     }
 
     public void deleteAllSettingsFromSharedPref(Context context) {

@@ -150,7 +150,11 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized Questionnaire");
                 } else {
                     Log.e("sHelper", "Failed to synchronize Questionnaire, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    try {
+                        Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    } catch (NullPointerException e) {
+                        System.out.println(e);
+                    }
                 }
             }
 
@@ -355,14 +359,23 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized Sensordata");
                 } else {
                     Log.e("sHelper", "Failed to synchronize Sensordata, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    try{
+
+                        Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    } catch (NullPointerException e) {
+                        System.out.println(e);
+                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Sensordata, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                } catch(Exception e) {
+                    System.out.println(e);
+                }
             }
         });
     }
@@ -442,7 +455,11 @@ public class ServerHelper {
 
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            try {
+                Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            } catch(Exception e) {
+                System.out.println(e);
+            }
             return;
         }
 

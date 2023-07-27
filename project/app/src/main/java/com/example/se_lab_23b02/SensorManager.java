@@ -10,13 +10,7 @@ import androidx.core.content.ContextCompat;
 public class SensorManager {
 
     public static void toggleService(Context context) {
-        boolean running = false;
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (SensorForegroundService.class.getName().equals(service.service.getClassName())) {
-                running = true;
-            }
-        }
+        boolean running = checkRunning(context);
         if(running)
             stopService(context);
         else
@@ -34,14 +28,22 @@ public class SensorManager {
         return false;
     }
     private static void startService(Context context) {
-        Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
+        try {
+            Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
         serviceIntent.putExtra("extras", "start");
         ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
     }
 
     private static void stopService(Context context) {
-        Toast.makeText(context, "recording ended", Toast.LENGTH_SHORT).show();
+        try {
+            Toast.makeText(context, "recording ended", Toast.LENGTH_SHORT).show();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
         serviceIntent.putExtra("extras", "stop");
         ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
