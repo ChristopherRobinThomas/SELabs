@@ -86,7 +86,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     private void tryOpenRandomIntervention() {
-        ensureInterventions();
+        dsHelper.ensureInterventions(HomeScreenActivity.this);
         try {
             Intent sourceIntent = getIntent();
             boolean doRandIntv = sourceIntent.getBooleanExtra("openRandomIntervention", false);
@@ -105,19 +105,6 @@ public class HomeScreenActivity extends AppCompatActivity {
                 setTitle(resources.getString(R.string.interventions_heading));
             }
         } catch (Exception ignored) {}
-    }
-
-    private void ensureInterventions() {
-        Vector<Vector<String>> emptyV = new Vector<Vector<String>>();
-        Vector<Vector<String>> tempV = new Vector<Vector<String>>();
-        try {
-            tempV = dsHelper.getSavedInterventions(HomeScreenActivity.this);
-        } catch (JSONException e) {}
-        if(tempV.equals(emptyV)) {
-            try {
-                dsHelper.saveInterventions(dsHelper.getSampleInterventions(), HomeScreenActivity.this);
-            } catch (JSONException e) {}
-        }
     }
 
     private void refreshResources() {
