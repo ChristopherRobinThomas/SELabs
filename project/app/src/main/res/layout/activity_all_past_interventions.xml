@@ -24,6 +24,7 @@
             android:paddingLeft="20dp">
 
             <TextView
+                android:id="@+id/tv_allInterventions_pastInterventions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Past Interventions"

@@ -75,33 +75,33 @@
 
         <Button
             android:id="@+id/btHealthIndex"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/bt_overview_health_index"
-            android:textSize="11sp"
+            android:background="@drawable/step_count_border"
             android:padding="10dp"
-            android:background="@drawable/step_count_border"/>
+            android:text="@string/bt_overview_health_index"
+            android:textSize="11sp" />
 
         <Button
             android:id="@+id/btIntervention"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/bt_overview_interventions_graph"
-            android:textSize="11sp"
+            android:background="@drawable/step_count_border"
             android:padding="10dp"
-            android:background="@drawable/step_count_border"/>
+            android:text="@string/bt_overview_interventions_graph"
+            android:textSize="11sp" />
 
         <Button
             android:id="@+id/btDistributionOfDailytasks"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/bt_overview_task_distribution"
-            android:textSize="11sp"
+            android:background="@drawable/step_count_border"
             android:padding="10dp"
-            android:background="@drawable/step_count_border"/>
+            android:text="@string/bt_overview_task_distribution"
+            android:textSize="11sp" />
     </LinearLayout>
 
     <EditText

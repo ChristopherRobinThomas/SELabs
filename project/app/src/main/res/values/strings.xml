@@ -21,6 +21,10 @@
     <string name="toast_little_being_happy">Larry is feeling really happy right now! </string>
     <string name="toast_daily_goal_achieved">You\'ve completed your daily goal. That makes Larry a bit happier! </string>
     <string name="toast_three_questionnaires_answered">You\'ve filled out 3 Questionnaires. That makes Larry a bit happier!</string>
+    <string name="tv_recent_interventions">your recent interventions</string>
+
+    <string name="Own_Recording">Own Recording</string>
+    <string name="Time">Time</string>
 
 
     <!-- Strings for the overview fragment-->
@@ -76,6 +80,14 @@
     <string name="tv_questionnaire_q1_1">In the last 24 hours I felt: Satisfied/Unsatisfied</string>
     <string name="et_questionnaire_additional_notes">additional notes...</string>
 
+    <!-- single recording activity -->
+    <string name="x_values">x-values</string>
+    <string name="y_values">y-values</string>
+    <string name="z_values">z-values</string>
+    <string name="distance">distance</string>
+    <string name="steps">steps</string>
+    <string name="no_distance">no GPS data was available during recording</string>
+    <string name="no_steps">no steps were recorded</string>
 
     <!-- overview fragment -->
     <string name="bt_overview_health_index">Mental health score</string>

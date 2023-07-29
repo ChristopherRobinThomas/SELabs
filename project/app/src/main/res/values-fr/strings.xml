@@ -6,7 +6,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Strings for the home fragment-->
-    <string name="home_heading">Maison</string>
+    <string name="home_heading">Home</string>
     <string name="tv_home_title">écran d\'accueil</string>
     <string name="bt_home_questionnaire">questionnaire</string>
     <string name="bt_home_daily_goal">choisir un \n objectif quotidien</string>
@@ -21,6 +21,19 @@
     <string name="toast_little_being_happy">Larry se sent vraiment heureux en ce moment! </string>
     <string name="toast_daily_goal_achieved">Vous avez atteint votre objectif quotidien. Cela rend Larry un peu plus heureux! </string>
     <string name="toast_three_questionnaires_answered">Vous avez rempli trois questionnaires. Cela rend Larry un peu plus heureux!</string>
+    <string name="tv_recent_interventions">vos interventions récentes</string>
+
+    <string name="Own_Recording">enregistrement individuel</string>
+    <string name="Time">temps</string>
+
+    <!-- single recording activity -->
+    <string name="x_values">x-valeur</string>
+    <string name="y_values">y-valeur</string>
+    <string name="z_values">z-valeur</string>
+    <string name="distance">distance</string>
+    <string name="steps">pas</string>
+    <string name="no_distance">aucune donnée GPS n\'était disponible pendant l\'enregistrement</string>
+    <string name="no_steps">aucune étape n\'a été enregistrée</string>
 
 
     <!-- Strings for the overview fragment-->

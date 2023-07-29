@@ -48,6 +48,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         binding.bottomNavigation.setSelectedItemId(R.id.home);
         refreshResources();
+        setTitle(resources.getString(R.string.home_heading));
         dsHelper = DataSavingHelper.getInstance();
         binding.bottomNavigation.setOnItemSelectedListener(item ->
         {
@@ -57,18 +58,22 @@ public class HomeScreenActivity extends AppCompatActivity {
             {
                 case R.id.home:
                     item.setTitle(resources.getString(R.string.home_heading));
+                    setTitle(resources.getString(R.string.home_heading));
                     replaceFragment(new HomeFragment());
                     break;
                 case R.id.settings:
                     item.setTitle(resources.getString(R.string.settings_heading));
+                    setTitle(resources.getString(R.string.settings_heading));
                     replaceFragment(new SettingsFragment());
                     break;
                 case R.id.data:
                     item.setTitle(resources.getString(R.string.overview_navigation_bar));
+                    setTitle(resources.getString(R.string.overview_navigation_bar));
                     replaceFragment(new OverviewFragment());
                     break;
                 case R.id.interventions:
                     item.setTitle(resources.getString(R.string.interventions_heading));
+                    setTitle(resources.getString(R.string.interventions_heading));
                     replaceFragment(new InterventionsFragment());
                     break;
             }
