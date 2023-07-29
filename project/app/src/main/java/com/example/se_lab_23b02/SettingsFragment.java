@@ -378,6 +378,16 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        Button btTutorial = view.findViewById(R.id.btSettingsTutorial);
+        btTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), TutorialActivity.class);
+                startActivity(myIntent);
+                getActivity().finish();
+            }
+        });
+
         return view;
     }
 
