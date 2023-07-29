@@ -260,11 +260,15 @@ public class SettingsFragment extends Fragment {
         });
 
         switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b) {
                     if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+                    }
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 0);
                     }
 
                 }
@@ -443,7 +447,15 @@ public class SettingsFragment extends Fragment {
     private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS) {
         swStep.setChecked(dsHelper.getSpecificSettingsFromSharedPref("StepCounterAllowed", context).equals("true"));
         swAcc.setChecked(dsHelper.getSpecificSettingsFromSharedPref("AccelAllowed", context).equals("true"));
-        swGPS.setChecked(dsHelper.getSpecificSettingsFromSharedPref("GPSAllowed", context).equals("true"));
+        boolean gps = true;
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            gps = false;
+        }
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            gps = false;
+        }
+        swGPS.setChecked(gps);
+        dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(gps), context);
 
     }
 
