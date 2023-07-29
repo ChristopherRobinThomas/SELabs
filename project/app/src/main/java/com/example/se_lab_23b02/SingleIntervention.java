@@ -96,11 +96,11 @@ public class SingleIntervention extends Fragment {
 
     void startDoingIntervention() {
         completeButton.setText("Complete!");
-        SensorManager.toggleService(getActivity());
         interventionStartTime = TimeStamp.getCurrentTimeStamp();
+        SensorManager.toggleService(getActivity(), interventionStartTime);
 
         completeButton.setOnClickListener(v -> {
-            SensorManager.toggleService(getActivity());
+            SensorManager.toggleService(getActivity(), interventionStartTime);
             hasCompletedIntervention = true;
             saveInterventionCompleted();
             getActivity().getSupportFragmentManager().beginTransaction()

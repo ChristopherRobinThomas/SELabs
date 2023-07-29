@@ -37,7 +37,7 @@ public class SensorManagerTest {
     @Test
     public void testCheckToggling() throws InterruptedException {
         boolean result = !checkRunning();
-        SensorManager.toggleService(context);
+        SensorManager.toggleService(context, "");
         TimeUnit.SECONDS.sleep(1);
         assertEquals(result, checkRunning());
     }
@@ -48,7 +48,7 @@ public class SensorManagerTest {
         assertEquals(running, SensorManager.checkRunning(context));
 
         running = !running;
-        SensorManager.toggleService(context);
+        SensorManager.toggleService(context, "");
         assertEquals(running, SensorManager.checkRunning(context));
 
     }

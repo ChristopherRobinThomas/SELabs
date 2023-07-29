@@ -58,7 +58,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
     public int onStartCommand(Intent intent, int flags, int startId) {
         String input = intent.getStringExtra("extras");
         if (input.equals("start")) {
-            timestamp = TimeStamp.getCurrentTimeStamp();
+            timestamp = intent.getStringExtra("timestamp");
             createNotificationChannel();
             Intent notificationIntent = new Intent(this, HomeScreenActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this,
