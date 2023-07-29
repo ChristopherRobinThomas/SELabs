@@ -32,8 +32,12 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -614,7 +618,10 @@ public class SettingsFragment extends Fragment {
                 int hour = Integer.parseInt(values[i].split(",")[0].split(":")[1].replace(":",""));
                 int min = Integer.parseInt(values[i].split(",")[1].split(":")[1].replace(":",""));
 
-                btn.setText(String.valueOf(hour)+":"+String.valueOf(min));
+                DateFormat format = new SimpleDateFormat("HH:mm");
+                Date date = new Date(0, 0, 0, hour, min, 0);
+                String formatted = format.format(date);
+                btn.setText(formatted);
             }
         }
     }
