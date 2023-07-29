@@ -9,12 +9,12 @@ import androidx.core.content.ContextCompat;
 
 public class SensorManager {
 
-    public static void toggleService(Context context) {
+    public static void toggleService(Context context, String timestamp) {
         boolean running = checkRunning(context);
         if(running)
             stopService(context);
         else
-            startService(context);
+            startService(context, timestamp);
 
     }
 
@@ -27,7 +27,7 @@ public class SensorManager {
         }
         return false;
     }
-    private static void startService(Context context) {
+    private static void startService(Context context, String timestamp) {
         try {
             Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
@@ -35,6 +35,7 @@ public class SensorManager {
         }
         Intent serviceIntent = new Intent(context, SensorForegroundService.class);
         serviceIntent.putExtra("extras", "start");
+        serviceIntent.putExtra("timestamp", timestamp);
         ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
     }
 

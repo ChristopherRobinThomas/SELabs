@@ -139,7 +139,8 @@ public class InterventionsFragment extends Fragment {
         btStartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SensorManager.toggleService(getActivity());
+                String timestamp = TimeStamp.getCurrentTimeStamp();
+                SensorManager.toggleService(getActivity(), timestamp);
             }
         });
         return view;
