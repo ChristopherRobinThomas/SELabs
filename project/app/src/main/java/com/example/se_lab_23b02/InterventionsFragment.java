@@ -175,6 +175,9 @@ public class InterventionsFragment extends Fragment {
 
         try {
             dsHelper.saveInterventions(interventionList,getActivity().getApplicationContext());
+            ServerHelper serverHelper = ServerHelper.getInstance();
+            serverHelper.setActivity(getActivity());
+            serverHelper.synchronize(getContext());
         } catch (JSONException ignored) {}
 
         getActivity()
