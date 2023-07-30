@@ -178,7 +178,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
      */
     private boolean shouldDoInterventionAlgorithm(String questResult) {
         Random r = new Random();
-        boolean rand = r.nextInt(100) > 50;
+        //boolean rand = r.nextInt(100) > 50;
+        boolean rand = true;
         boolean calc = (calculateAffectiveWellbeingScore(questResult) <= 50);
         return rand && calc;
     }
