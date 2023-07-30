@@ -83,12 +83,6 @@ public class ServerHelper {
         return context.getResources();
     }
 
-    /**
-     * Checks if an Internet Connection is available
-     *
-     * @param context needs Context to get ConnectivityManager
-     * @return 1 if ConnectionType is WIFI, 2 if ConnectionType is Mobile, -1 if no Connection is available
-     */
     public static int checkInternetAvailability(Context context) {
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {

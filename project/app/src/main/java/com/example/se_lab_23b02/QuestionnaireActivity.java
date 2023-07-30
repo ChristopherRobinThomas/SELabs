@@ -170,12 +170,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         elementsForLanguageChange.add(findViewById(R.id.Send_Button));
         elementsForLanguageChange.add(findViewById(R.id.tvQuestionnaireAdditionalNotes));
     }
-
-
-    /**
-     * This highly complex Algorithm based on many parameters can be substituted by the researchers at any time.
-     * @return Whether the Questionnaire indicates that an Intervention should be triggered.
-     */
     private boolean shouldDoInterventionAlgorithm(String questResult) {
         Random r = new Random();
         //boolean rand = r.nextInt(100) > 50;
