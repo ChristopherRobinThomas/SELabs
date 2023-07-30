@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.content.Context;
@@ -21,6 +27,8 @@ import android.widget.VideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import static android.content.Intent.getIntent;
 
@@ -70,13 +78,13 @@ public class SingleIntervention extends Fragment {
         interventionDesc = view.findViewById(R.id.textView4);
         bar = (RatingBar) view.findViewById(R.id.ratingBar);
         constraintLayout = view.findViewById(R.id.singleInterventionFragment);
-        // TODO: Video
         completeButton = view.findViewById(R.id.buttonComplete);
         completeButton.setOnClickListener(v -> {
             startDoingIntervention();
         });
         interventionName.setText(pInterventionName);
         interventionDesc.setText(pInterventionDesc);
+        chooseAndLoadVideo();
         setColorTheme();
 
 
@@ -84,13 +92,39 @@ public class SingleIntervention extends Fragment {
     }
 
     void chooseAndLoadVideo() {
-        if(pInterventionName == "Cobra") {
+        if(Objects.equals(pInterventionName, "Cobra")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.cobra));
             vv.setVisibility(View.VISIBLE);
         }
-        else if (pInterventionName == "Rueckenentspannung"){
-
+        else if(Objects.equals(pInterventionName, "Rueckenentspannung")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.rueckenentspannung));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "LaterallinienA")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise1_1));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "LaterallinienB")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise_2_1));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "Seitliche Beinrolle")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.seitliche_beinrolle));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "Windmuehle")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.windmuehle));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else {
+            iv.setVisibility(View.VISIBLE);
+            vv.setVisibility(View.INVISIBLE);
         }
     }
 

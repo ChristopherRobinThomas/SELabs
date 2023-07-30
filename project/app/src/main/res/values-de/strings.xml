@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">Hauptaktivität</string>
@@ -6,14 +12,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Strings for the home fragment-->
-    <string name="home_heading">Heimat</string>
+    <string name="home_heading">Home</string>
     <string name="tv_home_title">Schaltzentrale</string>
     <string name="bt_home_questionnaire">Fragebogen</string>
     <string name="bt_home_daily_goal">Tagesziel \n auswählen</string>
     <string name="bt_home_goal_complete">Ziel erreicht</string>
     <string name="bt_home_all_past_activities">Zeige alle gemachten Interventionen</string>
     <string name="tv_home_goal_status_achieved">Tagesziel erreicht!</string>
-    <string name="tv_home_goal_status_not_achieved">Dein Tagesziel: \n </string>
+    <string name="tv_home_goal_status_not_achieved">Dein Tagesziel: \n</string>
     <string name="tv_home_goal_status_not_picked">Wähle ein Tagesziel aus! </string>
     <string name="tv_home_step_count">Heutige Schrittzahl: \u0020 </string>
     <string name="toast_little_being_sad">Larry ist im Moment traurig. Das ist in Ordnung! </string>
@@ -21,8 +27,19 @@
     <string name="toast_little_being_happy">Larry ist im Moment sehr glücklich! </string>
     <string name="toast_daily_goal_achieved">Du hast dein Tagesziel erreicht. Das macht Larry ein bisschen glücklicher! </string>
     <string name="toast_three_questionnaires_answered">Du hast heute drei Fragebögen ausgefüllt. Das macht Larry ein bisschen glücklicher!</string>
+    <string name="tv_recent_interventions">Deine letzten Aktivitäten</string>
 
+    <string name="Own_Recording">individuelle Aufnahme</string>
+    <string name="Time">Uhrzeit</string>
 
+    <!-- single recording activity -->
+    <string name="x_values">x-Werte</string>
+    <string name="y_values">y-Werte</string>
+    <string name="z_values">z-Werte</string>
+    <string name="distance">Distanz</string>
+    <string name="steps">Schritte</string>
+    <string name="no_distance">GPS war während der Aufnahme nicht verfügbar</string>
+    <string name="no_steps">Schritte konnten nicht aufgenommen werden</string>
 
 
     <!-- Strings for the overview fragment-->
@@ -81,6 +98,7 @@
     <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
     <string name="tv_overview_no_data">keine Daten verfügbar</string>
     <string name="bt_settings_logout">ausloggen</string>
+    <string name="bt_settings_logout_completly"> Von dem Gerät ausloggen</string>
 
 
     <string-array name="languages">
@@ -120,4 +138,23 @@
     <string name="timepicker_submit">Bestätigen</string>
     <string name="timepicker_preferred_choice">Wähle deine bevorzugte Uhrzeit</string>
     <string name="timepicker_selected">Gewählt:\u0020</string>
+    <string name="Choose_your_Account">Wähle deinen Account aus</string>
+    <string name="password">Passwort</string>
+    <string name="login">Einloggen</string>
+    <string name="back">Zurück</string>
+    <string name="add_user">neues Profil</string>
+    <string name="CreateNewUser_Headline">erstelle einen Account</string>
+    <string name="CreateNewUser_UsernameTextView">Benutzernamen angeben</string>
+    <string name="CreateNewUser_PasswordTextView">Passwort angeben</string>
+    <string name="MultiUser_termsOfService">Nutzungbedingungen</string>
+    <string name="username">Benutzername</string>
+    <string name="no_internet">kein Internet verfügbar</string>
+    <string name="sync_failed">Synchronisierung fehlgeschlagen</string>
+    <string name="login_failure">Etwas ist fehlgeschlagen. Nochmal versuchen</string>
+    <string name="login_success">erfolgreich eingeloggt</string>
+    <string name="login_wrong_password">Benutzername und Passwort stimmen nicht überein oder Sie haben noch kein Konto</string>
+    <string name="rec_start">Aufnahme gestartet</string>
+    <string name="rec_stopped">Aufnahme beendet</string>
+    <string name="del_all_data">Alle Daten erfolgreich gelöscht</string>
+    <string name="date_format">dd.MM.YYYY</string>
 </resources>

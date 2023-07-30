@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">activité principal</string>
@@ -6,7 +12,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Strings for the home fragment-->
-    <string name="home_heading">Maison</string>
+    <string name="home_heading">Home</string>
     <string name="tv_home_title">écran d\'accueil</string>
     <string name="bt_home_questionnaire">questionnaire</string>
     <string name="bt_home_daily_goal">choisir un \n objectif quotidien</string>
@@ -21,6 +27,19 @@
     <string name="toast_little_being_happy">Larry se sent vraiment heureux en ce moment! </string>
     <string name="toast_daily_goal_achieved">Vous avez atteint votre objectif quotidien. Cela rend Larry un peu plus heureux! </string>
     <string name="toast_three_questionnaires_answered">Vous avez rempli trois questionnaires. Cela rend Larry un peu plus heureux!</string>
+    <string name="tv_recent_interventions">vos interventions récentes</string>
+
+    <string name="Own_Recording">enregistrement individuel</string>
+    <string name="Time">temps</string>
+
+    <!-- single recording activity -->
+    <string name="x_values">x-valeur</string>
+    <string name="y_values">y-valeur</string>
+    <string name="z_values">z-valeur</string>
+    <string name="distance">distance</string>
+    <string name="steps">pas</string>
+    <string name="no_distance">aucune donnée GPS n\'était disponible pendant l\'enregistrement</string>
+    <string name="no_steps">aucune étape n\'a été enregistrée</string>
 
 
     <!-- Strings for the overview fragment-->
@@ -77,7 +96,7 @@
     <string name="bt_overview_task_distribution">Répartition des tâches quotidiennes</string>
     <string name="tv_overview_no_data">pas de données disponibles</string>
     <string name="bt_settings_logout">déconnecter</string>
-
+    <string name="bt_settings_logout_completly"> Se déconnecter de cet appareil </string>
 
     <string-array name="languages">
         <item>english</item>
@@ -116,4 +135,23 @@
     <string name="timepicker_submit">Soumettre</string>
     <string name="timepicker_preferred_choice">Sélectionnez votre heure préférée</string>
     <string name="timepicker_selected">Choisi:\u0020 </string>
+    <string name="Choose_your_Account">Choisissez votre compte</string>
+    <string name="password">mot de passe</string>
+    <string name="login">connexion</string>
+    <string name="back">retour</string>
+    <string name="add_user">nouveau profil</string>
+    <string name="CreateNewUser_Headline">créer un compte</string>
+    <string name="CreateNewUser_UsernameTextView">entrer le nom d\'utilisateur</string>
+    <string name="CreateNewUser_PasswordTextView">entrer le mot de passe</string>
+    <string name="MultiUser_termsOfService">Conditions d\'utilisation</string>
+    <string name="username">"nom d'utilisateur "</string>
+    <string name="no_internet">pas d\'internet disponible</string>
+    <string name="sync_failed">la synchronisation a échoué</string>
+    <string name="login_failure">"Quelque chose s'est mal passé. Essayer à nouveau "</string>
+    <string name="login_success">connecté avec succès</string>
+    <string name="login_wrong_password">Le nom d\'utilisateur et le mot de passe ne correspondent pas ou vous n\'avez pas encore de compte</string>
+    <string name="rec_start">l\'enregistrement a commencé</string>
+    <string name="rec_stopped">enregistrement terminé</string>
+    <string name="del_all_data">toutes les données ont été supprimées avec succès</string>
+    <string name="date_format">dd.MM.YYYY</string>
 </resources>

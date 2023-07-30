@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +42,7 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
 
     private TextView txtViewInterventions;
 
+    private Resources resources;
 
     //------Objects-----------
     private DataSavingHelper dsHelper;
@@ -49,6 +57,7 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all_past_interventions);
         linearLayout = findViewById(R.id.linearLayoutAllPastInterventions);
         constraintLayout = findViewById(R.id.allPastInterventionConstraintLayout);
+        refreshResources();
 
         getPastInterventions();
         txtViewDate = new TextView(this);
@@ -57,6 +66,27 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         linearLayout.addView(txtViewDate);
 
         setColorTheme();
+        TextView textView = (TextView) findViewById(R.id.tv_allInterventions_pastInterventions);
+        textView.setText(resources.getString(R.string.tv_recent_interventions));
+
+    }
+
+    private void refreshResources() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        Context c = LocaleHelper.setLocale(getApplicationContext(), language_short);
+        resources = c.getResources();
 
     }
 
@@ -232,12 +262,12 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
         txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         if(type.equals("Recording")) {
 
-            txtViewInterventions.setText("Own Recording \n" + "Time: " + time[0] + ":" + time[1]);
+            txtViewInterventions.setText(resources.getString(R.string.Own_Recording) +  "\n" + resources.getString(R.string.Time) + ": " + time[0] + ":" + time[1]);
         }
         else
         {
             String name = interventionList.get(Integer.valueOf(id)).get(1);
-            txtViewInterventions.setText(name + "\nUhrzeit: " + time[0] + ":" + time[1]);
+            txtViewInterventions.setText(name + "\n" + resources.getString(R.string.Time) + ": " + time[0] + ":" + time[1]);
         }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);

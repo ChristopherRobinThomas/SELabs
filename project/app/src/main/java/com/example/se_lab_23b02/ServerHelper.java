@@ -1,7 +1,14 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -63,6 +70,18 @@ public class ServerHelper {
         return INSTANCE;
     }
 
+    private Resources getLanguageResources(Context pContext) {
+        String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", pContext);
+        String loc = "en";
+        if(language.equals("francais"))
+            loc = "fr";
+        if(language.equals("deutsch"))
+            loc = "de";
+
+        Context context = LocaleHelper.setLocale(pContext, loc);
+        return context.getResources();
+    }
+
     /**
      * Checks if an Internet Connection is available
      *
@@ -86,7 +105,8 @@ public class ServerHelper {
     public void synchronize(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -102,7 +122,8 @@ public class ServerHelper {
     public void synchronizeQuestionnaire(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -163,7 +184,8 @@ public class ServerHelper {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -171,7 +193,8 @@ public class ServerHelper {
     public void synchronizeDigitSpanTask(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -222,14 +245,16 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized DigitSpanTask");
                 } else {
                     Log.e("sHelper", "Failed to synchronize DigitSpanTask, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    Resources res = getLanguageResources(context);
+                    Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -237,7 +262,8 @@ public class ServerHelper {
     public void synchronizeDailyGoals(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -276,14 +302,16 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized DailyGoal");
                 } else {
                     Log.e("sHelper", "Failed to synchronize DailyGoal, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    Resources res = getLanguageResources(context);
+                    Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -291,7 +319,8 @@ public class ServerHelper {
     public void synchronizeSensorreadings(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -362,8 +391,8 @@ public class ServerHelper {
                 } else {
                     Log.e("sHelper", "Failed to synchronize Sensordata, Response: " + response);
                     try {
-
-                        Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                        Resources res = getLanguageResources(context);
+                        Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                     } catch (NullPointerException e) {
                         System.out.println(e);
                     }
@@ -374,7 +403,8 @@ public class ServerHelper {
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Sensordata, Throwable: " + t);
                 try {
-                    Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                    Resources res = getLanguageResources(context);
+                    Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -385,7 +415,8 @@ public class ServerHelper {
     public void synchronizeDoneInterventions(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -433,14 +464,16 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized completedInterventions");
                 } else {
                     Log.e("sHelper", "Failed to synchronize completedInterventions, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    Resources res = getLanguageResources(context);
+                    Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -448,7 +481,8 @@ public class ServerHelper {
     public void synchronizeInterventions(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -477,14 +511,16 @@ public class ServerHelper {
                     Log.i("sHelper", "Successfully synchronized interventions");
                 } else {
                     Log.e("sHelper", "Failed to synchronize interventions, Response: " + response);
-                    Toast.makeText(activity, "Synchronization failed", Toast.LENGTH_LONG).show();
+                    Resources res = getLanguageResources(context);
+                    Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - Q, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.sync_failed), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -502,7 +538,8 @@ public class ServerHelper {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
             try {
-                Toast.makeText(activity, "No Internet connection available", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -521,20 +558,22 @@ public class ServerHelper {
                         String array = response.body().string();
                         JSONArray jarray = new JSONArray(array);
                         String result = jarray.getString(0);
+                        Resources ress = getLanguageResources(context);
 
                         switch (result) {
                             case "-1":
-                                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, ress.getString(R.string.login_failure), Toast.LENGTH_LONG).show();
                                 Log.e("sHelper", "Tried to create User - failed: No UUID could be created. SQL Error:" + jarray.get(1));
                                 context.startActivity(new Intent(context, failedClass));
                                 break;
                             case "-3":
-                                Toast.makeText(activity, "Username and password do not match or you do not have an account yet", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, ress.getString(R.string.login_wrong_password), Toast.LENGTH_LONG).show();
                                 Log.e("sHelper", "Tried to create User - failed: Username already in use or Username and Password are not matching");
                                 context.startActivity(new Intent(context, failedClass));
                                 break;
                             default:
-                                Toast.makeText(activity, "Successfully logged in User", Toast.LENGTH_LONG).show();
+
+                                Toast.makeText(activity, ress.getString(R.string.login_success), Toast.LENGTH_LONG).show();
                                 Log.i("sHelper", "Successfully created new User");
                                 DataSavingHelper ds = DataSavingHelper.getInstance();
                                 String res = result;
@@ -587,7 +626,8 @@ public class ServerHelper {
     public void deleteEverything(Context context) throws JSONException {
         if (checkInternetAvailability(context) < 0) {
             Log.i("sHelper", "Checked for Internet, no Internet available");
-            Toast.makeText(activity, "No Internet connection", Toast.LENGTH_LONG).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -598,11 +638,11 @@ public class ServerHelper {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.i("sHelper", "Successfully deleted all Data");
-                    Toast.makeText(activity, "Successfully deleted all Data online", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(activity, "Successfully deleted all Data online", Toast.LENGTH_LONG).show();
 
                 } else {
                     Log.i("sHelper", "Failed to delete all Data, Response: " + response);
-                    Toast.makeText(activity, "Failed to get delete all Data", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(activity, "Failed to get delete all Data", Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -610,7 +650,8 @@ public class ServerHelper {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("sHelper", "Failed to execute Call - deleteAllData, Throwable: " + t);
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show();
+                Resources res = getLanguageResources(context);
+                Toast.makeText(activity, res.getString(R.string.no_internet), Toast.LENGTH_LONG).show();
 
             }
         });

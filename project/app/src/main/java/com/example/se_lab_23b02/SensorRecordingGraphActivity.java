@@ -3,6 +3,7 @@ package com.example.se_lab_23b02;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class SensorRecordingGraphActivity extends Activity {
     private CheckBox checkY;
     private CheckBox checkZ;
 
+    private Context context;
+
     private DataSavingHelper dsHelper;
     private DataAccessHelper daHelper;
     private boolean xChecked = true;
@@ -61,6 +64,7 @@ public class SensorRecordingGraphActivity extends Activity {
         xyPlot.getGraph().setGridBackgroundPaint(whiteColor);
         constraintLayout = findViewById(R.id.activity_sensor_recording);
         setColorTheme();
+        setLanguage();
 
 
         Paint transparentColor = new Paint();
@@ -121,27 +125,61 @@ public class SensorRecordingGraphActivity extends Activity {
         TextView tvStepCounter = (TextView) findViewById(R.id.tvStepCounterDisplay);
         try {
             int steps = daHelper.getStepCountFromRecording(timestamp, getApplicationContext());
-            if(steps != -1)
-                tvStepCounter.setText("steps: " + steps);
-            else
-                tvStepCounter.setText("no steps were recorded");
+            if(steps != -1) {
+                tvStepCounter.setText(context.getResources().getString(R.string.steps) + ": " + steps);
+            }
+            else {
+                tvStepCounter.setText(context.getResources().getString(R.string.no_steps));
+            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        
+
         TextView tvDistance = (TextView) findViewById(R.id.tvWalkedDistance);
         try {
             float distance = daHelper.getWalkedDistanceFromRecording(timestamp, getApplicationContext());
-            if(distance != -1)
-                tvDistance.setText("distance: " + distance + " m");
-            else
-                tvDistance.setText("no GPS data was available during recording");
+            if(distance != -1) {
+                tvDistance.setText(context.getResources().getString(R.string.distance) + ": " + distance + " m");
+            }
+            else {
+                super.onCreate(savedInstanceState);
+                tvDistance.setText(context.getResources().getString(R.string.no_distance));
+            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
         getValues(timestamp);
         plotting();
+
+
+    }
+
+    private void setLanguage() {
+
+        String language = DataSavingHelper.getInstance().getSelectedLanguage(getApplicationContext());
+
+        String language_short = "en";
+
+        switch(language) {
+            case "francais":
+                language_short = "fr";
+                break;
+            case "deutsch":
+                language_short = "de";
+                break;
+        }
+        context = LocaleHelper.setLocale(getApplicationContext(), language_short);
+        Resources res = context.getResources();
+        CheckBox tvX = (CheckBox) findViewById(R.id.cbX);
+        tvX.setText(res.getString(R.string.x_values));
+        CheckBox tvY = (CheckBox) findViewById(R.id.cbY);
+        tvY.setText(res.getString(R.string.y_values));
+        CheckBox tvZ = (CheckBox) findViewById(R.id.cbZ);
+        tvZ.setText(res.getString(R.string.z_values));
+
+
+
     }
 
     private void getValues(String timestamp) {

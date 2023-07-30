@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.Manifest;
@@ -16,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +39,12 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +74,7 @@ public class SettingsFragment extends Fragment {
     private Button btnNotifNoon;
     private Button btnNotifEvening;
     private Button btLogout;
+    private Button btLogoutFromDevice;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -146,6 +158,7 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.tvSettingsEvening));
         textViews.add(view.findViewById(R.id.btDeleteData));
         textViews.add(view.findViewById(R.id.btSettingsLogout));
+        textViews.add(view.findViewById(R.id.btSettingsLogoutCompletly));
 
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -159,6 +172,7 @@ public class SettingsFragment extends Fragment {
         btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
         btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
+        btLogoutFromDevice = (Button) view.findViewById((R.id.btSettingsLogoutCompletly));
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -256,11 +270,15 @@ public class SettingsFragment extends Fragment {
         });
 
         switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b) {
                     if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+                    }
+                    if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 0);
                     }
 
                 }
@@ -345,14 +363,20 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 cancelAlarms();
-                deleteLocalFiles();
+                UserHelper uh = UserHelper.getInstance();
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS);
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
-                Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getContext(), resources.getString(R.string.del_all_data), Toast.LENGTH_SHORT).show();
 
                 //try to delete Online Data
                 ServerHelper sHelper = ServerHelper.getInstance();
@@ -378,6 +402,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
         Button btTutorial = view.findViewById(R.id.btSettingsTutorial);
         btTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,6 +410,22 @@ public class SettingsFragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), TutorialActivity.class);
                 startActivity(myIntent);
                 getActivity().finish();
+
+        btLogoutFromDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelAlarms();
+                UserHelper uh = UserHelper.getInstance();
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+
+                saveDefaultValuesInSettings();
+                refreshSettings();
+                Intent i = new Intent(getActivity(),MultiUserActivity.class);
+                startActivity(i);
+
             }
         });
 
@@ -449,7 +490,15 @@ public class SettingsFragment extends Fragment {
     private void setupCheckboxValues(Switch swAcc, Switch swStep, Switch swGPS) {
         swStep.setChecked(dsHelper.getSpecificSettingsFromSharedPref("StepCounterAllowed", context).equals("true"));
         swAcc.setChecked(dsHelper.getSpecificSettingsFromSharedPref("AccelAllowed", context).equals("true"));
-        swGPS.setChecked(dsHelper.getSpecificSettingsFromSharedPref("GPSAllowed", context).equals("true"));
+        boolean gps = true;
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            gps = false;
+        }
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            gps = false;
+        }
+        swGPS.setChecked(gps);
+        dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(gps), context);
 
     }
 
@@ -515,6 +564,8 @@ public class SettingsFragment extends Fragment {
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
         bt = (Button) textViews.get(12);
         bt.setText(resources.getText(R.string.bt_settings_logout));
+        bt = (Button) textViews.get(13);
+        bt.setText(resources.getText(R.string.bt_settings_logout_completly));
     }
 
     public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
@@ -589,6 +640,7 @@ public class SettingsFragment extends Fragment {
         btnNotifNoon.getBackground().setAlpha(ButtonTransparency);
         btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
         btLogout.getBackground().setAlpha(ButtonTransparency);
+        btLogoutFromDevice.getBackground().setAlpha(ButtonTransparency);
     }
 
     private void cancelAlarms()
@@ -624,7 +676,10 @@ public class SettingsFragment extends Fragment {
                 int hour = Integer.parseInt(values[i].split(",")[0].split(":")[1].replace(":",""));
                 int min = Integer.parseInt(values[i].split(",")[1].split(":")[1].replace(":",""));
 
-                btn.setText(String.valueOf(hour)+":"+String.valueOf(min));
+                DateFormat format = new SimpleDateFormat("HH:mm");
+                Date date = new Date(0, 0, 0, hour, min, 0);
+                String formatted = format.format(date);
+                btn.setText(formatted);
             }
         }
     }

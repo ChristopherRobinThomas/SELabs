@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.content.Context;
@@ -6,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -14,6 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +99,34 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         constraintLayout = view.findViewById(R.id.multiUserCreateNewUserFragment);
         setColorTheme();
 
+        String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", getActivity().getApplicationContext());
+        String loc = "en";
+        if(language.equals("francais"))
+            loc = "fr";
+        if(language.equals("deutsch"))
+            loc = "de";
+
+        Context context = LocaleHelper.setLocale(getActivity().getApplicationContext(), loc);
+        Resources resources = context.getResources();
+        TextView tv = (TextView) view.findViewById(R.id.CreateNewUser_Headline);
+        tv.setText(resources.getString(R.string.CreateNewUser_Headline));
+        tv = (TextView) view.findViewById(R.id.CreateNewUser_UsernameTextView);
+        tv.setText(resources.getString(R.string.CreateNewUser_UsernameTextView));
+        tv = (TextView) view.findViewById(R.id.CreateNewUser_PasswordTextView);
+        tv.setText(resources.getString(R.string.CreateNewUser_PasswordTextView));
+        Button bt = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
+        bt.setText(resources.getString(R.string.MultiUser_termsOfService));
+        bt = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+        bt.setText(resources.getString(R.string.add_user));
+        bt = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        bt.setText(resources.getString(R.string.back));
+        TextInputEditText ti = (TextInputEditText) view.findViewById(R.id.CreateNewUser_UsernameTextField);
+        ti.setHint(resources.getString(R.string.username));
+        ti = (TextInputEditText) view.findViewById(R.id.CreateNewUser_PasswordTextField);
+        ti.setHint(resources.getString(R.string.password));
+
+
+
         view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,11 +193,13 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
         TOS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String tosText = "For our Terms of Service, refer to: https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0";
+                String tosText = "For our Terms of Service, refer to: " + "";
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Terms of Service");
+
                 final TextView tos = new TextView(getContext());
-                tos.setText(tosText);
+                tos.setText(Html.fromHtml(getActivity().getResources().getString(R.string.TOS_link)));
+                tos.setMovementMethod(LinkMovementMethod.getInstance());
                 builder.setView(tos);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

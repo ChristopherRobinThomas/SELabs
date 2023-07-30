@@ -1,8 +1,15 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import static android.content.Context.SENSOR_SERVICE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -186,6 +193,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         elementsForLanguageChange.add(view.findViewById(R.id.btHomeGoalComplete));
         elementsForLanguageChange.add(view.findViewById(R.id.SeeAllPastActivitiesButton));
         elementsForLanguageChange.add(view.findViewById(R.id.textViewStepCount));
+        elementsForLanguageChange.add(view.findViewById(R.id.tv_recent_interventions));
 
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensor_to_read = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -555,6 +563,8 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         bt.setText(resources.getString(R.string.bt_home_all_past_activities));
         tv = (TextView) elementsForLanguageChange.get(5);
         tv.setText(resources.getString(R.string.tv_home_step_count));
+        tv = (TextView) elementsForLanguageChange.get(6);
+        tv.setText(resources.getString(R.string.tv_recent_interventions));
 
     }
 
@@ -790,6 +800,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         linearLayout.addView(txtViewDate);
     }
 
+    @SuppressLint("SetTextI18n")
     private void addInterventionView(String id, String[] time, String date, String type)
     {
 
@@ -825,15 +836,18 @@ public class HomeFragment extends Fragment implements SensorEventListener {
 
         txtViewInterventions = new TextView(getActivity());
         txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+
         //If else with different Text
         if(type.equals("Recording")) {
 
-            txtViewInterventions.setText("Own Recording \n" + "Time: " + time[0] + ":" + time[1]);
+            txtViewInterventions.setText(resources.getString(R.string.Own_Recording) +  "\n" + resources.getString(R.string.Time) + ": " + time[0] + ":" + time[1]);
         }
         else
         {
             String name = interventionList.get(Integer.valueOf(id)).get(1);
-            txtViewInterventions.setText(name + "\nUhrzeit: " + time[0] + ":" + time[1]);
+            txtViewInterventions.setText(name + "\n" + resources.getString(R.string.Time) + time[0] + ":" + time[1]);
         }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);

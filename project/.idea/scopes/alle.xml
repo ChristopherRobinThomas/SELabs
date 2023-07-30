@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="alle" pattern="src[SE-Lab-23B02*]:*..*" />
+</component>

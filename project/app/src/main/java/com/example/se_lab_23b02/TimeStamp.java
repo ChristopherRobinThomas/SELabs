@@ -1,13 +1,23 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.content.Context;
 
 import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class TimeStamp {
@@ -173,6 +183,9 @@ public class TimeStamp {
 
     public static String getLocalTimeAsStringFromSeconds(int seconds) {
         LocalTime lt = getLocalTimeFromSeconds(seconds);
-        return lt.toString();
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date(0, 0, 0, lt.getHour(), lt.getMinute(), lt.getSecond());
+        String formatted = df.format(date);
+        return formatted;
     }
 }
