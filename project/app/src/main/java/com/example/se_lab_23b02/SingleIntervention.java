@@ -34,6 +34,8 @@ import java.util.Objects;
 
 import static android.content.Intent.getIntent;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class SingleIntervention extends Fragment {
 
     DataSavingHelper dsHelper;
@@ -89,6 +91,8 @@ public class SingleIntervention extends Fragment {
         interventionName.setText(name);
         String desc = DataSavingHelper.getInstance().getTranslationOfDesc(pInterventionName, getActivity().getApplicationContext());
         interventionDesc.setText(desc);
+        TextInputEditText ti = (TextInputEditText) view.findViewById(R.id.tvInterventionAdditionalNotes);
+        ti.setHint(SensorManager.getLanguageResources(getActivity().getApplicationContext()).getString(R.string.add_notes));
         chooseAndLoadVideo();
         setColorTheme();
 

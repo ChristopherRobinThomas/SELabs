@@ -191,6 +191,20 @@
     <string name="Burpies">Burpies</string>
     <string name="d_JJacks">Start with your arms next to your body and you legs together. Then move both arms above your head while you jump. When landing your legs should be apart. When jumping again, the arms go down again and the legs go together. Imaging your arms and legs are bound together with a string. Do this 15 times.</string>
     <string name="d_Burpies">We start standing upwards. Then we move down to the push up position. Perfom one push up and use the energy to jump wiht your legs between your arms. Now stand up and jump. After landing go down to the push up position again and repeat. Do 8 repetitions.</string>
+    <string name="add_notes">additional notes...</string>
+    <string name="partner">partner</string>
+    <string name="Family">family</string>
+    <string name="Friends">Friends</string>
+    <string name="Coworkers">Co-Workers</string>
+    <string name="Strangers">Strangers</string>
+    <string name="other">other</string>
+    <string name="at_home">at home</string>
+    <string name="school">School/University</string>
+    <string name="work">work</string>
+    <string name="Sport">sport</string>
+    <string name="other_rec">other recreational activity</string>
+    <string name="shopping">shopping</string>
+    <string name="visiting">visiting</string>
 
 
 </resources>

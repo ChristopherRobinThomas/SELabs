@@ -178,4 +178,18 @@
     <string name="Burpies">Burpees</string>
     <string name="d_JJacks">Beginnen Sie mit den Armen neben Ihrem Körper und den Beinen zusammen. Bewegen Sie dann beim Springen beide Arme über Ihren Kopf. Bei der Landung sollten Ihre Beine gespreizt sein. Beim erneuten Springen gehen die Arme wieder nach unten und die Beine gehen zusammen. Stellen Sie sich vor, Ihre Arme und Beine seien mit einer Schnur zusammengebunden. Tun Sie dies 15 Mal.</string>
     <string name="d_Burpies">Wir beginnen in aufrechter Position. Dann bewegen wir uns in die Liegestützposition. Mache einen Liegestütz und nutze den Schwung, um mit den Beinen zwischen die Arme zu springen. Jetzt steh auf und spring. Nach der Landung geht es wieder in die Liegestützposition und von vorne los. Mache 8 Wiederholungen.</string>
+    <string name="add_notes">zusätzliche Notizen...</string>
+    <string name="partner">Partner</string>
+    <string name="Family">Familie</string>
+    <string name="Friends">Freunde</string>
+    <string name="Coworkers">Mitarbeiter</string>
+    <string name="Strangers">Fremde</string>
+    <string name="other">Andere</string>
+    <string name="at_home">zu Hause</string>
+    <string name="school">Schule/Universität</string>
+    <string name="shopping">shoppen</string>
+    <string name="work">Arbeit</string>
+    <string name="Sport">Sport</string>
+    <string name="other_rec">andere kreative Aufgabe</string>
+    <string name="visiting">besuchen</string>
 </resources>
