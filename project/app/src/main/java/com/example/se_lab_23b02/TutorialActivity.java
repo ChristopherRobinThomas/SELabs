@@ -46,7 +46,7 @@ public class TutorialActivity extends Activity {
         });
 
         VideoView videoView = (VideoView) findViewById(R.id.vvTutorial);
-        videoView.setVideoURI(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.cobra));
+        videoView.setVideoURI(Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.selab));
         videoView.start();
     }
     @Override
