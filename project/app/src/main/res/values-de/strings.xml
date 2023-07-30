@@ -19,7 +19,7 @@
     <string name="bt_home_goal_complete">Ziel erreicht</string>
     <string name="bt_home_all_past_activities">Zeige alle gemachten Interventionen</string>
     <string name="tv_home_goal_status_achieved">Tagesziel erreicht!</string>
-    <string name="tv_home_goal_status_not_achieved">Dein Tagesziel: \n </string>
+    <string name="tv_home_goal_status_not_achieved">Dein Tagesziel: \n</string>
     <string name="tv_home_goal_status_not_picked">Wähle ein Tagesziel aus! </string>
     <string name="tv_home_step_count">Heutige Schrittzahl: \u0020 </string>
     <string name="toast_little_being_sad">Larry ist im Moment traurig. Das ist in Ordnung! </string>
@@ -154,4 +154,5 @@
     <string name="rec_start">Aufnahme gestartet</string>
     <string name="rec_stopped">Aufnahme beendet</string>
     <string name="del_all_data">Alle Daten erfolgreich gelöscht</string>
+    <string name="date_format">dd.MM.YYYY</string>
 </resources>

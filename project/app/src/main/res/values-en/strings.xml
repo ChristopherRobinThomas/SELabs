@@ -150,4 +150,5 @@
     <string name="rec_start">recording started</string>
     <string name="rec_stopped">recording ended</string>
     <string name="del_all_data">All data were deleted successfully</string>
+    <string name="date_format">YYYY-MM-dd</string>
 </resources>

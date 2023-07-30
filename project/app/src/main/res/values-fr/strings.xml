@@ -152,4 +152,5 @@
     <string name="rec_start">l\'enregistrement a commencé</string>
     <string name="rec_stopped">enregistrement terminé</string>
     <string name="del_all_data">toutes les données ont été supprimées avec succès</string>
+    <string name="date_format">dd.MM.YYYY</string>
 </resources>
