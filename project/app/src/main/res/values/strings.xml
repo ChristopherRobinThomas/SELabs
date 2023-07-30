@@ -159,6 +159,14 @@
     <string name="CreateNewUser_PasswordTextView">Enter password</string>
     <string name="MultiUser_termsOfService">Terms of Service</string>
     <string name="username">username</string>
+    <string name="no_internet">No internet connection available</string>
+    <string name="sync_failed">Synchronization failed</string>
+    <string name="login_failure">Something went wrong. Try again.</string>
+    <string name="login_success">Successfully logged in User</string>
+    <string name="login_wrong_password">Username and password do not match or you do not have an account yet</string>
+    <string name="rec_start">recording started</string>
+    <string name="rec_stopped">recording ended</string>
+    <string name="del_all_data">All data were deleted successfully</string>
 
 
 </resources>

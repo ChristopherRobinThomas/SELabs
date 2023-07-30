@@ -144,4 +144,12 @@
     <string name="CreateNewUser_PasswordTextView">entrer le mot de passe</string>
     <string name="MultiUser_termsOfService">Conditions d\'utilisation</string>
     <string name="username">"nom d'utilisateur "</string>
+    <string name="no_internet">pas d\'internet disponible</string>
+    <string name="sync_failed">la synchronisation a échoué</string>
+    <string name="login_failure">"Quelque chose s'est mal passé. Essayer à nouveau "</string>
+    <string name="login_success">connecté avec succès</string>
+    <string name="login_wrong_password">Le nom d\'utilisateur et le mot de passe ne correspondent pas ou vous n\'avez pas encore de compte</string>
+    <string name="rec_start">l\'enregistrement a commencé</string>
+    <string name="rec_stopped">enregistrement terminé</string>
+    <string name="del_all_data">toutes les données ont été supprimées avec succès</string>
 </resources>

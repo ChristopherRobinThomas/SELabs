@@ -9,6 +9,7 @@ package com.example.se_lab_23b02;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -24,6 +25,18 @@ public class SensorManager {
 
     }
 
+    private static Resources getLanguageResources(Context pContext) {
+        String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", pContext);
+        String loc = "en";
+        if(language.equals("francais"))
+            loc = "fr";
+        if(language.equals("deutsch"))
+            loc = "de";
+
+        Context context = LocaleHelper.setLocale(pContext, loc);
+        return context.getResources();
+    }
+
     public static boolean checkRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -35,7 +48,8 @@ public class SensorManager {
     }
     private static void startService(Context context, String timestamp) {
         try {
-            Toast.makeText(context, "recording started", Toast.LENGTH_SHORT).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(context, res.getString(R.string.rec_start), Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -47,7 +61,8 @@ public class SensorManager {
 
     private static void stopService(Context context) {
         try {
-            Toast.makeText(context, "recording ended", Toast.LENGTH_SHORT).show();
+            Resources res = getLanguageResources(context);
+            Toast.makeText(context, res.getString(R.string.rec_stopped), Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
