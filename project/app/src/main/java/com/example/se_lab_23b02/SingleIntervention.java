@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.json.JSONException;
@@ -153,18 +154,22 @@ public class SingleIntervention extends Fragment {
     }
 
     void startDoingIntervention() {
-        completeButton.setText("Complete!");
-        interventionStartTime = TimeStamp.getCurrentTimeStamp();
-        SensorManager.toggleService(getActivity(), interventionStartTime);
-
-        completeButton.setOnClickListener(v -> {
+        if(!SensorManager.checkRunning(getActivity().getApplicationContext())) {
+            completeButton.setText("Complete!");
+            interventionStartTime = TimeStamp.getCurrentTimeStamp();
             SensorManager.toggleService(getActivity(), interventionStartTime);
-            hasCompletedIntervention = true;
-            saveInterventionCompleted();
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(((ViewGroup)getView().getParent()).getId(), new InterventionsFragment(), "findThisFragment")
-                    .commit();
-        });
+
+            completeButton.setOnClickListener(v -> {
+                SensorManager.toggleService(getActivity(), interventionStartTime);
+                hasCompletedIntervention = true;
+                saveInterventionCompleted();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(((ViewGroup) getView().getParent()).getId(), new InterventionsFragment(), "findThisFragment")
+                        .commit();
+            });
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), SensorManager.getLanguageResources(getActivity().getApplicationContext()).getString(R.string.toast_stop_intervention), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void saveInterventionCompleted() {
