@@ -26,8 +26,11 @@ import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Vector;
 
 public class AllPastInterventionsActivity extends AppCompatActivity {
@@ -217,12 +220,14 @@ public class AllPastInterventionsActivity extends AppCompatActivity {
     }
 
 
-    private void addTextView(String date)
-    {
+    private void addTextView(String date) {
         txtViewDate = new TextView(this);
         txtViewDate.setTextSize(20);
         txtViewDate.setGravity(Gravity.CENTER);
-        txtViewDate.setText(date);
+        String[] dateSplitted = date.split("-");
+        Date tempDate = new Date(Integer.parseInt(dateSplitted[0])-1900, Integer.parseInt(dateSplitted[1])- 1, Integer.parseInt(dateSplitted[2]));
+        DateFormat df = new SimpleDateFormat(resources.getString(R.string.date_format));
+        txtViewDate.setText(df.format(tempDate));
         linearLayout.addView(txtViewDate);
     }
 
