@@ -75,6 +75,7 @@ public class SettingsFragment extends Fragment {
     private Button btnNotifEvening;
     private Button btLogout;
     private Button btLogoutFromDevice;
+    private Button btTutorial;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -173,6 +174,7 @@ public class SettingsFragment extends Fragment {
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
         btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
         btLogoutFromDevice = (Button) view.findViewById((R.id.btSettingsLogoutCompletly));
+        btTutorial = (Button) view.findViewById(R.id.btSettingsTutorial);
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -642,6 +644,8 @@ public class SettingsFragment extends Fragment {
         btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
         btLogout.getBackground().setAlpha(ButtonTransparency);
         btLogoutFromDevice.getBackground().setAlpha(ButtonTransparency);
+        btTutorial.getBackground().setAlpha(ButtonTransparency);
+
     }
 
     private void cancelAlarms()
