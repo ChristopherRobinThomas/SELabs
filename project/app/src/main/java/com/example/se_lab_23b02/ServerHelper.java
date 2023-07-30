@@ -601,8 +601,12 @@ public class ServerHelper {
                                 synchronize(context);
 
                                 if (jarray.getString(1).equals("login")) {
+                                    DataSavingHelper.getInstance().saveSettingAsSharedPref("dmValue", "white-mode", context);
+                                    DataSavingHelper.getInstance().saveSettingAsSharedPref("color","blue", context);
                                     context.startActivity(new Intent(context, successfulClass));
                                 } else if (jarray.getString(1).equals("create")) {
+                                    DataSavingHelper.getInstance().saveSettingAsSharedPref("dmValue", "white-mode", context);
+                                    DataSavingHelper.getInstance().saveSettingAsSharedPref("color","blue", context);
                                     context.startActivity(new Intent(context, onlyNewUser));
                                 }
                         }
