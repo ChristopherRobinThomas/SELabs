@@ -175,4 +175,18 @@
     <string name="Burpies">burpees</string>
     <string name="d_JJacks">Commencez avec vos bras à côté de votre corps et vos jambes ensemble. Ensuite, déplacez les deux bras au-dessus de votre tête pendant que vous sautez. Lors de l\'atterrissage, vos jambes doivent être écartées. En sautant à nouveau, les bras redescendent et les jambes se rejoignent. Imaginez que vos bras et vos jambes sont liés avec une ficelle. Faites cela 15 fois.</string>
     <string name="d_Burpies">Nous commençons debout vers le haut. Ensuite, nous passons à la position push up. Effectuez une poussée et utilisez l\'énergie pour sauter avec vos jambes entre vos bras. Maintenant, lève-toi et saute. Après l\'atterrissage, redescendez en position de pompe et répétez. Faites 8 répétitions.</string>
+    <string name="add_notes">Notes complémentaires...</string>
+    <string name="partner">partenaire</string>
+    <string name="Family">familiar</string>
+    <string name="Friends">amis</string>
+    <string name="Coworkers">collègues de travail</string>
+    <string name="Strangers">étrangers</string>
+    <string name="other">autre</string>
+    <string name="at_home">à la maison</string>
+    <string name="school">École/Université</string>
+    <string name="shopping">achats</string>
+    <string name="work">travail</string>
+    <string name="Sport">sport</string>
+    <string name="other_rec">autre activité récréative</string>
+    <string name="visiting">visiter</string>
 </resources>

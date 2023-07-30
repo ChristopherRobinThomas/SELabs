@@ -39,6 +39,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -106,6 +107,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         sendButton = findViewById(R.id.Send_Button);
         constraintLayout = findViewById(R.id.questionnaireActivity);
+
+        TextInputEditText ti = (TextInputEditText) findViewById(R.id.tvQuestionnaireAdditionalNotes);
+        ti.setHint(SensorManager.getLanguageResources(getApplicationContext()).getString(R.string.add_notes));
+
         setColorTheme();
 
         manageQuestions();
@@ -408,26 +413,27 @@ public class QuestionnaireActivity extends AppCompatActivity {
         spinner.setEnabled(false);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
-        adapter.add("Partner");
-        adapter.add("Family");
-        adapter.add("Friends");
-        adapter.add("Coworkers");
-        adapter.add("Strangers");
-        adapter.add("Other"); // To be implemented
+        Resources res = SensorManager.getLanguageResources(getApplicationContext());
+        adapter.add(res.getString(R.string.partner));
+        adapter.add(res.getString(R.string.Family));
+        adapter.add(res.getString(R.string.Friends));
+        adapter.add(res.getString(R.string.Coworkers));
+        adapter.add(res.getString(R.string.Strangers));
+        adapter.add(res.getString(R.string.other)); // To be implemented
 
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String val =  parent.getItemAtPosition(position).toString();
+                String[] vals = {"Partner", "Family", "Friends", "Coworkers", "Strangers", "Other"};
 
-                if(val.equals("Other")) {
+                if(id == 5) {
                     Log.d("Other","Other should be shown");
                     showPopup(questionFourValue, 0,spinner);
                 }else{
                     Log.d("Other","Other should not be shown");
-                    questionFourValue[0] = val;
+                    questionFourValue[0] = vals[(int)id];
                 }
             }
 
@@ -442,28 +448,30 @@ public class QuestionnaireActivity extends AppCompatActivity {
         Spinner spinner = findViewById(R.id.Question5_1DropDown);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
-        adapter.add("At home");
-        adapter.add("School/University");
-        adapter.add("Work");
-        adapter.add("Sport");
-        adapter.add("other recreational Activity");
-        adapter.add("Shopping");
-        adapter.add("Visiting");
-        adapter.add("Other"); // To be implemented
+
+        Resources res = SensorManager.getLanguageResources(getApplicationContext());
+
+        adapter.add(res.getString(R.string.at_home));
+        adapter.add(res.getString(R.string.school));
+        adapter.add(res.getString(R.string.work));
+        adapter.add(res.getString(R.string.Sport));
+        adapter.add(res.getString(R.string.other_rec));
+        adapter.add(res.getString(R.string.shopping));
+        adapter.add(res.getString(R.string.visiting));
+        adapter.add(res.getString(R.string.other));
 
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String val =  parent.getItemAtPosition(position).toString();
-
-                if(val.equals("Other")) {
+                String[] vals = {"At home", "School/University", "Work", "Sport", "other recreational Activity", "Shopping", "Visiting", "Other"};
+                if(id == 7) {
                     Log.d("Other","Other should be shown");
                     showPopup(questionFiveValue, 0,spinner);
                 }else{
                     Log.d("Other","Other should not be shown");
-                    questionFiveValue[0] = val;
+                    questionFiveValue[0] = vals[(int)id];
                 }
             }
 

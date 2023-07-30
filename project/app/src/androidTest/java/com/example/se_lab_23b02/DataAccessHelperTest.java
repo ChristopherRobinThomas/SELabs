@@ -47,7 +47,7 @@ public class DataAccessHelperTest {
 
     @Test
     public void testGetInterventionsValueS() throws JSONException {
-        String[] stringinit = {"2023-06-12", "2023-06-13", "2023-06-14", "2023-06-15", "2023-06-16", "2023-06-17", "2023-06-18", "2023-06-19", "2023-06-20"};
+        String[] stringinit = {"12.06.2023", "13.06.2023", "14.06.2023", "15.06.2023", "16.06.2023", "17.06.2023", "18.06.2023", "19.06.2023", "20.06.2023"};
         Integer[] intInit = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         ArrayList<String> a1 = new ArrayList<>(Arrays.asList(stringinit));
         ArrayList<Integer> a2 = new ArrayList<>(Arrays.asList(intInit));
