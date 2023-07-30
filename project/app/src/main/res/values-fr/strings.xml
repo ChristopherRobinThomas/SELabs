@@ -17,7 +17,7 @@
     <string name="bt_home_questionnaire">questionnaire</string>
     <string name="bt_home_daily_goal">choisir un \n objectif quotidien</string>
     <string name="bt_home_goal_complete">marquer l\'objectif terminé</string>
-    <string name="bt_home_all_past_activities">Afficher toutes les interventions effectuées</string>
+    <string name="bt_home_all_past_activities">voir toutes les activités passées</string>
     <string name="tv_home_goal_status_achieved">Vous avez atteint votre objectif quotidien !</string>
     <string name="tv_home_goal_status_not_achieved">l\'objectif du jour: \n</string>
     <string name="tv_home_goal_status_not_picked">Choisissez un objectif quotidien </string>
@@ -190,4 +190,7 @@
     <string name="other_rec">autre activité récréative</string>
     <string name="visiting">visiter</string>
     <string name="date_format_complete">dd.MM.YYYY HH:mm:ss</string>
+    <string name="complete">complet!</string>
+    <string name="sit_ups">sit-ups</string>
+    <string name="cobra">cobra</string>
 </resources>

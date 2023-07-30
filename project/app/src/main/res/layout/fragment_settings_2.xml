@@ -32,7 +32,8 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:text="Tutorial"
-                android:textSize="20sp"
+                android:textSize="14sp"
+                android:background="@drawable/step_count_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btSettingsLogoutCompletly" />

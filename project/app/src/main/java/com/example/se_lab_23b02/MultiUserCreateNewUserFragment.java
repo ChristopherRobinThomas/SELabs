@@ -161,7 +161,8 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                     ServerHelper sh = ServerHelper.getInstance();
                     sh.setActivity(getActivity());
                     try {
-                        sh.createNewUser(newUser,getContext(), MultiUserActivity.class,HomeScreenActivity.class, TutorialActivity.class);
+                        sh.createNewUser(newUser, getContext(), MultiUserActivity.class,HomeScreenActivity.class, TutorialActivity.class);
+                        getActivity().finish();
                         TimeStamp.setStandardTimers(getContext());
                     }catch (Exception e )
                     {

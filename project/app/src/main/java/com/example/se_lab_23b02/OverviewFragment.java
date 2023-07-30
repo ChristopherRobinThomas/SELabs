@@ -615,6 +615,7 @@ public class OverviewFragment extends Fragment {
                         break;
                 }
                 break;
+
         }
         btNumOfActivities.getBackground().setAlpha(ButtonTransparency);
         btNumOfInterventions.getBackground().setAlpha(ButtonTransparency);

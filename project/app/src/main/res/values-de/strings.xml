@@ -48,7 +48,7 @@
 
 
     <!-- Strings for the interventions fragment-->
-    <string name="interventions_heading">Interventionen</string>
+    <string name="interventions_heading">Aktivitäten</string>
     <string name="add_intervention_button">Intervention hinzufügen</string>
 
 
@@ -193,4 +193,7 @@
     <string name="other_rec">andere kreative Aufgabe</string>
     <string name="visiting">besuchen</string>
     <string name="date_format_complete">dd.MM.YYYY HH:mm:ss</string>
+    <string name="complete">Beenden!</string>
+    <string name="sit_ups">Sit-Ups</string>
+    <string name="cobra">Cobra</string>
 </resources>
