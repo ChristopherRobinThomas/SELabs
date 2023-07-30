@@ -43,6 +43,7 @@ import org.w3c.dom.Text;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class QuestionnaireActivity extends AppCompatActivity {
@@ -176,7 +177,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
      * @return Whether the Questionnaire indicates that an Intervention should be triggered.
      */
     private boolean shouldDoInterventionAlgorithm(String questResult) {
-        return (calculateAffectiveWellbeingScore(questResult) <= 50);
+        Random r = new Random();
+        boolean rand = r.nextInt(100) > 50;
+        boolean calc = (calculateAffectiveWellbeingScore(questResult) <= 50);
+        return rand && calc;
     }
 
     private int calculateAffectiveWellbeingScore(String questResult) {
