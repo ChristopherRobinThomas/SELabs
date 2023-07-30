@@ -188,4 +188,5 @@
     <string name="Sport">sport</string>
     <string name="other_rec">other recreational activity</string>
     <string name="visiting">visiting</string>
+    <string name="date_format_complete">YYYY-MM-dd HH:mm:ss</string>
 </resources>

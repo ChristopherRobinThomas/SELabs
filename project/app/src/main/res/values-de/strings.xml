@@ -192,4 +192,5 @@
     <string name="Sport">Sport</string>
     <string name="other_rec">andere kreative Aufgabe</string>
     <string name="visiting">besuchen</string>
+    <string name="date_format_complete">dd.MM.YYYY HH:mm:ss</string>
 </resources>
