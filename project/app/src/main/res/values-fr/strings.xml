@@ -171,4 +171,8 @@
     <string name="d_seitliche_Beinrolle">Allongez-vous sur le dos. Soulevez vos genoux et vos pieds pour faire deux angles de 90 degrés. Balancez vos genoux d\'un côté, puis de l\'autre. Répétez trois fois.</string>
     <string name="d_windmuehle">Tenez-vous droit et penchez-vous vers l\'avant. Touchez alternativement votre pied gauche et droit avec le bras opposé.</string>
     <string name="toast_stop_intervention">arrêter l\'enregistrement avant de commencer une intervention</string>
+    <string name="JJacks">sauts étoiles</string>
+    <string name="Burpies">burpees</string>
+    <string name="d_JJacks">Commencez avec vos bras à côté de votre corps et vos jambes ensemble. Ensuite, déplacez les deux bras au-dessus de votre tête pendant que vous sautez. Lors de l\'atterrissage, vos jambes doivent être écartées. En sautant à nouveau, les bras redescendent et les jambes se rejoignent. Imaginez que vos bras et vos jambes sont liés avec une ficelle. Faites cela 15 fois.</string>
+    <string name="d_Burpies">Nous commençons debout vers le haut. Ensuite, nous passons à la position push up. Effectuez une poussée et utilisez l\'énergie pour sauter avec vos jambes entre vos bras. Maintenant, lève-toi et saute. Après l\'atterrissage, redescendez en position de pompe et répétez. Faites 8 répétitions.</string>
 </resources>

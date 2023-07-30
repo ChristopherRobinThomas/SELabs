@@ -174,4 +174,8 @@
     <string name="d_seitliche_Beinrolle">Leg dich auf deinen Rücken. Heben Sie Ihre Knie und Füße an, um zwei 90-Grad-Winkel zu bilden. Schwingen Sie Ihre Knie auf die eine und dann auf die andere Seite. Dreimal wiederholen.</string>
     <string name="d_windmuehle">Stehen Sie aufrecht und beugen Sie sich nach vorne. Berühren Sie abwechselnd Ihren linken und rechten Fuß mit dem gegenüberliegenden Arm.</string>
     <string name="toast_stop_intervention">Stoppen Sie die Aufzeichnung, bevor Sie mit einem Eingriff beginnen</string>
+    <string name="JJacks">Hampelmänner</string>
+    <string name="Burpies">Burpees</string>
+    <string name="d_JJacks">Beginnen Sie mit den Armen neben Ihrem Körper und den Beinen zusammen. Bewegen Sie dann beim Springen beide Arme über Ihren Kopf. Bei der Landung sollten Ihre Beine gespreizt sein. Beim erneuten Springen gehen die Arme wieder nach unten und die Beine gehen zusammen. Stellen Sie sich vor, Ihre Arme und Beine seien mit einer Schnur zusammengebunden. Tun Sie dies 15 Mal.</string>
+    <string name="d_Burpies">Wir beginnen in aufrechter Position. Dann bewegen wir uns in die Liegestützposition. Mache einen Liegestütz und nutze den Schwung, um mit den Beinen zwischen die Arme zu springen. Jetzt steh auf und spring. Nach der Landung geht es wieder in die Liegestützposition und von vorne los. Mache 8 Wiederholungen.</string>
 </resources>

@@ -305,6 +305,10 @@ public class DataSavingHelper {
                 return res.getString(R.string.Seitliche_beinrolle);
             case "Windmuehle":
                 return res.getString(R.string.Windmuhle);
+            case "Burpies":
+                return res.getString(R.string.Burpies);
+            case "Jumping Jacks":
+                return res.getString(R.string.JJacks);
             default:
                 return name;
         }
@@ -331,6 +335,10 @@ public class DataSavingHelper {
                 return res.getString(R.string.d_seitliche_Beinrolle);
             case "Windmuehle":
                 return res.getString(R.string.d_windmuehle);
+            case "Burpies":
+                return res.getString(R.string.d_Burpies);
+            case "Jumping Jacks":
+                return res.getString(R.string.d_JJacks);
             default:
                 return "";
         }

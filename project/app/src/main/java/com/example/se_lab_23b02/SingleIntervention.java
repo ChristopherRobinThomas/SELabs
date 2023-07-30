@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -46,7 +47,7 @@ public class SingleIntervention extends Fragment {
     private EditText et;
     private RatingBar bar;
     String interventionStartTime;
-    private ConstraintLayout constraintLayout;
+    private ScrollView constraintLayout;
     private VideoView vv;
     private ImageView iv;
 
