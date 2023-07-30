@@ -82,8 +82,11 @@ public class SingleIntervention extends Fragment {
         completeButton.setOnClickListener(v -> {
             startDoingIntervention();
         });
-        interventionName.setText(pInterventionName);
-        interventionDesc.setText(pInterventionDesc);
+
+        String name = DataSavingHelper.getInstance().getTranslationOfName(pInterventionName, getActivity().getApplicationContext());
+        interventionName.setText(name);
+        String desc = DataSavingHelper.getInstance().getTranslationOfDesc(pInterventionName, getActivity().getApplicationContext());
+        interventionDesc.setText(desc);
         chooseAndLoadVideo();
         setColorTheme();
 
@@ -102,12 +105,12 @@ public class SingleIntervention extends Fragment {
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.rueckenentspannung));
             vv.setVisibility(View.VISIBLE);
         }
-        else if(Objects.equals(pInterventionName, "LaterallinienA")) {
+        else if(Objects.equals(pInterventionName, "Laterallinien 1")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise1_1));
             vv.setVisibility(View.VISIBLE);
         }
-        else if(Objects.equals(pInterventionName, "LaterallinienB")) {
+        else if(Objects.equals(pInterventionName, "Laterallinien 2")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise_2_1));
             vv.setVisibility(View.VISIBLE);
@@ -145,6 +148,7 @@ public class SingleIntervention extends Fragment {
             iv.setVisibility(View.VISIBLE);
             vv.setVisibility(View.INVISIBLE);
         }
+        vv.start();
     }
 
     void startDoingIntervention() {
