@@ -6,6 +6,7 @@
 
 package com.example.se_lab_23b02;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -638,7 +639,15 @@ public class ServerHelper {
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.i("sHelper", "Successfully deleted all Data");
-                    // Toast.makeText(activity, "Successfully deleted all Data online", Toast.LENGTH_LONG).show();
+                    DataSavingHelper dsHelper = DataSavingHelper.getInstance();
+                    UserHelper userHelper = UserHelper.getInstance();
+                    String user = "User" + userHelper.intToStringOneToFour(userHelper.getCurrentUserID(context));
+                    dsHelper.saveSettingAsSharedPref(user,"",context);
+                    dsHelper.saveSettingAsSharedPref("ActiveUser","None",context);
+
+                    Intent i = new Intent(context,MultiUserActivity.class);
+                    context.startActivity(i);
+                     // Toast.makeText(activity, "Successfully deleted all Data online", Toast.LENGTH_LONG).show();
 
                 } else {
                     Log.i("sHelper", "Failed to delete all Data, Response: " + response);
