@@ -142,6 +142,7 @@ public class SensorRecordingGraphActivity extends Activity {
                 tvDistance.setText(context.getResources().getString(R.string.distance) + ": " + distance + " m");
             }
             else {
+                super.onCreate(savedInstanceState);
                 tvDistance.setText(context.getResources().getString(R.string.no_distance));
             }
         } catch (JSONException e) {

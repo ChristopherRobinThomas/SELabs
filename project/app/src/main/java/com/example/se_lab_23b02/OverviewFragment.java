@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.app.DatePickerDialog;
@@ -44,9 +50,11 @@ import com.google.android.material.slider.LabelFormatter;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -54,6 +62,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import kotlin.Triple;
 
@@ -232,7 +241,10 @@ public class OverviewFragment extends Fragment {
 
         // set Text of edittext to current selected time, when new time > dateUB then nothing is changed
         EditText lowerBoundTimePicker = (EditText) view.findViewById(R.id.etLowerBoundTimePicker);
-        lowerBoundTimePicker.setText(dateLB.getDayOfMonth() + "." + (dateLB.getMonthValue()) + "." + dateLB.getYear());
+
+        DateFormat dateFormat = new SimpleDateFormat(resources.getString(R.string.date_format));
+        Date dateL = new Date(dateLB.getYear() - 1900, dateLB.getMonthValue() - 1, dateLB.getDayOfMonth());
+        lowerBoundTimePicker.setText(dateFormat.format(dateL));
         lowerBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +266,8 @@ public class OverviewFragment extends Fragment {
                                     dateLB = dateLB.withYear(year);
                                     dateLB = dateLB.withMonth(month + 1);
                                     dateLB = dateLB.withDayOfMonth(dayOfMonth);
-                                    lowerBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                    Date tempDate = new Date(year - 1900, month, dayOfMonth);
+                                    lowerBoundTimePicker.setText(dateFormat.format(tempDate));
                                 } else {
                                     Toast.makeText(getActivity(), "Pick an earlier date", Toast.LENGTH_LONG).show();
                                 }
@@ -275,7 +288,9 @@ public class OverviewFragment extends Fragment {
 
         // added an "editText" with Calender interaction for setting the timeframe, same as lowerBoundTimePicker
         EditText upperBoundTimePicker = (EditText) view.findViewById(R.id.etUpperBoundTimePicker);
-        upperBoundTimePicker.setText(dateUB.getDayOfMonth() + "." + (dateUB.getMonthValue()) + "." + dateUB.getYear());
+        Date dateU = new Date(dateUB.getYear() - 1900, dateUB.getMonthValue() - 1, dateUB.getDayOfMonth());
+        System.out.println(dateU);
+        upperBoundTimePicker.setText(dateFormat.format(dateU));
         upperBoundTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,7 +312,9 @@ public class OverviewFragment extends Fragment {
                                     dateUB = dateUB.withYear(year);
                                     dateUB = dateUB.withMonth(month + 1);
                                     dateUB = dateUB.withDayOfMonth(dayOfMonth);
-                                    upperBoundTimePicker.setText(dayOfMonth + "." + (month + 1) + "." + year);
+                                    Date temp = new Date(year - 1900, month, dayOfMonth);
+
+                                    upperBoundTimePicker.setText(dateFormat.format(temp));
                                 } else {
                                     Toast.makeText(getActivity(), "Pick a later date", Toast.LENGTH_LONG).show();
                                 }
@@ -358,7 +375,9 @@ public class OverviewFragment extends Fragment {
             labels[0] = tempDate.toLocalDate().toString();
             for (int i = 1; i < amountOfHours; i++) {
                 tempDate = tempDate.plusHours(1);
-                labels[i] = tempDate.toLocalDate().toString();
+                DateFormat df = new SimpleDateFormat(resources.getString(R.string.date_format));
+                Date temp = new Date(tempDate.getYear() - 1900, tempDate.getMonthValue() - 1, tempDate.getDayOfMonth());
+                labels[i] = df.format(temp);
             }
 
             for (int i = 0; i < data.size(); i++) {

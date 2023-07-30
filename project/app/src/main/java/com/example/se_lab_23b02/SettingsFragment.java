@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.Manifest;
@@ -16,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +74,7 @@ public class SettingsFragment extends Fragment {
     private Button btnNotifNoon;
     private Button btnNotifEvening;
     private Button btLogout;
+    private Button btLogoutFromDevice;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -150,6 +158,7 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.tvSettingsEvening));
         textViews.add(view.findViewById(R.id.btDeleteData));
         textViews.add(view.findViewById(R.id.btSettingsLogout));
+        textViews.add(view.findViewById(R.id.btSettingsLogoutCompletly));
 
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -163,6 +172,7 @@ public class SettingsFragment extends Fragment {
         btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
         btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
+        btLogoutFromDevice = (Button) view.findViewById((R.id.btSettingsLogoutCompletly));
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -182,14 +192,14 @@ public class SettingsFragment extends Fragment {
 
                 dsHelper.saveSettingAsSharedPref("language", val, contextForSharedPreferences);
 
-                if(val.equals("english")) {
+                if (val.equals("english")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
 
                 }
-                if(val.equals("deutsch")) {
+                if (val.equals("deutsch")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
                 }
-                if(val.equals("francais")) {
+                if (val.equals("francais")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
                 }
 
@@ -197,9 +207,9 @@ public class SettingsFragment extends Fragment {
                 setAllStrings();
                 refreshSettings();
                 setSpinnerWithoutLanguageSpinner(spinnerColortheme, spinnerDarkMode);
-
-
             }
+
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -353,14 +363,20 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 cancelAlarms();
-                deleteLocalFiles();
+                UserHelper uh = UserHelper.getInstance();
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS);
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
-                Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getContext(), resources.getString(R.string.del_all_data), Toast.LENGTH_SHORT).show();
 
                 //try to delete Online Data
                 ServerHelper sHelper = ServerHelper.getInstance();
@@ -383,6 +399,35 @@ public class SettingsFragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
+            }
+        });
+
+
+        Button btTutorial = view.findViewById(R.id.btSettingsTutorial);
+        btTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), TutorialActivity.class);
+                startActivity(myIntent);
+                getActivity().finish();
+            }
+        });
+
+        btLogoutFromDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelAlarms();
+                UserHelper uh = UserHelper.getInstance();
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+
+                saveDefaultValuesInSettings();
+                refreshSettings();
+                Intent i = new Intent(getActivity(),MultiUserActivity.class);
+                startActivity(i);
+
             }
         });
 
@@ -521,6 +566,8 @@ public class SettingsFragment extends Fragment {
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
         bt = (Button) textViews.get(12);
         bt.setText(resources.getText(R.string.bt_settings_logout));
+        bt = (Button) textViews.get(13);
+        bt.setText(resources.getText(R.string.bt_settings_logout_completly));
     }
 
     public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
@@ -595,6 +642,7 @@ public class SettingsFragment extends Fragment {
         btnNotifNoon.getBackground().setAlpha(ButtonTransparency);
         btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
         btLogout.getBackground().setAlpha(ButtonTransparency);
+        btLogoutFromDevice.getBackground().setAlpha(ButtonTransparency);
     }
 
     private void cancelAlarms()
@@ -607,8 +655,7 @@ public class SettingsFragment extends Fragment {
 
 
 
-    private void setAlarmButtons()
-    {
+    private void setAlarmButtons()   {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         String data = dsHelper.readSavedDataFromInternalStorage("Timers",context);
         if(!data.equals(""))

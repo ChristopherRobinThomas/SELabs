@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 import android.app.Activity;
 import android.content.SharedPreferences;

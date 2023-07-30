@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">MainActivity</string>
@@ -57,6 +63,7 @@
     <string name="tv_settings_noon_notification">Noon</string>
     <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
+    <string name="bt_tutorial_return">continue</string>
     <string name="bt_send">Send</string>
     <string name="tv_questionnaire_q8_2">Since the last questionnaire, I have been angry or aggressive to another person, which I regretted later on.</string>
     <string name="tv_questionnaire_q8_1">Since the last questionnaire, I reacted impulsive – meaning I acted without thinking about potential consequences.</string>
@@ -87,6 +94,7 @@
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_no_data">no data available</string>
     <string name="bt_settings_logout">Logout</string>
+    <string name="bt_settings_logout_completly"> Logout from this device </string>
 
 
     <string-array name="languages">
@@ -126,4 +134,23 @@
     <string name="timepicker_submit">Submit</string>
     <string name="timepicker_preferred_choice">Select your preferred Time</string>
     <string name="timepicker_selected">Selected:\u0020</string>
+    <string name="Choose_your_Account">Choose your Account</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="back">Back</string>
+    <string name="add_user">add User</string>
+    <string name="CreateNewUser_Headline">create an account</string>
+    <string name="CreateNewUser_UsernameTextView">enter username</string>
+    <string name="CreateNewUser_PasswordTextView">enter password</string>
+    <string name="MultiUser_termsOfService">Terms of Service</string>
+    <string name="username">username</string>
+    <string name="no_internet">No internet connection available</string>
+    <string name="sync_failed">Synchronization failed</string>
+    <string name="login_failure">Something went wrong. Try again.</string>
+    <string name="login_success">Successfully logged in User</string>
+    <string name="login_wrong_password">Username and password do not match or you do not have an account yet</string>
+    <string name="rec_start">recording started</string>
+    <string name="rec_stopped">recording ended</string>
+    <string name="del_all_data">All data were deleted successfully</string>
+    <string name="date_format">YYYY-MM-dd</string>
 </resources>

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.location.Location;
@@ -27,7 +33,7 @@ public class MyLocationListener implements LocationListener {
 
         double distanceMeters = location.distanceTo(lastLocationKnown);
         walkedDistance += distanceMeters;
-
+        System.out.println(walkedDistance);
         double plusHeight = Math.max(0, location.getAltitude() - lastLocationKnown.getAltitude());
 
         heightGained += plusHeight;

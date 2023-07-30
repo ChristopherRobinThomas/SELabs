@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,6 +23,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btSettingsTutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:text="Tutorial"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/btDeleteData"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogout" />
 
             <TextView
                 android:id="@+id/tvSettingsApperance"
@@ -252,7 +271,7 @@
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/step_count_border"/>
+                        android:background="@drawable/step_count_border" />
 
                 </LinearLayout>
 
@@ -275,7 +294,7 @@
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/step_count_border"/>
+                        android:background="@drawable/step_count_border" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -297,7 +316,7 @@
                         android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/step_count_border"/>
+                        android:background="@drawable/step_count_border" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -307,7 +326,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginBottom="60dp"
                 android:backgroundTint="#FF0000"
@@ -317,7 +335,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogout" />
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogoutCompletly" />
 
             <Button
                 android:id="@+id/btSettingsLogout"
@@ -326,12 +344,26 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
+                android:background="@drawable/step_count_border"
                 android:text="@string/bt_settings_logout"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-                android:background="@drawable/step_count_border"/>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            <Button
+                android:id="@+id/btSettingsLogoutCompletly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/step_count_border"
+                android:text="@string/bt_settings_logout_completly"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogout" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

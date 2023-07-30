@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">activité principal</string>
@@ -59,6 +65,7 @@
     <string name="tv_settings_noon_notification">Midi</string>
     <string name="tv_settings_evening_notification">Soir</string>
     <string name="bt_settings_delete_data">supprimer toutes les données personnelles</string>
+    <string name="bt_tutorial_return">continué</string>
     <string name="bt_send">Envoyer</string>
     <string name="tv_questionnaire_q8_2">Depuis le dernier questionnaire, j\'ai été en colère ou agressif envers une autre personne, ce que j\'ai regretté plus tard.</string>
     <string name="tv_questionnaire_q8_1">Depuis le dernier questionnaire, j\'ai réagi de manière impulsive, c\'est-à-dire que j\'ai agi sans penser aux conséquences potentielles.</string>
@@ -89,7 +96,7 @@
     <string name="bt_overview_task_distribution">Répartition des tâches quotidiennes</string>
     <string name="tv_overview_no_data">pas de données disponibles</string>
     <string name="bt_settings_logout">déconnecter</string>
-
+    <string name="bt_settings_logout_completly"> Se déconnecter de cet appareil </string>
 
     <string-array name="languages">
         <item>english</item>
@@ -128,4 +135,23 @@
     <string name="timepicker_submit">Soumettre</string>
     <string name="timepicker_preferred_choice">Sélectionnez votre heure préférée</string>
     <string name="timepicker_selected">Choisi:\u0020 </string>
+    <string name="Choose_your_Account">Choisissez votre compte</string>
+    <string name="password">mot de passe</string>
+    <string name="login">connexion</string>
+    <string name="back">retour</string>
+    <string name="add_user">nouveau profil</string>
+    <string name="CreateNewUser_Headline">créer un compte</string>
+    <string name="CreateNewUser_UsernameTextView">entrer le nom d\'utilisateur</string>
+    <string name="CreateNewUser_PasswordTextView">entrer le mot de passe</string>
+    <string name="MultiUser_termsOfService">Conditions d\'utilisation</string>
+    <string name="username">"nom d'utilisateur "</string>
+    <string name="no_internet">pas d\'internet disponible</string>
+    <string name="sync_failed">la synchronisation a échoué</string>
+    <string name="login_failure">"Quelque chose s'est mal passé. Essayer à nouveau "</string>
+    <string name="login_success">connecté avec succès</string>
+    <string name="login_wrong_password">Le nom d\'utilisateur et le mot de passe ne correspondent pas ou vous n\'avez pas encore de compte</string>
+    <string name="rec_start">l\'enregistrement a commencé</string>
+    <string name="rec_stopped">enregistrement terminé</string>
+    <string name="del_all_data">toutes les données ont été supprimées avec succès</string>
+    <string name="date_format">dd.MM.YYYY</string>
 </resources>

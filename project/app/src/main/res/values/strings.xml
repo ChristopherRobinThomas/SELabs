@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~ Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~ All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">MainActivity</string>
@@ -26,6 +32,8 @@
     <string name="Own_Recording">Own Recording</string>
     <string name="Time">Time</string>
 
+    <string name="TOS_link" translatable="false"><a href="https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0">Terms of Service</a></string>
+
 
     <!-- Strings for the overview fragment-->
     <string name="overview_heading">Analysis</string>
@@ -36,8 +44,11 @@
     <string name="interventions_heading">Interventions</string>
     <string name="add_intervention_button">Add Intervention</string>
 
-
-
+    <!-- Strings for the multiuser activity-->
+    <string name="Choose_your_Account">Choose your Account</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="back">Back></string>
     <!-- Strings for the settings fragment-->
     <string name="settings_heading">Settings</string>
     <string name="settings_title">Appearance</string>
@@ -52,6 +63,8 @@
     <string name="tv_settings_noon_notification">Noon</string>
     <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
+    <string name="bt_tutorial_return">continue</string>
+    <string name="bt_settings_logout_completly"> Logout from this device</string>
 
     <!-- Strings for the questionnaire activity-->
     <string name="bt_send">Send</string>
@@ -142,8 +155,21 @@
     <string name="timepicker_submit">Submit</string>
     <string name="timepicker_preferred_choice">Select your preferred Time</string>
     <string name="timepicker_selected">Selected:\u0020</string>
-
-
+    <string name="add_user">add User</string>
+    <string name="CreateNewUser_Headline">Create an account</string>
+    <string name="CreateNewUser_UsernameTextView">Enter username</string>
+    <string name="CreateNewUser_PasswordTextView">Enter password</string>
+    <string name="MultiUser_termsOfService">Terms of Service</string>
+    <string name="username">username</string>
+    <string name="no_internet">No internet connection available</string>
+    <string name="sync_failed">Synchronization failed</string>
+    <string name="login_failure">Something went wrong. Try again.</string>
+    <string name="login_success">Successfully logged in User</string>
+    <string name="login_wrong_password">Username and password do not match or you do not have an account yet</string>
+    <string name="rec_start">recording started</string>
+    <string name="rec_stopped">recording ended</string>
+    <string name="del_all_data">All data were deleted successfully</string>
+    <string name="date_format">YYYY-MM-dd</string>
 
 
 </resources>
