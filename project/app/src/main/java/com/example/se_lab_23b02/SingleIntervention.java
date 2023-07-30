@@ -122,6 +122,25 @@ public class SingleIntervention extends Fragment {
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.windmuehle));
             vv.setVisibility(View.VISIBLE);
         }
+        else if(Objects.equals(pInterventionName, "Burpies")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.burpies));
+            vv.setVisibility(View.VISIBLE);
+        }else if(Objects.equals(pInterventionName, "Jumping Jacks")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.jumpingjacks));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "Push-Ups")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.pushups));
+            vv.setVisibility(View.VISIBLE);
+        }
+        else if(Objects.equals(pInterventionName, "Sit-Ups")) {
+            iv.setVisibility(View.INVISIBLE);
+            vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.situps));
+            vv.setVisibility(View.VISIBLE);
+        }
         else {
             iv.setVisibility(View.VISIBLE);
             vv.setVisibility(View.INVISIBLE);
