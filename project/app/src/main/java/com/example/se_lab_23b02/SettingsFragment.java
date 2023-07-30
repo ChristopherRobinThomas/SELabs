@@ -192,14 +192,14 @@ public class SettingsFragment extends Fragment {
 
                 dsHelper.saveSettingAsSharedPref("language", val, contextForSharedPreferences);
 
-                if(val.equals("english")) {
+                if (val.equals("english")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "en");
 
                 }
-                if(val.equals("deutsch")) {
+                if (val.equals("deutsch")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "de");
                 }
-                if(val.equals("francais")) {
+                if (val.equals("francais")) {
                     context = LocaleHelper.setLocale(getActivity().getApplicationContext(), "fr");
                 }
 
@@ -207,9 +207,9 @@ public class SettingsFragment extends Fragment {
                 setAllStrings();
                 refreshSettings();
                 setSpinnerWithoutLanguageSpinner(spinnerColortheme, spinnerDarkMode);
-
-
             }
+
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -410,6 +410,8 @@ public class SettingsFragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), TutorialActivity.class);
                 startActivity(myIntent);
                 getActivity().finish();
+            }
+        });
 
         btLogoutFromDevice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -653,8 +655,7 @@ public class SettingsFragment extends Fragment {
 
 
 
-    private void setAlarmButtons()
-    {
+    private void setAlarmButtons()   {
         DataSavingHelper dsHelper = DataSavingHelper.getInstance();
         String data = dsHelper.readSavedDataFromInternalStorage("Timers",context);
         if(!data.equals(""))
