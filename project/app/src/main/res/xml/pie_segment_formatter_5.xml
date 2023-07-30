@@ -1,3 +1,9 @@
+<!--
+  ~ Copyright (c) 2023.
+  ~  Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~  All rights. reserved.
+  -->
+
 <config
     fillPaint.color="#6699B898"
     labelPaint.textSize="15dp"/>

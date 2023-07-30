@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023.
+  ~ Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+  ~ All rights. reserved.
+  -->
+
 <resources>
     <string name="app_name">Larry\'s Liftin\' Lab</string>
     <string name="title_activity_main">MainActivity</string>
@@ -25,6 +31,8 @@
 
     <string name="Own_Recording">Own Recording</string>
     <string name="Time">Time</string>
+
+    <string name="TOS_link" translatable="false"><a href="https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0">Terms of Service</a></string>
 
 
     <!-- Strings for the overview fragment-->

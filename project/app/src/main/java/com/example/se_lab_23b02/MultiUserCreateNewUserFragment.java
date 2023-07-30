@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023.
+ * Christopher Thomas, Miriam Fee, Linus Brandt, Maximilian Frese, Frederik Hüttemann
+ * All rights. reserved.
+ */
+
 package com.example.se_lab_23b02;
 
 import android.content.Context;
@@ -14,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,11 +164,13 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         Button TOS = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
         TOS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String tosText = "For our Terms of Service, refer to: https://www.termsfeed.com/live/5a631fb5-139d-4a09-b5bd-df178f4d4ba0";
+                String tosText = "For our Terms of Service, refer to: " + "";
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Terms of Service");
+
                 final TextView tos = new TextView(getContext());
-                tos.setText(tosText);
+                tos.setText(Html.fromHtml(getActivity().getResources().getString(R.string.TOS_link)));
+                tos.setMovementMethod(LinkMovementMethod.getInstance());
                 builder.setView(tos);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
