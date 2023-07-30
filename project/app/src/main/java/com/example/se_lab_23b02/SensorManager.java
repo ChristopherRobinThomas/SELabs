@@ -25,7 +25,7 @@ public class SensorManager {
 
     }
 
-    private static Resources getLanguageResources(Context pContext) {
+    public static Resources getLanguageResources(Context pContext) {
         String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", pContext);
         String loc = "en";
         if(language.equals("francais"))

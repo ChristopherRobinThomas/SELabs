@@ -7,6 +7,7 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Pair;
 
 import androidx.constraintlayout.motion.widget.Debug;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +32,7 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import kotlin.Triple;
 
@@ -153,7 +157,11 @@ public class DataAccessHelper {
 
         LocalDateTime tempdate = lowerBorder;
         for(int i = 0; i < daysDifference; i++) {
-            dates.add(tempdate.toLocalDate().toString());
+            Date temp = new Date(tempdate.getYear() - 1900, tempdate.getMonthValue() - 1, tempdate.getDayOfMonth());
+
+            Resources resources = SensorManager.getLanguageResources(context);
+            DateFormat df = new SimpleDateFormat(resources.getString(R.string.date_format));
+            dates.add(df.format(temp));
             tempdate = tempdate.plusDays(1);
             completed.add(0);
             incompleted.add(0);

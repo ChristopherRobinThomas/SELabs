@@ -182,39 +182,39 @@ public class DataSavingHelper {
         newInterventions.add(sampleInterventionC);
 
         Vector<String> sampleInterventionD = new Vector<String>();
-        sampleInterventionC.add("3");
-        sampleInterventionC.add("Cobra");
-        sampleInterventionC.add("Lie down on your stomach, with your hands against the ground. Straighten your arms and push upwards, while leaving your legs on the ground. Your back should arch upwards. Hold for 10 seconds. ");
+        sampleInterventionD.add("3");
+        sampleInterventionD.add("Cobra");
+        sampleInterventionD.add("Lie down on your stomach, with your hands against the ground. Straighten your arms and push upwards, while leaving your legs on the ground. Your back should arch upwards. Hold for 10 seconds. ");
         newInterventions.add(sampleInterventionD);
 
         Vector<String> sampleInterventionE = new Vector<String>();
-        sampleInterventionC.add("4");
-        sampleInterventionC.add("Rueckenentspannung");
-        sampleInterventionC.add("Kneel on the ground. Lean forward so your knees tuck under your body. Stretch your arms forward and lean down until your face is almost on the ground. Hold for 10 seconds.");
+        sampleInterventionE.add("4");
+        sampleInterventionE.add("Rueckenentspannung");
+        sampleInterventionE.add("Kneel on the ground. Lean forward so your knees tuck under your body. Stretch your arms forward and lean down until your face is almost on the ground. Hold for 10 seconds.");
         newInterventions.add(sampleInterventionE);
 
         Vector<String> sampleInterventionF = new Vector<String>();
-        sampleInterventionC.add("5");
-        sampleInterventionC.add("Laterallinien 1");
-        sampleInterventionC.add("Stand up straight and curve your right arm above your head while leaning to the right. Repeat for the left side. Repeat three times. ");
+        sampleInterventionF.add("5");
+        sampleInterventionF.add("Laterallinien 1");
+        sampleInterventionF.add("Stand up straight and curve your right arm above your head while leaning to the right. Repeat for the left side. Repeat three times. ");
         newInterventions.add(sampleInterventionF);
 
         Vector<String> sampleInterventionG = new Vector<String>();
-        sampleInterventionC.add("6");
-        sampleInterventionC.add("Laterallinien 2");
-        sampleInterventionC.add("Stand up and cross your legs. Cross your arms over your head. Lean to one side, then to the other. Repeat three times. ");
+        sampleInterventionG.add("6");
+        sampleInterventionG.add("Laterallinien 2");
+        sampleInterventionG.add("Stand up and cross your legs. Cross your arms over your head. Lean to one side, then to the other. Repeat three times. ");
         newInterventions.add(sampleInterventionG);
 
         Vector<String> sampleInterventionH = new Vector<String>();
-        sampleInterventionC.add("7");
-        sampleInterventionC.add("Seitliche Beinrolle");
-        sampleInterventionC.add("Lie on your back. Raise your knees and feet to make two 90-degree angles. Swing your knees to one side, then the other. Repeat three times. ");
+        sampleInterventionH.add("7");
+        sampleInterventionH.add("Seitliche Beinrolle");
+        sampleInterventionH.add("Lie on your back. Raise your knees and feet to make two 90-degree angles. Swing your knees to one side, then the other. Repeat three times. ");
         newInterventions.add(sampleInterventionH);
 
         Vector<String> sampleInterventionI = new Vector<String>();
-        sampleInterventionC.add("7");
-        sampleInterventionC.add("Windmuehle");
-        sampleInterventionC.add("Stand up straight and lean over forwards. Alternate touching your left and right foot with the opposing arm.");
+        sampleInterventionI.add("7");
+        sampleInterventionI.add("Windmuehle");
+        sampleInterventionI.add("Stand up straight and lean over forwards. Alternate touching your left and right foot with the opposing arm.");
         newInterventions.add(sampleInterventionI);
 
         return newInterventions;

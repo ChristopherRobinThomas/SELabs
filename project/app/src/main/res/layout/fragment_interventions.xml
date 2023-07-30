@@ -37,12 +37,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/interventionTxt">
+
         <Button
             android:id="@+id/buttonAddNewIntervention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/step_count_border"
             android:text="Add Intervention"
-            android:background="@drawable/step_count_border"/>
+            android:textAlignment="center" />
 
 
         <Button

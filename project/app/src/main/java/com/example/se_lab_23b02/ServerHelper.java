@@ -117,7 +117,7 @@ public class ServerHelper {
         synchronizeDailyGoals(context);
         synchronizeSensorreadings(context);
         synchronizeDoneInterventions(context);
-        synchronizeInterventions(context);
+        // synchronizeInterventions(context);
     }
 
     public void synchronizeQuestionnaire(Context context) throws JSONException {

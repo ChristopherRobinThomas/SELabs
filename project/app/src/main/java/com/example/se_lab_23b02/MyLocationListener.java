@@ -33,7 +33,7 @@ public class MyLocationListener implements LocationListener {
 
         double distanceMeters = location.distanceTo(lastLocationKnown);
         walkedDistance += distanceMeters;
-
+        System.out.println(walkedDistance);
         double plusHeight = Math.max(0, location.getAltitude() - lastLocationKnown.getAltitude());
 
         heightGained += plusHeight;
