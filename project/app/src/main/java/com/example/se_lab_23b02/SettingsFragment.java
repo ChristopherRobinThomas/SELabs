@@ -402,6 +402,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
+        Button btTutorial = view.findViewById(R.id.btSettingsTutorial);
+        btTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), TutorialActivity.class);
+                startActivity(myIntent);
+                getActivity().finish();
+
         btLogoutFromDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -416,6 +425,7 @@ public class SettingsFragment extends Fragment {
                 refreshSettings();
                 Intent i = new Intent(getActivity(),MultiUserActivity.class);
                 startActivity(i);
+
             }
         });
 

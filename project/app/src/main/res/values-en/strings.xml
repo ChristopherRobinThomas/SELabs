@@ -63,6 +63,7 @@
     <string name="tv_settings_noon_notification">Noon</string>
     <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
+    <string name="bt_tutorial_return">continue</string>
     <string name="bt_send">Send</string>
     <string name="tv_questionnaire_q8_2">Since the last questionnaire, I have been angry or aggressive to another person, which I regretted later on.</string>
     <string name="tv_questionnaire_q8_1">Since the last questionnaire, I reacted impulsive – meaning I acted without thinking about potential consequences.</string>

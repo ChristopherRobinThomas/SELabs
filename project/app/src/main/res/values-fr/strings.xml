@@ -65,6 +65,7 @@
     <string name="tv_settings_noon_notification">Midi</string>
     <string name="tv_settings_evening_notification">Soir</string>
     <string name="bt_settings_delete_data">supprimer toutes les données personnelles</string>
+    <string name="bt_tutorial_return">continué</string>
     <string name="bt_send">Envoyer</string>
     <string name="tv_questionnaire_q8_2">Depuis le dernier questionnaire, j\'ai été en colère ou agressif envers une autre personne, ce que j\'ai regretté plus tard.</string>
     <string name="tv_questionnaire_q8_1">Depuis le dernier questionnaire, j\'ai réagi de manière impulsive, c\'est-à-dire que j\'ai agi sans penser aux conséquences potentielles.</string>
