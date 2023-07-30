@@ -221,7 +221,10 @@ public class InterventionsFragment extends Fragment {
 
             txtViewInterventions = new TextView(getActivity());
             txtViewInterventions.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            txtViewInterventions.setText(interventionObject.get(1));
+
+            String name = DataSavingHelper.getInstance().getTranslationOfName(interventionObject.get(1), context);
+
+            txtViewInterventions.setText(name);
             txtViewInterventions.setTextSize(20);
             linearLayoutToAdd.addView(txtViewInterventions);
 

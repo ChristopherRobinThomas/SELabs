@@ -154,4 +154,20 @@
     <string name="rec_stopped">enregistrement terminé</string>
     <string name="del_all_data">toutes les données ont été supprimées avec succès</string>
     <string name="date_format">dd.MM.YYYY</string>
+    <string name="push_ups">push-ups</string>
+    <string name="Light_run">course légère</string>
+    <string name="Rueckenentspannung">détente du dos</string>
+    <string name="Lat_Linien_1">lignes latérales 1</string>
+    <string name="Lat_Linien_2">lignes latérales 2</string>
+    <string name="Seitliche_beinrolle">roulades latérales des jambes</string>
+    <string name="Windmuhle">moulin à vent</string>
+    <string name="d_push_ups">Effectuez 10 pompes.</string>
+    <string name="d_sit_ups">Effectuez 10 redressements assis.</string>
+    <string name="d_Light_run">Courez une distance confortable à un rythme lent. Notre recommandation : 2 kilomètres en 12 minutes.</string>
+    <string name="d_Cobra">Allongez-vous sur le ventre, les mains contre le sol. Redressez vos bras et poussez vers le haut, tout en laissant vos jambes au sol. Votre dos doit se cambrer vers le haut. Tenez-le pendant 10 secondes.</string>
+    <string name="d_Rueckenentspannung">Agenouillez-vous sur le sol. Penchez-vous en avant pour que vos genoux rentrent votre corps. Étirez vos bras vers l\'avant et penchez-vous jusqu\'à ce que votre visage soit presque au sol. Maintenez pendant 10 secondes.</string>
+    <string name="d_Laterallinien_1">Tenez-vous droit et courbez votre bras droit au-dessus de votre tête tout en vous penchant vers la droite. Répétez pour le côté gauche. Répétez trois fois.</string>
+    <string name="d_Laterallinien_2">Levez-vous et croisez les jambes. Croisez vos bras au-dessus de votre tête. Penchez-vous d\'un côté, puis de l\'autre. Répétez trois fois.</string>
+    <string name="d_seitliche_Beinrolle">Allongez-vous sur le dos. Soulevez vos genoux et vos pieds pour faire deux angles de 90 degrés. Balancez vos genoux d\'un côté, puis de l\'autre. Répétez trois fois.</string>
+    <string name="d_windmuehle">Tenez-vous droit et penchez-vous vers l\'avant. Touchez alternativement votre pied gauche et droit avec le bras opposé.</string>
 </resources>

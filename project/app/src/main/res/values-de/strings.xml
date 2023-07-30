@@ -157,4 +157,20 @@
     <string name="rec_stopped">Aufnahme beendet</string>
     <string name="del_all_data">Alle Daten erfolgreich gelöscht</string>
     <string name="date_format">dd.MM.YYYY</string>
+    <string name="push_ups">Liegestütze</string>
+    <string name="Light_run">leichtes Laufen</string>
+    <string name="Rueckenentspannung">Rückenentspannung</string>
+    <string name="Lat_Linien_1">Laterallinien 1</string>
+    <string name="Lat_Linien_2">Laterallinien 2</string>
+    <string name="Seitliche_beinrolle">seitliche Beinrollen</string>
+    <string name="Windmuhle">Windmühle</string>
+    <string name="d_push_ups">Mache 10 Liegestütze.</string>
+    <string name="d_sit_ups">Mache 10 Sit-Ups.</string>
+    <string name="d_Light_run">Laufe mit komfortabler Geschwindigkeit. Unsere Empfehlung: 2 Kilometer in 12 Minuten</string>
+    <string name="d_Cobra">Leg dich mit deinem Bauch auf den Boden. Die Arme ausgestreckt vor dir. Drücke nun deine Hüfte Richtung Boden während du deine Arme gerade lässt, so dass sich der Rücken biegt. Halte die Position für 10 Sekunden.</string>
+    <string name="d_Rueckenentspannung">Knie dich hin. Lehne dich nach vorne. Strecke dabei deine Arme nach vorne aus und drücke deine Hüfte auf deine Waden, so dass du mit dem Kopf fast den Boden berührst. Halte die Position für 10 Sekunden.</string>
+    <string name="d_Laterallinien_1">Stehen Sie aufrecht und beugen Sie den rechten Arm über Ihren Kopf, während Sie sich nach rechts neigen. Wiederholen Sie dies für die linke Seite. Dreimal wiederholen.</string>
+    <string name="d_Laterallinien_2">Stehen Sie auf und schlagen Sie die Beine übereinander. Verschränke deine Arme über deinem Kopf. Lehnen Sie sich zur einen Seite und dann zur anderen. Dreimal wiederholen.</string>
+    <string name="d_seitliche_Beinrolle">Leg dich auf deinen Rücken. Heben Sie Ihre Knie und Füße an, um zwei 90-Grad-Winkel zu bilden. Schwingen Sie Ihre Knie auf die eine und dann auf die andere Seite. Dreimal wiederholen.</string>
+    <string name="d_windmuehle">Stehen Sie aufrecht und beugen Sie sich nach vorne. Berühren Sie abwechselnd Ihren linken und rechten Fuß mit dem gegenüberliegenden Arm.</string>
 </resources>

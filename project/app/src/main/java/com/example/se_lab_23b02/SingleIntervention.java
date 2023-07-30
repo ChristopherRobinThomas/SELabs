@@ -82,8 +82,11 @@ public class SingleIntervention extends Fragment {
         completeButton.setOnClickListener(v -> {
             startDoingIntervention();
         });
-        interventionName.setText(pInterventionName);
-        interventionDesc.setText(pInterventionDesc);
+
+        String name = DataSavingHelper.getInstance().getTranslationOfName(pInterventionName, getActivity().getApplicationContext());
+        interventionName.setText(name);
+        String desc = DataSavingHelper.getInstance().getTranslationOfDesc(pInterventionName, getActivity().getApplicationContext());
+        interventionDesc.setText(desc);
         chooseAndLoadVideo();
         setColorTheme();
 
@@ -126,6 +129,7 @@ public class SingleIntervention extends Fragment {
             iv.setVisibility(View.VISIBLE);
             vv.setVisibility(View.INVISIBLE);
         }
+        vv.start();
     }
 
     void startDoingIntervention() {

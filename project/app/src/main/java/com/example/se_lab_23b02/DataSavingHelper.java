@@ -7,6 +7,7 @@
 package com.example.se_lab_23b02;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.provider.ContactsContract;
 import android.app.Application;
 import android.content.Context;
@@ -269,4 +270,58 @@ public class DataSavingHelper {
             } catch (JSONException ignored) {}
         }
     }
+
+
+    public String getTranslationOfName(String name, Context context) {
+        Resources res = SensorManager.getLanguageResources(context);
+        switch (name) {
+            case "Push-Ups":
+                return res.getString(R.string.push_ups);
+            case "Sit-Ups":
+                return name;
+            case "Light Run":
+                return res.getString(R.string.Light_run);
+            case "Cobra":
+                return name;
+            case "Rueckenentspannung":
+                return res.getString(R.string.Rueckenentspannung);
+            case "Laterallinien 1":
+                return res.getString(R.string.Lat_Linien_1);
+            case "Laterallinien 2":
+                return res.getString(R.string.Lat_Linien_2);
+            case "Seitliche Beinrolle":
+                return res.getString(R.string.Seitliche_beinrolle);
+            case "Windmuehle":
+                return res.getString(R.string.Windmuhle);
+            default:
+                return name;
+        }
+    }
+
+    public String getTranslationOfDesc(String name, Context context) {
+        Resources res = SensorManager.getLanguageResources(context);
+        switch (name) {
+            case "Push-Ups":
+                return res.getString(R.string.d_push_ups);
+            case "Sit-Ups":
+                return res.getString(R.string.d_sit_ups);
+            case "Light Run":
+                return res.getString(R.string.d_Light_run);
+            case "Cobra":
+                return res.getString(R.string.d_Cobra);
+            case "Rueckenentspannung":
+                return res.getString(R.string.d_Rueckenentspannung);
+            case "Laterallinien 1":
+                return res.getString(R.string.d_Laterallinien_1);
+            case "Laterallinien 2":
+                return res.getString(R.string.d_Laterallinien_2);
+            case "Seitliche Beinrolle":
+                return res.getString(R.string.d_seitliche_Beinrolle);
+            case "Windmuehle":
+                return res.getString(R.string.d_windmuehle);
+            default:
+                return "";
+        }
+    }
+
 }
