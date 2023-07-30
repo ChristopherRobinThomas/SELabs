@@ -290,11 +290,11 @@ public class DataSavingHelper {
             case "Push-Ups":
                 return res.getString(R.string.push_ups);
             case "Sit-Ups":
-                return name;
+                return res.getString(R.string.sit_ups);
             case "Light Run":
                 return res.getString(R.string.Light_run);
             case "Cobra":
-                return name;
+                return res.getString(R.string.cobra);
             case "Rueckenentspannung":
                 return res.getString(R.string.Rueckenentspannung);
             case "Laterallinien 1":

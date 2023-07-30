@@ -160,7 +160,7 @@ public class SingleIntervention extends Fragment {
 
     void startDoingIntervention() {
         if(!SensorManager.checkRunning(getActivity().getApplicationContext())) {
-            completeButton.setText("Complete!");
+            completeButton.setText(SensorManager.getLanguageResources(getActivity().getApplicationContext()).getString(R.string.complete));
             interventionStartTime = TimeStamp.getCurrentTimeStamp();
             SensorManager.toggleService(getActivity(), interventionStartTime);
 

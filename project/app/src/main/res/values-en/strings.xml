@@ -154,7 +154,7 @@
     <string name="del_all_data">All data were deleted successfully</string>
     <string name="date_format">YYYY-MM-dd</string>
     <string name="push_ups">push-ups</string>
-    <string name="Light_run">Light run</string>
+    <string name="Light_run">light run</string>
     <string name="Rueckenentspannung">"back relaxation "</string>
     <string name="Lat_Linien_1">laterallines 1</string>
     <string name="Lat_Linien_2">laterallines 2</string>
@@ -170,8 +170,8 @@
     <string name="d_seitliche_Beinrolle">Lie on your back. Raise your knees and feet to make two 90-degree angles. Swing your knees on one side, then the other. Repeat three times.</string>
     <string name="d_windmuehle">Stand up straight and lean over forwards. Alternate touching your left and right foot with the opposite arm.</string>
     <string name="toast_stop_intervention">stop the recording before starting an intervention</string>
-    <string name="JJacks">Jumping Jacks</string>
-    <string name="Burpies">Burpees</string>
+    <string name="JJacks">jumping jacks</string>
+    <string name="Burpies">burpees</string>
     <string name="d_JJacks">Start with your arms next to your body and you legs together. Then move both arms above your head while you jump. When landing your legs should be apart. When jumping again, the arms go down again and the legs go together. Imaging your arms and legs are bound together with a string. Do this 15 times.</string>
     <string name="d_Burpies">"We start with standing upwards. Then we move down to the push up position. Perfom one push up and use the energy to jump wiht your legs between your arms. Now stand up and jump. After landing go down to the push up position again and repeat. Do 8 repetitions. "</string>
     <string name="add_notes">additional notes...</string>
@@ -189,4 +189,7 @@
     <string name="other_rec">other recreational activity</string>
     <string name="visiting">visiting</string>
     <string name="date_format_complete">YYYY-MM-dd HH:mm:ss</string>
+    <string name="complete">Complete!</string>
+    <string name="sit_ups">sit-ups</string>
+    <string name="cobra">cobra</string>
 </resources>

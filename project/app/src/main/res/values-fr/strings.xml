@@ -190,4 +190,7 @@
     <string name="other_rec">autre activité récréative</string>
     <string name="visiting">visiter</string>
     <string name="date_format_complete">dd.MM.YYYY HH:mm:ss</string>
+    <string name="complete">complet!</string>
+    <string name="sit_ups">sit-ups</string>
+    <string name="cobra">cobra</string>
 </resources>

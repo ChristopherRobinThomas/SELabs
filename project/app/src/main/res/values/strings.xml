@@ -267,6 +267,9 @@
     <string name="shopping">shopping</string>
     <string name="visiting">visiting</string>
     <string name="date_format_complete">YYYY-MM-dd HH:mm:ss</string>
+    <string name="complete">complete!</string>
+    <string name="sit_ups">sit-ups</string>
+    <string name="cobra">cobra</string>
 
 
 </resources>
