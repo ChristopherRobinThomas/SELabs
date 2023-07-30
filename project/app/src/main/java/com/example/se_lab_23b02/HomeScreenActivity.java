@@ -101,12 +101,14 @@ public class HomeScreenActivity extends AppCompatActivity {
                 Vector<Vector<String>> allI = dsHelper.getSavedInterventions(HomeScreenActivity.this);
                 int randomNum = ThreadLocalRandom.current().nextInt(0, allI.size());
                 Vector<String> randomIntervention = allI.get(randomNum);
+
                 SingleIntervention singleIntervention = new SingleIntervention();
                 Bundle args = new Bundle();
                 args.putInt("InterventionID", Integer.parseInt(randomIntervention.get(0)));
                 args.putString("InterventionName", randomIntervention.get(1));
                 args.putString("InterventionDescription", randomIntervention.get(2));
                 singleIntervention.setArguments(args);
+                
                 replaceFragment(singleIntervention);
                 setTitle(resources.getString(R.string.interventions_heading));
             }

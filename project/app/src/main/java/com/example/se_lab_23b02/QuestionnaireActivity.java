@@ -191,7 +191,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     void showDoInterventionDialogue(Intent i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(QuestionnaireActivity.this);
-        builder.setTitle("Title");
+        builder.setTitle("We recommend an Intervention!");
         final TextView tv = new TextView(QuestionnaireActivity.this);
         tv.setGravity(Gravity.CENTER);
         tv.setText("Based on your response, \nwe recommend an intervention.\nDo intervention now?");
@@ -211,7 +211,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         builder.show();
     }
 
