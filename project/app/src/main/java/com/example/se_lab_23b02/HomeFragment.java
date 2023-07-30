@@ -849,7 +849,7 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         else
         {
             String name = interventionList.get(Integer.valueOf(id)).get(1);
-            txtViewInterventions.setText(name + "\n" + resources.getString(R.string.Time) + time[0] + ":" + time[1]);
+            txtViewInterventions.setText(name + "\n" + resources.getString(R.string.Time) + ": " + time[0] + ":" + time[1]);
         }
         txtViewInterventions.setTextSize(20);
         linearLayoutToAdd.addView(txtViewInterventions);
