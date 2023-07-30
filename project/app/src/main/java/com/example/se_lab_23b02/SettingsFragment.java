@@ -496,6 +496,8 @@ public class SettingsFragment extends Fragment {
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             gps = false;
         }
+        if(dsHelper.getSpecificSettingsFromSharedPref("GPSAllowed", context).equals("false"))
+            gps = false;
         swGPS.setChecked(gps);
         dsHelper.saveSettingAsSharedPref("GPSAllowed", String.valueOf(gps), context);
 
