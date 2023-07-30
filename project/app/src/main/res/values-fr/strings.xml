@@ -95,7 +95,7 @@
     <string name="bt_overview_task_distribution">Répartition des tâches quotidiennes</string>
     <string name="tv_overview_no_data">pas de données disponibles</string>
     <string name="bt_settings_logout">déconnecter</string>
-
+    <string name="bt_settings_logout_completly"> Se déconnecter de cet appareil </string>
 
     <string-array name="languages">
         <item>english</item>

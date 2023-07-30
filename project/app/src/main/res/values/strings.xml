@@ -63,6 +63,7 @@
     <string name="tv_settings_noon_notification">Noon</string>
     <string name="tv_settings_evening_notification">Evening</string>
     <string name="bt_settings_delete_data">delete all personal data</string>
+    <string name="bt_settings_logout_completly"> Logout from this device</string>
 
     <!-- Strings for the questionnaire activity-->
     <string name="bt_send">Send</string>
