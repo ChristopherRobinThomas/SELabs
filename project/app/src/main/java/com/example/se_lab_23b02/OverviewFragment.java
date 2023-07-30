@@ -615,6 +615,8 @@ public class OverviewFragment extends Fragment {
                     case "green":
                         constraintLayout.setBackgroundResource(R.drawable.green_dark_mode_background);
                         break;
+                    default:
+                        constraintLayout.setBackgroundResource(R.drawable.blue_dark_mode_background);
                 }
                 break;
             case "white-mode":
@@ -631,8 +633,14 @@ public class OverviewFragment extends Fragment {
                     case "green":
                         constraintLayout.setBackgroundResource(R.drawable.green_light_mode_background);
                         break;
+                    default:
+                        constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
+                        break;
                 }
+
                 break;
+            default:
+                constraintLayout.setBackgroundResource(R.drawable.blue_light_mode_background);
         }
         btNumOfActivities.getBackground().setAlpha(ButtonTransparency);
         btNumOfInterventions.getBackground().setAlpha(ButtonTransparency);
