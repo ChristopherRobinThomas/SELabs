@@ -173,4 +173,5 @@
     <string name="d_Laterallinien_2">Stehen Sie auf und schlagen Sie die Beine übereinander. Verschränke deine Arme über deinem Kopf. Lehnen Sie sich zur einen Seite und dann zur anderen. Dreimal wiederholen.</string>
     <string name="d_seitliche_Beinrolle">Leg dich auf deinen Rücken. Heben Sie Ihre Knie und Füße an, um zwei 90-Grad-Winkel zu bilden. Schwingen Sie Ihre Knie auf die eine und dann auf die andere Seite. Dreimal wiederholen.</string>
     <string name="d_windmuehle">Stehen Sie aufrecht und beugen Sie sich nach vorne. Berühren Sie abwechselnd Ihren linken und rechten Fuß mit dem gegenüberliegenden Arm.</string>
+    <string name="toast_stop_intervention">Stoppen Sie die Aufzeichnung, bevor Sie mit einem Eingriff beginnen</string>
 </resources>

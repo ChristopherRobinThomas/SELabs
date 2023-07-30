@@ -186,6 +186,7 @@
     <string name="d_Laterallinien_2">Stand up and cross your legs. Cross your arms over your head. Lean to one side, then to the other. Repeat three times.</string>
     <string name="d_seitliche_Beinrolle">Lie on your back. Raise your knees and feet to make two 90-degree angles. Swing your knees on one side, then the other. Repeat three times.</string>
     <string name="d_windmuehle">Stand up straight and lean over forwards. Alternate touching your left and right foot with the opposite arm.</string>
+    <string name="toast_stop_intervention">stop the recording before starting an intervention</string>
 
 
 </resources>
