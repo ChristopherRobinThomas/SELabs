@@ -216,17 +216,19 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         txtViewDate.setGravity(Gravity.CENTER);
         linearLayout.addView(txtViewDate);
 
-
+        boolean timeslotDoesNotAlreadyExists = !TimeStamp.timeSlotExistsAlready(getContext());
+        boolean timeslotCorrect =  TimeStamp.getCurrentTimeSlot() != TimeStamp.TimeSlot.no_TimeSLot;
+        if(timeslotDoesNotAlreadyExists && timeslotCorrect) {
+            questionnaireButton.setEnabled(true);
+        }else{
+            questionnaireButton.setEnabled(false);
+        }
 
         questionnaireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TimeStamp.timeSlotExistsAlready(getContext()) && TimeStamp.getCurrentTimeSlot() != TimeStamp.TimeSlot.no_TimeSLot)
-                {
-                    Log.d("Time Slot", "Time Slot already exists");
-                    Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
-                    startActivity(myIntent);
-                }
+                Intent myIntent = new Intent(getActivity(), QuestionnaireActivity.class);
+                startActivity(myIntent);
             }
         });
 

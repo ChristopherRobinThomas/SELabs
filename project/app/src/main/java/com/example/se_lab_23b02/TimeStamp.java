@@ -10,6 +10,7 @@ import android.content.Context;
 
 import android.util.Log;
 
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -49,6 +50,7 @@ public class TimeStamp {
         LocalDateTime now = LocalDateTime.now();
         String clockTime = dateTimeFormatter.format(now).split(" ")[1];
         int hour = Integer.parseInt(clockTime.split(":")[0]);
+        Log.d("hour", String.valueOf(hour));
         if(hour >= 7 && hour < 11)
             return TimeSlot.morning;
         if(hour >= 12 && hour < 14)
