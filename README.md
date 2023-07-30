@@ -7,7 +7,17 @@
 ## Home Screen
 - you can open the questionnaire if it's morning, noon, or evening and you didn't answer one in that time frame
 - you can set an daily goal
-- you see the progress on the daily goal or can set it to done
+- you can see the progress on the daily goal or can set it to done
+- you can see all past interventions
+- you can sell recent inteventions
+  
+## Data
+- you can set an time frame, which you want to inspect
+- you can then choose what you want to see(mental health score/number of interventions/distribution) 
+## Interventions
+- you can start recording your accelerometer
+- you can add a personal intervention
+- you can do an already added intervention 
   
 ## Settings
 ### Visual Settings
