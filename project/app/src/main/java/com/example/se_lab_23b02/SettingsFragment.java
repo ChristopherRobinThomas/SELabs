@@ -375,7 +375,8 @@ public class SettingsFragment extends Fragment {
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS);
                 setupSpinnerValues(spinnerLanguage, spinnerColortheme, spinnerDarkMode, settings);
-                Toast.makeText(getContext(), "All data deleted successfully.", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getContext(), resources.getString(R.string.del_all_data), Toast.LENGTH_SHORT).show();
 
                 //try to delete Online Data
                 ServerHelper sHelper = ServerHelper.getInstance();

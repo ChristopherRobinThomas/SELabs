@@ -147,4 +147,12 @@
     <string name="CreateNewUser_PasswordTextView">Passwort angeben</string>
     <string name="MultiUser_termsOfService">Nutzungbedingungen</string>
     <string name="username">Benutzername</string>
+    <string name="no_internet">kein Internet verfügbar</string>
+    <string name="sync_failed">Synchronisierung fehlgeschlagen</string>
+    <string name="login_failure">Etwas ist fehlgeschlagen. Nochmal versuchen</string>
+    <string name="login_success">erfolgreich eingeloggt</string>
+    <string name="login_wrong_password">Benutzername und Passwort stimmen nicht überein oder Sie haben noch kein Konto</string>
+    <string name="rec_start">Aufnahme gestartet</string>
+    <string name="rec_stopped">Aufnahme beendet</string>
+    <string name="del_all_data">Alle Daten erfolgreich gelöscht</string>
 </resources>
