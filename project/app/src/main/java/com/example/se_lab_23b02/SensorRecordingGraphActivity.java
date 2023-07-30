@@ -26,11 +26,15 @@ import com.androidplot.xy.XYSeries;
 import org.json.JSONException;
 
 
+import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+
 import kotlin.Triple;
 
 public class SensorRecordingGraphActivity extends Activity {
@@ -112,23 +116,24 @@ public class SensorRecordingGraphActivity extends Activity {
         });
 
 
-
         Bundle b = getIntent().getExtras();
         String[] dateTime = b.getStringArray("time");
         String day = b.getString("date");
+        String[] dateSliced = day.split("-");
         String timestamp = day + " " + dateTime[0] + ":" + dateTime[1] + ":" + dateTime[2];
 
 
-
         TextView tvDate = (TextView) findViewById(R.id.tvDate);
-        tvDate.setText(timestamp);
+        Date temp = new Date(Integer.parseInt(dateSliced[0]) - 1900, Integer.parseInt(dateSliced[1]) - 1, Integer.parseInt(dateSliced[2]), Integer.parseInt(dateTime[0]), Integer.parseInt(dateTime[1]), Integer.parseInt(dateTime[2]));
+        DateFormat df = new SimpleDateFormat(SensorManager.getLanguageResources(context).getString(R.string.date_format_complete));
+
+        tvDate.setText(df.format(temp));
         TextView tvStepCounter = (TextView) findViewById(R.id.tvStepCounterDisplay);
         try {
             int steps = daHelper.getStepCountFromRecording(timestamp, getApplicationContext());
-            if(steps != -1) {
+            if (steps != -1) {
                 tvStepCounter.setText(context.getResources().getString(R.string.steps) + ": " + steps);
-            }
-            else {
+            } else {
                 tvStepCounter.setText(context.getResources().getString(R.string.no_steps));
             }
         } catch (JSONException e) {
@@ -138,11 +143,9 @@ public class SensorRecordingGraphActivity extends Activity {
         TextView tvDistance = (TextView) findViewById(R.id.tvWalkedDistance);
         try {
             float distance = daHelper.getWalkedDistanceFromRecording(timestamp, getApplicationContext());
-            if(distance != -1) {
+            if (distance != -1) {
                 tvDistance.setText(context.getResources().getString(R.string.distance) + ": " + distance + " m");
-            }
-            else {
-                super.onCreate(savedInstanceState);
+            } else {
                 tvDistance.setText(context.getResources().getString(R.string.no_distance));
             }
         } catch (JSONException e) {

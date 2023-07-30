@@ -91,7 +91,7 @@ public class DigitSpanTaskActivity extends AppCompatActivity implements View.OnC
             initSpanLength = 2;
         }
         System.out.println(initSpanLength);
-        spanLength = initSpanLength;
+        spanLength = Math.max(initSpanLength, 1);
         startingButton = findViewById(R.id.startButton);
         exitButton = findViewById(R.id.exitButton);
         numberField = findViewById(R.id.numberView);
