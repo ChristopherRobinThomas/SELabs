@@ -182,9 +182,9 @@ public class DataSavingHelper {
         newInterventions.add(sampleInterventionC);
 
         Vector<String> sampleInterventionD = new Vector<String>();
-        sampleInterventionC.add("3");
-        sampleInterventionC.add("Cobra");
-        sampleInterventionC.add("Lie down on your stomach, with your hands against the ground. Straighten your arms and push upwards, while leaving your legs on the ground. Your back should arch upwards. Hold for 10 seconds. ");
+        sampleInterventionD.add("3");
+        sampleInterventionD.add("Cobra");
+        sampleInterventionD.add("Lie down on your stomach, with your hands against the ground. Straighten your arms and push upwards, while leaving your legs on the ground. Your back should arch upwards. Hold for 10 seconds. ");
         newInterventions.add(sampleInterventionD);
 
         Vector<String> sampleInterventionE = new Vector<String>();
