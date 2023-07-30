@@ -105,12 +105,12 @@ public class SingleIntervention extends Fragment {
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.rueckenentspannung));
             vv.setVisibility(View.VISIBLE);
         }
-        else if(Objects.equals(pInterventionName, "LaterallinienA")) {
+        else if(Objects.equals(pInterventionName, "Laterallinien 1")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise1_1));
             vv.setVisibility(View.VISIBLE);
         }
-        else if(Objects.equals(pInterventionName, "LaterallinienB")) {
+        else if(Objects.equals(pInterventionName, "Laterallinien 2")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.sample_exercise_2_1));
             vv.setVisibility(View.VISIBLE);
