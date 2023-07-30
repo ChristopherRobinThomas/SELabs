@@ -52,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -69,6 +70,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
@@ -798,7 +800,12 @@ public class HomeFragment extends Fragment implements SensorEventListener {
         txtViewDate = new TextView(getActivity());
         txtViewDate.setTextSize(20);
         txtViewDate.setGravity(Gravity.CENTER);
-        txtViewDate.setText(date);
+        Resources res = com.example.se_lab_23b02.SensorManager.getLanguageResources(context);
+        System.out.println(date);
+        String[] dateSplitted = date.split("-");
+        Date tempDate = new Date(Integer.parseInt(dateSplitted[0]) - 1900, Integer.parseInt(dateSplitted[1]) - 1, Integer.parseInt(dateSplitted[2]));
+        DateFormat df = new SimpleDateFormat(res.getString(R.string.date_format));
+        txtViewDate.setText(df.format(tempDate));
         linearLayout.addView(txtViewDate);
     }
 

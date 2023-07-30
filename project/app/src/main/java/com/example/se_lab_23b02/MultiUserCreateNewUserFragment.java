@@ -181,6 +181,7 @@ public class MultiUserCreateNewUserFragment extends Fragment {
                     sh.setActivity(getActivity());
                     try {
                         sh.createNewUser(newUser, getContext(), MultiUserActivity.class,HomeScreenActivity.class, TutorialActivity.class);
+                        getActivity().finish();
                         TimeStamp.setStandardTimers(getContext());
                     }catch (Exception e )
                     {

@@ -128,9 +128,12 @@ public class InterventionsFragment extends Fragment {
         btStartRecording = view.findViewById(R.id.btStartRecording);
         elementsForLanguageChange.add(buttonAddNewIntervention);
 
+        TextView tv = (TextView) view.findViewById(R.id.interventionTxt);
+
         setColorTheme();
         refreshResources();
         setLanguage();
+        tv.setText(resources.getString(R.string.interventions_heading));
 
         try {
             interventionList = dsHelper.getSavedInterventions(this.getContext());
