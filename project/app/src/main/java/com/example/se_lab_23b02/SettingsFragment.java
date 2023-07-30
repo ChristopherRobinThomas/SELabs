@@ -366,10 +366,7 @@ public class SettingsFragment extends Fragment {
                 UserHelper uh = UserHelper.getInstance();
                 //delete data here
                 //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
-                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
                 deleteLocalFiles();
-                dsHelper.saveSettingAsSharedPref(user,"",getContext());
-                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
 
                 saveDefaultValuesInSettings();
                 refreshSettings();
@@ -380,7 +377,7 @@ public class SettingsFragment extends Fragment {
 
                 //try to delete Online Data
                 ServerHelper sHelper = ServerHelper.getInstance();
-                sHelper.setActivity(getActivity());
+                //sHelper.setActivity(getActivity());
                 try {
                     sHelper.deleteEverything(getContext());
                 } catch (JSONException e) {
