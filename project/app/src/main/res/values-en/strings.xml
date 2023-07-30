@@ -93,6 +93,7 @@
     <string name="bt_overview_task_distribution">Distribution of Daily Tasks</string>
     <string name="tv_overview_no_data">no data available</string>
     <string name="bt_settings_logout">Logout</string>
+    <string name="bt_settings_logout_completly"> Logout from this device </string>
 
 
     <string-array name="languages">

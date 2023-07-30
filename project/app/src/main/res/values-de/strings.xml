@@ -97,6 +97,7 @@
     <string name="bt_overview_task_distribution">Verteilung der täglichen Aufgaben</string>
     <string name="tv_overview_no_data">keine Daten verfügbar</string>
     <string name="bt_settings_logout">ausloggen</string>
+    <string name="bt_settings_logout_completly"> Von dem Gerät ausloggen</string>
 
 
     <string-array name="languages">

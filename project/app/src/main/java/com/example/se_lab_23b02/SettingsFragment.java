@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class SettingsFragment extends Fragment {
     private Button btnNotifNoon;
     private Button btnNotifEvening;
     private Button btLogout;
+    private Button btLogoutFromDevice;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -156,6 +158,7 @@ public class SettingsFragment extends Fragment {
         textViews.add(view.findViewById(R.id.tvSettingsEvening));
         textViews.add(view.findViewById(R.id.btDeleteData));
         textViews.add(view.findViewById(R.id.btSettingsLogout));
+        textViews.add(view.findViewById(R.id.btSettingsLogoutCompletly));
 
 
         Spinner spinnerLanguage = (Spinner) view.findViewById(R.id.spLanguageSelector);
@@ -169,6 +172,7 @@ public class SettingsFragment extends Fragment {
         btnNotifEvening = (Button) view.findViewById(R.id.btChangeNotificationEvening);
         Button btnDelAllData = (Button) view.findViewById(R.id.btDeleteData);
         btLogout = (Button) view.findViewById(R.id.btSettingsLogout);
+        btLogoutFromDevice = (Button) view.findViewById((R.id.btSettingsLogoutCompletly));
 
         saveDefaultValuesInSettings();
         setAllStrings();
@@ -359,9 +363,14 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v)  {
                 cancelAlarms();
-                deleteLocalFiles();
+                UserHelper uh = UserHelper.getInstance();
                 //delete data here
-                dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                //dsHelper.deleteAllSettingsFromSharedPref(contextForSharedPreferences);
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+
                 saveDefaultValuesInSettings();
                 refreshSettings();
                 setupCheckboxValues(switchAccel,switchStepCount, switchGPS);
@@ -390,6 +399,23 @@ public class SettingsFragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), MultiUserActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(myIntent);
+            }
+        });
+
+        btLogoutFromDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelAlarms();
+                UserHelper uh = UserHelper.getInstance();
+                String user = "User" + uh.intToStringOneToFour(uh.getCurrentUserID(getContext()));
+                deleteLocalFiles();
+                dsHelper.saveSettingAsSharedPref("ActiveUser","None",getContext());
+                dsHelper.saveSettingAsSharedPref(user,"",getContext());
+
+                saveDefaultValuesInSettings();
+                refreshSettings();
+                Intent i = new Intent(getActivity(),MultiUserActivity.class);
+                startActivity(i);
             }
         });
 
@@ -528,6 +554,8 @@ public class SettingsFragment extends Fragment {
         bt.setText(resources.getString(R.string.bt_settings_delete_data));
         bt = (Button) textViews.get(12);
         bt.setText(resources.getText(R.string.bt_settings_logout));
+        bt = (Button) textViews.get(13);
+        bt.setText(resources.getText(R.string.bt_settings_logout_completly));
     }
 
     public void setSpinnerWithoutLanguageSpinner(Spinner spColor, Spinner spDMode) {
@@ -602,6 +630,7 @@ public class SettingsFragment extends Fragment {
         btnNotifNoon.getBackground().setAlpha(ButtonTransparency);
         btnNotifMorning.getBackground().setAlpha(ButtonTransparency);
         btLogout.getBackground().setAlpha(ButtonTransparency);
+        btLogoutFromDevice.getBackground().setAlpha(ButtonTransparency);
     }
 
     private void cancelAlarms()
