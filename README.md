@@ -1,20 +1,11 @@
-## Software Engineering Lab Summer Semester 2023 Group B02
-
-
-## <p style="color:green">Current Status: Third Sprint</p>
-
-Important Dates:  
-Date | Time |What
- --  | -- |-- 
-April 27|4-6pm|Meet the Customer
-May 10|3-4pm|Sprint Review
-May 11|6-6:30pm|Second Sprint Planning
-May 16|12-2pm|Meet the Customer
-May 24|3-4pm|Sprint Review
-May 25|6-6:30pm|Third Sprint Planning
-June 6|12-2pm|Meet the Customer
-June 21|3-4pm|Sprint Review
-June 22|6-6:30pm|Fourth Sprint Planning
-July 6|4-6pm|Q&A about hand-ins and presentation
-July 12|3-4pm|Fourth Sprint Review
-
+### Software Engineering Lab Summer Semester 2023 Group B02
+## Logging in
+- you can create a user(The username and pasword are not allowed to be empty)
+- you can login an existing user
+- you will be automaticly logged in if you didn't log out
+## Home Screen
+- you can open the questionnaire if it's morning, noon, or evening and you didn't answer one in that time frame
+- you can set an daily goal
+- you see the progress on the daily goal or can set it to done
+## Settings
+- you can 
