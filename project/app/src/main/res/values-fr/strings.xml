@@ -134,4 +134,14 @@
     <string name="timepicker_submit">Soumettre</string>
     <string name="timepicker_preferred_choice">Sélectionnez votre heure préférée</string>
     <string name="timepicker_selected">Choisi:\u0020 </string>
+    <string name="Choose_your_Account">Choisissez votre compte</string>
+    <string name="password">mot de passe</string>
+    <string name="login">connexion</string>
+    <string name="back">retour</string>
+    <string name="add_user">nouveau profil</string>
+    <string name="CreateNewUser_Headline">créer un compte</string>
+    <string name="CreateNewUser_UsernameTextView">entrer le nom d\'utilisateur</string>
+    <string name="CreateNewUser_PasswordTextView">entrer le mot de passe</string>
+    <string name="MultiUser_termsOfService">Conditions d\'utilisation</string>
+    <string name="username">"nom d'utilisateur "</string>
 </resources>

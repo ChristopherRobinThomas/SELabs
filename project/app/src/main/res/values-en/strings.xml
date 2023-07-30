@@ -132,4 +132,14 @@
     <string name="timepicker_submit">Submit</string>
     <string name="timepicker_preferred_choice">Select your preferred Time</string>
     <string name="timepicker_selected">Selected:\u0020</string>
+    <string name="Choose_your_Account">Choose your Account</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="back">Back</string>
+    <string name="add_user">add User</string>
+    <string name="CreateNewUser_Headline">create an account</string>
+    <string name="CreateNewUser_UsernameTextView">enter username</string>
+    <string name="CreateNewUser_PasswordTextView">enter password</string>
+    <string name="MultiUser_termsOfService">Terms of Service</string>
+    <string name="username">username</string>
 </resources>

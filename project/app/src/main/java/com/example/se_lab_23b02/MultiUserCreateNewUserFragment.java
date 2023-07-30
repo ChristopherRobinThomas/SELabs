@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -97,6 +98,34 @@ public class MultiUserCreateNewUserFragment extends Fragment {
         NewUser = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
         constraintLayout = view.findViewById(R.id.multiUserCreateNewUserFragment);
         setColorTheme();
+
+        String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", getActivity().getApplicationContext());
+        String loc = "en";
+        if(language.equals("francais"))
+            loc = "fr";
+        if(language.equals("deutsch"))
+            loc = "de";
+
+        Context context = LocaleHelper.setLocale(getActivity().getApplicationContext(), loc);
+        Resources resources = context.getResources();
+        TextView tv = (TextView) view.findViewById(R.id.CreateNewUser_Headline);
+        tv.setText(resources.getString(R.string.CreateNewUser_Headline));
+        tv = (TextView) view.findViewById(R.id.CreateNewUser_UsernameTextView);
+        tv.setText(resources.getString(R.string.CreateNewUser_UsernameTextView));
+        tv = (TextView) view.findViewById(R.id.CreateNewUser_PasswordTextView);
+        tv.setText(resources.getString(R.string.CreateNewUser_PasswordTextView));
+        Button bt = (Button) view.findViewById(R.id.MultiUser_TermsOfService);
+        bt.setText(resources.getString(R.string.MultiUser_termsOfService));
+        bt = (Button) view.findViewById(R.id.CreateNewUser_LoginButton);
+        bt.setText(resources.getString(R.string.add_user));
+        bt = (Button) view.findViewById(R.id.CreateNewUser_BackButton);
+        bt.setText(resources.getString(R.string.back));
+        TextInputEditText ti = (TextInputEditText) view.findViewById(R.id.CreateNewUser_UsernameTextField);
+        ti.setHint(resources.getString(R.string.username));
+        ti = (TextInputEditText) view.findViewById(R.id.CreateNewUser_PasswordTextField);
+        ti.setHint(resources.getString(R.string.password));
+
+
 
         view.findViewById(R.id.MultiUser_TermsOfService).setOnClickListener(new View.OnClickListener() {
             @Override

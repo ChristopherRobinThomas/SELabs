@@ -7,6 +7,7 @@
 package com.example.se_lab_23b02;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -20,8 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -56,15 +59,9 @@ public class MultiUserMainFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MultiUserMainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    Resources resources;
+    View view;
+
     public static MultiUserMainFragment newInstance(String param1, String param2) {
         MultiUserMainFragment fragment = new MultiUserMainFragment();
         Bundle args = new Bundle();
@@ -87,12 +84,34 @@ public class MultiUserMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_multi_user_main, container, false);
+        view = inflater.inflate(R.layout.fragment_multi_user_main, container, false);
         topLeft = view.findViewById(R.id.ButtonTopLeft);
         topRight = view.findViewById(R.id.ButtonTopRight);
         bottomLeft = view.findViewById(R.id.ButtonBottomLeft);
         bottomRight = view.findViewById(R.id.ButtonBottomRight);
         constraintLayout = view.findViewById(R.id.multiUserMainFragment);
+
+
+
+        String locString = Locale.getDefault().getDisplayLanguage();
+        String lang = "en";
+        String language = "english";
+        if(locString.equalsIgnoreCase("deutsch")) {
+            language = "deutsch";
+            lang = "de";
+        }
+
+        if(locString.equalsIgnoreCase("français")) {
+            language = "francais";
+            lang = "fr";
+        }
+        Context context = LocaleHelper.setLocale(getActivity().getApplicationContext(), lang);
+        System.out.println(locString);
+        resources = context.getResources();
+
+        DataSavingHelper.getInstance().saveSettingAsSharedPref("language", language, getActivity().getApplicationContext());
+
+        setLanguage();
 
         //DataStorage
         ArrayList<User> users;
@@ -118,6 +137,11 @@ public class MultiUserMainFragment extends Fragment {
         return view;
     }
 
+    private void setLanguage() {
+        TextView tvHeading = (TextView) view.findViewById(R.id.HeadlineText);
+        tvHeading.setText(resources.getString(R.string.Choose_your_Account));
+    }
+
     private void buttonSetup(View view, ArrayList<User> users)
     {
         buttons = new ArrayList<>();
@@ -136,7 +160,7 @@ public class MultiUserMainFragment extends Fragment {
             }
             else
             {
-                buttons.get(i).setText("Add User");
+                buttons.get(i).setText(resources.getString(R.string.add_user));
             }
         }
         for(int i = 0; i<=3;i++)

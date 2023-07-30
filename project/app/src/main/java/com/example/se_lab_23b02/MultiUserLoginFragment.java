@@ -8,6 +8,7 @@ package com.example.se_lab_23b02;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -96,6 +97,28 @@ public class MultiUserLoginFragment extends Fragment {
         username.setText(mParam1);
         constraintLayout = view.findViewById(R.id.multiUserLoginFragment);
         setColorTheme();
+
+
+        // set language
+
+        String language = DataSavingHelper.getInstance().getSpecificSettingsFromSharedPref("language", getActivity().getApplicationContext());
+        String loc = "en";
+        if(language.equals("francais"))
+            loc = "fr";
+        if(language.equals("deutsch"))
+            loc = "de";
+
+        Context context = LocaleHelper.setLocale(getActivity().getApplicationContext(), loc);
+        Resources resources = context.getResources();
+
+        TextView tvPassword = (TextView) view.findViewById(R.id.PasswordTextView);
+        tvPassword.setText(resources.getString(R.string.password));
+        btnBack.setText(resources.getString(R.string.back));
+        btnLogin.setText(resources.getString(R.string.login));
+
+
+
+
 
         //BackButton
         view.findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {

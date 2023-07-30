@@ -44,8 +44,11 @@
     <string name="interventions_heading">Interventions</string>
     <string name="add_intervention_button">Add Intervention</string>
 
-
-
+    <!-- Strings for the multiuser activity-->
+    <string name="Choose_your_Account">Choose your Account</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="back">Back></string>
     <!-- Strings for the settings fragment-->
     <string name="settings_heading">Settings</string>
     <string name="settings_title">Appearance</string>
@@ -150,8 +153,12 @@
     <string name="timepicker_submit">Submit</string>
     <string name="timepicker_preferred_choice">Select your preferred Time</string>
     <string name="timepicker_selected">Selected:\u0020</string>
-
-
+    <string name="add_user">add User</string>
+    <string name="CreateNewUser_Headline">Create an account</string>
+    <string name="CreateNewUser_UsernameTextView">Enter username</string>
+    <string name="CreateNewUser_PasswordTextView">Enter password</string>
+    <string name="MultiUser_termsOfService">Terms of Service</string>
+    <string name="username">username</string>
 
 
 </resources>

@@ -13,25 +13,33 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 public class MultiUserActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_multi_user);
+
+
+
 
         requestPushNotification();
 
-        setContentView(R.layout.activity_multi_user);
 
         if(checkForActiveUser()){
             ServerHelper sHelper = ServerHelper.getInstance();
@@ -51,8 +59,11 @@ public class MultiUserActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.multi_user_frame_layout, new MultiUserMainFragment());
             fragmentTransaction.commit();
+
         }
     }
+
+
 
     private void requestPushNotification() {
         try{
