@@ -28,14 +28,14 @@
                 android:id="@+id/btSettingsTutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginEnd="25dp"
                 android:text="Tutorial"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/btDeleteData"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogout" />
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogoutCompletly" />
 
             <TextView
                 android:id="@+id/tvSettingsApperance"
@@ -326,16 +326,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="25dp"
                 android:backgroundTint="#FF0000"
                 android:text="@string/bt_settings_delete_data"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.896"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btSettingsLogoutCompletly" />
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsTutorial" />
 
             <Button
                 android:id="@+id/btSettingsLogout"
@@ -350,6 +351,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
             <Button
                 android:id="@+id/btSettingsLogoutCompletly"
                 android:layout_width="wrap_content"
