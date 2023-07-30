@@ -218,6 +218,18 @@ public class DataSavingHelper {
         sampleInterventionI.add("Stand up straight and lean over forwards. Alternate touching your left and right foot with the opposing arm.");
         newInterventions.add(sampleInterventionI);
 
+        Vector<String> sampleInterventionJ = new Vector<String>();
+        sampleInterventionJ.add("8");
+        sampleInterventionJ.add("Burpies");
+        sampleInterventionJ.add("Do a single push-up, stand up and jump straight upwards. Repeat 5 times.");
+        newInterventions.add(sampleInterventionJ);
+
+        Vector<String> sampleInterventionK = new Vector<String>();
+        sampleInterventionK.add("9");
+        sampleInterventionK.add("Jumping Jacks");
+        sampleInterventionK.add("Do 10 jumping jacks.");
+        newInterventions.add(sampleInterventionK);
+
         return newInterventions;
     }
     public Vector<Vector<String>> getSavedInterventions(Context context) throws JSONException {

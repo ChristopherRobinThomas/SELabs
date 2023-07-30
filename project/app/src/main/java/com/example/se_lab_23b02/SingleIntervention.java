@@ -129,7 +129,8 @@ public class SingleIntervention extends Fragment {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.burpies));
             vv.setVisibility(View.VISIBLE);
-        }else if(Objects.equals(pInterventionName, "Jumping Jacks")) {
+        }
+        else if(Objects.equals(pInterventionName, "Jumping Jacks")) {
             iv.setVisibility(View.INVISIBLE);
             vv.setVideoURI(Uri.parse("android.resource://" + getActivity().getApplicationContext().getPackageName() + "/" + R.raw.jumpingjacks));
             vv.setVisibility(View.VISIBLE);
